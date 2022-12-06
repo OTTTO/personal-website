@@ -1,4 +1,4 @@
-import { Box, Stack, Accordion, AccordionSummary, AccordionDetails, Typography, Divider} from '@mui/material';
+import { Box, Stack, Grid, Accordion, AccordionSummary, AccordionDetails, Typography, Divider} from '@mui/material';
 import { ExpandMore } from '@mui/icons-material';
 
 function Contact() {
@@ -19,14 +19,15 @@ interface ResumeAccordionProps {
 }
 
 function ResumeAccordion({summary, details}: ResumeAccordionProps) {
-    return( <Accordion >
+    return(
+    <Accordion >
         <AccordionSummary expandIcon={<ExpandMore />}>
-          <Typography><b>{summary}</b></Typography>
+            <Typography><b>{summary}</b></Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <Typography>{details}</Typography>
+            <Typography>{details}</Typography>
         </AccordionDetails>
-      </Accordion>)
+    </Accordion>)
 }
 
 function Skills() {
@@ -115,6 +116,29 @@ function Roles() {
     </>)
 }
 
+interface EducationItemProps {
+    institution: string;
+    achievement: string;
+    time: string;
+}
+
+function EducationItem({institution, achievement, time}: EducationItemProps) {
+    return(
+    <Grid container={true} justifyContent="space-between"> 
+        <Typography align='left'><b>{institution}</b> - {achievement}</Typography>
+        <Typography align='right'><b>{time}</b></Typography>
+    </Grid>)
+}
+
+function Education() {
+    return(<>
+        <EducationItem institution='Lewis University' achievement='BS in Computer Science' time='2020-2022'/>
+        <Divider/>
+        <EducationItem institution='AWS' achievement='Certified Cloud Practitioner' time='August 2018'/>
+        <Divider/>
+        <EducationItem institution='Santa Clara University' achievement='BS Biochemistry Candidate' time='2011-2015'/>
+    </>)
+}
 
 function Resume() {
     return (
@@ -125,6 +149,7 @@ function Resume() {
         <Typography variant="h4" padding="20px"> PROFESSIONAL EXPERIENCE </Typography>
         <Roles/>
         <Typography variant="h4" padding="20px"> EDUCATION </Typography>
+        <Education/>
     </Box>)
 }
 
