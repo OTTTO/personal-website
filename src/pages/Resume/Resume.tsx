@@ -1,5 +1,16 @@
-import { Box, Grid, Accordion, AccordionSummary, AccordionDetails, Typography, Divider, Fab} from '@mui/material';
+import { 
+    Box, 
+    Grid, 
+    Accordion, 
+    AccordionSummary, 
+    AccordionDetails, 
+    Typography,
+    Divider, 
+    Fab, 
+    ThemeProvider
+} from '@mui/material';
 import { ExpandMore, MailOutline, GitHub } from '@mui/icons-material';
+import resumeTheme from '../../themes/resumeTheme';
 
 function Contact() {
     return(
@@ -8,7 +19,7 @@ function Contact() {
             <Typography variant="h3"> Software Engineer </Typography>
             <Fab variant="extended" href='mailto:contact.dylanbeckwith@gmail.com' sx={{'margin':'1rem 1rem 0rem 0rem'}}>
                 <MailOutline sx={{ mr: 1 }} />
-                <Typography variant="h6"> contact.dylanbeckwith@gmail.com </Typography>
+                <Typography variant="h6"> contact.dylan.beckwith@gmail.com </Typography>
             </Fab>
             <Fab variant="extended" href='https://www.github.com/OTTTO' sx={{'margin':'1rem 1rem 0rem 0rem'}}>
                 <GitHub sx={{ mr: 1 }} />
@@ -149,17 +160,19 @@ function Education() {
 
 function Resume() {
     return (
-    <Box sx={{'background-color': 'black'}}>
-        <Box padding="1rem" sx={{margin: 'auto', width: '50%', 'background-color': 'white'}}>
-            <Contact/>
-            <Typography variant="h4" padding="1rem"> TECHNICAL SKILLS </Typography>
-            <Skills/>
-            <Typography variant="h4" padding="1rem"> PROFESSIONAL EXPERIENCE </Typography>
-            <Roles/>
-            <Typography variant="h4" padding="1rem"> EDUCATION </Typography>
-            <Education/>
+    <ThemeProvider theme={resumeTheme}>
+        <Box sx={{'background-color': 'black'}}>
+            <Box padding="1rem" sx={{margin: 'auto', width: '50%', 'background-color': 'white'}}>
+                <Contact/>
+                <Typography variant="h4" padding="1rem"> TECHNICAL SKILLS </Typography>
+                <Skills/>
+                <Typography variant="h4" padding="1rem"> PROFESSIONAL EXPERIENCE </Typography>
+                <Roles/>
+                <Typography variant="h4" padding="1rem"> EDUCATION </Typography>
+                <Education/>
+            </Box>
         </Box>
-    </Box>)
+    </ThemeProvider>)
 }
 
 export default Resume
