@@ -1,15 +1,22 @@
-import { Box, Stack, Grid, Accordion, AccordionSummary, AccordionDetails, Typography, Divider} from '@mui/material';
-import { ExpandMore } from '@mui/icons-material';
+import { Box, Grid, Accordion, AccordionSummary, AccordionDetails, Typography, Divider, Fab} from '@mui/material';
+import { ExpandMore, MailOutline, GitHub } from '@mui/icons-material';
 
 function Contact() {
-    return(<>
-        <Box justifyContent='flex-end'>
-        <Typography variant="h1"> Dylan Beckwith </Typography>
-        <Typography variant="h3"> Software Engineer </Typography>
-        <Typography variant="h6"> contact.dylanbeckwith@gmail.com </Typography>
-        <Typography variant="h6"> github.com/OTTTO </Typography>
-        </Box>
-        </>
+    return(
+        <Box>
+            <Typography variant="h1"> Dylan Beckwith </Typography>
+            <Typography variant="h3"> Software Engineer </Typography>
+            <Fab variant="extended" href='mailto:contact.dylanbeckwith@gmail.com' sx={{'margin':'1rem 1rem 0rem 0rem'}}>
+                <MailOutline sx={{ mr: 1 }} />
+                <Typography variant="h6"> contact.dylanbeckwith@gmail.com </Typography>
+            </Fab>
+            <Fab variant="extended" href='https://www.github.com/OTTTO' sx={{'margin':'1rem 1rem 0rem 0rem'}}>
+                <GitHub sx={{ mr: 1 }} />
+                <Typography variant="h6"> github.com/OTTTO </Typography>
+            </Fab>
+        
+            <Typography variant="h6">  </Typography>
+        </Box>        
     )
 }
 
@@ -142,14 +149,16 @@ function Education() {
 
 function Resume() {
     return (
-    <Box padding="20px" sx={{margin: 'auto', width: '50%'}}>
-        <Contact/>
-        <Typography variant="h4" padding="20px"> TECHNICAL SKILLS </Typography>
-        <Skills/>
-        <Typography variant="h4" padding="20px"> PROFESSIONAL EXPERIENCE </Typography>
-        <Roles/>
-        <Typography variant="h4" padding="20px"> EDUCATION </Typography>
-        <Education/>
+    <Box sx={{'background-color': 'black'}}>
+        <Box padding="1rem" sx={{margin: 'auto', width: '50%', 'background-color': 'white'}}>
+            <Contact/>
+            <Typography variant="h4" padding="1rem"> TECHNICAL SKILLS </Typography>
+            <Skills/>
+            <Typography variant="h4" padding="1rem"> PROFESSIONAL EXPERIENCE </Typography>
+            <Roles/>
+            <Typography variant="h4" padding="1rem"> EDUCATION </Typography>
+            <Education/>
+        </Box>
     </Box>)
 }
 
