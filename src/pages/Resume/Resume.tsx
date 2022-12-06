@@ -1,7 +1,6 @@
 import { 
     Box, 
     Grid,
-    Stack,
     Accordion, 
     AccordionSummary, 
     AccordionDetails, 
@@ -14,6 +13,7 @@ import { ExpandMore, MailOutline, GitHub } from '@mui/icons-material';
 import resumeTheme from '../../themes/resumeTheme';
 import reactIcon from '../../reactjs-icon.svg';
 import nodeIcon from '../../nodejs-icon.svg'
+import graphQlIcon from '../../graphql-icon.svg'
 
 function Contact() {
     return(
@@ -165,11 +165,17 @@ function Resume() {
     return (
     <ThemeProvider theme={resumeTheme}>
         <Box padding='1rem 0rem 1rem 0rem' sx={{'background-color': 'black', position:'relative'}}>
-            <img src={reactIcon} className="App-logo-left" alt="react-icon" width='15%' />
-            <img src={reactIcon} className="App-logo-right" alt="react-icon" width='15%' />
+            <Grid container={true} justifyContent="space-between" sx={{position: 'absolute', top:0}}> 
+                <img src={reactIcon} className="App-logo-left" alt="react-icon" width='15%' />
+                <img src={reactIcon} className="App-logo-right" alt="react-icon" width='15%' />
+            </Grid>
+            <Grid container={true} justifyContent="space-between" sx={{position: 'absolute', bottom:'42%'}}> 
+                <img src={graphQlIcon} className="App-logo-left" alt="graphql-icon" width='15%' />
+                <img src={graphQlIcon} className="App-logo-right" alt="graphql-icon" width='15%' />
+            </Grid>
             <Grid container={true} justifyContent="space-between" sx={{position: 'absolute', bottom:0}}> 
-                <img src={nodeIcon} className="App-logo-right" alt="node-icon" width='15%' />
                 <img src={nodeIcon} className="App-logo-left" alt="node-icon" width='15%' />
+                <img src={nodeIcon} className="App-logo-right" alt="node-icon" width='15%' />
             </Grid>
             <Box padding="1rem" sx={{margin: 'auto', width: '55%', 'background-color': 'white'}}>
                 <Contact/>
