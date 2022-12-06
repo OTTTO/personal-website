@@ -1,16 +1,19 @@
 import { 
     Box, 
-    Grid, 
+    Grid,
+    Stack,
     Accordion, 
     AccordionSummary, 
     AccordionDetails, 
     Typography,
     Divider, 
     Fab, 
-    ThemeProvider
+    ThemeProvider,
 } from '@mui/material';
 import { ExpandMore, MailOutline, GitHub } from '@mui/icons-material';
 import resumeTheme from '../../themes/resumeTheme';
+import reactIcon from '../../reactjs-icon.svg';
+import nodeIcon from '../../nodejs-icon.svg'
 
 function Contact() {
     return(
@@ -130,7 +133,7 @@ const roleResponsibilities = [
 
 function Roles() {
     return(<>
-        {roleInfos.map((roleInfo, idx) => <ResumeAccordion summary={roleInfo} details={roleResponsibilities[idx].map((responsibility, idx)=> <li key={idx}> {responsibility} </li>)}/>)}        
+        {roleInfos.map((roleInfo, idx) => <ResumeAccordion summary={roleInfo} details={roleResponsibilities[idx].map((responsibility, index)=> <li key={index}> {responsibility} </li>)}/>)}        
     </>)
 }
 
@@ -161,8 +164,14 @@ function Education() {
 function Resume() {
     return (
     <ThemeProvider theme={resumeTheme}>
-        <Box sx={{'background-color': 'black'}}>
-            <Box padding="1rem" sx={{margin: 'auto', width: '50%', 'background-color': 'white'}}>
+        <Box padding='1rem 0rem 1rem 0rem' sx={{'background-color': 'black', position:'relative'}}>
+            <img src={reactIcon} className="App-logo-left" alt="react-icon" width='15%' />
+            <img src={reactIcon} className="App-logo-right" alt="react-icon" width='15%' />
+            <Grid container={true} justifyContent="space-between" sx={{position: 'absolute', bottom:0}}> 
+                <img src={nodeIcon} className="App-logo-right" alt="node-icon" width='15%' />
+                <img src={nodeIcon} className="App-logo-left" alt="node-icon" width='15%' />
+            </Grid>
+            <Box padding="1rem" sx={{margin: 'auto', width: '55%', 'background-color': 'white'}}>
                 <Contact/>
                 <Typography variant="h4" padding="1rem"> TECHNICAL SKILLS </Typography>
                 <Skills/>
