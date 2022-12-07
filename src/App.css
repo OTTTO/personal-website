@@ -12,12 +12,12 @@
 }
 .App-logo-left {
   float: left;
-  padding: 1rem;
+  margin: 5%;
 }
 
 .App-logo-right {
   float: right;
-  padding: 1rem;
+  margin: 5%;
 }
 
 .App-header {
