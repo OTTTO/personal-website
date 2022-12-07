@@ -1,5 +1,5 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Resume from "../pages/Resume/Resume";
+import Resume from "pages/Resume/Resume";
 
 function AppRoutes() {
     return (

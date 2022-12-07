@@ -10,10 +10,10 @@ import {
     ThemeProvider,
 } from '@mui/material';
 import { ExpandMore, MailOutline, GitHub } from '@mui/icons-material';
-import resumeTheme from '../../themes/resumeTheme';
-import reactIcon from '../../reactjs-icon.svg';
-import nodeIcon from '../../nodejs-icon.svg'
-import graphQlIcon from '../../graphql-icon.svg'
+import resumeTheme from 'themes/resumeTheme';
+import reactIcon from 'images/reactjs-icon.svg';
+import nodeIcon from 'images/nodejs-icon.svg'
+import graphQlIcon from 'images/graphql-icon.svg'
 
 function Contact() {
     return(
