@@ -64,25 +64,21 @@ function ResumeAccordion({ summary, details }: ResumeAccordionProps) {
   );
 }
 
-function Skills() {
+interface ISkillGroup {
+  name: string;
+  skills: string;
+}
+
+function Skills({ skillGroupList }) {
   return (
     <>
-      <ResumeAccordion
-        summary="Languages"
-        details="TypeScript, Java, Python, BASH"
-      />
-      <ResumeAccordion
-        summary="Databases"
-        details="SQL, JDBC, Hibernate, Knex"
-      />
-      <ResumeAccordion
-        summary="Web Technologies"
-        details="Node, GraphQL, ES6+, jQuery, Spring, React"
-      />
-      <ResumeAccordion
-        summary="Tools"
-        details="AWS, Git, Unix CLI, Eclipse, Postman"
-      />
+      {skillGroupList.map((skillGroup: ISkillGroup, idx: number) => (
+        <ResumeAccordion
+          key={idx}
+          summary={skillGroup.name}
+          details={skillGroup.skills}
+        />
+      ))}
     </>
   );
 }
@@ -111,124 +107,40 @@ function RoleInfo({ role, company, location, time }: RoleInfoProps) {
   );
 }
 
-const dialexaRoleInfo = (
-  <RoleInfo
-    role="Software Engineer"
-    company="Dialexa"
-    location="Austin, TX"
-    time="May 2022 - Present"
-  />
-);
-const dialexaRoleResponsibilities = [
-  `Started <b> Node TypeScript</b> green field project from scratch and completed in 6 months`,
-  `Built out a <b>CI/CD</b> pipeline with GitHub Actions that only would pass if <b>unit test</b> coverage was over 80%`,
-  `Set up an <b>Auth</b> Service leveraging AWS <b>Cognito</b> including <b>SSO</b> for Google, Apple, and Facebook`,
-  `Implemented a <b>GraphQL</b> API interface for use by web and mobile teams`,
-];
+interface IResponsibility {
+  details: string;
+}
 
-const sparkCompassRoleInfo = (
-  <RoleInfo
-    role="Full Stack Developer"
-    company="Spark Compass"
-    location="Austin, TX"
-    time="April 2019 - May 2022"
-  />
-);
-const sparkCompassRoleResponsibilities = [
-  `Built out features and fixed bugs for a rewards program whose biggest client was Ole Miss University.`,
-  `Integrated a blockchain solution into a <b>Java</b> application by connecting the client application to a blockchain server.`,
-  `Processed over half a million transactions in the final year of production with a 97.2% transaction success rate`,
-  `Utilized <b>Spring</b> MVC to quickly expand on current web application and add new functionality`,
-  `Used <b>AngularJS</b> to make a website generic by removing client specific content and replacing it with templates and image references that can be easily updated by uploading images/text through the admin panel`,
-  `Programmatically migrated resources from <b>EC2</b> to <b>S3</b>`,
-  `Implemented Interactive Video Service using AWS <b>API Gateway</b>, <b>Lambda</b>, and <b>React</b>.`,
-];
+interface IExperience {
+  role: string;
+  company: string;
+  location: string;
+  time: string;
+  responsibilities: IResponsibility[];
+}
 
-const oneNetworkRoleInfo = (
-  <RoleInfo
-    role="Full Stack Developer"
-    company="ONE Network Enterprises"
-    location="Austin, TX"
-    time="June 2021 - May 2022"
-  />
-);
-const oneNetworkRoleResponsibilities = [
-  `Worked on supply chain software as a military contractor for the US Navy, completing tight deadlines every 4 weeks in <b>Scrum</b>.`,
-  `Built <b>React</b> components with CSS/JS while also navigating a codebase with over 40,000 java files.`,
-  `Programmatically ran <b>CRUD</b> operations, including <b>JOIN</b>s, on <b>SQL</b> Databases`,
-];
-
-const dataEconomyRoleInfo = (
-  <RoleInfo
-    role="Back End Developer"
-    company="Data Economy"
-    location="Austin, TX"
-    time="January 2019 - October 2020"
-  />
-);
-const dataEconomyRoleResponsbilities = [
-  `Built the backend of a federated search engine for two distinct data platforms processing hundreds of thousands of items. Retrieved and processed data to provide key metric analytics on this data as well.`,
-  `Wrote Java code to consume and produce <b>RESTful APIs</b>`,
-  `Contracted by a banking consortium to construct and maintain a private, permissioned blockchain in Ethereum.`,
-  `Built an end-to-end fraud tracking solution`,
-];
-
-const wintermuteRoleInfo = (
-  <RoleInfo
-    role="Blockchain Back End Developer"
-    company="Wintermute Industries"
-    location="New York, NY"
-    time="July 2017 -  December 2018"
-  />
-);
-const wintermuteRoleResponsbilities = [
-  `Wrote Ethereum Smart Contracts and audited codebases for multiple clients`,
-  `Built a <b>Node</b> API that provided a simple interface to the Solidity backend for other JS developers to consume`,
-  `Contributed to the official Solidity technical documentation on GitHub in order to make our company's coding style the de facto style within the Ethereum Blockchain community`,
-];
-
-const gyogRoleInfo = (
-  <RoleInfo
-    role="Web Developer"
-    company="Grow Your Own Garden LLC"
-    location="Tricities, WA"
-    time="May 2016 -  August 2016"
-  />
-);
-const gyogRoleResponsibilities = [
-  `Built and deployed a fully responsive e-commerce website with <b>HTML5/Bootstrap/CSS</b> on <b>AWS</b>.`,
-  `Customized third-party extensions, integrated Stripe payment API, and used vanilla <b>Javascript</b> to build UI components`,
-];
-
-const roleInfos = [
-  dialexaRoleInfo,
-  oneNetworkRoleInfo,
-  sparkCompassRoleInfo,
-  dataEconomyRoleInfo,
-  wintermuteRoleInfo,
-  gyogRoleInfo,
-];
-const roleResponsibilities = [
-  dialexaRoleResponsibilities,
-  oneNetworkRoleResponsibilities,
-  sparkCompassRoleResponsibilities,
-  dataEconomyRoleResponsbilities,
-  wintermuteRoleResponsbilities,
-  gyogRoleResponsibilities,
-];
-
-function Roles() {
+function Experience({ experienceList }) {
   return (
     <>
-      {roleInfos.map((roleInfo, idx) => (
+      {experienceList.map((experience: IExperience, idx: number) => (
         <ResumeAccordion
-          summary={roleInfo}
-          details={roleResponsibilities[idx].map((responsibility, index) => (
-            <li
-              key={index}
-              dangerouslySetInnerHTML={{ __html: responsibility }}
+          key={idx}
+          summary={
+            <RoleInfo
+              role={experience.role}
+              company={experience.company}
+              location={experience.location}
+              time={experience.time}
             />
-          ))}
+          }
+          details={experience.responsibilities.map(
+            (responsibility: IResponsibility, index: number) => (
+              <li
+                key={index}
+                dangerouslySetInnerHTML={{ __html: responsibility.details }}
+              />
+            )
+          )}
         />
       ))}
     </>
@@ -240,6 +152,8 @@ interface EducationItemProps {
   achievement: string;
   time: string;
 }
+
+interface IEducation extends EducationItemProps {}
 
 function EducationItem({ institution, achievement, time }: EducationItemProps) {
   return (
@@ -254,33 +168,28 @@ function EducationItem({ institution, achievement, time }: EducationItemProps) {
   );
 }
 
-function Education() {
+function Education({ educationList }) {
   return (
     <>
-      <EducationItem
-        institution="Lewis University"
-        achievement="BS in Computer Science"
-        time="2020-2022"
-      />
-      <Divider />
-      <EducationItem
-        institution="AWS"
-        achievement="Certified Cloud Practitioner"
-        time="August 2018"
-      />
-      <Divider />
-      <EducationItem
-        institution="Santa Clara University"
-        achievement="BS Biochemistry Candidate"
-        time="2011-2015"
-      />
+      {educationList.map((education: IEducation, idx: number) => {
+        return (
+          <>
+            <EducationItem
+              institution={education.institution}
+              achievement={education.achievement}
+              time={education.time}
+            />
+            {idx + 1 < educationList.length && <Divider />}
+          </>
+        );
+      })}
     </>
   );
 }
 
 function Resume() {
   const { data, loading, error } = useQuery(RESUME);
-
+  console.log(`data: ${JSON.stringify(data)}`);
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error : {error.message}</p>;
 
@@ -352,15 +261,15 @@ function Resume() {
           <Typography variant="h4" padding="1rem">
             TECHNICAL SKILLS
           </Typography>
-          <Skills />
+          <Skills skillGroupList={data.resume.skillGroupList} />
           <Typography variant="h4" padding="1rem">
             PROFESSIONAL EXPERIENCE
           </Typography>
-          <Roles />
+          <Experience experienceList={data.resume.experienceList} />
           <Typography variant="h4" padding="1rem">
             EDUCATION
           </Typography>
-          <Education />
+          <Education educationList={data.resume.educationList} />
         </Box>
       </Box>
     </ThemeProvider>
