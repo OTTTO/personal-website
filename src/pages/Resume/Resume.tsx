@@ -8,6 +8,7 @@ import {
   Divider,
   Fab,
   ThemeProvider,
+  TextField,
 } from "@mui/material";
 import { ExpandMore, MailOutline, GitHub } from "@mui/icons-material";
 import resumeTheme from "themes/resumeTheme";
@@ -16,6 +17,9 @@ import nodeIcon from "images/nodejs-icon.svg";
 import graphQlIcon from "images/graphql-icon.svg";
 import { useQuery } from "@apollo/client";
 import { RESUME } from "queries/resume";
+import { Stack } from "@mui/system";
+
+const isAuthenticated = localStorage.getItem("token");
 
 function Contact() {
   return (
@@ -44,21 +48,29 @@ function Contact() {
   );
 }
 
-interface ResumeAccordionProps {
+interface SkillsAccordionProps {
   summary: string | React.ReactNode;
   details: string | React.ReactNode;
 }
 
-function ResumeAccordion({ summary, details }: ResumeAccordionProps) {
+function SkillsAccordion({ summary, details }: SkillsAccordionProps) {
   return (
     <Accordion>
       <AccordionSummary expandIcon={<ExpandMore />}>
-        <Typography>
-          <b>{summary}</b>
-        </Typography>
+        {!isAuthenticated ? (
+          <Typography>
+            <b>{summary}</b>
+          </Typography>
+        ) : (
+          <TextField defaultValue={summary}></TextField>
+        )}
       </AccordionSummary>
       <AccordionDetails>
-        <Typography>{details}</Typography>
+        {!isAuthenticated ? (
+          <Typography>{details}</Typography>
+        ) : (
+          <TextField defaultValue={details}></TextField>
+        )}
       </AccordionDetails>
     </Accordion>
   );
@@ -73,7 +85,7 @@ function Skills({ skillGroupList }) {
   return (
     <>
       {skillGroupList.map((skillGroup: ISkillGroup, idx: number) => (
-        <ResumeAccordion
+        <SkillsAccordion
           key={idx}
           summary={skillGroup.name}
           details={skillGroup.skills}
@@ -119,28 +131,73 @@ interface IExperience {
   responsibilities: IResponsibility[];
 }
 
+interface ExperienceAccordionProps extends IExperience {}
+
+function ExperienceAccordion({
+  role,
+  company,
+  location,
+  time,
+  responsibilities,
+}: ExperienceAccordionProps) {
+  return (
+    <Accordion>
+      <AccordionSummary expandIcon={<ExpandMore />}>
+        {!isAuthenticated ? (
+          <Typography>
+            <b>
+              <RoleInfo
+                role={role}
+                company={company}
+                location={location}
+                time={time}
+              />
+            </b>
+          </Typography>
+        ) : (
+          <Stack direction="row">
+            <TextField defaultValue={role}></TextField>
+            <TextField defaultValue={company}></TextField>
+            <TextField defaultValue={location}></TextField>
+            <TextField defaultValue={time}></TextField>
+          </Stack>
+        )}
+      </AccordionSummary>
+      <AccordionDetails>
+        {!isAuthenticated ? (
+          <Typography>
+            {responsibilities.map(
+              (responsibility: IResponsibility, index: number) => (
+                <li
+                  key={index}
+                  dangerouslySetInnerHTML={{ __html: responsibility.details }}
+                />
+              )
+            )}
+          </Typography>
+        ) : (
+          <Stack>
+            {responsibilities.map((responsibility: IResponsibility) => (
+              <TextField defaultValue={responsibility.details}></TextField>
+            ))}
+          </Stack>
+        )}
+      </AccordionDetails>
+    </Accordion>
+  );
+}
+
 function Experience({ experienceList }) {
   return (
     <>
       {experienceList.map((experience: IExperience, idx: number) => (
-        <ResumeAccordion
+        <ExperienceAccordion
           key={idx}
-          summary={
-            <RoleInfo
-              role={experience.role}
-              company={experience.company}
-              location={experience.location}
-              time={experience.time}
-            />
-          }
-          details={experience.responsibilities.map(
-            (responsibility: IResponsibility, index: number) => (
-              <li
-                key={index}
-                dangerouslySetInnerHTML={{ __html: responsibility.details }}
-              />
-            )
-          )}
+          role={experience.role}
+          company={experience.company}
+          location={experience.location}
+          time={experience.time}
+          responsibilities={experience.responsibilities}
         />
       ))}
     </>
@@ -171,18 +228,28 @@ function EducationItem({ institution, achievement, time }: EducationItemProps) {
 function Education({ educationList }) {
   return (
     <>
-      {educationList.map((education: IEducation, idx: number) => {
-        return (
-          <>
-            <EducationItem
-              institution={education.institution}
-              achievement={education.achievement}
-              time={education.time}
-            />
-            {idx + 1 < educationList.length && <Divider />}
-          </>
-        );
-      })}
+      {!isAuthenticated
+        ? educationList.map((education: IEducation, idx: number) => {
+            return (
+              <>
+                <EducationItem
+                  institution={education.institution}
+                  achievement={education.achievement}
+                  time={education.time}
+                />
+                {idx + 1 < educationList.length && <Divider />}
+              </>
+            );
+          })
+        : educationList.map((education: IEducation, idx: number) => {
+            return (
+              <Stack direction="row">
+                <TextField defaultValue={education.institution}></TextField>
+                <TextField defaultValue={education.achievement}></TextField>
+                <TextField defaultValue={education.time}></TextField>
+              </Stack>
+            );
+          })}
     </>
   );
 }

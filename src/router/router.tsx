@@ -8,7 +8,6 @@ function AppRoutes() {
       <Routes>
         <Route path="/" element={<AdminLogin />} />
         <Route path="/resume" element={<Resume />} />
-        <Route path="/resume/update/:userId" element={<Resume />} />
       </Routes>
     </BrowserRouter>
   );
