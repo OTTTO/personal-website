@@ -1,302 +1,35 @@
 import {
   Box,
   Grid,
-  Accordion,
-  AccordionSummary,
-  AccordionDetails,
   Typography,
-  Divider,
-  Fab,
   ThemeProvider,
-  TextField,
   Button,
+  IconButton,
+  Stack,
 } from "@mui/material";
-import { ExpandMore, MailOutline, GitHub } from "@mui/icons-material";
 import resumeTheme from "themes/resumeTheme";
 import reactIcon from "images/reactjs-icon.svg";
 import nodeIcon from "images/nodejs-icon.svg";
 import graphQlIcon from "images/graphql-icon.svg";
 import { useMutation, useQuery } from "@apollo/client";
 import { RESUME, UPDATE_RESUME } from "queries/resume";
-import { Stack } from "@mui/system";
 import React, { useEffect } from "react";
+import {
+  Contact,
+  Education,
+  Experience,
+  IEducation,
+  IExperience,
+  IResponsibility,
+  IResume,
+  ISkillGroup,
+  Skills,
+} from "./ResumeComponents";
+import { AddCircle } from "@mui/icons-material";
 
 const isAuthenticated = localStorage.getItem("token");
 
-function Contact() {
-  return (
-    <Box>
-      <Typography variant="h1"> Dylan Beckwith </Typography>
-      <Typography variant="h3"> Software Engineer </Typography>
-      <Fab
-        variant="extended"
-        href="mailto:contact.dylanbeckwith@gmail.com"
-        sx={{ margin: "1rem 1rem 0rem 0rem" }}
-      >
-        <MailOutline sx={{ mr: 1 }} />
-        <Typography variant="h6"> contact.dylan.beckwith@gmail.com </Typography>
-      </Fab>
-      <Fab
-        variant="extended"
-        href="https://www.github.com/OTTTO"
-        sx={{ margin: "1rem 1rem 0rem 0rem" }}
-      >
-        <GitHub sx={{ mr: 1 }} />
-        <Typography variant="h6"> github.com/OTTTO </Typography>
-      </Fab>
-
-      <Typography variant="h6"> </Typography>
-    </Box>
-  );
-}
-
-interface ISkillGroup {
-  id?: string;
-  name: string;
-  skills: string;
-}
-
-function Skills({ skillGroupList, handleChange }) {
-  return (
-    <>
-      {skillGroupList.map((skillGroup: ISkillGroup, idx: number) => (
-        <Accordion>
-          <AccordionSummary expandIcon={<ExpandMore />}>
-            {!isAuthenticated ? (
-              <Typography>
-                <b>{skillGroup.name}</b>
-              </Typography>
-            ) : (
-              <TextField
-                id="skillGroupName"
-                inputProps={{ className: "test" }}
-                defaultValue={skillGroup.name}
-                onChange={(e) => handleChange(e, skillGroup, idx)}
-              ></TextField>
-            )}
-          </AccordionSummary>
-          <AccordionDetails>
-            {!isAuthenticated ? (
-              <Typography>{skillGroup.skills}</Typography>
-            ) : (
-              <TextField
-                id="skillGroupSkills"
-                defaultValue={skillGroup.skills}
-                onChange={(e) => handleChange(e, skillGroup, idx)}
-              ></TextField>
-            )}
-          </AccordionDetails>
-        </Accordion>
-      ))}
-    </>
-  );
-}
-
-interface RoleInfoProps {
-  role: string;
-  company: string;
-  location: string;
-  time: string;
-}
-
-function RoleInfo({ role, company, location, time }: RoleInfoProps) {
-  return (
-    <>
-      <Typography variant="subtitle2">
-        <b>
-          <i>{role}</i>, {company}
-        </b>
-      </Typography>
-      <Typography variant="subtitle2">
-        <b>
-          {location}, {time}
-        </b>
-      </Typography>
-    </>
-  );
-}
-
-interface IExperience {
-  id?: string;
-  role: string;
-  company: string;
-  location: string;
-  time: string;
-  responsibilities: IResponsibility[];
-}
-
-interface IResponsibility {
-  id?: string;
-  details: string;
-}
-
-function Experience({
-  experienceList,
-  handleExperienceChange,
-  handleResponsibilityChange,
-}) {
-  return (
-    <>
-      {experienceList.map((experience: IExperience, expIdx: number) => (
-        <Accordion>
-          <AccordionSummary expandIcon={<ExpandMore />}>
-            {!isAuthenticated ? (
-              <Typography>
-                <b>
-                  <RoleInfo
-                    role={experience.role}
-                    company={experience.company}
-                    location={experience.location}
-                    time={experience.time}
-                  />
-                </b>
-              </Typography>
-            ) : (
-              <Stack direction="row">
-                <TextField
-                  id="experienceRole"
-                  defaultValue={experience.role}
-                  onChange={(e) =>
-                    handleExperienceChange(e, experience, expIdx)
-                  }
-                ></TextField>
-                <TextField
-                  id="experienceCompany"
-                  defaultValue={experience.company}
-                  onChange={(e) =>
-                    handleExperienceChange(e, experience, expIdx)
-                  }
-                ></TextField>
-                <TextField
-                  id="experienceLocation"
-                  defaultValue={experience.location}
-                  onChange={(e) =>
-                    handleExperienceChange(e, experience, expIdx)
-                  }
-                ></TextField>
-                <TextField
-                  id="experienceTime"
-                  defaultValue={experience.time}
-                  onChange={(e) =>
-                    handleExperienceChange(e, experience, expIdx)
-                  }
-                ></TextField>
-              </Stack>
-            )}
-          </AccordionSummary>
-          <AccordionDetails>
-            {!isAuthenticated ? (
-              <Typography>
-                {experience.responsibilities.map(
-                  (responsibility: IResponsibility, index: number) => (
-                    <li
-                      key={index}
-                      dangerouslySetInnerHTML={{
-                        __html: responsibility.details,
-                      }}
-                    />
-                  )
-                )}
-              </Typography>
-            ) : (
-              <Stack>
-                {experience.responsibilities.map(
-                  (responsibility: IResponsibility, resIdx) => (
-                    <TextField
-                      id="responsibility"
-                      multiline
-                      defaultValue={responsibility.details}
-                      onChange={(e) =>
-                        handleResponsibilityChange(
-                          e,
-                          responsibility,
-                          expIdx,
-                          resIdx
-                        )
-                      }
-                    ></TextField>
-                  )
-                )}
-              </Stack>
-            )}
-          </AccordionDetails>
-        </Accordion>
-      ))}
-    </>
-  );
-}
-
-interface EducationItemProps {
-  institution: string;
-  achievement: string;
-  time: string;
-}
-
-interface IEducation extends EducationItemProps {
-  id?: string;
-}
-
-function EducationItem({ institution, achievement, time }: EducationItemProps) {
-  return (
-    <Grid container={true} justifyContent="space-between">
-      <Typography align="left">
-        <b>{institution}</b> - {achievement}
-      </Typography>
-      <Typography align="right">
-        <b>{time}</b>
-      </Typography>
-    </Grid>
-  );
-}
-
-function Education({ educationList, handleChange }) {
-  return (
-    <>
-      {!isAuthenticated
-        ? educationList.map((education: IEducation, idx: number) => {
-            return (
-              <>
-                <EducationItem
-                  institution={education.institution}
-                  achievement={education.achievement}
-                  time={education.time}
-                />
-                {idx + 1 < educationList.length && <Divider />}
-              </>
-            );
-          })
-        : educationList.map((education: IEducation, idx: number) => {
-            return (
-              <Stack direction="row">
-                <TextField
-                  id="educationInstitution"
-                  defaultValue={education.institution}
-                  onChange={(e) => handleChange(e, education, idx)}
-                ></TextField>
-                <TextField
-                  id="educationAchievement"
-                  defaultValue={education.achievement}
-                  onChange={(e) => handleChange(e, education, idx)}
-                ></TextField>
-                <TextField
-                  id="educationTime"
-                  defaultValue={education.time}
-                  onChange={(e) => handleChange(e, education, idx)}
-                ></TextField>
-              </Stack>
-            );
-          })}
-    </>
-  );
-}
-
-export interface IResume {
-  skillGroups: ISkillGroup[];
-  experience: IExperience[];
-  education: IEducation[];
-}
-
-function Resume() {
+export function Resume() {
   const [skillGroupList, setSkillGroupList] = React.useState<ISkillGroup[]>();
   const [experienceList, setExperienceList] = React.useState<IExperience[]>();
   const [educationList, setEducationList] = React.useState<IEducation[]>();
@@ -372,6 +105,64 @@ function Resume() {
     }
     const newEducationList = structuredClone(educationList);
     newEducationList[idx] = newEducation;
+    setEducationList(newEducationList);
+  };
+
+  const handleRemoveSkillGroup = (idx: number) => {
+    console.log(idx);
+    const newSkillGroupList = structuredClone(skillGroupList);
+    console.log(newSkillGroupList);
+    newSkillGroupList.splice(idx, 1);
+    console.log(newSkillGroupList);
+    setSkillGroupList(newSkillGroupList);
+  };
+
+  const handleRemoveExperience = (idx: number) => {
+    const newExperienceList = structuredClone(experienceList);
+    newExperienceList.splice(idx, 1);
+    setExperienceList(newExperienceList);
+  };
+
+  const handleRemoveResponsibility = (expIdx: number, resIdx: number) => {
+    const newExperienceList = structuredClone(experienceList);
+    newExperienceList[expIdx].responsibilities.splice(resIdx, 1);
+    setExperienceList(newExperienceList);
+  };
+
+  const handleRemoveEducation = (idx: number) => {
+    const newEducationList = structuredClone(educationList);
+    newEducationList.splice(idx, 1);
+    setEducationList(newEducationList);
+  };
+
+  const handleAddSkillGroup = () => {
+    const newSkillGroupList = structuredClone(skillGroupList);
+    newSkillGroupList.push({ name: "", skills: "" });
+    setSkillGroupList(newSkillGroupList);
+  };
+
+  const handleAddExperience = () => {
+    const newExperienceList = structuredClone(experienceList);
+    newExperienceList.push({
+      role: "",
+      company: "",
+      location: "",
+      time: "",
+      responsibilities: [{ details: "" }],
+    });
+    setExperienceList(newExperienceList);
+  };
+
+  const handleAddResponsibility = (expIdx: number) => {
+    const newExperienceList = structuredClone(experienceList);
+    const experience = newExperienceList[expIdx];
+    experience.responsibilities.push({ details: "" });
+    setExperienceList(newExperienceList);
+  };
+
+  const handleAddEducation = () => {
+    const newEducationList = structuredClone(educationList);
+    newEducationList.push({ institution: "", achievement: "", time: "" });
     setEducationList(newEducationList);
   };
 
@@ -454,36 +245,75 @@ function Resume() {
           sx={{ margin: "auto", width: "55%", backgroundColor: "white" }}
         >
           {isAuthenticated && (
-            <Button
-              variant="contained"
-              sx={{ float: "right" }}
-              onClick={() => updateResume({ variables: { resume } })}
-            >
-              SAVE
-            </Button>
+            <>
+              <Stack direction="row" sx={{ float: "right" }} spacing={2}>
+                <Button
+                  variant="contained"
+                  onClick={() => updateResume({ variables: { resume } })}
+                >
+                  SAVE
+                </Button>
+                <Button
+                  variant="contained"
+                  color="error"
+                  onClick={() => {
+                    localStorage.removeItem("token");
+                    window.location.replace("/");
+                  }}
+                >
+                  LOGOUT
+                </Button>
+              </Stack>
+            </>
           )}
           <Contact />
-          <Typography variant="h4" padding="1rem">
-            TECHNICAL SKILLS
-          </Typography>
+          <Stack direction="row">
+            <Typography variant="h4" padding="1rem">
+              TECHNICAL SKILLS
+            </Typography>
+            {isAuthenticated && (
+              <IconButton onClick={handleAddSkillGroup}>
+                <AddCircle sx={{ mr: 1 }} />
+              </IconButton>
+            )}
+          </Stack>
           <Skills
             skillGroupList={skillGroupList || data.resume.skillGroupList}
             handleChange={handleSkillGroupListChange}
+            removeGroup={handleRemoveSkillGroup}
           />
-          <Typography variant="h4" padding="1rem">
-            PROFESSIONAL EXPERIENCE
-          </Typography>
+          <Stack direction="row">
+            <Typography variant="h4" padding="1rem">
+              PROFESSIONAL EXPERIENCE
+            </Typography>
+            {isAuthenticated && (
+              <IconButton onClick={handleAddExperience}>
+                <AddCircle sx={{ mr: 1 }} />
+              </IconButton>
+            )}
+          </Stack>
           <Experience
             experienceList={experienceList || data.resume.experienceList}
             handleExperienceChange={handleExperienceListChange}
             handleResponsibilityChange={handleResponsibilityListChange}
+            removeExperience={handleRemoveExperience}
+            addResponsibility={handleAddResponsibility}
+            removeResponsibility={handleRemoveResponsibility}
           />
-          <Typography variant="h4" padding="1rem">
-            EDUCATION
-          </Typography>
+          <Stack direction="row">
+            <Typography variant="h4" padding="1rem">
+              EDUCATION
+            </Typography>
+            {isAuthenticated && (
+              <IconButton onClick={handleAddEducation}>
+                <AddCircle sx={{ mr: 1 }} />
+              </IconButton>
+            )}
+          </Stack>
           <Education
             educationList={educationList || data.resume.educationList}
             handleChange={handleEducationListChange}
+            removeEducation={handleRemoveEducation}
           />
         </Box>
       </Box>
