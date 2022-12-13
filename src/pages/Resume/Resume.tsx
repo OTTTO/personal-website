@@ -9,14 +9,15 @@ import {
   Fab,
   ThemeProvider,
   TextField,
+  Button,
 } from "@mui/material";
 import { ExpandMore, MailOutline, GitHub } from "@mui/icons-material";
 import resumeTheme from "themes/resumeTheme";
 import reactIcon from "images/reactjs-icon.svg";
 import nodeIcon from "images/nodejs-icon.svg";
 import graphQlIcon from "images/graphql-icon.svg";
-import { useQuery } from "@apollo/client";
-import { RESUME } from "queries/resume";
+import { useMutation, useQuery } from "@apollo/client";
+import { RESUME, UPDATE_RESUME } from "queries/resume";
 import { Stack } from "@mui/system";
 import React, { useEffect } from "react";
 
@@ -50,6 +51,7 @@ function Contact() {
 }
 
 interface ISkillGroup {
+  id?: string;
   name: string;
   skills: string;
 }
@@ -115,6 +117,7 @@ function RoleInfo({ role, company, location, time }: RoleInfoProps) {
 }
 
 interface IExperience {
+  id?: string;
   role: string;
   company: string;
   location: string;
@@ -123,6 +126,7 @@ interface IExperience {
 }
 
 interface IResponsibility {
+  id?: string;
   details: string;
 }
 
@@ -228,7 +232,9 @@ interface EducationItemProps {
   time: string;
 }
 
-interface IEducation extends EducationItemProps {}
+interface IEducation extends EducationItemProps {
+  id?: string;
+}
 
 function EducationItem({ institution, achievement, time }: EducationItemProps) {
   return (
@@ -284,10 +290,21 @@ function Education({ educationList, handleChange }) {
   );
 }
 
+export interface IResume {
+  skillGroups: ISkillGroup[];
+  experience: IExperience[];
+  education: IEducation[];
+}
+
 function Resume() {
   const [skillGroupList, setSkillGroupList] = React.useState<ISkillGroup[]>();
   const [experienceList, setExperienceList] = React.useState<IExperience[]>();
   const [educationList, setEducationList] = React.useState<IEducation[]>();
+  const resume: IResume = {
+    skillGroups: skillGroupList,
+    experience: experienceList,
+    education: educationList,
+  };
 
   const handleSkillGroupListChange = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -358,6 +375,7 @@ function Resume() {
     setEducationList(newEducationList);
   };
 
+  const [updateResume] = useMutation(UPDATE_RESUME);
   const { data, loading, error } = useQuery(RESUME);
 
   useEffect(() => {
@@ -435,6 +453,15 @@ function Resume() {
           padding="1rem"
           sx={{ margin: "auto", width: "55%", backgroundColor: "white" }}
         >
+          {isAuthenticated && (
+            <Button
+              variant="contained"
+              sx={{ float: "right" }}
+              onClick={() => updateResume({ variables: { resume } })}
+            >
+              SAVE
+            </Button>
+          )}
           <Contact />
           <Typography variant="h4" padding="1rem">
             TECHNICAL SKILLS

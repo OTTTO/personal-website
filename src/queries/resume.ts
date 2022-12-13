@@ -28,3 +28,9 @@ export const RESUME = gql`
     }
   }
 `;
+
+export const UPDATE_RESUME = gql`
+  mutation UpsertResume($resume: ResumeInput!) {
+    upsertResume(resume: $resume)
+  }
+`;

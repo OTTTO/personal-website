@@ -38,5 +38,7 @@ const errorHandler = onError(({ graphQLErrors, networkError }) => {
 
 export const apolloClient = new ApolloClient({
   link: ApolloLink.from([authMiddleware, errorHandler, httpLink]),
-  cache: new InMemoryCache(),
+  cache: new InMemoryCache({
+    addTypename: false,
+  }),
 });
