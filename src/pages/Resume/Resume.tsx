@@ -18,6 +18,7 @@ import graphQlIcon from "images/graphql-icon.svg";
 import { useQuery } from "@apollo/client";
 import { RESUME } from "queries/resume";
 import { Stack } from "@mui/system";
+import React, { useEffect } from "react";
 
 const isAuthenticated = localStorage.getItem("token");
 
@@ -48,48 +49,42 @@ function Contact() {
   );
 }
 
-interface SkillsAccordionProps {
-  summary: string | React.ReactNode;
-  details: string | React.ReactNode;
-}
-
-function SkillsAccordion({ summary, details }: SkillsAccordionProps) {
-  return (
-    <Accordion>
-      <AccordionSummary expandIcon={<ExpandMore />}>
-        {!isAuthenticated ? (
-          <Typography>
-            <b>{summary}</b>
-          </Typography>
-        ) : (
-          <TextField defaultValue={summary}></TextField>
-        )}
-      </AccordionSummary>
-      <AccordionDetails>
-        {!isAuthenticated ? (
-          <Typography>{details}</Typography>
-        ) : (
-          <TextField defaultValue={details}></TextField>
-        )}
-      </AccordionDetails>
-    </Accordion>
-  );
-}
-
 interface ISkillGroup {
   name: string;
   skills: string;
 }
 
-function Skills({ skillGroupList }) {
+function Skills({ skillGroupList, handleChange }) {
   return (
     <>
       {skillGroupList.map((skillGroup: ISkillGroup, idx: number) => (
-        <SkillsAccordion
-          key={idx}
-          summary={skillGroup.name}
-          details={skillGroup.skills}
-        />
+        <Accordion>
+          <AccordionSummary expandIcon={<ExpandMore />}>
+            {!isAuthenticated ? (
+              <Typography>
+                <b>{skillGroup.name}</b>
+              </Typography>
+            ) : (
+              <TextField
+                id="skillGroupName"
+                inputProps={{ className: "test" }}
+                defaultValue={skillGroup.name}
+                onChange={(e) => handleChange(e, skillGroup, idx)}
+              ></TextField>
+            )}
+          </AccordionSummary>
+          <AccordionDetails>
+            {!isAuthenticated ? (
+              <Typography>{skillGroup.skills}</Typography>
+            ) : (
+              <TextField
+                id="skillGroupSkills"
+                defaultValue={skillGroup.skills}
+                onChange={(e) => handleChange(e, skillGroup, idx)}
+              ></TextField>
+            )}
+          </AccordionDetails>
+        </Accordion>
       ))}
     </>
   );
@@ -119,10 +114,6 @@ function RoleInfo({ role, company, location, time }: RoleInfoProps) {
   );
 }
 
-interface IResponsibility {
-  details: string;
-}
-
 interface IExperience {
   role: string;
   company: string;
@@ -131,74 +122,101 @@ interface IExperience {
   responsibilities: IResponsibility[];
 }
 
-interface ExperienceAccordionProps extends IExperience {}
-
-function ExperienceAccordion({
-  role,
-  company,
-  location,
-  time,
-  responsibilities,
-}: ExperienceAccordionProps) {
-  return (
-    <Accordion>
-      <AccordionSummary expandIcon={<ExpandMore />}>
-        {!isAuthenticated ? (
-          <Typography>
-            <b>
-              <RoleInfo
-                role={role}
-                company={company}
-                location={location}
-                time={time}
-              />
-            </b>
-          </Typography>
-        ) : (
-          <Stack direction="row">
-            <TextField defaultValue={role}></TextField>
-            <TextField defaultValue={company}></TextField>
-            <TextField defaultValue={location}></TextField>
-            <TextField defaultValue={time}></TextField>
-          </Stack>
-        )}
-      </AccordionSummary>
-      <AccordionDetails>
-        {!isAuthenticated ? (
-          <Typography>
-            {responsibilities.map(
-              (responsibility: IResponsibility, index: number) => (
-                <li
-                  key={index}
-                  dangerouslySetInnerHTML={{ __html: responsibility.details }}
-                />
-              )
-            )}
-          </Typography>
-        ) : (
-          <Stack>
-            {responsibilities.map((responsibility: IResponsibility) => (
-              <TextField defaultValue={responsibility.details}></TextField>
-            ))}
-          </Stack>
-        )}
-      </AccordionDetails>
-    </Accordion>
-  );
+interface IResponsibility {
+  details: string;
 }
 
-function Experience({ experienceList }) {
+function Experience({
+  experienceList,
+  handleExperienceChange,
+  handleResponsibilityChange,
+}) {
   return (
     <>
-      {experienceList.map((experience: IExperience, idx: number) => (
-        <ExperienceAccordion
-          key={idx}
-          role={experience.role}
-          company={experience.company}
-          location={experience.location}
-          time={experience.time}
-          responsibilities={experience.responsibilities}
-        />
+      {experienceList.map((experience: IExperience, expIdx: number) => (
+        <Accordion>
+          <AccordionSummary expandIcon={<ExpandMore />}>
+            {!isAuthenticated ? (
+              <Typography>
+                <b>
+                  <RoleInfo
+                    role={experience.role}
+                    company={experience.company}
+                    location={experience.location}
+                    time={experience.time}
+                  />
+                </b>
+              </Typography>
+            ) : (
+              <Stack direction="row">
+                <TextField
+                  id="experienceRole"
+                  defaultValue={experience.role}
+                  onChange={(e) =>
+                    handleExperienceChange(e, experience, expIdx)
+                  }
+                ></TextField>
+                <TextField
+                  id="experienceCompany"
+                  defaultValue={experience.company}
+                  onChange={(e) =>
+                    handleExperienceChange(e, experience, expIdx)
+                  }
+                ></TextField>
+                <TextField
+                  id="experienceLocation"
+                  defaultValue={experience.location}
+                  onChange={(e) =>
+                    handleExperienceChange(e, experience, expIdx)
+                  }
+                ></TextField>
+                <TextField
+                  id="experienceTime"
+                  defaultValue={experience.time}
+                  onChange={(e) =>
+                    handleExperienceChange(e, experience, expIdx)
+                  }
+                ></TextField>
+              </Stack>
+            )}
+          </AccordionSummary>
+          <AccordionDetails>
+            {!isAuthenticated ? (
+              <Typography>
+                {experience.responsibilities.map(
+                  (responsibility: IResponsibility, index: number) => (
+                    <li
+                      key={index}
+                      dangerouslySetInnerHTML={{
+                        __html: responsibility.details,
+                      }}
+                    />
+                  )
+                )}
+              </Typography>
+            ) : (
+              <Stack>
+                {experience.responsibilities.map(
+                  (responsibility: IResponsibility, resIdx) => (
+                    <TextField
+                      id="responsibility"
+                      multiline
+                      defaultValue={responsibility.details}
+                      onChange={(e) =>
+                        handleResponsibilityChange(
+                          e,
+                          responsibility,
+                          expIdx,
+                          resIdx
+                        )
+                      }
+                    ></TextField>
+                  )
+                )}
+              </Stack>
+            )}
+          </AccordionDetails>
+        </Accordion>
       ))}
     </>
   );
@@ -225,7 +243,7 @@ function EducationItem({ institution, achievement, time }: EducationItemProps) {
   );
 }
 
-function Education({ educationList }) {
+function Education({ educationList, handleChange }) {
   return (
     <>
       {!isAuthenticated
@@ -244,9 +262,21 @@ function Education({ educationList }) {
         : educationList.map((education: IEducation, idx: number) => {
             return (
               <Stack direction="row">
-                <TextField defaultValue={education.institution}></TextField>
-                <TextField defaultValue={education.achievement}></TextField>
-                <TextField defaultValue={education.time}></TextField>
+                <TextField
+                  id="educationInstitution"
+                  defaultValue={education.institution}
+                  onChange={(e) => handleChange(e, education, idx)}
+                ></TextField>
+                <TextField
+                  id="educationAchievement"
+                  defaultValue={education.achievement}
+                  onChange={(e) => handleChange(e, education, idx)}
+                ></TextField>
+                <TextField
+                  id="educationTime"
+                  defaultValue={education.time}
+                  onChange={(e) => handleChange(e, education, idx)}
+                ></TextField>
               </Stack>
             );
           })}
@@ -255,8 +285,89 @@ function Education({ educationList }) {
 }
 
 function Resume() {
+  const [skillGroupList, setSkillGroupList] = React.useState<ISkillGroup[]>();
+  const [experienceList, setExperienceList] = React.useState<IExperience[]>();
+  const [educationList, setEducationList] = React.useState<IEducation[]>();
+
+  const handleSkillGroupListChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    skillGroup: ISkillGroup,
+    idx: number
+  ) => {
+    const newSkillGroup: ISkillGroup = structuredClone(skillGroup);
+    if (e.target.id === "skillGroupName") {
+      newSkillGroup.name = e.target.value;
+    } else if (e.target.id === "skillGroupSkills") {
+      newSkillGroup.skills = e.target.value;
+    }
+    const newSkillGroupList = structuredClone(skillGroupList);
+    newSkillGroupList[idx] = newSkillGroup;
+    setSkillGroupList(newSkillGroupList);
+  };
+
+  const handleExperienceListChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    experience: IExperience,
+    idx: number
+  ) => {
+    const newExperience: IExperience = structuredClone(experience);
+    if (e.target.id === "experienceRole") {
+      newExperience.role = e.target.value;
+    } else if (e.target.id === "experienceCompany") {
+      newExperience.company = e.target.value;
+    } else if (e.target.id === "experienceLocation") {
+      newExperience.location = e.target.value;
+    } else if (e.target.id === "experienceTime") {
+      newExperience.time = e.target.value;
+    }
+    const newExperienceList = structuredClone(experienceList);
+    newExperienceList[idx] = newExperience;
+    setExperienceList(newExperienceList);
+  };
+
+  const handleResponsibilityListChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    responsibility: IResponsibility,
+    expIdx: number,
+    resIdx: number
+  ) => {
+    const newResponsibility: IResponsibility = structuredClone(responsibility);
+    console.log(`res: ${JSON.stringify(responsibility)}`);
+    newResponsibility.details = e.target.value;
+    const newExperienceList = structuredClone(experienceList);
+    console.log(`new res:${JSON.stringify(newResponsibility)}`);
+    newExperienceList[expIdx].responsibilities[resIdx] = newResponsibility;
+    setExperienceList(newExperienceList);
+  };
+
+  const handleEducationListChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    education: IEducation,
+    idx: number
+  ) => {
+    const newEducation: IEducation = structuredClone(education);
+    if (e.target.id === "educationInstitution") {
+      newEducation.institution = e.target.value;
+    } else if (e.target.id === "educationAchievement") {
+      newEducation.achievement = e.target.value;
+    } else if (e.target.id === "educationTime") {
+      newEducation.time = e.target.value;
+    }
+    const newEducationList = structuredClone(educationList);
+    newEducationList[idx] = newEducation;
+    setEducationList(newEducationList);
+  };
+
   const { data, loading, error } = useQuery(RESUME);
-  console.log(`data: ${JSON.stringify(data)}`);
+
+  useEffect(() => {
+    if (!loading && data) {
+      setSkillGroupList(data.resume.skillGroupList);
+      setExperienceList(data.resume.experienceList);
+      setEducationList(data.resume.educationList);
+    }
+  }, [loading, data]);
+
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error : {error.message}</p>;
 
@@ -328,15 +439,25 @@ function Resume() {
           <Typography variant="h4" padding="1rem">
             TECHNICAL SKILLS
           </Typography>
-          <Skills skillGroupList={data.resume.skillGroupList} />
+          <Skills
+            skillGroupList={skillGroupList || data.resume.skillGroupList}
+            handleChange={handleSkillGroupListChange}
+          />
           <Typography variant="h4" padding="1rem">
             PROFESSIONAL EXPERIENCE
           </Typography>
-          <Experience experienceList={data.resume.experienceList} />
+          <Experience
+            experienceList={experienceList || data.resume.experienceList}
+            handleExperienceChange={handleExperienceListChange}
+            handleResponsibilityChange={handleResponsibilityListChange}
+          />
           <Typography variant="h4" padding="1rem">
             EDUCATION
           </Typography>
-          <Education educationList={data.resume.educationList} />
+          <Education
+            educationList={educationList || data.resume.educationList}
+            handleChange={handleEducationListChange}
+          />
         </Box>
       </Box>
     </ThemeProvider>
