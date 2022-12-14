@@ -107,14 +107,11 @@ export function Resume() {
   };
 
   const handleRemoveSkillGroup = (idx: number) => {
-    console.log(idx);
     const newSkillGroupList: ISkillGroup[] = structuredClone(skillGroupList);
-    // console.log(newSkillGroupList);
     newSkillGroupList.splice(idx, 1);
     for (let i = 0; i < newSkillGroupList.length; i++) {
       newSkillGroupList[i].position = i;
     }
-    // console.log(newSkillGroupList);
     setSkillGroupList(newSkillGroupList);
   };
 
@@ -206,8 +203,6 @@ export function Resume() {
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error : {error.message}</p>;
-
-  console.log(`skillGroupList: ${JSON.stringify(skillGroupList)}`);
 
   return (
     <ThemeProvider theme={resumeTheme}>

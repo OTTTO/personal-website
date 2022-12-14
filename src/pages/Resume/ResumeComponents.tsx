@@ -56,52 +56,48 @@ export interface ISkillGroup {
 }
 
 export function Skills({ skillGroupList, handleChange, removeGroup }) {
-  console.log(`in Skills list: ${JSON.stringify(skillGroupList)}`);
   return (
     <>
       {structuredClone(skillGroupList)
         .sort((a, b) => a.position - b.position)
         .map((skillGroup: ISkillGroup, idx: number) => {
-          console.log(`in map ${idx}: ${JSON.stringify(skillGroup)}`);
           return (
-            <>
-              <Stack direction="row">
-                <Accordion sx={{ width: "100%" }}>
-                  <AccordionSummary expandIcon={<ExpandMore />}>
-                    {!isAuthenticated ? (
-                      <Typography>
-                        <b>{skillGroup.name}</b>
-                      </Typography>
-                    ) : (
-                      <TextField
-                        id="skillGroupName"
-                        fullWidth={true}
-                        inputProps={{ className: "test" }}
-                        defaultValue={skillGroup.name}
-                        onChange={(e) => handleChange(e, skillGroup, idx)}
-                      ></TextField>
-                    )}
-                  </AccordionSummary>
-                  <AccordionDetails>
-                    {!isAuthenticated ? (
-                      <Typography>{skillGroup.skills}</Typography>
-                    ) : (
-                      <TextField
-                        id="skillGroupSkills"
-                        fullWidth={true}
-                        defaultValue={skillGroup.skills}
-                        onChange={(e) => handleChange(e, skillGroup, idx)}
-                      ></TextField>
-                    )}
-                  </AccordionDetails>
-                </Accordion>
-                {isAuthenticated && (
-                  <IconButton onClick={() => removeGroup(idx)}>
-                    <RemoveCircle sx={{ mr: 1 }} />
-                  </IconButton>
-                )}
-              </Stack>
-            </>
+            <Stack direction="row" key={skillGroup.id}>
+              <Accordion sx={{ width: "100%" }}>
+                <AccordionSummary expandIcon={<ExpandMore />}>
+                  {!isAuthenticated ? (
+                    <Typography>
+                      <b>{skillGroup.name}</b>
+                    </Typography>
+                  ) : (
+                    <TextField
+                      id="skillGroupName"
+                      fullWidth={true}
+                      inputProps={{ className: "test" }}
+                      defaultValue={skillGroup.name}
+                      onChange={(e) => handleChange(e, skillGroup, idx)}
+                    ></TextField>
+                  )}
+                </AccordionSummary>
+                <AccordionDetails>
+                  {!isAuthenticated ? (
+                    <Typography>{skillGroup.skills}</Typography>
+                  ) : (
+                    <TextField
+                      id="skillGroupSkills"
+                      fullWidth={true}
+                      defaultValue={skillGroup.skills}
+                      onChange={(e) => handleChange(e, skillGroup, idx)}
+                    ></TextField>
+                  )}
+                </AccordionDetails>
+              </Accordion>
+              {isAuthenticated && (
+                <IconButton onClick={() => removeGroup(idx)}>
+                  <RemoveCircle sx={{ mr: 1 }} />
+                </IconButton>
+              )}
+            </Stack>
           );
         })}
     </>
@@ -156,109 +152,97 @@ export function Experience({
   addResponsibility,
   removeResponsibility,
 }) {
-  return (
-    <>
-      {structuredClone(experienceList)
-        .sort((a, b) => a.position - b.position)
-        .map((experience: IExperience, expIdx: number) => (
-          <Accordion>
-            <AccordionSummary expandIcon={<ExpandMore />}>
-              {!isAuthenticated ? (
-                <Typography>
-                  <b>
-                    <RoleInfo
-                      role={experience.role}
-                      company={experience.company}
-                      location={experience.location}
-                      time={experience.time}
-                    />
-                  </b>
+  return structuredClone(experienceList)
+    .sort((a, b) => a.position - b.position)
+    .map((experience: IExperience, expIdx: number) => (
+      <Accordion key={experience.id}>
+        <AccordionSummary expandIcon={<ExpandMore />}>
+          {!isAuthenticated ? (
+            <Typography>
+              <b>
+                <RoleInfo
+                  role={experience.role}
+                  company={experience.company}
+                  location={experience.location}
+                  time={experience.time}
+                />
+              </b>
+            </Typography>
+          ) : (
+            <Stack direction="row">
+              <TextField
+                id="experienceRole"
+                defaultValue={experience.role}
+                onChange={(e) => handleExperienceChange(e, experience, expIdx)}
+              ></TextField>
+              <TextField
+                id="experienceCompany"
+                defaultValue={experience.company}
+                onChange={(e) => handleExperienceChange(e, experience, expIdx)}
+              ></TextField>
+              <TextField
+                id="experienceLocation"
+                defaultValue={experience.location}
+                onChange={(e) => handleExperienceChange(e, experience, expIdx)}
+              ></TextField>
+              <TextField
+                id="experienceTime"
+                defaultValue={experience.time}
+                onChange={(e) => handleExperienceChange(e, experience, expIdx)}
+              ></TextField>
+              <IconButton onClick={() => removeExperience(expIdx)}>
+                <RemoveCircle sx={{ mr: 1 }} />
+              </IconButton>
+            </Stack>
+          )}
+        </AccordionSummary>
+        {isAuthenticated && (
+          <IconButton onClick={() => addResponsibility(expIdx)}>
+            <AddCircle sx={{ mr: 1 }} />
+          </IconButton>
+        )}
+        <AccordionDetails>
+          {experience.responsibilities
+            .sort((a, b) => a.position - b.position)
+            .map((responsibility: IResponsibility, resIdx: number) => {
+              return !isAuthenticated ? (
+                <Typography key={responsibility.id}>
+                  <li
+                    key={resIdx}
+                    dangerouslySetInnerHTML={{
+                      __html: responsibility.details,
+                    }}
+                  />
                 </Typography>
               ) : (
-                <Stack direction="row">
-                  <TextField
-                    id="experienceRole"
-                    defaultValue={experience.role}
-                    onChange={(e) =>
-                      handleExperienceChange(e, experience, expIdx)
-                    }
-                  ></TextField>
-                  <TextField
-                    id="experienceCompany"
-                    defaultValue={experience.company}
-                    onChange={(e) =>
-                      handleExperienceChange(e, experience, expIdx)
-                    }
-                  ></TextField>
-                  <TextField
-                    id="experienceLocation"
-                    defaultValue={experience.location}
-                    onChange={(e) =>
-                      handleExperienceChange(e, experience, expIdx)
-                    }
-                  ></TextField>
-                  <TextField
-                    id="experienceTime"
-                    defaultValue={experience.time}
-                    onChange={(e) =>
-                      handleExperienceChange(e, experience, expIdx)
-                    }
-                  ></TextField>
-                  <IconButton onClick={() => removeExperience(expIdx)}>
-                    <RemoveCircle sx={{ mr: 1 }} />
-                  </IconButton>
+                <Stack key={responsibility.id}>
+                  <Stack direction="row">
+                    <TextField
+                      id="responsibility"
+                      fullWidth={true}
+                      multiline
+                      defaultValue={responsibility.details}
+                      onChange={(e) =>
+                        handleResponsibilityChange(
+                          e,
+                          responsibility,
+                          expIdx,
+                          resIdx
+                        )
+                      }
+                    ></TextField>
+                    <IconButton
+                      onClick={() => removeResponsibility(expIdx, resIdx)}
+                    >
+                      <RemoveCircle sx={{ mr: 1 }} />
+                    </IconButton>
+                  </Stack>
                 </Stack>
-              )}
-            </AccordionSummary>
-            {isAuthenticated && (
-              <IconButton onClick={() => addResponsibility(expIdx)}>
-                <AddCircle sx={{ mr: 1 }} />
-              </IconButton>
-            )}
-            <AccordionDetails>
-              {experience.responsibilities
-                .sort((a, b) => a.position - b.position)
-                .map((responsibility: IResponsibility, resIdx: number) => {
-                  return !isAuthenticated ? (
-                    <Typography>
-                      <li
-                        key={resIdx}
-                        dangerouslySetInnerHTML={{
-                          __html: responsibility.details,
-                        }}
-                      />
-                    </Typography>
-                  ) : (
-                    <Stack>
-                      <Stack direction="row">
-                        <TextField
-                          id="responsibility"
-                          fullWidth={true}
-                          multiline
-                          defaultValue={responsibility.details}
-                          onChange={(e) =>
-                            handleResponsibilityChange(
-                              e,
-                              responsibility,
-                              expIdx,
-                              resIdx
-                            )
-                          }
-                        ></TextField>
-                        <IconButton
-                          onClick={() => removeResponsibility(expIdx, resIdx)}
-                        >
-                          <RemoveCircle sx={{ mr: 1 }} />
-                        </IconButton>
-                      </Stack>
-                    </Stack>
-                  );
-                })}
-            </AccordionDetails>
-          </Accordion>
-        ))}
-    </>
-  );
+              );
+            })}
+        </AccordionDetails>
+      </Accordion>
+    ));
 }
 
 interface EducationItemProps {
@@ -296,37 +280,35 @@ export function Education({ educationList, handleChange, removeEducation }) {
         .sort((a, b) => a.position - b.position)
         .map((education: IEducation, idx: number) => {
           return !isAuthenticated ? (
-            <>
+            <Grid key={education.id}>
               <EducationItem
                 institution={education.institution}
                 achievement={education.achievement}
                 time={education.time}
               />
               {idx + 1 < educationList.length && <Divider />}
-            </>
+            </Grid>
           ) : (
-            <>
-              <Stack direction="row">
-                <TextField
-                  id="educationInstitution"
-                  defaultValue={education.institution}
-                  onChange={(e) => handleChange(e, education, idx)}
-                ></TextField>
-                <TextField
-                  id="educationAchievement"
-                  defaultValue={education.achievement}
-                  onChange={(e) => handleChange(e, education, idx)}
-                ></TextField>
-                <TextField
-                  id="educationTime"
-                  defaultValue={education.time}
-                  onChange={(e) => handleChange(e, education, idx)}
-                ></TextField>
-                <IconButton onClick={() => removeEducation(idx)}>
-                  <RemoveCircle sx={{ mr: 1 }} />
-                </IconButton>
-              </Stack>
-            </>
+            <Stack direction="row" key={education.id}>
+              <TextField
+                id="educationInstitution"
+                defaultValue={education.institution}
+                onChange={(e) => handleChange(e, education, idx)}
+              ></TextField>
+              <TextField
+                id="educationAchievement"
+                defaultValue={education.achievement}
+                onChange={(e) => handleChange(e, education, idx)}
+              ></TextField>
+              <TextField
+                id="educationTime"
+                defaultValue={education.time}
+                onChange={(e) => handleChange(e, education, idx)}
+              ></TextField>
+              <IconButton onClick={() => removeEducation(idx)}>
+                <RemoveCircle sx={{ mr: 1 }} />
+              </IconButton>
+            </Stack>
           );
         })}
     </>
