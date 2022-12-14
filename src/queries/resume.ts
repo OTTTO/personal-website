@@ -5,22 +5,26 @@ export const RESUME = gql`
     resume {
       skillGroupList {
         id
+        position
         name
         skills
       }
       experienceList {
         id
+        position
         role
         company
         location
         time
         responsibilities {
           id
+          position
           details
         }
       }
       educationList {
         id
+        position
         institution
         achievement
         time

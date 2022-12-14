@@ -82,10 +82,8 @@ export function Resume() {
     resIdx: number
   ) => {
     const newResponsibility: IResponsibility = structuredClone(responsibility);
-    console.log(`res: ${JSON.stringify(responsibility)}`);
     newResponsibility.details = e.target.value;
     const newExperienceList = structuredClone(experienceList);
-    console.log(`new res:${JSON.stringify(newResponsibility)}`);
     newExperienceList[expIdx].responsibilities[resIdx] = newResponsibility;
     setExperienceList(newExperienceList);
   };
@@ -110,59 +108,88 @@ export function Resume() {
 
   const handleRemoveSkillGroup = (idx: number) => {
     console.log(idx);
-    const newSkillGroupList = structuredClone(skillGroupList);
-    console.log(newSkillGroupList);
+    const newSkillGroupList: ISkillGroup[] = structuredClone(skillGroupList);
+    // console.log(newSkillGroupList);
     newSkillGroupList.splice(idx, 1);
-    console.log(newSkillGroupList);
+    for (let i = 0; i < newSkillGroupList.length; i++) {
+      newSkillGroupList[i].position = i;
+    }
+    // console.log(newSkillGroupList);
     setSkillGroupList(newSkillGroupList);
   };
 
   const handleRemoveExperience = (idx: number) => {
-    const newExperienceList = structuredClone(experienceList);
+    const newExperienceList: IExperience[] = structuredClone(experienceList);
     newExperienceList.splice(idx, 1);
+    for (let i = 0; i < newExperienceList.length; i++) {
+      newExperienceList[i].position = i;
+    }
     setExperienceList(newExperienceList);
   };
 
   const handleRemoveResponsibility = (expIdx: number, resIdx: number) => {
-    const newExperienceList = structuredClone(experienceList);
+    const newExperienceList: IExperience[] = structuredClone(experienceList);
     newExperienceList[expIdx].responsibilities.splice(resIdx, 1);
+    for (
+      let i = 0;
+      i < newExperienceList[expIdx].responsibilities.length;
+      i++
+    ) {
+      newExperienceList[expIdx].responsibilities[i].position = i;
+    }
     setExperienceList(newExperienceList);
   };
 
   const handleRemoveEducation = (idx: number) => {
-    const newEducationList = structuredClone(educationList);
+    const newEducationList: IEducation[] = structuredClone(educationList);
     newEducationList.splice(idx, 1);
+    for (let i = 0; i < newEducationList.length; i++) {
+      newEducationList[i].position = i;
+    }
     setEducationList(newEducationList);
   };
 
   const handleAddSkillGroup = () => {
-    const newSkillGroupList = structuredClone(skillGroupList);
-    newSkillGroupList.push({ name: "", skills: "" });
+    const newSkillGroupList: ISkillGroup[] = structuredClone(skillGroupList);
+    newSkillGroupList.push({
+      name: "",
+      skills: "",
+      position: skillGroupList.length,
+    });
     setSkillGroupList(newSkillGroupList);
   };
 
   const handleAddExperience = () => {
-    const newExperienceList = structuredClone(experienceList);
+    const newExperienceList: IExperience[] = structuredClone(experienceList);
     newExperienceList.push({
       role: "",
       company: "",
       location: "",
       time: "",
-      responsibilities: [{ details: "" }],
+      responsibilities: [{ details: "", position: 0 }],
+      position: experienceList.length,
     });
     setExperienceList(newExperienceList);
   };
 
   const handleAddResponsibility = (expIdx: number) => {
-    const newExperienceList = structuredClone(experienceList);
+    const newExperienceList: IExperience[] = structuredClone(experienceList);
     const experience = newExperienceList[expIdx];
-    experience.responsibilities.push({ details: "" });
+    experience.responsibilities.push({
+      details: "",
+      position: experienceList[expIdx].responsibilities.length,
+    });
     setExperienceList(newExperienceList);
   };
 
   const handleAddEducation = () => {
-    const newEducationList = structuredClone(educationList);
-    newEducationList.push({ institution: "", achievement: "", time: "" });
+    const newEducationList: IEducation[] = structuredClone(educationList);
+    newEducationList.push({
+      institution: "",
+      achievement: "",
+      time: "",
+      position: educationList.length,
+    });
     setEducationList(newEducationList);
   };
 
@@ -179,6 +206,8 @@ export function Resume() {
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error : {error.message}</p>;
+
+  console.log(`skillGroupList: ${JSON.stringify(skillGroupList)}`);
 
   return (
     <ThemeProvider theme={resumeTheme}>
@@ -249,7 +278,10 @@ export function Resume() {
               <Stack direction="row" sx={{ float: "right" }} spacing={2}>
                 <Button
                   variant="contained"
-                  onClick={() => updateResume({ variables: { resume } })}
+                  onClick={() => {
+                    updateResume({ variables: { resume } });
+                    window.location.replace("/resume");
+                  }}
                 >
                   SAVE
                 </Button>
