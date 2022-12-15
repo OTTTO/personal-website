@@ -457,8 +457,7 @@ export function Resume() {
             >
               <MailOutline sx={{ mr: 1 }} />
               <Typography variant="h6">
-                {" "}
-                contact.dylan.beckwith@gmail.com{" "}
+                contact.dylan.beckwith@gmail.com
               </Typography>
             </Fab>
             <Fab
