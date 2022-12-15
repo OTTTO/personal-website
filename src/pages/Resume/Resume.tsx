@@ -27,18 +27,19 @@ import {
   MailOutline,
   RemoveCircle,
 } from "@mui/icons-material";
+import { v4 as uuid } from "uuid";
 
 const isAuthenticated = localStorage.getItem("token");
 
 export interface ISkillGroup {
-  id?: string;
+  id: string;
   position: number;
   name: string;
   skills: string;
 }
 
 export interface IExperience {
-  id?: string;
+  id: string;
   position: number;
   role: string;
   company: string;
@@ -48,13 +49,13 @@ export interface IExperience {
 }
 
 export interface IResponsibility {
-  id?: string;
+  id: string;
   position: number;
   details: string;
 }
 
 export interface IEducation {
-  id?: string;
+  id: string;
   position: number;
   institution: string;
   achievement: string;
@@ -159,6 +160,7 @@ export function Resume() {
     for (let i = 0; i < newExperienceList.length; i++) {
       newExperienceList[i].position = i;
     }
+    console.log(newExperienceList);
     setExperienceList(newExperienceList);
   };
 
@@ -187,6 +189,7 @@ export function Resume() {
   const handleAddSkillGroup = () => {
     const newSkillGroupList: ISkillGroup[] = structuredClone(skillGroupList);
     newSkillGroupList.push({
+      id: uuid(),
       name: "",
       skills: "",
       position: skillGroupList.length,
@@ -197,11 +200,12 @@ export function Resume() {
   const handleAddExperience = () => {
     const newExperienceList: IExperience[] = structuredClone(experienceList);
     newExperienceList.push({
+      id: uuid(),
       role: "",
       company: "",
       location: "",
       time: "",
-      responsibilities: [{ details: "", position: 0 }],
+      responsibilities: [{ id: uuid(), details: "", position: 0 }],
       position: experienceList.length,
     });
     setExperienceList(newExperienceList);
@@ -211,6 +215,7 @@ export function Resume() {
     const newExperienceList: IExperience[] = structuredClone(experienceList);
     const experience = newExperienceList[expIdx];
     experience.responsibilities.push({
+      id: uuid(),
       details: "",
       position: experienceList[expIdx].responsibilities.length,
     });
@@ -220,6 +225,7 @@ export function Resume() {
   const handleAddEducation = () => {
     const newEducationList: IEducation[] = structuredClone(educationList);
     newEducationList.push({
+      id: uuid(),
       institution: "",
       achievement: "",
       time: "",
