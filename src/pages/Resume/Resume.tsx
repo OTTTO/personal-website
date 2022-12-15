@@ -78,6 +78,18 @@ export function Resume() {
     education: educationList,
   };
 
+  const [canSubmitArr, setCanSubmitArr] = React.useState<boolean[]>([]);
+
+  const updateErrorCount = (oldString: string, newString: string) => {
+    const newCanSubmitArr: boolean[] = structuredClone(canSubmitArr);
+    if (oldString.length > 0 && newString.length === 0) {
+      newCanSubmitArr.push(true);
+    } else if (oldString.length === 0 && newString.length > 0) {
+      newCanSubmitArr.pop();
+    }
+    setCanSubmitArr(newCanSubmitArr);
+  };
+
   const handleSkillGroupListChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
     skillGroup: ISkillGroup,
@@ -86,8 +98,10 @@ export function Resume() {
     const newSkillGroup: ISkillGroup = structuredClone(skillGroup);
     if (e.target.id === "skillGroupName") {
       newSkillGroup.name = e.target.value;
+      updateErrorCount(skillGroup.name, newSkillGroup.name);
     } else if (e.target.id === "skillGroupSkills") {
       newSkillGroup.skills = e.target.value;
+      updateErrorCount(skillGroup.skills, newSkillGroup.skills);
     }
     const newSkillGroupList = structuredClone(skillGroupList);
     newSkillGroupList[idx] = newSkillGroup;
@@ -102,12 +116,16 @@ export function Resume() {
     const newExperience: IExperience = structuredClone(experience);
     if (e.target.id === "experienceRole") {
       newExperience.role = e.target.value;
+      updateErrorCount(experience.role, newExperience.role);
     } else if (e.target.id === "experienceCompany") {
       newExperience.company = e.target.value;
+      updateErrorCount(experience.company, newExperience.company);
     } else if (e.target.id === "experienceLocation") {
       newExperience.location = e.target.value;
+      updateErrorCount(experience.location, newExperience.location);
     } else if (e.target.id === "experienceTime") {
       newExperience.time = e.target.value;
+      updateErrorCount(experience.time, newExperience.time);
     }
     const newExperienceList = structuredClone(experienceList);
     newExperienceList[idx] = newExperience;
@@ -122,6 +140,7 @@ export function Resume() {
   ) => {
     const newResponsibility: IResponsibility = structuredClone(responsibility);
     newResponsibility.details = e.target.value;
+    updateErrorCount(responsibility.details, newResponsibility.details);
     const newExperienceList = structuredClone(experienceList);
     newExperienceList[expIdx].responsibilities[resIdx] = newResponsibility;
     setExperienceList(newExperienceList);
@@ -135,10 +154,13 @@ export function Resume() {
     const newEducation: IEducation = structuredClone(education);
     if (e.target.id === "educationInstitution") {
       newEducation.institution = e.target.value;
+      updateErrorCount(education.institution, newEducation.institution);
     } else if (e.target.id === "educationAchievement") {
       newEducation.achievement = e.target.value;
+      updateErrorCount(education.achievement, newEducation.achievement);
     } else if (e.target.id === "educationTime") {
       newEducation.time = e.target.value;
+      updateErrorCount(education.time, newEducation.time);
     }
     const newEducationList = structuredClone(educationList);
     newEducationList[idx] = newEducation;
@@ -147,26 +169,59 @@ export function Resume() {
 
   const handleRemoveSkillGroup = (idx: number) => {
     const newSkillGroupList: ISkillGroup[] = structuredClone(skillGroupList);
-    newSkillGroupList.splice(idx, 1);
+
+    //Reset Position
     for (let i = 0; i < newSkillGroupList.length; i++) {
       newSkillGroupList[i].position = i;
     }
+
+    //Splice removed element out of array and remove error count from canSubmitArr
+    const skillGroup: ISkillGroup = newSkillGroupList.splice(idx, 1)[0];
+    const newCanSubmitArr: boolean[] = structuredClone(canSubmitArr);
+
+    for (const property in skillGroup) {
+      if (skillGroup[property].length === 0) {
+        newCanSubmitArr.pop();
+      }
+    }
+
+    setCanSubmitArr(newCanSubmitArr);
     setSkillGroupList(newSkillGroupList);
   };
 
   const handleRemoveExperience = (idx: number) => {
     const newExperienceList: IExperience[] = structuredClone(experienceList);
-    newExperienceList.splice(idx, 1);
+
+    //Reset Position
     for (let i = 0; i < newExperienceList.length; i++) {
       newExperienceList[i].position = i;
     }
-    console.log(newExperienceList);
+
+    //Splice removed element out of array and remove error count from canSubmitArr
+    const experience: IExperience = newExperienceList.splice(idx, 1)[0];
+    const newCanSubmitArr: boolean[] = structuredClone(canSubmitArr);
+
+    for (const property in experience) {
+      if (experience[property].length === 0) {
+        newCanSubmitArr.pop();
+      }
+    }
+
+    // Account for responsibilities
+    for (const responsbility of experience.responsibilities) {
+      if (responsbility.details.length === 0) {
+        newCanSubmitArr.pop();
+      }
+    }
+
+    setCanSubmitArr(newCanSubmitArr);
     setExperienceList(newExperienceList);
   };
 
   const handleRemoveResponsibility = (expIdx: number, resIdx: number) => {
     const newExperienceList: IExperience[] = structuredClone(experienceList);
-    newExperienceList[expIdx].responsibilities.splice(resIdx, 1);
+
+    //Reset Position
     for (
       let i = 0;
       i < newExperienceList[expIdx].responsibilities.length;
@@ -174,15 +229,40 @@ export function Resume() {
     ) {
       newExperienceList[expIdx].responsibilities[i].position = i;
     }
+
+    //Splice removed element out of array and remove error count from canSubmitArr
+    const responsbility: IResponsibility = newExperienceList[
+      expIdx
+    ].responsibilities.splice(resIdx, 1)[0];
+    const newCanSubmitArr: boolean[] = structuredClone(canSubmitArr);
+
+    if (responsbility.details.length === 0) {
+      newCanSubmitArr.pop();
+    }
+
+    setCanSubmitArr(newCanSubmitArr);
     setExperienceList(newExperienceList);
   };
 
   const handleRemoveEducation = (idx: number) => {
     const newEducationList: IEducation[] = structuredClone(educationList);
-    newEducationList.splice(idx, 1);
+
+    //Reset Position
     for (let i = 0; i < newEducationList.length; i++) {
       newEducationList[i].position = i;
     }
+
+    //Splice removed element out of array and remove error count from canSubmitArr
+    const education: IEducation = newEducationList.splice(idx, 1)[0];
+    const newCanSubmitArr: boolean[] = structuredClone(canSubmitArr);
+
+    for (const property in education) {
+      if (education[property].length === 0) {
+        newCanSubmitArr.pop();
+      }
+    }
+
+    setCanSubmitArr(newCanSubmitArr);
     setEducationList(newEducationList);
   };
 
@@ -194,6 +274,14 @@ export function Resume() {
       skills: "",
       position: skillGroupList.length,
     });
+
+    //Add error count to canSubmitArr
+    const emptyFieldCount = 2;
+    const newCanSubmitArr: boolean[] = structuredClone(canSubmitArr);
+    for (let i = 0; i < emptyFieldCount; i++) {
+      newCanSubmitArr.push(true);
+    }
+    setCanSubmitArr(newCanSubmitArr);
     setSkillGroupList(newSkillGroupList);
   };
 
@@ -208,6 +296,14 @@ export function Resume() {
       responsibilities: [{ id: uuid(), details: "", position: 0 }],
       position: experienceList.length,
     });
+
+    //Add error count to canSubmitArr
+    const emptyFieldCount = 5;
+    const newCanSubmitArr: boolean[] = structuredClone(canSubmitArr);
+    for (let i = 0; i < emptyFieldCount; i++) {
+      newCanSubmitArr.push(true);
+    }
+    setCanSubmitArr(newCanSubmitArr);
     setExperienceList(newExperienceList);
   };
 
@@ -219,6 +315,11 @@ export function Resume() {
       details: "",
       position: experienceList[expIdx].responsibilities.length,
     });
+
+    //Add error count to canSubmitArr
+    const newCanSubmitArr: boolean[] = structuredClone(canSubmitArr);
+    newCanSubmitArr.push(true);
+    setCanSubmitArr(newCanSubmitArr);
     setExperienceList(newExperienceList);
   };
 
@@ -231,6 +332,14 @@ export function Resume() {
       time: "",
       position: educationList.length,
     });
+
+    //Add error count to canSubmitArr
+    const emptyFieldCount = 3;
+    const newCanSubmitArr: boolean[] = structuredClone(canSubmitArr);
+    for (let i = 0; i < emptyFieldCount; i++) {
+      newCanSubmitArr.push(true);
+    }
+    setCanSubmitArr(newCanSubmitArr);
     setEducationList(newEducationList);
   };
 
@@ -321,6 +430,7 @@ export function Resume() {
                     updateResume({ variables: { resume } });
                     window.location.replace("/resume");
                   }}
+                  disabled={canSubmitArr.length > 0}
                 >
                   SAVE
                 </Button>
@@ -386,6 +496,7 @@ export function Resume() {
                       ) : (
                         <TextField
                           id="skillGroupName"
+                          error={skillGroup.name.length === 0}
                           fullWidth={true}
                           inputProps={{ className: "test" }}
                           defaultValue={skillGroup.name}
@@ -401,6 +512,7 @@ export function Resume() {
                       ) : (
                         <TextField
                           id="skillGroupSkills"
+                          error={skillGroup.skills.length === 0}
                           fullWidth={true}
                           defaultValue={skillGroup.skills}
                           onChange={(e) =>
@@ -452,6 +564,7 @@ export function Resume() {
                     <Stack direction="row">
                       <TextField
                         id="experienceRole"
+                        error={experience.role.length === 0}
                         defaultValue={experience.role}
                         onChange={(e) =>
                           handleExperienceListChange(e, experience, expIdx)
@@ -459,6 +572,7 @@ export function Resume() {
                       ></TextField>
                       <TextField
                         id="experienceCompany"
+                        error={experience.company.length === 0}
                         defaultValue={experience.company}
                         onChange={(e) =>
                           handleExperienceListChange(e, experience, expIdx)
@@ -466,6 +580,7 @@ export function Resume() {
                       ></TextField>
                       <TextField
                         id="experienceLocation"
+                        error={experience.location.length === 0}
                         defaultValue={experience.location}
                         onChange={(e) =>
                           handleExperienceListChange(e, experience, expIdx)
@@ -473,6 +588,7 @@ export function Resume() {
                       ></TextField>
                       <TextField
                         id="experienceTime"
+                        error={experience.time.length === 0}
                         defaultValue={experience.time}
                         onChange={(e) =>
                           handleExperienceListChange(e, experience, expIdx)
@@ -509,6 +625,7 @@ export function Resume() {
                           <Stack direction="row">
                             <TextField
                               id="responsibility"
+                              error={responsibility.details.length === 0}
                               fullWidth={true}
                               multiline
                               defaultValue={responsibility.details}
@@ -564,6 +681,7 @@ export function Resume() {
                 <Stack direction="row" key={education.id}>
                   <TextField
                     id="educationInstitution"
+                    error={education.institution.length === 0}
                     defaultValue={education.institution}
                     onChange={(e) =>
                       handleEducationListChange(e, education, idx)
@@ -571,6 +689,7 @@ export function Resume() {
                   ></TextField>
                   <TextField
                     id="educationAchievement"
+                    error={education.achievement.length === 0}
                     defaultValue={education.achievement}
                     onChange={(e) =>
                       handleEducationListChange(e, education, idx)
@@ -578,6 +697,7 @@ export function Resume() {
                   ></TextField>
                   <TextField
                     id="educationTime"
+                    error={education.time.length === 0}
                     defaultValue={education.time}
                     onChange={(e) =>
                       handleEducationListChange(e, education, idx)
