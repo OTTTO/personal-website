@@ -11,8 +11,8 @@ export function Home() {
     a couple of years before that by reading books and doing code challenges.
     Although I did eventually end up getting a bachelors in CS, 
     I pride myself on being self taught because to me the discipline of
-    software development is an iterative process of teaching one's self as you
-    build project after project. Being in consulting, it is not very often
+    software development is an iterative process of teaching oneself 
+    by building project after project. Being in consulting, it is not very often
     that I face the exact same technology stack that I have worked with previously so
     I am grateful that I have cultivated the ability to learn on the fly. I
     enjoy helping others get started in their programming careers as well as
@@ -22,8 +22,8 @@ export function Home() {
   const websiteInfo = `This website was built from the ground up with NodeJS, GraphQL, Postgres, and React. 
     It currently serves as a personal resume and portfolio, 
     but it is also a CMS behind the scenes which I use to administer changes to the frontend`;
-  const { height, width } = useWindowDimensions();
 
+  const { width } = useWindowDimensions();
   const introWidth = 950;
 
   const backgroundColor = "black";
@@ -43,6 +43,7 @@ export function Home() {
           <Typography variant="h1" color="white">
             <u>WELCOME!</u>
           </Typography>
+          <br></br>
           {width < introWidth && (
             <Box>
               <img src={angel} alt="Angel's Landing" className="angelImg"></img>
