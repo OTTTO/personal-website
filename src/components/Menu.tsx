@@ -1,6 +1,7 @@
 import {
   AdminPanelSettingsOutlined,
   ArticleOutlined,
+  CrisisAlertOutlined,
   HomeOutlined,
 } from "@mui/icons-material";
 import { Box, Fab, Stack, Typography } from "@mui/material";
@@ -30,6 +31,14 @@ export function Menu({ backgroundColor }) {
           >
             <ArticleOutlined sx={{ mr: 1 }} />
             <Typography variant="h6">RESUME</Typography>
+          </Fab>
+          <Fab
+            variant="extended"
+            href="/trouble"
+            sx={{ margin: "1rem 1rem 0rem 0rem" }}
+          >
+            <CrisisAlertOutlined sx={{ mr: 1 }} />
+            <Typography variant="h6">PROJECTS</Typography>
           </Fab>
         </Stack>
         <Stack

@@ -7,7 +7,7 @@ import useWindowDimensions from "hooks/useWindowDimensions";
 import { Footer } from "components/Footer";
 
 export function Home() {
-  const intro = `I've been a professional software developer since 2016. I started learning
+  const intro = `I've been a professional software developer since 2017. I started learning
     a couple of years before that by reading books and doing code challenges.
     Although I did eventually end up getting a bachelors in CS, 
     I pride myself on being self taught because to me the discipline of
@@ -34,7 +34,7 @@ export function Home() {
         sx={{
           backgroundColor: "black",
           height: "100vh",
-          "overflow-y": "auto",
+          overflowY: "auto",
           margin: "0 auto",
           textAlign: "center",
         }}
@@ -58,12 +58,12 @@ export function Home() {
               width={width > introWidth ? "90%" : "90%"}
               padding="0rem 1rem 0rem 1rem"
             >
-              <Typography variant="h5" color="white">
+              <Typography variant="h5" color="white" textAlign="left">
                 {intro}
               </Typography>
               <br></br>
               <br></br>
-              <Typography variant="h5" color="white">
+              <Typography variant="h5" color="white" textAlign="left">
                 {websiteInfo}
               </Typography>
             </Stack>

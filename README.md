@@ -10,6 +10,12 @@ My personal website to display my resume and portfolio
 REACT_APP_GRAPHQL_URI=http://localhost:3001/graphql
 ```
 
+### Installation
+
+```bash
+$ npm install
+```
+
 ### Running the app locally
 
 ```bash
