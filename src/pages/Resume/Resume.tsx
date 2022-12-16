@@ -13,7 +13,7 @@ import {
   AccordionDetails,
   Divider,
 } from "@mui/material";
-import resumeTheme from "themes/resumeTheme";
+import mainTheme from "themes/mainTheme";
 import reactIcon from "images/reactjs-icon.svg";
 import nodeIcon from "images/nodejs-icon.svg";
 import graphQlIcon from "images/graphql-icon.svg";
@@ -26,8 +26,6 @@ import {
   GitHub,
   MailOutline,
   RemoveCircle,
-  HomeTwoTone,
-  ArticleOutlined,
 } from "@mui/icons-material";
 import { v4 as uuid } from "uuid";
 import { Menu } from "components/Menu";
@@ -361,7 +359,7 @@ export function Resume() {
   if (error) return <p>Error : {error.message}</p>;
 
   return (
-    <ThemeProvider theme={resumeTheme}>
+    <ThemeProvider theme={mainTheme}>
       <Menu backgroundColor="black" />
       <Box
         padding="1rem 0rem 1rem 0rem"

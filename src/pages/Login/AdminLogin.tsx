@@ -8,10 +8,13 @@ import {
   InputAdornment,
   InputLabel,
   OutlinedInput,
+  ThemeProvider,
 } from "@mui/material";
 import { Stack } from "@mui/system";
+import { Menu } from "components/Menu";
 import { ADMIN_LOGIN } from "queries/adminLogin";
 import React from "react";
+import mainTheme from "themes/mainTheme";
 
 interface LoginForm {
   email: string;
@@ -63,52 +66,61 @@ function AdminLogin() {
   };
 
   return (
-    <Box sx={{ margin: "auto", width: "50%" }}>
-      <Stack direction="column">
-        <FormControl sx={{ m: 1, width: "40rem" }} variant="outlined">
-          <InputLabel htmlFor="outlined-adornment-password">Email</InputLabel>
-          <OutlinedInput
-            id="outlined-email"
-            type="text"
-            value={values.email}
-            onChange={handleChange("email")}
-            placeholder="Email"
-          ></OutlinedInput>
-        </FormControl>
-        <FormControl sx={{ m: 1, width: "40rem" }} variant="outlined">
-          <OutlinedInput
-            id="outlined-adornment-password"
-            type={values.showPassword ? "text" : "password"}
-            value={values.password}
-            onChange={handleChange("password")}
-            placeholder="Password"
-            endAdornment={
-              <InputAdornment position="end">
-                <IconButton
-                  aria-label="toggle password visibility"
-                  onClick={handleClickShowPassword}
-                  onMouseDown={handleMouseDownPassword}
-                  edge="end"
-                >
-                  {values.showPassword ? <VisibilityOff /> : <Visibility />}
-                </IconButton>
-              </InputAdornment>
-            }
-            label="Password"
-          />
-        </FormControl>
-        <Button
-          sx={{ m: 1, width: "40rem" }}
-          variant="contained"
-          onClick={handleSubmit}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") handleSubmit();
-          }}
-        >
-          LOG IN
-        </Button>
-      </Stack>
-    </Box>
+    <ThemeProvider theme={mainTheme}>
+      <Menu backgroundColor="black"></Menu>
+      {new Array(9).fill(true).map((el, idx) => (
+        <hr key={idx}></hr>
+      ))}
+      <Box sx={{ margin: "0 auto", width: "50%" }}>
+        <Stack direction="column">
+          <FormControl sx={{ m: 1, width: "40rem" }} variant="outlined">
+            <InputLabel htmlFor="outlined-adornment-password">Email</InputLabel>
+            <OutlinedInput
+              id="outlined-email"
+              type="text"
+              value={values.email}
+              onChange={handleChange("email")}
+              placeholder="Email"
+            ></OutlinedInput>
+          </FormControl>
+          <FormControl sx={{ m: 1, width: "40rem" }} variant="outlined">
+            <OutlinedInput
+              id="outlined-adornment-password"
+              type={values.showPassword ? "text" : "password"}
+              value={values.password}
+              onChange={handleChange("password")}
+              placeholder="Password"
+              endAdornment={
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label="toggle password visibility"
+                    onClick={handleClickShowPassword}
+                    onMouseDown={handleMouseDownPassword}
+                    edge="end"
+                  >
+                    {values.showPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              }
+              label="Password"
+            />
+          </FormControl>
+          <Button
+            sx={{ m: 1, width: "40rem" }}
+            variant="contained"
+            onClick={handleSubmit}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") handleSubmit();
+            }}
+          >
+            LOG IN
+          </Button>
+        </Stack>
+      </Box>
+      {new Array(9).fill(true).map((el, idx) => (
+        <hr key={idx}></hr>
+      ))}
+    </ThemeProvider>
   );
 }
 
