@@ -24,38 +24,48 @@ export function Home() {
     but it is also a CMS behind the scenes which I use to administer changes to the frontend`;
   const { height, width } = useWindowDimensions();
 
+  const introWidth = 950;
+
   const backgroundColor = "black";
   return (
     <ThemeProvider theme={mainTheme}>
       <Menu backgroundColor={backgroundColor}></Menu>
-      <Box sx={{ backgroundColor: "black", height: "100vh" }}>
-        {width < 675 && (
-          <Box margin="0 auto" sx={{ padding: "2rem 0rem 0rem 2rem" }}>
-            <img src={angel} alt="Angel's Landing" width="80%"></img>
-          </Box>
-        )}
-        <Stack direction="row" sx={{ padding: "2rem 0rem 0rem 2rem" }}>
-          {width > 675 && (
-            <img
-              src={angel}
-              alt="Angel's Landing"
-              width="40%"
-              height="80%"
-            ></img>
+      <Box
+        sx={{
+          backgroundColor: "black",
+          height: "100vh",
+          "overflow-y": "auto",
+          margin: "0 auto",
+          textAlign: "center",
+        }}
+      >
+        <Stack direction="column">
+          <Typography variant="h1" color="white">
+            <u>WELCOME!</u>
+          </Typography>
+          {width < introWidth && (
+            <Box>
+              <img src={angel} alt="Angel's Landing" className="angelImg"></img>
+            </Box>
           )}
-          <Stack
-            direction="column"
-            width={width > 675 ? "90%" : "55%"}
-            padding="0rem 0rem 0rem 1rem"
-          >
-            <Typography variant="h5" color="white">
-              {intro}
-            </Typography>
-            <br></br>
-            <br></br>
-            <Typography variant="h5" color="white">
-              {websiteInfo}
-            </Typography>
+          <Stack direction="row" sx={{ padding: "2rem 0rem 0rem 1rem" }}>
+            {width > introWidth && (
+              <img src={angel} alt="Angel's Landing" className="angelImg"></img>
+            )}
+            <Stack
+              direction="column"
+              width={width > introWidth ? "90%" : "90%"}
+              padding="0rem 1rem 0rem 1rem"
+            >
+              <Typography variant="h5" color="white">
+                {intro}
+              </Typography>
+              <br></br>
+              <br></br>
+              <Typography variant="h5" color="white">
+                {websiteInfo}
+              </Typography>
+            </Stack>
           </Stack>
         </Stack>
       </Box>
