@@ -4,6 +4,7 @@ import { Box, Stack } from "@mui/system";
 import mainTheme from "themes/mainTheme";
 import angel from "images/angel.jpeg";
 import useWindowDimensions from "hooks/useWindowDimensions";
+import { Footer } from "components/Footer";
 
 export function Home() {
   const intro = `I've been a professional software developer since 2016. I started learning
@@ -22,9 +23,11 @@ export function Home() {
     It currently serves as a personal resume and portfolio, 
     but it is also a CMS behind the scenes which I use to administer changes to the frontend`;
   const { height, width } = useWindowDimensions();
+
+  const backgroundColor = "black";
   return (
     <ThemeProvider theme={mainTheme}>
-      <Menu backgroundColor="black" />
+      <Menu backgroundColor={backgroundColor}></Menu>
       <Box sx={{ backgroundColor: "black", height: "100vh" }}>
         {width < 675 && (
           <Box margin="0 auto" sx={{ padding: "2rem 0rem 0rem 2rem" }}>
@@ -56,6 +59,7 @@ export function Home() {
           </Stack>
         </Stack>
       </Box>
+      <Footer backgroundColor={backgroundColor}></Footer>
     </ThemeProvider>
   );
 }

@@ -11,6 +11,7 @@ import {
   ThemeProvider,
 } from "@mui/material";
 import { Stack } from "@mui/system";
+import { Footer } from "components/Footer";
 import { Menu } from "components/Menu";
 import { ADMIN_LOGIN } from "queries/adminLogin";
 import React from "react";
@@ -65,9 +66,11 @@ function AdminLogin() {
     }
   };
 
+  const backgroundColor = "black";
+
   return (
     <ThemeProvider theme={mainTheme}>
-      <Menu backgroundColor="black"></Menu>
+      <Menu backgroundColor={backgroundColor}></Menu>
       {new Array(9).fill(true).map((el, idx) => (
         <hr key={idx}></hr>
       ))}
@@ -120,6 +123,7 @@ function AdminLogin() {
       {new Array(9).fill(true).map((el, idx) => (
         <hr key={idx}></hr>
       ))}
+      <Footer backgroundColor={backgroundColor}></Footer>
     </ThemeProvider>
   );
 }

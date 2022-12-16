@@ -29,6 +29,7 @@ import {
 } from "@mui/icons-material";
 import { v4 as uuid } from "uuid";
 import { Menu } from "components/Menu";
+import { Footer } from "components/Footer";
 
 const isAuthenticated = localStorage.getItem("token");
 
@@ -358,9 +359,11 @@ export function Resume() {
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error : {error.message}</p>;
 
+  const backgroundColor = "black";
+
   return (
     <ThemeProvider theme={mainTheme}>
-      <Menu backgroundColor="black" />
+      <Menu backgroundColor={backgroundColor} />
       <Box
         padding="1rem 0rem 1rem 0rem"
         sx={{ backgroundColor: "black", position: "relative" }}
@@ -712,6 +715,7 @@ export function Resume() {
             })}
         </Box>
       </Box>
+      <Footer backgroundColor={backgroundColor}></Footer>
     </ThemeProvider>
   );
 }
