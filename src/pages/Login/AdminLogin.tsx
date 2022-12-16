@@ -71,9 +71,9 @@ function AdminLogin() {
       {new Array(9).fill(true).map((el, idx) => (
         <hr key={idx}></hr>
       ))}
-      <Box sx={{ margin: "0 auto", width: "50%" }}>
+      <Box sx={{ margin: "0 auto", width: "80%" }}>
         <Stack direction="column">
-          <FormControl sx={{ m: 1, width: "40rem" }} variant="outlined">
+          <FormControl sx={{ m: 1 }} variant="outlined">
             <InputLabel htmlFor="outlined-adornment-password">Email</InputLabel>
             <OutlinedInput
               id="outlined-email"
@@ -83,7 +83,7 @@ function AdminLogin() {
               placeholder="Email"
             ></OutlinedInput>
           </FormControl>
-          <FormControl sx={{ m: 1, width: "40rem" }} variant="outlined">
+          <FormControl sx={{ m: 1 }} variant="outlined">
             <OutlinedInput
               id="outlined-adornment-password"
               type={values.showPassword ? "text" : "password"}
@@ -106,7 +106,7 @@ function AdminLogin() {
             />
           </FormControl>
           <Button
-            sx={{ m: 1, width: "40rem" }}
+            sx={{ m: 1 }}
             variant="contained"
             onClick={handleSubmit}
             onKeyDown={(e) => {
