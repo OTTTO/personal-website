@@ -360,7 +360,6 @@ export function Resume() {
   if (error) return <p>Error : {error.message}</p>;
 
   const backgroundColor = "black";
-  console.log(JSON.stringify(experienceList));
 
   return (
     <ThemeProvider theme={mainTheme}>

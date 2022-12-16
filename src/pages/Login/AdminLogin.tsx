@@ -6,7 +6,6 @@ import {
   FormControl,
   IconButton,
   InputAdornment,
-  InputLabel,
   OutlinedInput,
   ThemeProvider,
 } from "@mui/material";
@@ -77,7 +76,6 @@ function AdminLogin() {
       <Box sx={{ margin: "0 auto", width: "80%" }}>
         <Stack direction="column">
           <FormControl sx={{ m: 1 }} variant="outlined">
-            <InputLabel htmlFor="outlined-adornment-password">Email</InputLabel>
             <OutlinedInput
               id="outlined-email"
               type="text"
