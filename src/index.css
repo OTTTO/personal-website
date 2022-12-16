@@ -11,11 +11,3 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
-
-.angelImg {
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-  max-height: 30rem;
-  width: auto;
-}

@@ -364,63 +364,74 @@ export function Resume() {
   return (
     <ThemeProvider theme={mainTheme}>
       <Menu backgroundColor={backgroundColor} />
-      <Box
+      <Grid
         padding="1rem 0rem 1rem 0rem"
         sx={{ backgroundColor: "black", position: "relative" }}
       >
-        <Grid
-          container={true}
-          justifyContent="space-between"
-          sx={{ position: "absolute", top: 0 }}
-        >
-          <img
-            src={reactIcon}
-            className="App-logo-left"
-            alt="react-icon"
-            width="10%"
-          />
-          <img
-            src={reactIcon}
-            className="App-logo-right"
-            alt="react-icon"
-            width="10%"
-          />
-        </Grid>
-        <Grid
-          container={true}
-          justifyContent="space-between"
-          sx={{ position: "absolute", bottom: "36%" }}
-        >
-          <img
-            src={graphQlIcon}
-            className="App-logo-left"
-            alt="graphql-icon"
-            width="10%"
-          />
-          <img
-            src={graphQlIcon}
-            className="App-logo-right"
-            alt="graphql-icon"
-            width="10%"
-          />
-        </Grid>
-        <Grid
-          container={true}
-          justifyContent="space-between"
-          sx={{ position: "absolute", bottom: "0rem" }}
-        >
-          <img
-            src={nodeIcon}
-            className="App-logo-left"
-            alt="node-icon"
-            width="10%"
-          />
-          <img
-            src={nodeIcon}
-            className="App-logo-right"
-            alt="node-icon"
-            width="10%"
-          />
+        <Grid direction="row" justifyContent="space-between">
+          <Grid
+            item
+            xs={2}
+            container={true}
+            justifyContent="space-between"
+            direction="column"
+            height="100%"
+            sx={{ position: "absolute", left: "0rem", marginLeft: "2%" }}
+          >
+            <Grid item>
+              <img
+                src={reactIcon}
+                className="App-logo-left"
+                alt="react-icon"
+                width="80%"
+              />
+            </Grid>
+            <Grid item>
+              <img
+                src={graphQlIcon}
+                className="App-logo-left"
+                alt="graphql-icon"
+                width="80%"
+              />
+            </Grid>
+            <Grid item>
+              <img
+                src={nodeIcon}
+                className="App-logo-left"
+                alt="node-icon"
+                width="80%"
+              />
+            </Grid>
+          </Grid>
+          <Grid
+            item
+            xs={2}
+            container={true}
+            justifyContent="space-between"
+            direction="column"
+            height="100%"
+            sx={{ position: "absolute", right: "0rem", marginRight: "1%" }}
+          >
+            <img
+              src={reactIcon}
+              className="App-logo-right"
+              alt="react-icon"
+              width="80%"
+            />
+            <img
+              src={graphQlIcon}
+              className="App-logo-right"
+              alt="graphql-icon"
+              width="80%"
+            />
+
+            <img
+              src={nodeIcon}
+              className="App-logo-right"
+              alt="node-icon"
+              width="80%"
+            />
+          </Grid>
         </Grid>
         <Box
           padding="1rem"
@@ -558,7 +569,7 @@ export function Resume() {
                       </Typography>
                       <Typography variant="subtitle2">
                         <b>
-                          {experience.location}, {experience.time}
+                          {experience.location} : {experience.time}
                         </b>
                       </Typography>
                     </Box>
@@ -712,7 +723,7 @@ export function Resume() {
               );
             })}
         </Box>
-      </Box>
+      </Grid>
       <Footer backgroundColor={backgroundColor}></Footer>
     </ThemeProvider>
   );

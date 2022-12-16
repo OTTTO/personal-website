@@ -11,12 +11,10 @@
   }
 }
 .App-logo-left {
-  float: left;
   margin: 5%;
 }
 
 .App-logo-right {
-  float: right;
   margin: 5%;
 }
 
@@ -51,4 +49,12 @@
   to {
     transform: rotate(-360deg);
   }
+}
+
+.angelImg {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  max-height: 30rem;
+  width: auto;
 }
