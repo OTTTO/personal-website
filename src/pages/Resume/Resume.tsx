@@ -26,8 +26,11 @@ import {
   GitHub,
   MailOutline,
   RemoveCircle,
+  HomeTwoTone,
+  ArticleOutlined,
 } from "@mui/icons-material";
 import { v4 as uuid } from "uuid";
+import { Menu } from "components/Menu";
 
 const isAuthenticated = localStorage.getItem("token");
 
@@ -359,6 +362,7 @@ export function Resume() {
 
   return (
     <ThemeProvider theme={resumeTheme}>
+      <Menu backgroundColor="black" />
       <Box
         padding="1rem 0rem 1rem 0rem"
         sx={{ backgroundColor: "black", position: "relative" }}
@@ -384,7 +388,7 @@ export function Resume() {
         <Grid
           container={true}
           justifyContent="space-between"
-          sx={{ position: "absolute", bottom: "42%" }}
+          sx={{ position: "absolute", bottom: "36%" }}
         >
           <img
             src={graphQlIcon}
@@ -402,7 +406,7 @@ export function Resume() {
         <Grid
           container={true}
           justifyContent="space-between"
-          sx={{ position: "absolute", bottom: "1rem" }}
+          sx={{ position: "absolute", bottom: "0rem" }}
         >
           <img
             src={nodeIcon}

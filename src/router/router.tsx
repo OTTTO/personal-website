@@ -1,7 +1,7 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Resume from "pages/Resume/Resume";
 import AdminLogin from "pages/Login/AdminLogin";
-import { Home } from "pages/Resume/Home";
+import { Home } from "pages/Home/Home";
 
 function AppRoutes() {
   return (
