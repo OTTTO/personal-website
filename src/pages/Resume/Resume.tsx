@@ -71,9 +71,9 @@ export interface IResume {
 }
 
 export function Resume() {
-  const [skillGroupList, setSkillGroupList] = React.useState<ISkillGroup[]>();
-  const [experienceList, setExperienceList] = React.useState<IExperience[]>();
-  const [educationList, setEducationList] = React.useState<IEducation[]>();
+  const [skillGroupList, setSkillGroupList] = React.useState<ISkillGroup[]>([]);
+  const [experienceList, setExperienceList] = React.useState<IExperience[]>([]);
+  const [educationList, setEducationList] = React.useState<IEducation[]>([]);
   const resume: IResume = {
     skillGroups: skillGroupList,
     experience: experienceList,
@@ -360,6 +360,7 @@ export function Resume() {
   if (error) return <p>Error : {error.message}</p>;
 
   const backgroundColor = "black";
+  console.log(JSON.stringify(experienceList));
 
   return (
     <ThemeProvider theme={mainTheme}>
@@ -550,20 +551,18 @@ export function Resume() {
               <Accordion key={experience.id}>
                 <AccordionSummary expandIcon={<ExpandMore />}>
                   {!isAuthenticated ? (
-                    <Typography>
-                      <b>
-                        <Typography variant="subtitle2">
-                          <b>
-                            <i>{experience.role}</i>, {experience.company}
-                          </b>
-                        </Typography>
-                        <Typography variant="subtitle2">
-                          <b>
-                            {experience.location}, {experience.time}
-                          </b>
-                        </Typography>
-                      </b>
-                    </Typography>
+                    <Box>
+                      <Typography variant="subtitle2">
+                        <b>
+                          <i>{experience.role}</i>, {experience.company}
+                        </b>
+                      </Typography>
+                      <Typography variant="subtitle2">
+                        <b>
+                          {experience.location}, {experience.time}
+                        </b>
+                      </Typography>
+                    </Box>
                   ) : (
                     <Stack direction="row">
                       <TextField
