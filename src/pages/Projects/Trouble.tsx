@@ -47,23 +47,6 @@ class Player {
 
 export function Trouble() {
   const track = new Array<Peg>(28).fill(undefined);
-  track[2] = {
-    player: 0,
-    identifier: "3",
-    internalId: 2,
-    space: -1,
-    started: true,
-    finished: false,
-  };
-  track[17] = {
-    player: 0,
-    identifier: "3",
-    internalId: 2,
-    space: -1,
-    started: true,
-    finished: false,
-  };
-
   const home = new Array<[Peg]>(4).fill(undefined).map(() => new Array<Peg>(4));
   const finish = new Array<[Peg]>(4)
     .fill(undefined)
@@ -74,11 +57,33 @@ export function Trouble() {
   const pegJSX = (id: number, color: string) => {
     const style = { color };
     return [
-      <LooksOne fontSize="large" style={style} />,
-      <LooksTwo fontSize="large" style={style} />,
-      <Looks3 fontSize="large" style={style} />,
-      <Looks4 fontSize="large" style={style} />,
+      <Grid item>
+        <LooksOne fontSize="large" style={style} />
+      </Grid>,
+      <Grid item>
+        <LooksTwo fontSize="large" style={style} />
+      </Grid>,
+      <Grid item>
+        <Looks3 fontSize="large" style={style} />
+      </Grid>,
+      <Grid item>
+        <Looks4 fontSize="large" style={style} />
+      </Grid>,
     ][id];
+  };
+
+  const spaceJSX = (peg: Peg, colorIdx: number) => {
+    return peg && peg.space === -1 ? (
+      pegJSX(peg.internalId, colorMapping[peg.player])
+    ) : (
+      <Grid item>
+        {/* <Typography color="white">{peg ? peg.space : 0}</Typography> */}
+        <CropDinOutlined
+          fontSize="large"
+          style={{ color: colorMapping[colorIdx] }}
+        />
+      </Grid>
+    );
   };
 
   const initGame = () => {
@@ -114,115 +119,36 @@ export function Trouble() {
         }}
         margin="auto"
       >
-        {/* HOME 1 */}
+        {/* HOME 0 */}
         <Grid direction="column">
           <Grid container justifyContent="center">
-            {home[0].slice(0, 3).map((peg) => {
-              return peg && peg.space === -1 ? (
-                pegJSX(peg.internalId, colorMapping[0])
-              ) : (
-                <CropDinOutlined
-                  fontSize="large"
-                  style={{ color: colorMapping[0] }}
-                />
-              );
-            })}
+            {new Array(3)
+              .fill(undefined)
+              .map((_, idx) => spaceJSX(home[0][idx], 0))}
           </Grid>
           <Grid container justifyContent="center">
-            <Grid item>
-              {home[0][3] && home[0][3].space === -1 ? (
-                pegJSX(home[0][3].internalId, colorMapping[0])
-              ) : (
-                <CropDinOutlined
-                  fontSize="large"
-                  style={{ color: colorMapping[0] }}
-                />
-              )}
-            </Grid>
+            {spaceJSX(home[0][3], 0)}
           </Grid>
         </Grid>
 
         {/* TOP ROW */}
         <Grid container justifyContent="center" spacing={2}>
-          {track.slice(0, 5).map((peg) => {
-            return peg && peg.space === 0 ? (
-              <Grid item>
-                <AccessibilityNewRounded fontSize="large" />
-              </Grid>
-            ) : (
-              <Grid item>
-                <CropDinOutlined
-                  fontSize="large"
-                  style={{ color: colorMapping[0] }}
-                />
-              </Grid>
-            );
-          })}
+          {[0, 1, 2, 3, 4].map((space) => spaceJSX(track[space], 0))}
         </Grid>
 
         {/* TOP DIAGONALS AND MIDDLE HOME */}
         <Grid container justifyContent="center">
           <Grid container width="18rem" justifyContent="space-between">
-            {track.slice(0, 1).map((peg) => {
-              return peg && peg.space === 0 ? (
-                <AccessibilityNewRounded fontSize="large" />
-              ) : (
-                <CropDinOutlined
-                  fontSize="large"
-                  style={{ color: colorMapping[0] }}
-                />
-              );
-            })}
-            {finish[0][0] && finish[0][0].space === -1 ? (
-              pegJSX(finish[0][0].internalId, colorMapping[0])
-            ) : (
-              <CropDinOutlined
-                fontSize="large"
-                style={{ color: colorMapping[0] }}
-              />
-            )}
-            {track.slice(0, 1).map((peg) => {
-              return peg && peg.space === 0 ? (
-                <AccessibilityNewRounded fontSize="large" />
-              ) : (
-                <CropDinOutlined
-                  fontSize="large"
-                  style={{ color: colorMapping[0] }}
-                />
-              );
-            })}
+            {spaceJSX(track[27], 0)}
+            {spaceJSX(finish[0][0], 0)}
+            {spaceJSX(track[5], 0)}
           </Grid>
         </Grid>
         <Grid container justifyContent="center">
           <Grid container width="21rem" justifyContent="space-between">
-            {track.slice(0, 1).map((peg) => {
-              return peg && peg.space === 0 ? (
-                <AccessibilityNewRounded fontSize="large" />
-              ) : (
-                <CropDinOutlined
-                  fontSize="large"
-                  style={{ color: colorMapping[3] }}
-                />
-              );
-            })}
-            {finish[0][1] && finish[0][1].space === -1 ? (
-              pegJSX(finish[0][1].internalId, colorMapping[0])
-            ) : (
-              <CropDinOutlined
-                fontSize="large"
-                style={{ color: colorMapping[0] }}
-              />
-            )}
-            {track.slice(0, 1).map((peg) => {
-              return peg && peg.space === 0 ? (
-                <AccessibilityNewRounded fontSize="large" />
-              ) : (
-                <CropDinOutlined
-                  fontSize="large"
-                  style={{ color: colorMapping[1] }}
-                />
-              );
-            })}
+            {spaceJSX(track[26], 3)}
+            {spaceJSX(finish[0][1], 0)}
+            {spaceJSX(track[6], 1)}
           </Grid>
         </Grid>
 
@@ -242,97 +168,23 @@ export function Trouble() {
             width="24rem"
             justifyContent="space-between"
           >
-            {track.slice(0, 1).map((peg) => {
-              return peg && peg.space === 0 ? (
-                <AccessibilityNewRounded fontSize="large" />
-              ) : (
-                <CropDinOutlined
-                  fontSize="large"
-                  style={{ color: colorMapping[3] }}
-                />
-              );
-            })}
-            {finish[0][2] && finish[0][2].space === -1 ? (
-              pegJSX(finish[0][2].internalId, colorMapping[0])
-            ) : (
-              <CropDinOutlined
-                fontSize="large"
-                style={{ color: colorMapping[0] }}
-              />
-            )}
-            {track.slice(0, 1).map((peg) => {
-              return peg && peg.space === 0 ? (
-                <AccessibilityNewRounded fontSize="large" />
-              ) : (
-                <CropDinOutlined
-                  fontSize="large"
-                  style={{ color: colorMapping[1] }}
-                />
-              );
-            })}
+            {spaceJSX(track[25], 3)}
+            {spaceJSX(finish[0][2], 0)}
+            {spaceJSX(track[7], 1)}
           </Grid>
           {/* TOP HOME AND FINISH */}
           <Grid container justifyContent="space-between">
             <Grid container width="8.5rem" justifyContent="space-between">
               <Grid container width="4.5rem" justifyContent="flex-end">
-                <Grid item>
-                  {home[3][0] && home[3][0].space === -1 ? (
-                    pegJSX(home[3][0].internalId, colorMapping[3])
-                  ) : (
-                    <CropDinOutlined
-                      fontSize="large"
-                      style={{ color: colorMapping[3] }}
-                    />
-                  )}
-                </Grid>
+                <Grid item>{spaceJSX(home[3][0], 3)}</Grid>
               </Grid>
-              <Grid item>
-                {track.slice(0, 1).map((peg) => {
-                  return peg && peg.space === 0 ? (
-                    <AccessibilityNewRounded fontSize="large" />
-                  ) : (
-                    <CropDinOutlined
-                      fontSize="large"
-                      style={{ color: colorMapping[3] }}
-                    />
-                  );
-                })}
-              </Grid>
+              <Grid item>{spaceJSX(track[24], 3)}</Grid>
             </Grid>
-            <Grid item>
-              {finish[0][3] && finish[0][3].space === -1 ? (
-                pegJSX(finish[0][3].internalId, colorMapping[0])
-              ) : (
-                <CropDinOutlined
-                  fontSize="large"
-                  style={{ color: colorMapping[0] }}
-                />
-              )}
-            </Grid>
+            <Grid item>{spaceJSX(finish[0][3], 0)}</Grid>
             <Grid container width="8.5rem" justifyContent="space-between">
-              <Grid item>
-                {track.slice(0, 1).map((peg) => {
-                  return peg && peg.space === 0 ? (
-                    <AccessibilityNewRounded fontSize="large" />
-                  ) : (
-                    <CropDinOutlined
-                      fontSize="large"
-                      style={{ color: colorMapping[1] }}
-                    />
-                  );
-                })}
-              </Grid>
+              {spaceJSX(track[8], 1)}
               <Grid container width="4.5rem" justifyContent="flex-start">
-                <Grid item>
-                  {home[1][0] && home[1][0].space === -1 ? (
-                    pegJSX(home[1][0].internalId, colorMapping[1])
-                  ) : (
-                    <CropDinOutlined
-                      fontSize="large"
-                      style={{ color: colorMapping[1] }}
-                    />
-                  )}
-                </Grid>
+                <Grid item>{spaceJSX(home[1][0], 1)}</Grid>
               </Grid>
             </Grid>
           </Grid>
@@ -345,68 +197,20 @@ export function Trouble() {
             width="36rem"
           >
             <Grid container item width="17rem" justifyContent="flex-end">
-              {home[3][1] && home[3][1].space === -1 ? (
-                pegJSX(home[3][1].internalId, colorMapping[3])
-              ) : (
-                <CropDinOutlined
-                  fontSize="large"
-                  style={{ color: colorMapping[3] }}
-                />
-              )}
-              {home[3][3] && home[3][3].space === -1 ? (
-                pegJSX(home[3][3].internalId, colorMapping[3])
-              ) : (
-                <CropDinOutlined
-                  fontSize="large"
-                  style={{ color: colorMapping[3] }}
-                />
-              )}
-              {track.slice(0, 5).map((peg) => {
-                return peg && peg.space === 0 ? (
-                  <Grid item>
-                    <AccessibilityNewRounded fontSize="large" />
-                  </Grid>
-                ) : (
-                  <Grid item>
-                    <CropDinOutlined
-                      fontSize="large"
-                      style={{ color: colorMapping[3] }}
-                    />
-                  </Grid>
-                );
-              })}
+              {spaceJSX(home[3][1], 3)}
+              {spaceJSX(home[3][3], 3)}
+              {spaceJSX(track[23], 3)}
+              {new Array(4)
+                .fill(undefined)
+                .map((_, idx) => spaceJSX(finish[3][idx], 3))}
             </Grid>
             <Grid container item width="17rem" justifyContent="flex-start">
-              {track.slice(0, 5).map((peg) => {
-                return peg && peg.space === 0 ? (
-                  <Grid item>
-                    <AccessibilityNewRounded fontSize="large" />
-                  </Grid>
-                ) : (
-                  <Grid item>
-                    <CropDinOutlined
-                      fontSize="large"
-                      style={{ color: colorMapping[1] }}
-                    />
-                  </Grid>
-                );
-              })}
-              {home[1][3] && home[1][3].space === -1 ? (
-                pegJSX(home[1][3].internalId, colorMapping[1])
-              ) : (
-                <CropDinOutlined
-                  fontSize="large"
-                  style={{ color: colorMapping[1] }}
-                />
-              )}
-              {home[1][1] && home[1][1].space === -1 ? (
-                pegJSX(home[1][1].internalId, colorMapping[1])
-              ) : (
-                <CropDinOutlined
-                  fontSize="large"
-                  style={{ color: colorMapping[1] }}
-                />
-              )}
+              {new Array(4)
+                .fill(undefined)
+                .map((_, idx) => spaceJSX(finish[1][idx], 1))}
+              {spaceJSX(track[9], 1)}
+              {spaceJSX(home[1][3], 1)}
+              {spaceJSX(home[1][1], 1)}
             </Grid>
           </Grid>
 
@@ -414,96 +218,25 @@ export function Trouble() {
           <Grid container justifyContent="space-between">
             <Grid container width="8.5rem" justifyContent="space-between">
               <Grid container width="4.5rem" justifyContent="flex-end">
-                <Grid item>
-                  {home[3][2] && home[3][2].space === -1 ? (
-                    pegJSX(home[3][2].internalId, colorMapping[3])
-                  ) : (
-                    <CropDinOutlined
-                      fontSize="large"
-                      style={{ color: colorMapping[3] }}
-                    />
-                  )}
-                </Grid>
+                {spaceJSX(home[3][2], 3)}
               </Grid>
-              <Grid item>
-                {track.slice(0, 1).map((peg) => {
-                  return peg && peg.space === 0 ? (
-                    <AccessibilityNewRounded fontSize="large" />
-                  ) : (
-                    <CropDinOutlined
-                      fontSize="large"
-                      style={{ color: colorMapping[3] }}
-                    />
-                  );
-                })}
-              </Grid>
+              {spaceJSX(track[22], 3)}
             </Grid>
-            <Grid item>
-              {finish[2][3] && finish[2][3].space === -1 ? (
-                pegJSX(finish[2][3].internalId, colorMapping[2])
-              ) : (
-                <CropDinOutlined
-                  fontSize="large"
-                  style={{ color: colorMapping[2] }}
-                />
-              )}
-            </Grid>
+            {spaceJSX(finish[2][3], 2)}
             <Grid container width="8.5rem" justifyContent="space-between">
-              {track.slice(0, 1).map((peg) => {
-                return peg && peg.space === 0 ? (
-                  <AccessibilityNewRounded fontSize="large" />
-                ) : (
-                  <CropDinOutlined
-                    fontSize="large"
-                    style={{ color: colorMapping[1] }}
-                  />
-                );
-              })}
+              {spaceJSX(track[10], 1)}
+
               <Grid container width="4.5rem" justifyContent="flex-start">
-                <Grid item>
-                  {home[1][2] && home[1][2].space === -1 ? (
-                    pegJSX(home[1][2].internalId, colorMapping[1])
-                  ) : (
-                    <CropDinOutlined
-                      fontSize="large"
-                      style={{ color: colorMapping[1] }}
-                    />
-                  )}
-                </Grid>
+                {spaceJSX(home[1][2], 1)}
               </Grid>
             </Grid>
           </Grid>
 
           {/* BOTTOM ROW FOR COLUMNS */}
           <Grid container item width="24rem" justifyContent="space-between">
-            {track.slice(0, 1).map((peg) => {
-              return peg && peg.space === 0 ? (
-                <AccessibilityNewRounded fontSize="large" />
-              ) : (
-                <CropDinOutlined
-                  fontSize="large"
-                  style={{ color: colorMapping[3] }}
-                />
-              );
-            })}
-            {finish[2][2] && finish[2][2].space === -1 ? (
-              pegJSX(finish[0][2].internalId, colorMapping[0])
-            ) : (
-              <CropDinOutlined
-                fontSize="large"
-                style={{ color: colorMapping[2] }}
-              />
-            )}
-            {track.slice(0, 1).map((peg) => {
-              return peg && peg.space === 0 ? (
-                <AccessibilityNewRounded fontSize="large" />
-              ) : (
-                <CropDinOutlined
-                  fontSize="large"
-                  style={{ color: colorMapping[1] }}
-                />
-              );
-            })}
+            {spaceJSX(track[21], 3)}
+            {spaceJSX(finish[2][2], 2)}
+            {spaceJSX(track[11], 1)}
           </Grid>
         </Grid>
 
@@ -511,112 +244,33 @@ export function Trouble() {
 
         <Grid container justifyContent="center">
           <Grid container width="21rem" justifyContent="space-between">
-            {track.slice(0, 1).map((peg) => {
-              return peg && peg.space === 0 ? (
-                <AccessibilityNewRounded fontSize="large" />
-              ) : (
-                <CropDinOutlined
-                  fontSize="large"
-                  style={{ color: colorMapping[3] }}
-                />
-              );
-            })}
-            {finish[2][1] && finish[2][1].space === -1 ? (
-              pegJSX(finish[2][1].internalId, colorMapping[0])
-            ) : (
-              <CropDinOutlined
-                fontSize="large"
-                style={{ color: colorMapping[2] }}
-              />
-            )}
-            {track.slice(0, 1).map((peg) => {
-              return peg && peg.space === 0 ? (
-                <AccessibilityNewRounded fontSize="large" />
-              ) : (
-                <CropDinOutlined
-                  fontSize="large"
-                  style={{ color: colorMapping[1] }}
-                />
-              );
-            })}
+            {spaceJSX(track[20], 3)}
+            {spaceJSX(finish[2][1], 2)}
+            {spaceJSX(track[12], 1)}
           </Grid>
         </Grid>
         <Grid container justifyContent="center">
           <Grid container width="18rem" justifyContent="space-between">
-            {track.slice(0, 1).map((peg) => {
-              return peg && peg.space === 0 ? (
-                <AccessibilityNewRounded fontSize="large" />
-              ) : (
-                <CropDinOutlined
-                  fontSize="large"
-                  style={{ color: colorMapping[2] }}
-                />
-              );
-            })}
-            {finish[2][0] && finish[2][0].space === -1 ? (
-              pegJSX(finish[2][0].internalId, colorMapping[0])
-            ) : (
-              <CropDinOutlined
-                fontSize="large"
-                style={{ color: colorMapping[2] }}
-              />
-            )}
-            {track.slice(0, 1).map((peg) => {
-              return peg && peg.space === 0 ? (
-                <AccessibilityNewRounded fontSize="large" />
-              ) : (
-                <CropDinOutlined
-                  fontSize="large"
-                  style={{ color: colorMapping[2] }}
-                />
-              );
-            })}
+            {spaceJSX(track[19], 2)}
+            {spaceJSX(finish[2][0], 2)}
+            {spaceJSX(track[13], 2)}
           </Grid>
         </Grid>
 
         {/* BOTTOM ROW */}
         <Grid container justifyContent="center" spacing={2}>
-          {track.slice(0, 5).map((peg) => {
-            return peg && peg.space === 0 ? (
-              <Grid item>
-                <AccessibilityNewRounded fontSize="large" />
-              </Grid>
-            ) : (
-              <Grid item>
-                <CropDinOutlined
-                  fontSize="large"
-                  style={{ color: colorMapping[2] }}
-                />
-              </Grid>
-            );
-          })}
+          {[18, 17, 16, 15, 14].map((space) => spaceJSX(track[space], 2))}
         </Grid>
 
-        {/* HOME 3 */}
+        {/* HOME 2 */}
         <Grid direction="column">
           <Grid container justifyContent="center">
-            <Grid item>
-              {home[0][3] && home[0][3].space === -1 ? (
-                pegJSX(home[0][3].internalId, colorMapping[2])
-              ) : (
-                <CropDinOutlined
-                  fontSize="large"
-                  style={{ color: colorMapping[2] }}
-                />
-              )}
-            </Grid>
+            {spaceJSX(home[2][3], 2)}
           </Grid>
           <Grid container justifyContent="center">
-            {home[0].slice(0, 3).map((peg) => {
-              return peg && peg.space === -1 ? (
-                pegJSX(peg.internalId, colorMapping[2])
-              ) : (
-                <CropDinOutlined
-                  fontSize="large"
-                  style={{ color: colorMapping[2] }}
-                />
-              );
-            })}
+            {new Array(3)
+              .fill(undefined)
+              .map((_, idx) => spaceJSX(home[2][idx], 0))}
           </Grid>
         </Grid>
       </Grid>
