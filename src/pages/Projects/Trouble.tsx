@@ -12,7 +12,7 @@ import threeDie from "images/dice/dice-three.svg";
 import fourDie from "images/dice/dice-four.svg";
 import fiveDie from "images/dice/dice-five.svg";
 import sixDie from "images/dice/dice-six.svg";
-import React from "react";
+import React, { useRef } from "react";
 
 const HOME = -1;
 const colorMapping = ["red", "green", "#FFC133", "purple"];
@@ -57,6 +57,23 @@ class Player {
       this.pegs[j] = peg;
     }
   }
+}
+
+function Console({ text }) {
+  const [output, setOutput] = React.useState(text[0]);
+  const outputIdx = useRef(0);
+
+  React.useEffect(() => {
+    function tick() {
+      setOutput((prev) => prev + text[++outputIdx.current]);
+    }
+    if (outputIdx.current < text.length - 1) {
+      let addChar = setInterval(tick, 50);
+      return () => clearInterval(addChar);
+    }
+  }, [output, text]);
+
+  return <span>{output}</span>;
 }
 
 export function Trouble() {
@@ -297,6 +314,8 @@ export function Trouble() {
           </Grid>
         </Grid>
       </Grid>
+      {/* CONSOLE OUTPUT */}
+      <Console text="we are printing this out kind of slowly"></Console>
     </Grid>
   );
 }
