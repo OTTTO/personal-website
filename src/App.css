@@ -9,6 +9,9 @@
   .App-logo-right {
     animation: App-logo-spin-left infinite 20s linear;
   }
+  .spin-die {
+    animation: App-logo-spin-right 0.5s linear;
+  }
 }
 .App-logo-left {
   margin: 5%;

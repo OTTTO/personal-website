@@ -1,10 +1,18 @@
-import { Grid, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Grid,
+  IconButton,
+  Modal,
+  Typography,
+} from "@mui/material";
 import {
   CropDinOutlined,
   LooksOne,
   LooksTwo,
   Looks3,
   Looks4,
+  Close,
 } from "@mui/icons-material";
 import oneDie from "images/dice/dice-one.svg";
 import twoDie from "images/dice/dice-two.svg";
@@ -12,7 +20,7 @@ import threeDie from "images/dice/dice-three.svg";
 import fourDie from "images/dice/dice-four.svg";
 import fiveDie from "images/dice/dice-five.svg";
 import sixDie from "images/dice/dice-six.svg";
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 
 const HOME = -1;
 const colorMapping = ["red", "green", "#FFC133", "purple"];
@@ -25,9 +33,20 @@ const dieMapping = {
   6: sixDie,
 };
 
+const introText = `WELCOME TO THE GAME OF TROUBLE`;
+// The rules are simple
+// Players roll to see who goes first
+// All pegs start in HOME, in order to leave HOME the player must roll a 6
+// The game ends when a player has moved all of their pegs into their FINISH line
+// Players cannot move a peg onto a space occupied by another one of their pegs
+// If your peg lands on an opponent's peg, their peg is sent back HOME`;
+
+const startRollText = "Roll to see who goes first";
+const startRollTieText = "There was a tie, let's roll some more!";
+
 interface Peg {
   player: number;
-  identifier: String;
+  //   identifier: String;
   internalId: number;
   space: number;
   started: boolean;
@@ -36,26 +55,13 @@ interface Peg {
 
 class Player {
   pegs: Peg[] = [];
-  identifier: number;
+  //   identifier: number;
   internalId: number;
   playerStr: string;
 
-  constructor(iter: number, home: Peg[][]) {
-    this.identifier = iter + 1;
+  constructor(iter: number) {
+    // this.identifier = iter + 1;
     this.internalId = iter;
-    for (let j = 0; j < 4; j++) {
-      const peg: Peg = {
-        player: iter,
-        identifier: `${j + 1}`,
-        internalId: j,
-        space: HOME,
-        started: false,
-        finished: false,
-      };
-
-      home[iter][j] = peg;
-      this.pegs[j] = peg;
-    }
   }
 }
 
@@ -67,11 +73,14 @@ function Console({ text }) {
     function tick() {
       setOutput((prev: string) => prev + text[++outputIdx.current]);
     }
-    if (outputIdx.current < text.length - 1) {
-      let addChar = setInterval(tick, 50);
+    if (outputIdx.current < text.length - 1 && text.includes(output)) {
+      let addChar = setInterval(tick, 35);
       return () => clearInterval(addChar);
+    } else if (outputIdx.current === output.length - 1 && output !== text) {
+      setOutput(text[0]);
+      outputIdx.current = 0;
     }
-  }, [output, text]);
+  }, [text, output]);
 
   return (
     <Grid
@@ -82,22 +91,51 @@ function Console({ text }) {
         borderRadius: "1rem",
       }}
     >
-      <Typography variant="h6" color="white" textAlign="center">
-        {output}
-      </Typography>
+      {output.split("\n").map((out, key) => (
+        <Typography variant="h6" color="white" textAlign="center" key={key}>
+          {out}
+        </Typography>
+      ))}
     </Grid>
   );
 }
 
 export function Trouble() {
-  const track = new Array<Peg>(28).fill(undefined);
-  const home = new Array<[Peg]>(4).fill(undefined).map(() => new Array<Peg>(4));
-  const finish = new Array<[Peg]>(4)
-    .fill(undefined)
-    .map(() => new Array<Peg>(4));
-  const [lastRoll, setLastRoll] = React.useState(6);
+  //BOARD
+  const [track, setTrack] = React.useState(new Array<Peg>(28).fill(undefined));
+  const [home, setHome] = React.useState(
+    new Array<[Peg]>(4).fill(undefined).map(() => new Array<Peg>(4))
+  );
+  const [finish, setFinish] = React.useState(
+    new Array<[Peg]>(4).fill(undefined).map(() => new Array<Peg>(4))
+  );
 
-  let players: Player[];
+  //GAME PLAY
+  const [lastRoll, setLastRoll] = React.useState(6);
+  const [started, setStarted] = React.useState(false);
+  //   const [finished, setFinished] = React.useState(false);
+  const [numPlayers, setNumPlayers] = React.useState(0);
+  const [players, setPlayers] = React.useState([]);
+  const [playerTurn, setPlayerTurn] = React.useState(0);
+
+  //ROLL TO START
+  const [playersWithMaxRoll, setPlayersWithMaxRoll] = React.useState([]);
+  const [playersToRemove, setPlayersToRemove] = React.useState([]);
+  const [playersToRoll, setPlayersToRoll] = React.useState([]);
+  const [maxRoll, setMaxRoll] = React.useState(0);
+  const [rolling, setRolling] = React.useState(false);
+  const [rolls, setRolls] = React.useState(new Array(4).fill(0));
+
+  //MODAL
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => {
+    initGame();
+    setOpen(false);
+  };
+
+  //TEXT
+  const [outputText, setOutputText] = React.useState(introText);
 
   const pegJSX = (id: number, color: string) => {
     const style = { color };
@@ -130,27 +168,145 @@ export function Trouble() {
     );
   };
 
-  const renderDie = (face: number) => {
-    return <img src={dieMapping[face]} width="5%" onClick={roll}></img>;
+  const turnBoardJSX = () => {
+    return (
+      <Grid container direction="column">
+        {new Array(numPlayers).fill(undefined).map((_, idx) => {
+          const isTurn =
+            playersToRoll[playerTurn] &&
+            playersToRoll[playerTurn].internalId === idx;
+          return (
+            <Grid
+              key={idx}
+              sx={{
+                backgroundColor: isTurn ? colorMapping[idx] : "white",
+              }}
+            >
+              <Typography
+                paddingLeft="1rem"
+                color={isTurn ? "white" : colorMapping[idx]}
+                sx={{
+                  background: "rgba(0,0,0,0)",
+                  display: "inline",
+                }}
+              >
+                Player {idx + 1}:
+              </Typography>
+              <Typography
+                sx={{
+                  background: "rgba(0,0,0,0)",
+                  display: "inline",
+                }}
+              >
+                {" " + rolls[idx]}
+              </Typography>
+            </Grid>
+          );
+        })}
+      </Grid>
+    );
+  };
+
+  const dieJSX = (face: number) => {
+    const className = rolling || started ? "spin-die" : "";
+    const onClick = rolling ? startRoll : started ? roll : () => {};
+    return (
+      <img
+        key={Math.random()}
+        src={dieMapping[face]}
+        width="5%"
+        onClick={onClick}
+        className={className}
+        alt="die"
+      ></img>
+    );
   };
 
   const roll = () => {
-    setLastRoll(Math.floor(Math.random() * 6) + 1);
+    const rolling = setInterval(() => {
+      setLastRoll(Math.floor(Math.random() * 6) + 1);
+    }, 250);
+    setTimeout(() => clearInterval(rolling), 1800);
+  };
+
+  const startRoll = () => {
+    let thisRoll = 0;
+    const rolling = setInterval(() => {
+      thisRoll = Math.floor(Math.random() * 6) + 1;
+      setLastRoll(thisRoll);
+    }, 250);
+    setTimeout(() => {
+      clearInterval(rolling);
+      rolls[playersToRoll[playerTurn].internalId] = thisRoll;
+      setRolls(rolls);
+
+      let maxRollers = playersWithMaxRoll;
+      if (thisRoll > maxRoll) {
+        setMaxRoll(thisRoll);
+        setPlayersToRemove(playersToRemove.concat(playersWithMaxRoll));
+        maxRollers = [players[playerTurn]];
+        setPlayersWithMaxRoll(maxRollers);
+      } else if (thisRoll === maxRoll) {
+        maxRollers = playersWithMaxRoll.concat([players[playerTurn]]);
+        setPlayersWithMaxRoll(maxRollers);
+      } else {
+        setPlayersToRemove(playersToRemove.concat([players[playerTurn]]));
+      }
+      if (playerTurn === playersToRoll.length - 1 && maxRollers.length > 1) {
+        setOutputText(startRollTieText);
+      } else if (playerTurn === playersToRoll.length - 1) {
+        const mostRolls = maxRollers[0].internalId;
+        setPlayerTurn(mostRolls);
+        setRolling(false);
+        setStarted(true);
+        setOutputText(`Player ${mostRolls + 1} goes first!`);
+      }
+
+      const nextTurn = (playerTurn + 1) % playersToRoll.length;
+      setPlayerTurn(nextTurn);
+      if (nextTurn === 0) {
+        setMaxRoll(0);
+        setRolls(new Array(numPlayers).fill(0));
+        const removableIds = playersToRemove.map((p) => p.internalId);
+
+        setPlayersToRoll(
+          playersToRoll.filter((p) => !removableIds.includes(p.internalId))
+        );
+      }
+    }, 1800);
   };
 
   const initGame = () => {
-    const numPlayers = 4; // numPlayersSelect();
+    const newPlayers = new Array(numPlayers);
+    const newHome = new Array<[Peg]>(4)
+      .fill(undefined)
+      .map(() => new Array<Peg>(4));
 
-    players = new Array(numPlayers);
+    for (let i = 0; i < newPlayers.length; i++) {
+      const newPlayer = new Player(i);
+      for (let j = 0; j < 4; j++) {
+        const peg: Peg = {
+          player: i,
+          //   identifier: `${j + 1}`,
+          internalId: j,
+          space: HOME,
+          started: false,
+          finished: false,
+        };
 
-    for (let i = 0; i < players.length; i++) {
-      players[i] = new Player(i, home);
+        newHome[i][j] = peg;
+        newPlayer.pegs[j] = peg;
+      }
+      newPlayers[i] = newPlayer;
     }
 
-    // playerTurn = initRoll();
+    setPlayers(newPlayers);
+    setHome(newHome);
+    setPlayersToRoll(newPlayers);
+    setRolls(new Array(numPlayers).fill(0));
+    setRolling(true);
+    setOutputText(startRollText);
   };
-
-  initGame();
 
   return (
     <Grid height="100vh">
@@ -158,6 +314,7 @@ export function Trouble() {
       <Typography textAlign="center" variant="h3">
         GAME OF TROUBLE
       </Typography>
+
       {/* BOARD */}
       <Grid
         container
@@ -171,16 +328,118 @@ export function Trouble() {
         }}
         margin="auto"
       >
-        {/* HOME 0 */}
-        <Grid direction="column">
-          <Grid container justifyContent="center">
-            {new Array(3)
-              .fill(undefined)
-              .map((_, idx) => spaceJSX(home[0][idx], 0))}
+        <Grid container justifyContent="space-between" padding="0rem 1rem">
+          {/* START BUTTON AND MODAL */}
+          <Button
+            variant="contained"
+            sx={{
+              width: "20%",
+              height: "20%",
+              backgroundColor: "white",
+              color: "black",
+            }}
+            onClick={handleOpen}
+          >
+            START
+          </Button>
+          <Modal open={open} onClose={handleClose}>
+            <Grid
+              alignItems="center"
+              justifyContent="center"
+              sx={{ margin: "auto" }}
+            >
+              <Grid
+                width="50%"
+                sx={{
+                  margin: "auto",
+                  backgroundColor: "white",
+                  borderRadius: ".5rem",
+                  opacity: ".9",
+                }}
+              >
+                <IconButton onClick={handleClose} sx={{ float: "left" }}>
+                  <Close sx={{ color: "red" }}></Close>
+                </IconButton>
+                <Typography
+                  variant="h6"
+                  component="h2"
+                  textAlign="center"
+                  paddingTop="1rem"
+                >
+                  SELECT NUMBER OF PLAYERS
+                </Typography>
+                <Grid container justifyContent="center">
+                  <Grid item>
+                    <IconButton onClick={() => setNumPlayers(2)}>
+                      <LooksTwo
+                        className="selectTwo"
+                        fontSize={numPlayers === 2 ? "large" : "small"}
+                        style={{ color: colorMapping[1] }}
+                      />
+                    </IconButton>
+                  </Grid>
+                  <Grid item>
+                    <IconButton onClick={() => setNumPlayers(3)}>
+                      <Looks3
+                        className="selectThree"
+                        fontSize={numPlayers === 3 ? "large" : "small"}
+                        style={{ color: colorMapping[2] }}
+                      />
+                    </IconButton>
+                  </Grid>
+                  <Grid item>
+                    <IconButton onClick={() => setNumPlayers(4)}>
+                      <Looks4
+                        className="selectFour"
+                        fontSize={numPlayers === 4 ? "large" : "small"}
+                        style={{ color: colorMapping[3] }}
+                      />
+                    </IconButton>
+                  </Grid>
+                </Grid>
+                <Grid container justifyContent="center">
+                  <Button
+                    variant="contained"
+                    sx={{ width: "50%", margin: "0 auto 1rem" }}
+                    onClick={handleClose}
+                  >
+                    LET'S GO
+                  </Button>
+                </Grid>
+              </Grid>
+            </Grid>
+          </Modal>
+
+          {/* HOME 0 */}
+
+          <Grid container direction="column" sx={{ width: "20%" }}>
+            <Grid container justifyContent="center">
+              {new Array(3)
+                .fill(undefined)
+                .map((_, idx) => spaceJSX(home[0][idx], 0))}
+            </Grid>
+            <Grid container justifyContent="center">
+              {spaceJSX(home[0][3], 0)}
+            </Grid>
           </Grid>
-          <Grid container justifyContent="center">
-            {spaceJSX(home[0][3], 0)}
-          </Grid>
+          {numPlayers > 0 ? (
+            <Grid
+              container
+              direction="column"
+              sx={{
+                width: "20%",
+                backgroundColor: "white",
+                borderRadius: ".5rem",
+                marginTop: "-1rem",
+              }}
+              justifyItems="center"
+              overflow="hidden"
+            >
+              {turnBoardJSX()}
+            </Grid>
+          ) : (
+            <Grid width="20%"></Grid>
+          )}
         </Grid>
 
         {/* TOP ROW */}
@@ -213,13 +472,7 @@ export function Trouble() {
           alignItems="center"
         >
           {/* TOP ROW FOR COLUMNS*/}
-          <Grid
-            container
-            item
-            direction="row"
-            width="24rem"
-            justifyContent="space-between"
-          >
+          <Grid container item width="24rem" justifyContent="space-between">
             {spaceJSX(track[25], 3)}
             {spaceJSX(finish[0][2], 0)}
             {spaceJSX(track[7], 1)}
@@ -256,7 +509,7 @@ export function Trouble() {
                 .fill(undefined)
                 .map((_, idx) => spaceJSX(finish[3][idx], 3))}
             </Grid>
-            {renderDie(lastRoll)}
+            {dieJSX(lastRoll)}
             <Grid container item width="17rem" justifyContent="flex-start">
               {new Array(4)
                 .fill(undefined)
@@ -316,19 +569,19 @@ export function Trouble() {
         </Grid>
 
         {/* HOME 2 */}
-        <Grid direction="column">
+        <Grid direction="column" container>
           <Grid container justifyContent="center">
             {spaceJSX(home[2][3], 2)}
           </Grid>
           <Grid container justifyContent="center">
             {new Array(3)
               .fill(undefined)
-              .map((_, idx) => spaceJSX(home[2][idx], 0))}
+              .map((_, idx) => spaceJSX(home[2][idx], 2))}
           </Grid>
         </Grid>
       </Grid>
       {/* CONSOLE OUTPUT */}
-      <Console text="we are printing this out kind of slowly"></Console>
+      <Console text={outputText}></Console>
     </Grid>
   );
 }
