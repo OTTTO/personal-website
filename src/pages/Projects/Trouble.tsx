@@ -65,7 +65,7 @@ function Console({ text }) {
 
   React.useEffect(() => {
     function tick() {
-      setOutput((prev) => prev + text[++outputIdx.current]);
+      setOutput((prev: string) => prev + text[++outputIdx.current]);
     }
     if (outputIdx.current < text.length - 1) {
       let addChar = setInterval(tick, 50);
@@ -73,7 +73,20 @@ function Console({ text }) {
     }
   }, [output, text]);
 
-  return <span>{output}</span>;
+  return (
+    <Grid
+      sx={{
+        backgroundColor: "black",
+        margin: "2rem",
+        padding: "2rem 0rem",
+        borderRadius: "1rem",
+      }}
+    >
+      <Typography variant="h6" color="white" textAlign="center">
+        {output}
+      </Typography>
+    </Grid>
+  );
 }
 
 export function Trouble() {
@@ -142,7 +155,7 @@ export function Trouble() {
   return (
     <Grid height="100vh">
       {/* TITLE */}
-      <Typography textAlign="center" variant="h1">
+      <Typography textAlign="center" variant="h3">
         GAME OF TROUBLE
       </Typography>
       {/* BOARD */}
