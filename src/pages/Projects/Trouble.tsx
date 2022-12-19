@@ -1,15 +1,29 @@
 import { Grid, Typography } from "@mui/material";
 import {
-  AccessibilityNewRounded,
   CropDinOutlined,
   LooksOne,
   LooksTwo,
   Looks3,
   Looks4,
 } from "@mui/icons-material";
+import oneDie from "images/dice/dice-one.svg";
+import twoDie from "images/dice/dice-two.svg";
+import threeDie from "images/dice/dice-three.svg";
+import fourDie from "images/dice/dice-four.svg";
+import fiveDie from "images/dice/dice-five.svg";
+import sixDie from "images/dice/dice-six.svg";
+import React from "react";
 
 const HOME = -1;
-const colorMapping = { 0: "red", 1: "green", 2: "#FFC133", 3: "purple" };
+const colorMapping = ["red", "green", "#FFC133", "purple"];
+const dieMapping = {
+  1: oneDie,
+  2: twoDie,
+  3: threeDie,
+  4: fourDie,
+  5: fiveDie,
+  6: sixDie,
+};
 
 interface Peg {
   player: number;
@@ -51,6 +65,7 @@ export function Trouble() {
   const finish = new Array<[Peg]>(4)
     .fill(undefined)
     .map(() => new Array<Peg>(4));
+  const [lastRoll, setLastRoll] = React.useState(6);
 
   let players: Player[];
 
@@ -77,13 +92,20 @@ export function Trouble() {
       pegJSX(peg.internalId, colorMapping[peg.player])
     ) : (
       <Grid item>
-        {/* <Typography color="white">{peg ? peg.space : 0}</Typography> */}
         <CropDinOutlined
           fontSize="large"
           style={{ color: colorMapping[colorIdx] }}
         />
       </Grid>
     );
+  };
+
+  const renderDie = (face: number) => {
+    return <img src={dieMapping[face]} width="5%" onClick={roll}></img>;
+  };
+
+  const roll = () => {
+    setLastRoll(Math.floor(Math.random() * 6) + 1);
   };
 
   const initGame = () => {
@@ -204,6 +226,7 @@ export function Trouble() {
                 .fill(undefined)
                 .map((_, idx) => spaceJSX(finish[3][idx], 3))}
             </Grid>
+            {renderDie(lastRoll)}
             <Grid container item width="17rem" justifyContent="flex-start">
               {new Array(4)
                 .fill(undefined)
