@@ -175,33 +175,43 @@ export function Trouble() {
     return (
       <Grid container direction="column">
         {new Array(numPlayers).fill(undefined).map((_, idx) => {
-          const isTurn =
-            playersToRoll[playerTurn] && playersToRoll[playerTurn].id === idx;
+          const player = playersToRoll[playerTurn];
+          const isTurn = player && player.id === idx;
           return (
             <Grid
               key={idx}
               sx={{
                 backgroundColor: isTurn ? colorMapping[idx] : "white",
               }}
+              textAlign={!started ? "left" : "center"}
             >
               <Typography
-                paddingLeft="1rem"
-                color={isTurn ? "white" : colorMapping[idx]}
+                paddingLeft={!started ? "1rem" : "0rem"}
+                fontWeight={isTurn ? "bold" : "normal"}
+                color={
+                  isTurn && (player.id === 0 || player.id === 2)
+                    ? "black"
+                    : isTurn && (player.id === 1 || player.id === 3)
+                    ? "white"
+                    : colorMapping[idx]
+                }
                 sx={{
                   background: "rgba(0,0,0,0)",
                   display: "inline",
                 }}
               >
-                Player {idx + 1}:
+                Player {idx + 1}
               </Typography>
-              <Typography
-                sx={{
-                  background: "rgba(0,0,0,0)",
-                  display: "inline",
-                }}
-              >
-                {" " + rolls[idx]}
-              </Typography>
+              {!started && (
+                <Typography
+                  sx={{
+                    background: "rgba(0,0,0,0)",
+                    display: "inline",
+                  }}
+                >
+                  {": " + rolls[idx]}
+                </Typography>
+              )}
             </Grid>
           );
         })}
@@ -243,16 +253,19 @@ export function Trouble() {
       setRolls(rolls);
 
       let maxRollers = playersWithMaxRoll;
+      let removable = playersToRemove;
       if (thisRoll > maxRoll) {
         setMaxRoll(thisRoll);
-        setPlayersToRemove(playersToRemove.concat(playersWithMaxRoll));
+        removable = removable.concat(playersWithMaxRoll);
+        setPlayersToRemove(removable);
         maxRollers = [players[playerTurn]];
         setPlayersWithMaxRoll(maxRollers);
       } else if (thisRoll === maxRoll) {
         maxRollers = playersWithMaxRoll.concat([players[playerTurn]]);
         setPlayersWithMaxRoll(maxRollers);
       } else {
-        setPlayersToRemove(playersToRemove.concat([players[playerTurn]]));
+        removable.push(players[playerTurn]);
+        setPlayersToRemove(removable);
       }
       if (playerTurn === playersToRoll.length - 1 && maxRollers.length > 1) {
         setOutputText(startRollTieText);
@@ -270,7 +283,7 @@ export function Trouble() {
         setMaxRoll(0);
 
         setRolls(new Array(numPlayers).fill(0));
-        const removableIds = playersToRemove.map((p) => p.id);
+        const removableIds = removable.map((p) => p.id);
 
         const rollable = playersToRoll.filter(
           (p) => !removableIds.includes(p.id)
