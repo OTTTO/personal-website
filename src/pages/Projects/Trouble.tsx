@@ -1,11 +1,4 @@
-import {
-  Box,
-  Button,
-  Grid,
-  IconButton,
-  Modal,
-  Typography,
-} from "@mui/material";
+import { Button, Grid, IconButton, Modal, Typography } from "@mui/material";
 import {
   CropDinOutlined,
   LooksOne,
@@ -20,9 +13,11 @@ import threeDie from "images/dice/dice-three.svg";
 import fourDie from "images/dice/dice-four.svg";
 import fiveDie from "images/dice/dice-five.svg";
 import sixDie from "images/dice/dice-six.svg";
-import React, { useEffect, useRef } from "react";
+import React, { useRef } from "react";
 
 const HOME = -1;
+const startEndSpaces = [1, 8, 15, 22];
+
 const colorMapping = ["red", "green", "#FFC133", "purple"];
 const dieMapping = {
   1: oneDie,
@@ -45,23 +40,19 @@ const startRollText = "Roll to see who goes first";
 const startRollTieText = "There was a tie, let's roll some more!";
 
 interface Peg {
+  id: number;
   player: number;
-  //   identifier: String;
-  internalId: number;
   space: number;
-  started: boolean;
-  finished: boolean;
+  isStarted: boolean;
+  inFinish: boolean;
 }
 
 class Player {
+  id: number;
   pegs: Peg[] = [];
-  //   identifier: number;
-  internalId: number;
-  playerStr: string;
 
   constructor(iter: number) {
-    // this.identifier = iter + 1;
-    this.internalId = iter;
+    this.id = iter;
   }
 }
 
@@ -137,27 +128,39 @@ export function Trouble() {
   //TEXT
   const [outputText, setOutputText] = React.useState(introText);
 
-  const pegJSX = (id: number, color: string) => {
+  const pegJSX = (peg: Peg, color: string) => {
     const style = { color };
+    const onClick = (e) => {
+      //   if (playerTurn !== peg.player) e.preventDefault();
+      move(peg.id);
+    };
     return [
       <Grid item>
-        <LooksOne fontSize="large" style={style} />
+        <IconButton onClick={onClick} sx={{ padding: 0 }}>
+          <LooksOne fontSize="large" style={style} />
+        </IconButton>
       </Grid>,
       <Grid item>
-        <LooksTwo fontSize="large" style={style} />
+        <IconButton onClick={onClick} sx={{ padding: 0 }}>
+          <LooksTwo fontSize="large" style={style} />
+        </IconButton>
       </Grid>,
       <Grid item>
-        <Looks3 fontSize="large" style={style} />
+        <IconButton onClick={onClick} sx={{ padding: 0 }}>
+          <Looks3 fontSize="large" style={style} />
+        </IconButton>
       </Grid>,
       <Grid item>
-        <Looks4 fontSize="large" style={style} />
+        <IconButton onClick={onClick} sx={{ padding: 0 }}>
+          <Looks4 fontSize="large" style={style} />
+        </IconButton>
       </Grid>,
-    ][id];
+    ][peg.id];
   };
 
   const spaceJSX = (peg: Peg, colorIdx: number) => {
-    return peg && peg.space === -1 ? (
-      pegJSX(peg.internalId, colorMapping[peg.player])
+    return peg && peg.space ? (
+      pegJSX(peg, colorMapping[peg.player])
     ) : (
       <Grid item>
         <CropDinOutlined
@@ -173,8 +176,7 @@ export function Trouble() {
       <Grid container direction="column">
         {new Array(numPlayers).fill(undefined).map((_, idx) => {
           const isTurn =
-            playersToRoll[playerTurn] &&
-            playersToRoll[playerTurn].internalId === idx;
+            playersToRoll[playerTurn] && playersToRoll[playerTurn].id === idx;
           return (
             <Grid
               key={idx}
@@ -237,7 +239,7 @@ export function Trouble() {
     }, 250);
     setTimeout(() => {
       clearInterval(rolling);
-      rolls[playersToRoll[playerTurn].internalId] = thisRoll;
+      rolls[playersToRoll[playerTurn].id] = thisRoll;
       setRolls(rolls);
 
       let maxRollers = playersWithMaxRoll;
@@ -255,7 +257,7 @@ export function Trouble() {
       if (playerTurn === playersToRoll.length - 1 && maxRollers.length > 1) {
         setOutputText(startRollTieText);
       } else if (playerTurn === playersToRoll.length - 1) {
-        const mostRolls = maxRollers[0].internalId;
+        const mostRolls = maxRollers[0].id;
         setPlayerTurn(mostRolls);
         setRolling(false);
         setStarted(true);
@@ -266,12 +268,16 @@ export function Trouble() {
       setPlayerTurn(nextTurn);
       if (nextTurn === 0) {
         setMaxRoll(0);
-        setRolls(new Array(numPlayers).fill(0));
-        const removableIds = playersToRemove.map((p) => p.internalId);
 
-        setPlayersToRoll(
-          playersToRoll.filter((p) => !removableIds.includes(p.internalId))
+        setRolls(new Array(numPlayers).fill(0));
+        const removableIds = playersToRemove.map((p) => p.id);
+
+        const rollable = playersToRoll.filter(
+          (p) => !removableIds.includes(p.id)
         );
+        setPlayersToRoll(rollable);
+
+        setPlayersWithMaxRoll(new Array(rollable.length));
       }
     }, 1800);
   };
@@ -287,14 +293,14 @@ export function Trouble() {
       for (let j = 0; j < 4; j++) {
         const peg: Peg = {
           player: i,
-          //   identifier: `${j + 1}`,
-          internalId: j,
+          id: j,
           space: HOME,
-          started: false,
-          finished: false,
+          isStarted: false,
+          inFinish: false,
         };
 
         newHome[i][j] = peg;
+        //may be able to get rid of this connection
         newPlayer.pegs[j] = peg;
       }
       newPlayers[i] = newPlayer;
@@ -306,6 +312,58 @@ export function Trouble() {
     setRolls(new Array(numPlayers).fill(0));
     setRolling(true);
     setOutputText(startRollText);
+  };
+
+  const getFinalSpace = (startSpace: number, startEnd: number) => {
+    let finalSpace: number;
+    if (startSpace === HOME) {
+      finalSpace = startEnd + 1;
+    } else {
+      finalSpace = (startSpace + lastRoll) % 28;
+    }
+    return finalSpace;
+  };
+
+  const isGoingIntoFinish = () => {
+    return false;
+  };
+
+  const move = (pegId: number) => {
+    const player: Player = players[playerTurn];
+    const peg = player.pegs[pegId];
+
+    const startSpace = player.pegs[pegId].space;
+    const startEnd = startEndSpaces[player.id];
+    const finalSpace = getFinalSpace(startSpace, startEnd);
+
+    if (startSpace === HOME) {
+      home[player.id][pegId] = undefined;
+      setHome(home);
+
+      const oppPeg = track[finalSpace];
+
+      track[finalSpace] = peg;
+      setTrack(track);
+
+      //stomp(oppPeg)
+    } else if (peg.inFinish) {
+    } else if (isGoingIntoFinish()) {
+    } else {
+      track[startSpace] = undefined;
+
+      if (startSpace === startEnd + 1) peg.isStarted = true;
+
+      const oppPeg = track[finalSpace];
+      //stomp(oppPeg)
+
+      track[finalSpace] = peg;
+      setTrack(track);
+    }
+    console.log("finalSpace", finalSpace);
+    peg.space = finalSpace;
+    setPlayers(players);
+    console.log(players);
+    console.log(track);
   };
 
   return (
