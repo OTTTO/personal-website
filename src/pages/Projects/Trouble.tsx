@@ -108,6 +108,7 @@ export function Trouble() {
   const [numPlayers, setNumPlayers] = React.useState(0);
   const [players, setPlayers] = React.useState([]);
   const [playerTurn, setPlayerTurn] = React.useState(0);
+  const [playerCanMove, setPlayerCanMove] = React.useState(false);
 
   //ROLL TO START
   const [playersWithMaxRoll, setPlayersWithMaxRoll] = React.useState([]);
@@ -131,8 +132,14 @@ export function Trouble() {
   const pegJSX = (peg: Peg, color: string) => {
     const style = { color };
     const onClick = (e) => {
-      //   if (playerTurn !== peg.player) e.preventDefault();
-      move(peg.id);
+      if (
+        started &&
+        playerCanMove &&
+        playerTurn === peg.player &&
+        isValidMove(peg)
+      ) {
+        move(peg.id);
+      }
     };
     return [
       <Grid item>
@@ -221,7 +228,13 @@ export function Trouble() {
 
   const dieJSX = (face: number) => {
     const className = rolling || started ? "spin-die" : "";
-    const onClick = rolling ? startRoll : started ? roll : () => {};
+    const onClick = rolling
+      ? startRoll
+      : started && !playerCanMove
+      ? () => {
+          roll();
+        }
+      : () => {};
     return (
       <img
         key={Math.random()}
@@ -235,14 +248,21 @@ export function Trouble() {
   };
 
   const roll = () => {
+    let thisRoll: number;
     const rolling = setInterval(() => {
-      setLastRoll(Math.floor(Math.random() * 6) + 1);
+      thisRoll = Math.floor(Math.random() * 6) + 1;
+      setLastRoll(thisRoll);
     }, 250);
-    setTimeout(() => clearInterval(rolling), 1800);
+    setTimeout(() => {
+      clearInterval(rolling);
+      if (checkValidMoves(thisRoll)) {
+        setPlayerCanMove(true);
+      }
+    }, 900);
   };
 
   const startRoll = () => {
-    let thisRoll = 0;
+    let thisRoll: number;
     const rolling = setInterval(() => {
       thisRoll = Math.floor(Math.random() * 6) + 1;
       setLastRoll(thisRoll);
@@ -254,6 +274,7 @@ export function Trouble() {
 
       let maxRollers = playersWithMaxRoll;
       let removable = playersToRemove;
+      let ended = false;
       if (thisRoll > maxRoll) {
         setMaxRoll(thisRoll);
         removable = removable.concat(playersWithMaxRoll);
@@ -270,29 +291,33 @@ export function Trouble() {
       if (playerTurn === playersToRoll.length - 1 && maxRollers.length > 1) {
         setOutputText(startRollTieText);
       } else if (playerTurn === playersToRoll.length - 1) {
-        const mostRolls = maxRollers[0].id;
-        setPlayerTurn(mostRolls);
+        ended = true;
         setRolling(false);
         setStarted(true);
-        setOutputText(`Player ${mostRolls + 1} goes first!`);
       }
 
       const nextTurn = (playerTurn + 1) % playersToRoll.length;
-      setPlayerTurn(nextTurn);
+      const maxRolls = maxRollers[0].id;
+      setPlayerTurn(!ended ? nextTurn : maxRolls);
       if (nextTurn === 0) {
         setMaxRoll(0);
-
         setRolls(new Array(numPlayers).fill(0));
+
         const removableIds = removable.map((p) => p.id);
 
         const rollable = playersToRoll.filter(
           (p) => !removableIds.includes(p.id)
         );
-        setPlayersToRoll(rollable);
 
-        setPlayersWithMaxRoll(new Array(rollable.length));
+        if (!ended) {
+          setPlayersToRoll(rollable);
+          setPlayersWithMaxRoll(new Array(rollable.length));
+        } else {
+          setPlayersToRoll(players);
+          setOutputText(`Player ${maxRolls + 1} goes first!`);
+        }
       }
-    }, 1800);
+    }, 900);
   };
 
   const initGame = () => {
@@ -313,7 +338,6 @@ export function Trouble() {
         };
 
         newHome[i][j] = peg;
-        //may be able to get rid of this connection
         newPlayer.pegs[j] = peg;
       }
       newPlayers[i] = newPlayer;
@@ -337,46 +361,194 @@ export function Trouble() {
     return finalSpace;
   };
 
-  const isGoingIntoFinish = () => {
-    return false;
+  const isGoingIntoFinish = (
+    peg: Peg,
+    startSpace: number,
+    finalSpace: number,
+    startEnd: number
+  ) => {
+    //edge case for player 4 looping back around
+    if (peg.player === 3) {
+      const betweenStartAndZero =
+        peg.isStarted &&
+        (startSpace === startEnd || startSpace === startEnd + 1);
+
+      const looped = finalSpace === 0 || finalSpace === 1;
+
+      if (betweenStartAndZero && looped) finalSpace += 27;
+    }
+    const pastStartEnd = finalSpace > startEnd + 1;
+    const finishing = (startSpace + lastRoll) % 28 <= startEnd + lastRoll + 1;
+    return peg.isStarted && pastStartEnd && finishing;
+  };
+
+  const stomp = (oppPeg: Peg) => {
+    oppPeg.space = HOME;
+    oppPeg.isStarted = false;
+
+    const newHome = [...home];
+    newHome[oppPeg.player][oppPeg.id] = oppPeg;
+    setHome(newHome);
   };
 
   const move = (pegId: number) => {
-    const player: Player = players[playerTurn];
+    const newPlayers = [...players];
+    const player: Player = newPlayers[playerTurn];
     const peg = player.pegs[pegId];
 
     const startSpace = player.pegs[pegId].space;
     const startEnd = startEndSpaces[player.id];
     const finalSpace = getFinalSpace(startSpace, startEnd);
 
+    const newHome = [...home];
+    const newTrack = [...track];
+    const newFinish = [...finish];
+
     if (startSpace === HOME) {
-      home[player.id][pegId] = undefined;
-      setHome(home);
+      newHome[player.id][pegId] = undefined;
+      setHome(newHome);
 
       const oppPeg = track[finalSpace];
+      if (oppPeg) stomp(oppPeg);
 
-      track[finalSpace] = peg;
-      setTrack(track);
-
-      //stomp(oppPeg)
+      newTrack[finalSpace] = peg;
+      setTrack(newTrack);
     } else if (peg.inFinish) {
-    } else if (isGoingIntoFinish()) {
-    } else {
+      newFinish[player.id][startSpace - (startEnd + 2)] = undefined;
+      newFinish[player.id][finalSpace - (startEnd + 2)] = peg;
+    } else if (isGoingIntoFinish(peg, startSpace, finalSpace, startEnd)) {
+      newFinish[player.id][finalSpace - (startEnd + 2)] = peg;
+      peg.inFinish = true;
+      peg.space = finalSpace;
       track[startSpace] = undefined;
+    } else {
+      newTrack[startSpace] = undefined;
 
       if (startSpace === startEnd + 1) peg.isStarted = true;
+      const oppPeg = newTrack[finalSpace];
+      if (oppPeg) stomp(oppPeg);
 
-      const oppPeg = track[finalSpace];
-      //stomp(oppPeg)
-
-      track[finalSpace] = peg;
-      setTrack(track);
+      newTrack[finalSpace] = peg;
+      setTrack(newTrack);
     }
-    console.log("finalSpace", finalSpace);
     peg.space = finalSpace;
-    setPlayers(players);
-    console.log(players);
-    console.log(track);
+    setPlayers(newPlayers);
+    setPlayerTurn((playerTurn + 1) % numPlayers);
+    setPlayerCanMove(false);
+  };
+
+  const otherPegLogic = (peg: Peg, otherPeg: Peg) => {
+    if (otherPeg) {
+      if (peg.player === otherPeg.player) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return true;
+    }
+  };
+
+  const isValidMove = (peg: Peg) => {
+    const startSpace = peg.space;
+    const startEnd = startEndSpaces[peg.player];
+
+    const finalSpace = getFinalSpace(startSpace, lastRoll);
+    const finishLine = finalSpace - (startEnd + 2);
+
+    //LEAVING HOME
+    if (startSpace === HOME) {
+      if (lastRoll === 6) {
+        const otherPeg = track[startEnd + 1];
+        return otherPegLogic(peg, otherPeg);
+      } else {
+        return false;
+      }
+    } else if (peg.inFinish) {
+      //IN FINISH LINE
+      if (startSpace + lastRoll <= startEnd + 5) {
+        const otherPeg = finish[peg.player][finishLine];
+        return !otherPeg;
+      } else {
+        return false;
+      }
+    } else if (isGoingIntoFinish(peg, startSpace, finalSpace, startEnd)) {
+      // GOING INTO FINISH
+      const otherPeg = finish[peg.player][finishLine];
+      return otherPegLogic(peg, otherPeg);
+    } else {
+      //ON TRACK
+      const otherPeg = track[finalSpace];
+      return otherPegLogic(peg, otherPeg);
+    }
+  };
+
+  const checkValidMoves = (thisRoll: number) => {
+    let invalidMoves = 0;
+    const player: Player = players[playerTurn];
+    const startEnd = startEndSpaces[player.id];
+
+    for (const peg of player.pegs) {
+      const startSpace = peg.space;
+      const finalSpace = getFinalSpace(startSpace, thisRoll);
+      const goingIntoFinish = isGoingIntoFinish(
+        peg,
+        startSpace,
+        finalSpace,
+        startEnd
+      );
+      let otherPeg: Peg;
+
+      //home and not a 6
+      if (startSpace === HOME && thisRoll !== 6) {
+        invalidMoves++;
+        continue;
+      }
+
+      //past finish (in finish)
+      if (peg.inFinish) {
+        if (startSpace + thisRoll > startEnd + 5) {
+          invalidMoves++;
+          continue;
+        }
+      }
+
+      //past finish (going into finish)
+      if (goingIntoFinish) {
+        if (finalSpace > startEnd + 5) {
+          invalidMoves++;
+          continue;
+        }
+      }
+
+      //land on own peg
+      if (startSpace === HOME) {
+        otherPeg = track[startEnd + 1];
+      } else if (goingIntoFinish || peg.inFinish) {
+        const finishLine = finalSpace - (startEnd + 2);
+        if (finishLine > 3) {
+          invalidMoves++;
+          continue;
+        } else {
+          otherPeg = finishLine[player.id][finishLine];
+        }
+      } else {
+        otherPeg = track[finalSpace];
+      }
+
+      if (otherPeg && peg.player === otherPeg.player) {
+        invalidMoves++;
+        continue;
+      }
+    }
+    if (invalidMoves === 4) {
+      setPlayerTurn((playerTurn + 1) % numPlayers);
+      setOutputText("NO VALID MOVES");
+      return false;
+    } else {
+      setOutputText(`PLAYER ${playerTurn + 1}: CHOOSE A PEG TO MOVE`);
+      return true;
+    }
   };
 
   return (
