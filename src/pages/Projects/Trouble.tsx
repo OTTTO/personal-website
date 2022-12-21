@@ -455,7 +455,7 @@ export function Trouble() {
 
   const otherPegLogic = (peg: Peg, otherPeg: Peg) => {
     if (otherPeg) {
-      if (peg.player === otherPeg.player) {
+      if (peg.player !== otherPeg.player) {
         return true;
       } else {
         return false;
