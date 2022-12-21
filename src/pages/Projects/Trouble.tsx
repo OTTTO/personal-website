@@ -14,6 +14,8 @@ import fourDie from "images/dice/dice-four.svg";
 import fiveDie from "images/dice/dice-five.svg";
 import sixDie from "images/dice/dice-six.svg";
 import React, { useRef } from "react";
+import { Footer } from "components/Footer";
+import { Menu } from "components/Menu";
 
 const HOME = -1;
 const startEndSpaces = [1, 8, 15, 22];
@@ -157,10 +159,7 @@ export function Trouble() {
   //MODAL
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
-  const handleClose = () => {
-    initGame();
-    setOpen(false);
-  };
+  const handleClose = () => setOpen(false);
 
   //TEXT
   const [outputText, setOutputText] = React.useState(introText);
@@ -653,300 +652,309 @@ export function Trouble() {
   };
 
   return (
-    <Grid height="100vh">
-      {/* TITLE */}
-      <Typography textAlign="center" variant="h3">
-        GAME OF TROUBLE
-      </Typography>
+    <Grid container direction="column">
+      <Menu backgroundColor="black"></Menu>
+      <Grid paddingTop="1rem">
+        {/* TITLE */}
+        <Typography textAlign="center" variant="h3">
+          GAME OF TROUBLE
+        </Typography>
 
-      {/* BOARD */}
-      <Grid
-        container
-        justifyContent="center"
-        width="37rem"
-        direction="column"
-        sx={{
-          backgroundColor: "black",
-          padding: "2rem 0rem",
-          borderRadius: "1rem",
-        }}
-        margin="auto"
-      >
-        <Grid container justifyContent="space-between" padding="0rem 1rem">
-          {/* START BUTTON AND MODAL */}
-          {rolling || started || finished ? (
-            <Button
-              variant="contained"
-              sx={{
-                width: "20%",
-                height: "20%",
-                backgroundColor: "white",
-                color: "black",
-              }}
-              onClick={() => {
-                reset();
-                handleOpen();
-              }}
-            >
-              RESTART
-            </Button>
-          ) : (
-            <Button
-              variant="contained"
-              sx={{
-                width: "20%",
-                height: "20%",
-                backgroundColor: "white",
-                color: "black",
-              }}
-              onClick={handleOpen}
-            >
-              START
-            </Button>
-          )}
-          <Modal open={open} onClose={handleClose}>
-            <Grid
-              alignItems="center"
-              justifyContent="center"
-              sx={{ margin: "auto" }}
-            >
-              <Grid
-                width="50%"
+        {/* BOARD */}
+        <Grid
+          container
+          justifyContent="center"
+          width="37rem"
+          direction="column"
+          sx={{
+            backgroundColor: "black",
+            padding: "2rem 0rem",
+            borderRadius: "1rem",
+          }}
+          margin="auto"
+        >
+          <Grid container justifyContent="space-between" padding="0rem 1rem">
+            {/* START BUTTON AND MODAL */}
+            {rolling || started || finished ? (
+              <Button
+                variant="contained"
                 sx={{
-                  margin: "auto",
+                  width: "20%",
+                  height: "20%",
                   backgroundColor: "white",
-                  borderRadius: ".5rem",
-                  opacity: ".9",
+                  color: "black",
+                }}
+                onClick={() => {
+                  reset();
+                  handleOpen();
                 }}
               >
-                <IconButton onClick={handleClose} sx={{ float: "left" }}>
-                  <Close sx={{ color: "red" }}></Close>
-                </IconButton>
-                <Typography
-                  variant="h6"
-                  component="h2"
-                  textAlign="center"
-                  paddingTop="1rem"
+                RESTART
+              </Button>
+            ) : (
+              <Button
+                variant="contained"
+                sx={{
+                  width: "20%",
+                  height: "20%",
+                  backgroundColor: "white",
+                  color: "black",
+                }}
+                onClick={handleOpen}
+              >
+                START
+              </Button>
+            )}
+            <Modal open={open} onClose={handleClose}>
+              <Grid
+                alignItems="center"
+                justifyContent="center"
+                sx={{ margin: "auto" }}
+              >
+                <Grid
+                  width="50%"
+                  sx={{
+                    margin: "auto",
+                    backgroundColor: "white",
+                    borderRadius: ".5rem",
+                    opacity: ".9",
+                  }}
                 >
-                  SELECT NUMBER OF PLAYERS
-                </Typography>
-                <Grid container justifyContent="center">
-                  <Grid item>
-                    <IconButton onClick={() => setNumPlayers(2)}>
-                      <LooksTwo
-                        className="selectTwo"
-                        fontSize={numPlayers === 2 ? "large" : "small"}
-                        style={{ color: colorMapping[1] }}
-                      />
-                    </IconButton>
+                  <IconButton onClick={handleClose} sx={{ float: "left" }}>
+                    <Close sx={{ color: "red" }}></Close>
+                  </IconButton>
+                  <Typography
+                    variant="h6"
+                    component="h2"
+                    textAlign="center"
+                    paddingTop="1rem"
+                  >
+                    SELECT NUMBER OF PLAYERS
+                  </Typography>
+                  <Grid container justifyContent="center">
+                    <Grid item>
+                      <IconButton onClick={() => setNumPlayers(2)}>
+                        <LooksTwo
+                          className="selectTwo"
+                          fontSize={numPlayers === 2 ? "large" : "small"}
+                          style={{ color: colorMapping[1] }}
+                        />
+                      </IconButton>
+                    </Grid>
+                    <Grid item>
+                      <IconButton onClick={() => setNumPlayers(3)}>
+                        <Looks3
+                          className="selectThree"
+                          fontSize={numPlayers === 3 ? "large" : "small"}
+                          style={{ color: colorMapping[2] }}
+                        />
+                      </IconButton>
+                    </Grid>
+                    <Grid item>
+                      <IconButton onClick={() => setNumPlayers(4)}>
+                        <Looks4
+                          className="selectFour"
+                          fontSize={numPlayers === 4 ? "large" : "small"}
+                          style={{ color: colorMapping[3] }}
+                        />
+                      </IconButton>
+                    </Grid>
                   </Grid>
-                  <Grid item>
-                    <IconButton onClick={() => setNumPlayers(3)}>
-                      <Looks3
-                        className="selectThree"
-                        fontSize={numPlayers === 3 ? "large" : "small"}
-                        style={{ color: colorMapping[2] }}
-                      />
-                    </IconButton>
-                  </Grid>
-                  <Grid item>
-                    <IconButton onClick={() => setNumPlayers(4)}>
-                      <Looks4
-                        className="selectFour"
-                        fontSize={numPlayers === 4 ? "large" : "small"}
-                        style={{ color: colorMapping[3] }}
-                      />
-                    </IconButton>
+                  <Grid container justifyContent="center">
+                    <Button
+                      variant="contained"
+                      sx={{ width: "50%", margin: "0 auto 1rem" }}
+                      onClick={() => {
+                        handleClose();
+                        initGame();
+                      }}
+                    >
+                      LET'S GO
+                    </Button>
                   </Grid>
                 </Grid>
-                <Grid container justifyContent="center">
-                  <Button
-                    variant="contained"
-                    sx={{ width: "50%", margin: "0 auto 1rem" }}
-                    onClick={handleClose}
-                  >
-                    LET'S GO
-                  </Button>
+              </Grid>
+            </Modal>
+
+            {/* HOME 0 */}
+
+            <Grid container direction="column" sx={{ width: "20%" }}>
+              <Grid container justifyContent="center">
+                {new Array(3)
+                  .fill(undefined)
+                  .map((_, idx) => spaceJSX(home[0][idx], 0, idx))}
+              </Grid>
+              <Grid container justifyContent="center">
+                {spaceJSX(home[0][3], 0, 0)}
+              </Grid>
+            </Grid>
+            {numPlayers > 0 && rolling ? (
+              <Grid
+                container
+                direction="column"
+                sx={{
+                  width: "20%",
+                  backgroundColor: "white",
+                  borderRadius: ".5rem",
+                  marginTop: "-1rem",
+                }}
+                justifyItems="center"
+                overflow="hidden"
+              >
+                {turnBoardJSX()}
+              </Grid>
+            ) : (
+              <Grid width="20%"></Grid>
+            )}
+          </Grid>
+
+          {/* TOP ROW */}
+          <Grid container justifyContent="center" spacing={2}>
+            {[0, 1, 2, 3, 4].map((space, idx) =>
+              spaceJSX(track[space], 0, idx)
+            )}
+          </Grid>
+
+          {/* TOP DIAGONALS AND MIDDLE HOME */}
+          <Grid container justifyContent="center">
+            <Grid container width="18rem" justifyContent="space-between">
+              {spaceJSX(track[27], 0, 0)}
+              {spaceJSX(finish[0][0], 0, 1)}
+              {spaceJSX(track[5], 0, 2)}
+            </Grid>
+          </Grid>
+          <Grid container justifyContent="center">
+            <Grid container width="21rem" justifyContent="space-between">
+              {spaceJSX(track[26], 3, 0)}
+              {spaceJSX(finish[0][1], 0, 1)}
+              {spaceJSX(track[6], 1, 2)}
+            </Grid>
+          </Grid>
+
+          {/* COLUMNS */}
+          <Grid
+            container
+            width="37rem"
+            direction="column"
+            justifyContent="center"
+            alignItems="center"
+          >
+            {/* TOP ROW FOR COLUMNS*/}
+            <Grid container item width="24rem" justifyContent="space-between">
+              {spaceJSX(track[25], 3, 0)}
+              {spaceJSX(finish[0][2], 0, 1)}
+              {spaceJSX(track[7], 1, 2)}
+            </Grid>
+            {/* TOP HOME AND FINISH */}
+            <Grid container justifyContent="space-between">
+              <Grid container width="8.5rem" justifyContent="space-between">
+                <Grid container width="4.5rem" justifyContent="flex-end">
+                  <Grid item>{spaceJSX(home[3][0], 3, 0)}</Grid>
+                </Grid>
+                <Grid item>{spaceJSX(track[24], 3, 0)}</Grid>
+              </Grid>
+              <Grid item>{spaceJSX(finish[0][3], 0, 0)}</Grid>
+              <Grid container width="8.5rem" justifyContent="space-between">
+                {spaceJSX(track[8], 1, 0)}
+                <Grid container width="4.5rem" justifyContent="flex-start">
+                  <Grid item>{spaceJSX(home[1][0], 1, 0)}</Grid>
                 </Grid>
               </Grid>
             </Grid>
-          </Modal>
 
-          {/* HOME 0 */}
+            {/* MIDDLE HOME AND FINISH */}
+            <Grid
+              container
+              justifyContent="space-between"
+              alignItems="center"
+              width="36rem"
+            >
+              <Grid container item width="17rem" justifyContent="flex-end">
+                {spaceJSX(home[3][1], 3, 0)}
+                {spaceJSX(home[3][3], 3, 1)}
+                {spaceJSX(track[23], 3, 2)}
+                {new Array(4)
+                  .fill(undefined)
+                  .map((_, idx) => spaceJSX(finish[3][idx], 3, idx))}
+              </Grid>
+              {dieJSX(lastRoll)}
+              <Grid container item width="17rem" justifyContent="flex-start">
+                {new Array(4)
+                  .fill(undefined)
+                  .map((_, idx) => spaceJSX(finish[1][idx], 1, idx))
+                  .reverse()}
+                {spaceJSX(track[9], 1, 0)}
+                {spaceJSX(home[1][3], 1, 1)}
+                {spaceJSX(home[1][1], 1, 2)}
+              </Grid>
+            </Grid>
 
-          <Grid container direction="column" sx={{ width: "20%" }}>
+            {/* BOTTOM HOME AND FINISH */}
+            <Grid container justifyContent="space-between">
+              <Grid container width="8.5rem" justifyContent="space-between">
+                <Grid container width="4.5rem" justifyContent="flex-end">
+                  {spaceJSX(home[3][2], 3, 0)}
+                </Grid>
+                {spaceJSX(track[22], 3, 0)}
+              </Grid>
+              {spaceJSX(finish[2][3], 2, 0)}
+              <Grid container width="8.5rem" justifyContent="space-between">
+                {spaceJSX(track[10], 1, 0)}
+
+                <Grid container width="4.5rem" justifyContent="flex-start">
+                  {spaceJSX(home[1][2], 1, 0)}
+                </Grid>
+              </Grid>
+            </Grid>
+
+            {/* BOTTOM ROW FOR COLUMNS */}
+            <Grid container item width="24rem" justifyContent="space-between">
+              {spaceJSX(track[21], 3, 0)}
+              {spaceJSX(finish[2][2], 2, 1)}
+              {spaceJSX(track[11], 1, 2)}
+            </Grid>
+          </Grid>
+
+          {/* BOTTOM DIAGONALS AND MIDDLE HOME */}
+
+          <Grid container justifyContent="center">
+            <Grid container width="21rem" justifyContent="space-between">
+              {spaceJSX(track[20], 3, 0)}
+              {spaceJSX(finish[2][1], 2, 1)}
+              {spaceJSX(track[12], 1, 2)}
+            </Grid>
+          </Grid>
+          <Grid container justifyContent="center">
+            <Grid container width="18rem" justifyContent="space-between">
+              {spaceJSX(track[19], 2, 0)}
+              {spaceJSX(finish[2][0], 2, 1)}
+              {spaceJSX(track[13], 2, 2)}
+            </Grid>
+          </Grid>
+
+          {/* BOTTOM ROW */}
+          <Grid container justifyContent="center" spacing={2}>
+            {[18, 17, 16, 15, 14].map((space, idx) =>
+              spaceJSX(track[space], 2, idx)
+            )}
+          </Grid>
+
+          {/* HOME 2 */}
+          <Grid direction="column" container>
+            <Grid container justifyContent="center">
+              {spaceJSX(home[2][3], 2, 0)}
+            </Grid>
             <Grid container justifyContent="center">
               {new Array(3)
                 .fill(undefined)
-                .map((_, idx) => spaceJSX(home[0][idx], 0, idx))}
-            </Grid>
-            <Grid container justifyContent="center">
-              {spaceJSX(home[0][3], 0, 0)}
+                .map((_, idx) => spaceJSX(home[2][idx], 2, idx))}
             </Grid>
           </Grid>
-          {numPlayers > 0 ? (
-            <Grid
-              container
-              direction="column"
-              sx={{
-                width: "20%",
-                backgroundColor: "white",
-                borderRadius: ".5rem",
-                marginTop: "-1rem",
-              }}
-              justifyItems="center"
-              overflow="hidden"
-            >
-              {turnBoardJSX()}
-            </Grid>
-          ) : (
-            <Grid width="20%"></Grid>
-          )}
         </Grid>
-
-        {/* TOP ROW */}
-        <Grid container justifyContent="center" spacing={2}>
-          {[0, 1, 2, 3, 4].map((space, idx) => spaceJSX(track[space], 0, idx))}
-        </Grid>
-
-        {/* TOP DIAGONALS AND MIDDLE HOME */}
-        <Grid container justifyContent="center">
-          <Grid container width="18rem" justifyContent="space-between">
-            {spaceJSX(track[27], 0, 0)}
-            {spaceJSX(finish[0][0], 0, 1)}
-            {spaceJSX(track[5], 0, 2)}
-          </Grid>
-        </Grid>
-        <Grid container justifyContent="center">
-          <Grid container width="21rem" justifyContent="space-between">
-            {spaceJSX(track[26], 3, 0)}
-            {spaceJSX(finish[0][1], 0, 1)}
-            {spaceJSX(track[6], 1, 2)}
-          </Grid>
-        </Grid>
-
-        {/* COLUMNS */}
-        <Grid
-          container
-          width="37rem"
-          direction="column"
-          justifyContent="center"
-          alignItems="center"
-        >
-          {/* TOP ROW FOR COLUMNS*/}
-          <Grid container item width="24rem" justifyContent="space-between">
-            {spaceJSX(track[25], 3, 0)}
-            {spaceJSX(finish[0][2], 0, 1)}
-            {spaceJSX(track[7], 1, 2)}
-          </Grid>
-          {/* TOP HOME AND FINISH */}
-          <Grid container justifyContent="space-between">
-            <Grid container width="8.5rem" justifyContent="space-between">
-              <Grid container width="4.5rem" justifyContent="flex-end">
-                <Grid item>{spaceJSX(home[3][0], 3, 0)}</Grid>
-              </Grid>
-              <Grid item>{spaceJSX(track[24], 3, 0)}</Grid>
-            </Grid>
-            <Grid item>{spaceJSX(finish[0][3], 0, 0)}</Grid>
-            <Grid container width="8.5rem" justifyContent="space-between">
-              {spaceJSX(track[8], 1, 0)}
-              <Grid container width="4.5rem" justifyContent="flex-start">
-                <Grid item>{spaceJSX(home[1][0], 1, 0)}</Grid>
-              </Grid>
-            </Grid>
-          </Grid>
-
-          {/* MIDDLE HOME AND FINISH */}
-          <Grid
-            container
-            justifyContent="space-between"
-            alignItems="center"
-            width="36rem"
-          >
-            <Grid container item width="17rem" justifyContent="flex-end">
-              {spaceJSX(home[3][1], 3, 0)}
-              {spaceJSX(home[3][3], 3, 1)}
-              {spaceJSX(track[23], 3, 2)}
-              {new Array(4)
-                .fill(undefined)
-                .map((_, idx) => spaceJSX(finish[3][idx], 3, idx))}
-            </Grid>
-            {dieJSX(lastRoll)}
-            <Grid container item width="17rem" justifyContent="flex-start">
-              {new Array(4)
-                .fill(undefined)
-                .map((_, idx) => spaceJSX(finish[1][idx], 1, idx))
-                .reverse()}
-              {spaceJSX(track[9], 1, 0)}
-              {spaceJSX(home[1][3], 1, 1)}
-              {spaceJSX(home[1][1], 1, 2)}
-            </Grid>
-          </Grid>
-
-          {/* BOTTOM HOME AND FINISH */}
-          <Grid container justifyContent="space-between">
-            <Grid container width="8.5rem" justifyContent="space-between">
-              <Grid container width="4.5rem" justifyContent="flex-end">
-                {spaceJSX(home[3][2], 3, 0)}
-              </Grid>
-              {spaceJSX(track[22], 3, 0)}
-            </Grid>
-            {spaceJSX(finish[2][3], 2, 0)}
-            <Grid container width="8.5rem" justifyContent="space-between">
-              {spaceJSX(track[10], 1, 0)}
-
-              <Grid container width="4.5rem" justifyContent="flex-start">
-                {spaceJSX(home[1][2], 1, 0)}
-              </Grid>
-            </Grid>
-          </Grid>
-
-          {/* BOTTOM ROW FOR COLUMNS */}
-          <Grid container item width="24rem" justifyContent="space-between">
-            {spaceJSX(track[21], 3, 0)}
-            {spaceJSX(finish[2][2], 2, 1)}
-            {spaceJSX(track[11], 1, 2)}
-          </Grid>
-        </Grid>
-
-        {/* BOTTOM DIAGONALS AND MIDDLE HOME */}
-
-        <Grid container justifyContent="center">
-          <Grid container width="21rem" justifyContent="space-between">
-            {spaceJSX(track[20], 3, 0)}
-            {spaceJSX(finish[2][1], 2, 1)}
-            {spaceJSX(track[12], 1, 2)}
-          </Grid>
-        </Grid>
-        <Grid container justifyContent="center">
-          <Grid container width="18rem" justifyContent="space-between">
-            {spaceJSX(track[19], 2, 0)}
-            {spaceJSX(finish[2][0], 2, 1)}
-            {spaceJSX(track[13], 2, 2)}
-          </Grid>
-        </Grid>
-
-        {/* BOTTOM ROW */}
-        <Grid container justifyContent="center" spacing={2}>
-          {[18, 17, 16, 15, 14].map((space, idx) =>
-            spaceJSX(track[space], 2, idx)
-          )}
-        </Grid>
-
-        {/* HOME 2 */}
-        <Grid direction="column" container>
-          <Grid container justifyContent="center">
-            {spaceJSX(home[2][3], 2, 0)}
-          </Grid>
-          <Grid container justifyContent="center">
-            {new Array(3)
-              .fill(undefined)
-              .map((_, idx) => spaceJSX(home[2][idx], 2, idx))}
-          </Grid>
-        </Grid>
+        {/* CONSOLE OUTPUT */}
+        <Console text={outputText} update={update}></Console>
       </Grid>
-      {/* CONSOLE OUTPUT */}
-      <Console text={outputText} update={update}></Console>
+      <Footer backgroundColor="black"></Footer>
     </Grid>
   );
 }
