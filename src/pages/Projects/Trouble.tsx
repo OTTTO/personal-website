@@ -40,7 +40,7 @@ const startRollText = "Roll to see who goes first";
 const startRollTieText = "There was a tie, let's roll some more!";
 
 const nextMoveText = (playerId: number) => {
-  return `PLAYER ${playerId}: IT IS YOUR TURN, PLEASE ROLL THE DIE`;
+  return `PLAYER ${playerId}: IT IS YOUR TURN, PLEASE ROLL`;
 };
 
 const noValidMovesText = (playerId: number) => {
@@ -53,7 +53,11 @@ const validMoveText = (playerId: number) => {
 };
 
 const invalidMoveText = (playerId: number) => {
-  return `PLAYER ${playerId}: THIS IS NOT A VALID PEG, PLEASE TRY ANOTHER MOVE;`;
+  return `PLAYER ${playerId}: THIS IS NOT A VALID PEG, PLEASE TRY ANOTHER MOVE`;
+};
+
+const winRollText = (playerId: number) => {
+  return `PLAYER ${playerId}: YOU WON THE DIE ROLL, IT IS YOUR TURN`;
 };
 
 interface Peg {
@@ -266,75 +270,66 @@ export function Trouble() {
 
   const roll = () => {
     let thisRoll: number;
-    const rolling = setInterval(() => {
-      thisRoll = Math.floor(Math.random() * 6) + 1;
-      setLastRoll(thisRoll);
-    }, 250);
-    setTimeout(() => {
-      clearInterval(rolling);
-      if (checkValidMoves(thisRoll)) {
-        setPlayerCanMove(true);
-      }
-    }, 900);
+    thisRoll = Math.floor(Math.random() * 6) + 1;
+    setLastRoll(thisRoll);
+    if (checkValidMoves(thisRoll)) {
+      setPlayerCanMove(true);
+    }
   };
 
   const startRoll = () => {
     let thisRoll: number;
-    const rolling = setInterval(() => {
-      thisRoll = Math.floor(Math.random() * 6) + 1;
-      setLastRoll(thisRoll);
-    }, 250);
-    setTimeout(() => {
-      clearInterval(rolling);
-      rolls[playersToRoll[playerTurn].id] = thisRoll;
-      setRolls(rolls);
+    thisRoll = Math.floor(Math.random() * 6) + 1;
 
-      let maxRollers = playersWithMaxRoll;
-      let removable = playersToRemove;
-      let ended = false;
-      if (thisRoll > maxRoll) {
-        setMaxRoll(thisRoll);
-        removable = removable.concat(playersWithMaxRoll);
-        setPlayersToRemove(removable);
-        maxRollers = [players[playerTurn]];
-        setPlayersWithMaxRoll(maxRollers);
-      } else if (thisRoll === maxRoll) {
-        maxRollers = playersWithMaxRoll.concat([players[playerTurn]]);
-        setPlayersWithMaxRoll(maxRollers);
+    setLastRoll(thisRoll);
+    rolls[playersToRoll[playerTurn].id] = thisRoll;
+    setRolls(rolls);
+
+    let maxRollers = playersWithMaxRoll;
+    let removable = playersToRemove;
+    let ended = false;
+    if (thisRoll > maxRoll) {
+      setMaxRoll(thisRoll);
+      removable = removable.concat(playersWithMaxRoll);
+      setPlayersToRemove(removable);
+      maxRollers = [players[playerTurn]];
+      setPlayersWithMaxRoll(maxRollers);
+    } else if (thisRoll === maxRoll) {
+      maxRollers = playersWithMaxRoll.concat([players[playerTurn]]);
+      setPlayersWithMaxRoll(maxRollers);
+    } else {
+      removable.push(players[playerTurn]);
+      setPlayersToRemove(removable);
+    }
+    if (playerTurn === playersToRoll.length - 1 && maxRollers.length > 1) {
+      setOutputText(startRollTieText);
+    } else if (playerTurn === playersToRoll.length - 1) {
+      ended = true;
+      setRolling(false);
+      setStarted(true);
+    }
+
+    const nextTurn = (playerTurn + 1) % playersToRoll.length;
+    const maxRolls = maxRollers[0].id;
+    setPlayerTurn(!ended ? nextTurn : maxRolls);
+    if (nextTurn === 0) {
+      setMaxRoll(0);
+      setRolls(new Array(numPlayers).fill(0));
+
+      const removableIds = removable.map((p) => p.id);
+
+      const rollable = playersToRoll.filter(
+        (p) => !removableIds.includes(p.id)
+      );
+
+      if (!ended) {
+        setPlayersToRoll(rollable);
+        setPlayersWithMaxRoll(new Array(rollable.length));
       } else {
-        removable.push(players[playerTurn]);
-        setPlayersToRemove(removable);
+        setPlayersToRoll(players);
+        setOutputText(winRollText(maxRolls + 1));
       }
-      if (playerTurn === playersToRoll.length - 1 && maxRollers.length > 1) {
-        setOutputText(startRollTieText);
-      } else if (playerTurn === playersToRoll.length - 1) {
-        ended = true;
-        setRolling(false);
-        setStarted(true);
-      }
-
-      const nextTurn = (playerTurn + 1) % playersToRoll.length;
-      const maxRolls = maxRollers[0].id;
-      setPlayerTurn(!ended ? nextTurn : maxRolls);
-      if (nextTurn === 0) {
-        setMaxRoll(0);
-        setRolls(new Array(numPlayers).fill(0));
-
-        const removableIds = removable.map((p) => p.id);
-
-        const rollable = playersToRoll.filter(
-          (p) => !removableIds.includes(p.id)
-        );
-
-        if (!ended) {
-          setPlayersToRoll(rollable);
-          setPlayersWithMaxRoll(new Array(rollable.length));
-        } else {
-          setPlayersToRoll(players);
-          setOutputText(`Player ${maxRolls + 1} goes first!`);
-        }
-      }
-    }, 900);
+    }
   };
 
   const initGame = () => {
@@ -454,7 +449,7 @@ export function Trouble() {
     peg.space = finalSpace;
     setPlayers(newPlayers);
     setPlayerTurn(nextPlayer);
-    setOutputText(nextMoveText(nextPlayer));
+    setOutputText(nextMoveText(nextPlayer + 1));
     setPlayerCanMove(false);
   };
 
@@ -571,7 +566,7 @@ export function Trouble() {
     }
 
     const nextPlayer = (playerTurn + 1) % numPlayers;
-    const playerId = nextPlayer + 1;
+    const playerId = playerTurn + 1;
     if (invalidMoves === 4) {
       setPlayerTurn(nextPlayer);
       setOutputText(noValidMovesText(playerId));
