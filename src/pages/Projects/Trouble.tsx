@@ -36,8 +36,8 @@ const introText = `WELCOME TO THE GAME OF TROUBLE`;
 // Players cannot move a peg onto a space occupied by another one of their pegs
 // If your peg lands on an opponent's peg, their peg is sent back HOME`;
 
-const startRollText = "Roll to see who goes first";
-const startRollTieText = "There was a tie, let's roll some more!";
+const startRollText = `ROLL TO SEE WHO GOES FIRST`;
+const startRollTieText = "THERE WAS A TIE, LET'S ROLL SOME MORE!";
 
 const nextMoveText = (playerId: number) => {
   return `PLAYER ${playerId}: IT IS YOUR TURN, PLEASE ROLL`;
@@ -382,12 +382,16 @@ export function Trouble() {
     changeOutput(startRollText);
   };
 
-  const getFinalSpace = (startSpace: number, startEnd: number) => {
+  const getFinalSpace = (
+    startSpace: number,
+    startEnd: number,
+    thisRoll: number
+  ) => {
     let finalSpace: number;
     if (startSpace === HOME) {
       finalSpace = startEnd + 1;
     } else {
-      finalSpace = (startSpace + lastRoll) % 28;
+      finalSpace = (startSpace + thisRoll) % 28;
     }
     return finalSpace;
   };
@@ -429,11 +433,13 @@ export function Trouble() {
 
     const startSpace = player.pegs[pegId].space;
     const startEnd = startEndSpaces[player.id];
-    const finalSpace = getFinalSpace(startSpace, startEnd);
+    const finalSpace = getFinalSpace(startSpace, startEnd, lastRoll);
 
     const newHome = [...home];
     const newTrack = [...track];
     const newFinish = [...finish];
+
+    let finalMove = false;
 
     if (startSpace === HOME) {
       newHome[player.id][pegId] = undefined;
@@ -448,6 +454,7 @@ export function Trouble() {
       newFinish[player.id][startSpace - (startEnd + 2)] = undefined;
       newFinish[player.id][finalSpace - (startEnd + 2)] = peg;
       setFinish(newFinish);
+      finalMove = checkWin(newFinish[player.id]);
     } else if (isGoingIntoFinish(peg, startSpace, finalSpace, startEnd)) {
       newFinish[player.id][finalSpace - (startEnd + 2)] = peg;
       peg.inFinish = true;
@@ -455,6 +462,7 @@ export function Trouble() {
       newTrack[startSpace] = undefined;
       setTrack(newTrack);
       setFinish(newFinish);
+      finalMove = checkWin(newFinish[player.id]);
     } else {
       newTrack[startSpace] = undefined;
 
@@ -466,12 +474,17 @@ export function Trouble() {
       setTrack(newTrack);
     }
 
-    const nextPlayer = (playerTurn + 1) % numPlayers;
-    peg.space = finalSpace;
-    setPlayers(newPlayers);
-    setPlayerTurn(nextPlayer);
-    changeOutput(nextMoveText(nextPlayer + 1));
-    setPlayerCanMove(false);
+    if (finalMove) {
+      setFinished(true);
+      changeOutput(gameOverText(playerTurn + 1));
+    } else {
+      const nextPlayer = (playerTurn + 1) % numPlayers;
+      peg.space = finalSpace;
+      setPlayers(newPlayers);
+      setPlayerTurn(nextPlayer);
+      changeOutput(nextMoveText(nextPlayer + 1));
+      setPlayerCanMove(false);
+    }
   };
 
   const otherPegLogic = (peg: Peg, otherPeg: Peg) => {
@@ -490,7 +503,7 @@ export function Trouble() {
     const startSpace = peg.space;
     const startEnd = startEndSpaces[peg.player];
 
-    const finalSpace = getFinalSpace(startSpace, lastRoll);
+    const finalSpace = getFinalSpace(startSpace, startEnd, lastRoll);
     const finishLine = finalSpace - (startEnd + 2);
 
     let isValid;
@@ -512,8 +525,12 @@ export function Trouble() {
       }
     } else if (isGoingIntoFinish(peg, startSpace, finalSpace, startEnd)) {
       // GOING INTO FINISH
-      const otherPeg = finish[peg.player][finishLine];
-      isValid = otherPegLogic(peg, otherPeg);
+      if (finalSpace <= startEnd + 5) {
+        const otherPeg = finish[peg.player][finishLine];
+        isValid = otherPegLogic(peg, otherPeg);
+      } else {
+        isValid = false;
+      }
     } else {
       //ON TRACK
       const otherPeg = track[finalSpace];
@@ -534,7 +551,7 @@ export function Trouble() {
 
     for (const peg of player.pegs) {
       const startSpace = peg.space;
-      const finalSpace = getFinalSpace(startSpace, thisRoll);
+      const finalSpace = getFinalSpace(startSpace, startEnd, thisRoll);
       const goingIntoFinish = isGoingIntoFinish(
         peg,
         startSpace,
@@ -551,7 +568,7 @@ export function Trouble() {
 
       //past finish (in finish)
       if (peg.inFinish) {
-        if (startSpace + thisRoll > startEnd + 5) {
+        if (finalSpace > startEnd + 5) {
           invalidMoves++;
           continue;
         }
@@ -595,26 +612,7 @@ export function Trouble() {
       return false;
     } else {
       changeOutput(validMoveText(playerId));
-
       return true;
-    }
-  };
-
-  const checkWin = () => {
-    if (!finished) {
-      let win = true;
-      for (const finishLine of finish) {
-        for (const peg of finishLine) {
-          if (!peg) {
-            win = false;
-            break;
-          }
-        }
-      }
-      if (win) {
-        setFinished(win);
-        changeOutput(gameOverText(playerTurn + 1));
-      }
     }
   };
 
@@ -641,14 +639,18 @@ export function Trouble() {
     setRolling(false);
     setRolls(new Array(4).fill(0));
 
-    //MODAL
-    // setOpen(false);
-
     //TEXT
     setOutputText(" ");
   };
 
-  checkWin();
+  const checkWin = (finishLine: Peg[]) => {
+    for (const peg of finishLine) {
+      if (!peg) {
+        return false;
+      }
+    }
+    return true;
+  };
 
   return (
     <Grid height="100vh">
