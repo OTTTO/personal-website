@@ -43,9 +43,11 @@ const nextMoveText = (playerId: number) => {
   return `PLAYER ${playerId}: IT IS YOUR TURN, PLEASE ROLL`;
 };
 
-const noValidMovesText = (playerId: number) => {
+const noValidMovesText = (endPlayerId: number, startPlayerId: number) => {
   return `NO VALID MOVES
-   PLAYER ${playerId} YOUR TURN IS OVER `;
+   PLAYER ${endPlayerId}: YOUR TURN IS OVER
+   PLAYER ${startPlayerId}: IT IS YOUR TURN
+   `;
 };
 
 const validMoveText = (playerId: number) => {
@@ -586,10 +588,10 @@ export function Trouble() {
 
     const nextPlayer = (playerTurn + 1) % numPlayers;
     const playerId = playerTurn + 1;
+    const nextPlayerId = nextPlayer + 1;
     if (invalidMoves === 4) {
       setPlayerTurn(nextPlayer);
-      changeOutput(noValidMovesText(playerId));
-      changeOutput(nextMoveText(playerId));
+      changeOutput(noValidMovesText(playerId, nextPlayerId));
       return false;
     } else {
       changeOutput(validMoveText(playerId));
