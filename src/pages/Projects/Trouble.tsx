@@ -39,6 +39,23 @@ const introText = `WELCOME TO THE GAME OF TROUBLE`;
 const startRollText = "Roll to see who goes first";
 const startRollTieText = "There was a tie, let's roll some more!";
 
+const nextMoveText = (playerId: number) => {
+  return `PLAYER ${playerId}: IT IS YOUR TURN, PLEASE ROLL THE DIE`;
+};
+
+const noValidMovesText = (playerId: number) => {
+  return `NO VALID MOVES
+   PLAYER ${playerId} YOUR TURN IS OVER `;
+};
+
+const validMoveText = (playerId: number) => {
+  return `PLAYER ${playerId}: CHOOSE A PEG TO MOVE`;
+};
+
+const invalidMoveText = (playerId: number) => {
+  return `PLAYER ${playerId}: THIS IS NOT A VALID PEG, PLEASE TRY ANOTHER MOVE;`;
+};
+
 interface Peg {
   id: number;
   player: number;
@@ -431,9 +448,12 @@ export function Trouble() {
       newTrack[finalSpace] = peg;
       setTrack(newTrack);
     }
+
+    const nextPlayer = (playerTurn + 1) % numPlayers;
     peg.space = finalSpace;
     setPlayers(newPlayers);
-    setPlayerTurn((playerTurn + 1) % numPlayers);
+    setPlayerTurn(nextPlayer);
+    setOutputText(nextMoveText(nextPlayer));
     setPlayerCanMove(false);
   };
 
@@ -456,31 +476,38 @@ export function Trouble() {
     const finalSpace = getFinalSpace(startSpace, lastRoll);
     const finishLine = finalSpace - (startEnd + 2);
 
+    let isValid;
     //LEAVING HOME
     if (startSpace === HOME) {
       if (lastRoll === 6) {
         const otherPeg = track[startEnd + 1];
-        return otherPegLogic(peg, otherPeg);
+        isValid = otherPegLogic(peg, otherPeg);
       } else {
-        return false;
+        isValid = false;
       }
     } else if (peg.inFinish) {
       //IN FINISH LINE
       if (startSpace + lastRoll <= startEnd + 5) {
         const otherPeg = finish[peg.player][finishLine];
-        return !otherPeg;
+        isValid = !otherPeg;
       } else {
-        return false;
+        isValid = false;
       }
     } else if (isGoingIntoFinish(peg, startSpace, finalSpace, startEnd)) {
       // GOING INTO FINISH
       const otherPeg = finish[peg.player][finishLine];
-      return otherPegLogic(peg, otherPeg);
+      isValid = otherPegLogic(peg, otherPeg);
     } else {
       //ON TRACK
       const otherPeg = track[finalSpace];
-      return otherPegLogic(peg, otherPeg);
+      isValid = otherPegLogic(peg, otherPeg);
     }
+
+    if (!isValid) {
+      setOutputText(invalidMoveText(peg.player + 1));
+    }
+
+    return isValid;
   };
 
   const checkValidMoves = (thisRoll: number) => {
@@ -541,12 +568,16 @@ export function Trouble() {
         continue;
       }
     }
+
+    const nextPlayer = (playerTurn + 1) % numPlayers;
+    const playerId = nextPlayer + 1;
     if (invalidMoves === 4) {
-      setPlayerTurn((playerTurn + 1) % numPlayers);
-      setOutputText("NO VALID MOVES");
+      setPlayerTurn(nextPlayer);
+      setOutputText(noValidMovesText(playerId));
+      setOutputText(nextMoveText(playerId));
       return false;
     } else {
-      setOutputText(`PLAYER ${playerTurn + 1}: CHOOSE A PEG TO MOVE`);
+      setOutputText(validMoveText(playerId));
       return true;
     }
   };
