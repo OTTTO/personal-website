@@ -272,7 +272,7 @@ export function Trouble() {
     const className = rolling || started ? "spin-die" : "";
     const onClick = rolling
       ? startRoll
-      : started && !playerCanMove
+      : started && !playerCanMove && !finished
       ? () => {
           roll();
         }
@@ -574,7 +574,7 @@ export function Trouble() {
           invalidMoves++;
           continue;
         } else {
-          otherPeg = finishLine[player.id][finishLine];
+          otherPeg = finish[player.id][finishLine];
         }
       } else {
         otherPeg = track[finalSpace];
@@ -603,11 +603,12 @@ export function Trouble() {
   const checkWin = () => {
     if (!finished) {
       let win = true;
-      const finishLine = finish[playerTurn];
-      for (const peg of finishLine) {
-        if (!peg) {
-          win = false;
-          break;
+      for (const finishLine of finish) {
+        for (const peg of finishLine) {
+          if (!peg) {
+            win = false;
+            break;
+          }
         }
       }
       if (win) {
@@ -615,6 +616,36 @@ export function Trouble() {
         changeOutput(gameOverText(playerTurn + 1));
       }
     }
+  };
+
+  const reset = () => {
+    //BOARD
+    setTrack(new Array<Peg>(28).fill(undefined));
+    setHome(new Array<[Peg]>(4).fill(undefined).map(() => new Array<Peg>(4)));
+    setFinish(new Array<[Peg]>(4).fill(undefined).map(() => new Array<Peg>(4)));
+
+    //GAME PLAY
+    setLastRoll(6);
+    setStarted(false);
+    setFinished(false);
+    setNumPlayers(0);
+    setPlayers([]);
+    setPlayerTurn(0);
+    setPlayerCanMove(false);
+
+    //ROLL TO START
+    setPlayersWithMaxRoll([]);
+    setPlayersToRemove([]);
+    setPlayersToRoll([]);
+    setMaxRoll(0);
+    setRolling(false);
+    setRolls(new Array(4).fill(0));
+
+    //MODAL
+    // setOpen(false);
+
+    //TEXT
+    setOutputText(" ");
   };
 
   checkWin();
@@ -641,18 +672,36 @@ export function Trouble() {
       >
         <Grid container justifyContent="space-between" padding="0rem 1rem">
           {/* START BUTTON AND MODAL */}
-          <Button
-            variant="contained"
-            sx={{
-              width: "20%",
-              height: "20%",
-              backgroundColor: "white",
-              color: "black",
-            }}
-            onClick={handleOpen}
-          >
-            START
-          </Button>
+          {rolling || started || finished ? (
+            <Button
+              variant="contained"
+              sx={{
+                width: "20%",
+                height: "20%",
+                backgroundColor: "white",
+                color: "black",
+              }}
+              onClick={() => {
+                reset();
+                handleOpen();
+              }}
+            >
+              RESTART
+            </Button>
+          ) : (
+            <Button
+              variant="contained"
+              sx={{
+                width: "20%",
+                height: "20%",
+                backgroundColor: "white",
+                color: "black",
+              }}
+              onClick={handleOpen}
+            >
+              START
+            </Button>
+          )}
           <Modal open={open} onClose={handleClose}>
             <Grid
               alignItems="center"
