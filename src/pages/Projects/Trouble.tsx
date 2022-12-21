@@ -39,7 +39,8 @@ const introText = `WELCOME TO THE GAME OF TROUBLE`;
 // If your peg lands on an opponent's peg, their peg is sent back HOME`;
 
 const startRollText = `ROLL TO SEE WHO GOES FIRST`;
-const startRollTieText = "THERE WAS A TIE, LET'S ROLL SOME MORE!";
+const startRollTieText = `THERE WAS A TIE
+    LET'S ROLL SOME MORE!`;
 
 const nextMoveText = (playerId: number) => {
   return `PLAYER ${playerId}: IT IS YOUR TURN, PLEASE ROLL`;
@@ -57,11 +58,13 @@ const validMoveText = (playerId: number) => {
 };
 
 const invalidMoveText = (playerId: number) => {
-  return `PLAYER ${playerId}: THIS IS NOT A VALID PEG, PLEASE TRY ANOTHER MOVE`;
+  return `PLAYER ${playerId}: THIS IS NOT A VALID PEG
+  PLEASE TRY ANOTHER MOVE`;
 };
 
 const winRollText = (playerId: number) => {
-  return `PLAYER ${playerId}: YOU WON THE DIE ROLL, IT IS YOUR TURN`;
+  return `PLAYER ${playerId}: YOU WON THE DIE ROLL
+   IT IS YOUR TURN`;
 };
 
 const gameOverText = (playerId: number) => {
@@ -115,9 +118,10 @@ function Console({ text, update }) {
     <Grid
       sx={{
         backgroundColor: "black",
-        margin: "2rem",
+        margin: "2rem auto",
         padding: "2rem 0rem",
         borderRadius: "1rem",
+        width: "37rem",
       }}
     >
       {output.split("\n").map((out, key) => (
@@ -293,7 +297,7 @@ export function Trouble() {
       thisRoll = Math.floor(Math.random() * 6) + 1;
       setLastRoll(thisRoll);
       setisRolling(true);
-    }, 120);
+    }, 100);
 
     setTimeout(() => {
       clearInterval(rolling);
@@ -301,7 +305,7 @@ export function Trouble() {
       if (checkValidMoves(thisRoll)) {
         setPlayerCanMove(true);
       }
-    }, 1200);
+    }, 650);
   };
 
   const startRoll = () => {
@@ -310,7 +314,7 @@ export function Trouble() {
       thisRoll = Math.floor(Math.random() * 6) + 1;
       setLastRoll(thisRoll);
       setisRolling(true);
-    }, 120);
+    }, 100);
 
     setTimeout(() => {
       clearInterval(rolling);
@@ -365,7 +369,7 @@ export function Trouble() {
           changeOutput(winRollText(maxRolls + 1));
         }
       }
-    }, 1200);
+    }, 650);
   };
 
   const initGame = () => {
@@ -671,11 +675,6 @@ export function Trouble() {
     <Grid container direction="column">
       <Menu backgroundColor="black"></Menu>
       <Grid paddingTop="1rem">
-        {/* TITLE */}
-        <Typography textAlign="center" variant="h3">
-          GAME OF TROUBLE
-        </Typography>
-
         {/* BOARD */}
         <Grid
           container
