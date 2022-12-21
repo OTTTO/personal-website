@@ -60,6 +60,10 @@ const winRollText = (playerId: number) => {
   return `PLAYER ${playerId}: YOU WON THE DIE ROLL, IT IS YOUR TURN`;
 };
 
+const gameOverText = (playerId: number) => {
+  return `PLAYER ${playerId} WON THE GAME!`;
+};
+
 interface Peg {
   id: number;
   player: number;
@@ -77,9 +81,18 @@ class Player {
   }
 }
 
-function Console({ text }) {
+function Console({ text, update }) {
   const [output, setOutput] = React.useState(text[0]);
+
+  const [lastUpdate, setLastUpdate] = React.useState(update);
+
   const outputIdx = useRef(0);
+
+  if (update !== lastUpdate) {
+    setOutput(text[0]);
+    outputIdx.current = 0;
+    setLastUpdate(update);
+  }
 
   React.useEffect(() => {
     function tick() {
@@ -149,10 +162,16 @@ export function Trouble() {
 
   //TEXT
   const [outputText, setOutputText] = React.useState(introText);
+  const [update, updateState] = React.useState({});
+
+  const changeOutput = (text: string) => {
+    setOutputText(text);
+    updateState({});
+  };
 
   const pegJSX = (peg: Peg, color: string, idx: number) => {
     const style = { color };
-    const onClick = (e) => {
+    const onClick = () => {
       if (
         started &&
         playerCanMove &&
@@ -302,7 +321,7 @@ export function Trouble() {
       setPlayersToRemove(removable);
     }
     if (playerTurn === playersToRoll.length - 1 && maxRollers.length > 1) {
-      setOutputText(startRollTieText);
+      changeOutput(startRollTieText);
     } else if (playerTurn === playersToRoll.length - 1) {
       ended = true;
       setRolling(false);
@@ -327,7 +346,7 @@ export function Trouble() {
         setPlayersWithMaxRoll(new Array(rollable.length));
       } else {
         setPlayersToRoll(players);
-        setOutputText(winRollText(maxRolls + 1));
+        changeOutput(winRollText(maxRolls + 1));
       }
     }
   };
@@ -358,7 +377,7 @@ export function Trouble() {
     setPlayersToRoll(newPlayers);
     setRolls(new Array(numPlayers).fill(0));
     setRolling(true);
-    setOutputText(startRollText);
+    changeOutput(startRollText);
   };
 
   const getFinalSpace = (startSpace: number, startEnd: number) => {
@@ -431,7 +450,7 @@ export function Trouble() {
       newFinish[player.id][finalSpace - (startEnd + 2)] = peg;
       peg.inFinish = true;
       peg.space = finalSpace;
-      track[startSpace] = undefined;
+      newTrack[startSpace] = undefined;
       setTrack(newTrack);
       setFinish(newFinish);
     } else {
@@ -449,7 +468,7 @@ export function Trouble() {
     peg.space = finalSpace;
     setPlayers(newPlayers);
     setPlayerTurn(nextPlayer);
-    setOutputText(nextMoveText(nextPlayer + 1));
+    changeOutput(nextMoveText(nextPlayer + 1));
     setPlayerCanMove(false);
   };
 
@@ -500,7 +519,7 @@ export function Trouble() {
     }
 
     if (!isValid) {
-      setOutputText(invalidMoveText(peg.player + 1));
+      changeOutput(invalidMoveText(peg.player + 1));
     }
 
     return isValid;
@@ -569,11 +588,12 @@ export function Trouble() {
     const playerId = playerTurn + 1;
     if (invalidMoves === 4) {
       setPlayerTurn(nextPlayer);
-      setOutputText(noValidMovesText(playerId));
-      setOutputText(nextMoveText(playerId));
+      changeOutput(noValidMovesText(playerId));
+      changeOutput(nextMoveText(playerId));
       return false;
     } else {
-      setOutputText(validMoveText(playerId));
+      changeOutput(validMoveText(playerId));
+
       return true;
     }
   };
@@ -590,7 +610,7 @@ export function Trouble() {
       }
       if (win) {
         setFinished(win);
-        setOutputText(`PLAYER ${playerTurn + 1} WON THE GAME!`);
+        changeOutput(gameOverText(playerTurn + 1));
       }
     }
   };
@@ -872,7 +892,7 @@ export function Trouble() {
         </Grid>
       </Grid>
       {/* CONSOLE OUTPUT */}
-      <Console text={outputText}></Console>
+      <Console text={outputText} update={update}></Console>
     </Grid>
   );
 }
