@@ -147,6 +147,7 @@ export function Trouble() {
   const [players, setPlayers] = React.useState([]);
   const [playerTurn, setPlayerTurn] = React.useState(0);
   const [playerCanMove, setPlayerCanMove] = React.useState(false);
+  const [isRolling, setisRolling] = React.useState(false);
 
   //ROLL TO START
   const [playersWithMaxRoll, setPlayersWithMaxRoll] = React.useState([]);
@@ -268,13 +269,11 @@ export function Trouble() {
   };
 
   const dieJSX = (face: number) => {
-    const className = rolling || started ? "spin-die" : "";
+    const className = rolling || (started && isRolling) ? "spin-die" : "";
     const onClick = rolling
       ? startRoll
-      : started && !playerCanMove && !finished
-      ? () => {
-          roll();
-        }
+      : started && !playerCanMove && !isRolling && !finished
+      ? roll
       : () => {};
     return (
       <img
@@ -290,66 +289,83 @@ export function Trouble() {
 
   const roll = () => {
     let thisRoll: number;
-    thisRoll = Math.floor(Math.random() * 6) + 1;
-    setLastRoll(thisRoll);
-    if (checkValidMoves(thisRoll)) {
-      setPlayerCanMove(true);
-    }
+    const rolling = setInterval(() => {
+      thisRoll = Math.floor(Math.random() * 6) + 1;
+      setLastRoll(thisRoll);
+      setisRolling(true);
+    }, 120);
+
+    setTimeout(() => {
+      clearInterval(rolling);
+      setisRolling(false);
+      if (checkValidMoves(thisRoll)) {
+        setPlayerCanMove(true);
+      }
+    }, 1200);
   };
 
   const startRoll = () => {
     let thisRoll: number;
-    thisRoll = Math.floor(Math.random() * 6) + 1;
+    const rolling = setInterval(() => {
+      thisRoll = Math.floor(Math.random() * 6) + 1;
+      setLastRoll(thisRoll);
+      setisRolling(true);
+    }, 120);
 
-    setLastRoll(thisRoll);
-    rolls[playersToRoll[playerTurn].id] = thisRoll;
-    setRolls(rolls);
+    setTimeout(() => {
+      clearInterval(rolling);
+      setisRolling(false);
 
-    let maxRollers = playersWithMaxRoll;
-    let removable = playersToRemove;
-    let ended = false;
-    if (thisRoll > maxRoll) {
-      setMaxRoll(thisRoll);
-      removable = removable.concat(playersWithMaxRoll);
-      setPlayersToRemove(removable);
-      maxRollers = [players[playerTurn]];
-      setPlayersWithMaxRoll(maxRollers);
-    } else if (thisRoll === maxRoll) {
-      maxRollers = playersWithMaxRoll.concat([players[playerTurn]]);
-      setPlayersWithMaxRoll(maxRollers);
-    } else {
-      removable.push(players[playerTurn]);
-      setPlayersToRemove(removable);
-    }
-    if (playerTurn === playersToRoll.length - 1 && maxRollers.length > 1) {
-      changeOutput(startRollTieText);
-    } else if (playerTurn === playersToRoll.length - 1) {
-      ended = true;
-      setRolling(false);
-      setStarted(true);
-    }
+      setLastRoll(thisRoll);
+      rolls[playersToRoll[playerTurn].id] = thisRoll;
+      setRolls(rolls);
 
-    const nextTurn = (playerTurn + 1) % playersToRoll.length;
-    const maxRolls = maxRollers[0].id;
-    setPlayerTurn(!ended ? nextTurn : maxRolls);
-    if (nextTurn === 0) {
-      setMaxRoll(0);
-      setRolls(new Array(numPlayers).fill(0));
-
-      const removableIds = removable.map((p) => p.id);
-
-      const rollable = playersToRoll.filter(
-        (p) => !removableIds.includes(p.id)
-      );
-
-      if (!ended) {
-        setPlayersToRoll(rollable);
-        setPlayersWithMaxRoll(new Array(rollable.length));
+      let maxRollers = playersWithMaxRoll;
+      let removable = playersToRemove;
+      let ended = false;
+      if (thisRoll > maxRoll) {
+        setMaxRoll(thisRoll);
+        removable = removable.concat(playersWithMaxRoll);
+        setPlayersToRemove(removable);
+        maxRollers = [players[playerTurn]];
+        setPlayersWithMaxRoll(maxRollers);
+      } else if (thisRoll === maxRoll) {
+        maxRollers = playersWithMaxRoll.concat([players[playerTurn]]);
+        setPlayersWithMaxRoll(maxRollers);
       } else {
-        setPlayersToRoll(players);
-        changeOutput(winRollText(maxRolls + 1));
+        removable.push(players[playerTurn]);
+        setPlayersToRemove(removable);
       }
-    }
+      if (playerTurn === playersToRoll.length - 1 && maxRollers.length > 1) {
+        changeOutput(startRollTieText);
+      } else if (playerTurn === playersToRoll.length - 1) {
+        ended = true;
+        setRolling(false);
+        setStarted(true);
+      }
+
+      const nextTurn = (playerTurn + 1) % playersToRoll.length;
+      const maxRolls = maxRollers[0].id;
+      setPlayerTurn(!ended ? nextTurn : maxRolls);
+      if (nextTurn === 0) {
+        setMaxRoll(0);
+        setRolls(new Array(numPlayers).fill(0));
+
+        const removableIds = removable.map((p) => p.id);
+
+        const rollable = playersToRoll.filter(
+          (p) => !removableIds.includes(p.id)
+        );
+
+        if (!ended) {
+          setPlayersToRoll(rollable);
+          setPlayersWithMaxRoll(new Array(rollable.length));
+        } else {
+          setPlayersToRoll(players);
+          changeOutput(winRollText(maxRolls + 1));
+        }
+      }
+    }, 1200);
   };
 
   const initGame = () => {
@@ -788,7 +804,7 @@ export function Trouble() {
                 {spaceJSX(home[0][3], 0, 0)}
               </Grid>
             </Grid>
-            {numPlayers > 0 && rolling ? (
+            {numPlayers > 0 && (rolling || started) ? (
               <Grid
                 container
                 direction="column"
