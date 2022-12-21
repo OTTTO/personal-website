@@ -121,7 +121,7 @@ export function Trouble() {
   //GAME PLAY
   const [lastRoll, setLastRoll] = React.useState(6);
   const [started, setStarted] = React.useState(false);
-  //   const [finished, setFinished] = React.useState(false);
+  const [finished, setFinished] = React.useState(false);
   const [numPlayers, setNumPlayers] = React.useState(0);
   const [players, setPlayers] = React.useState([]);
   const [playerTurn, setPlayerTurn] = React.useState(0);
@@ -146,7 +146,7 @@ export function Trouble() {
   //TEXT
   const [outputText, setOutputText] = React.useState(introText);
 
-  const pegJSX = (peg: Peg, color: string) => {
+  const pegJSX = (peg: Peg, color: string, idx: number) => {
     const style = { color };
     const onClick = (e) => {
       if (
@@ -159,22 +159,22 @@ export function Trouble() {
       }
     };
     return [
-      <Grid item>
+      <Grid item key={idx}>
         <IconButton onClick={onClick} sx={{ padding: 0 }}>
           <LooksOne fontSize="large" style={style} />
         </IconButton>
       </Grid>,
-      <Grid item>
+      <Grid item key={idx}>
         <IconButton onClick={onClick} sx={{ padding: 0 }}>
           <LooksTwo fontSize="large" style={style} />
         </IconButton>
       </Grid>,
-      <Grid item>
+      <Grid item key={idx}>
         <IconButton onClick={onClick} sx={{ padding: 0 }}>
           <Looks3 fontSize="large" style={style} />
         </IconButton>
       </Grid>,
-      <Grid item>
+      <Grid item key={idx}>
         <IconButton onClick={onClick} sx={{ padding: 0 }}>
           <Looks4 fontSize="large" style={style} />
         </IconButton>
@@ -182,11 +182,11 @@ export function Trouble() {
     ][peg.id];
   };
 
-  const spaceJSX = (peg: Peg, colorIdx: number) => {
+  const spaceJSX = (peg: Peg, colorIdx: number, idx: number) => {
     return peg && peg.space ? (
-      pegJSX(peg, colorMapping[peg.player])
+      pegJSX(peg, colorMapping[peg.player], idx)
     ) : (
-      <Grid item>
+      <Grid item key={idx}>
         <CropDinOutlined
           fontSize="large"
           style={{ color: colorMapping[colorIdx] }}
@@ -339,9 +339,7 @@ export function Trouble() {
 
   const initGame = () => {
     const newPlayers = new Array(numPlayers);
-    const newHome = new Array<[Peg]>(4)
-      .fill(undefined)
-      .map(() => new Array<Peg>(4));
+    const newHome = [...home];
 
     for (let i = 0; i < newPlayers.length; i++) {
       const newPlayer = new Player(i);
@@ -433,11 +431,14 @@ export function Trouble() {
     } else if (peg.inFinish) {
       newFinish[player.id][startSpace - (startEnd + 2)] = undefined;
       newFinish[player.id][finalSpace - (startEnd + 2)] = peg;
+      setFinish(newFinish);
     } else if (isGoingIntoFinish(peg, startSpace, finalSpace, startEnd)) {
       newFinish[player.id][finalSpace - (startEnd + 2)] = peg;
       peg.inFinish = true;
       peg.space = finalSpace;
       track[startSpace] = undefined;
+      setTrack(newTrack);
+      setFinish(newFinish);
     } else {
       newTrack[startSpace] = undefined;
 
@@ -582,6 +583,25 @@ export function Trouble() {
     }
   };
 
+  const checkWin = () => {
+    if (!finished) {
+      let win = true;
+      const finishLine = finish[playerTurn];
+      for (const peg of finishLine) {
+        if (!peg) {
+          win = false;
+          break;
+        }
+      }
+      if (win) {
+        setFinished(win);
+        setOutputText(`PLAYER ${playerTurn + 1} WON THE GAME!`);
+      }
+    }
+  };
+
+  checkWin();
+
   return (
     <Grid height="100vh">
       {/* TITLE */}
@@ -690,10 +710,10 @@ export function Trouble() {
             <Grid container justifyContent="center">
               {new Array(3)
                 .fill(undefined)
-                .map((_, idx) => spaceJSX(home[0][idx], 0))}
+                .map((_, idx) => spaceJSX(home[0][idx], 0, idx))}
             </Grid>
             <Grid container justifyContent="center">
-              {spaceJSX(home[0][3], 0)}
+              {spaceJSX(home[0][3], 0, 0)}
             </Grid>
           </Grid>
           {numPlayers > 0 ? (
@@ -718,22 +738,22 @@ export function Trouble() {
 
         {/* TOP ROW */}
         <Grid container justifyContent="center" spacing={2}>
-          {[0, 1, 2, 3, 4].map((space) => spaceJSX(track[space], 0))}
+          {[0, 1, 2, 3, 4].map((space, idx) => spaceJSX(track[space], 0, idx))}
         </Grid>
 
         {/* TOP DIAGONALS AND MIDDLE HOME */}
         <Grid container justifyContent="center">
           <Grid container width="18rem" justifyContent="space-between">
-            {spaceJSX(track[27], 0)}
-            {spaceJSX(finish[0][0], 0)}
-            {spaceJSX(track[5], 0)}
+            {spaceJSX(track[27], 0, 0)}
+            {spaceJSX(finish[0][0], 0, 1)}
+            {spaceJSX(track[5], 0, 2)}
           </Grid>
         </Grid>
         <Grid container justifyContent="center">
           <Grid container width="21rem" justifyContent="space-between">
-            {spaceJSX(track[26], 3)}
-            {spaceJSX(finish[0][1], 0)}
-            {spaceJSX(track[6], 1)}
+            {spaceJSX(track[26], 3, 0)}
+            {spaceJSX(finish[0][1], 0, 1)}
+            {spaceJSX(track[6], 1, 2)}
           </Grid>
         </Grid>
 
@@ -747,23 +767,23 @@ export function Trouble() {
         >
           {/* TOP ROW FOR COLUMNS*/}
           <Grid container item width="24rem" justifyContent="space-between">
-            {spaceJSX(track[25], 3)}
-            {spaceJSX(finish[0][2], 0)}
-            {spaceJSX(track[7], 1)}
+            {spaceJSX(track[25], 3, 0)}
+            {spaceJSX(finish[0][2], 0, 1)}
+            {spaceJSX(track[7], 1, 2)}
           </Grid>
           {/* TOP HOME AND FINISH */}
           <Grid container justifyContent="space-between">
             <Grid container width="8.5rem" justifyContent="space-between">
               <Grid container width="4.5rem" justifyContent="flex-end">
-                <Grid item>{spaceJSX(home[3][0], 3)}</Grid>
+                <Grid item>{spaceJSX(home[3][0], 3, 0)}</Grid>
               </Grid>
-              <Grid item>{spaceJSX(track[24], 3)}</Grid>
+              <Grid item>{spaceJSX(track[24], 3, 0)}</Grid>
             </Grid>
-            <Grid item>{spaceJSX(finish[0][3], 0)}</Grid>
+            <Grid item>{spaceJSX(finish[0][3], 0, 0)}</Grid>
             <Grid container width="8.5rem" justifyContent="space-between">
-              {spaceJSX(track[8], 1)}
+              {spaceJSX(track[8], 1, 0)}
               <Grid container width="4.5rem" justifyContent="flex-start">
-                <Grid item>{spaceJSX(home[1][0], 1)}</Grid>
+                <Grid item>{spaceJSX(home[1][0], 1, 0)}</Grid>
               </Grid>
             </Grid>
           </Grid>
@@ -776,21 +796,21 @@ export function Trouble() {
             width="36rem"
           >
             <Grid container item width="17rem" justifyContent="flex-end">
-              {spaceJSX(home[3][1], 3)}
-              {spaceJSX(home[3][3], 3)}
-              {spaceJSX(track[23], 3)}
+              {spaceJSX(home[3][1], 3, 0)}
+              {spaceJSX(home[3][3], 3, 1)}
+              {spaceJSX(track[23], 3, 2)}
               {new Array(4)
                 .fill(undefined)
-                .map((_, idx) => spaceJSX(finish[3][idx], 3))}
+                .map((_, idx) => spaceJSX(finish[3][idx], 3, idx))}
             </Grid>
             {dieJSX(lastRoll)}
             <Grid container item width="17rem" justifyContent="flex-start">
               {new Array(4)
                 .fill(undefined)
-                .map((_, idx) => spaceJSX(finish[1][idx], 1))}
-              {spaceJSX(track[9], 1)}
-              {spaceJSX(home[1][3], 1)}
-              {spaceJSX(home[1][1], 1)}
+                .map((_, idx) => spaceJSX(finish[1][idx], 1, idx))}
+              {spaceJSX(track[9], 1, 0)}
+              {spaceJSX(home[1][3], 1, 1)}
+              {spaceJSX(home[1][1], 1, 2)}
             </Grid>
           </Grid>
 
@@ -798,25 +818,25 @@ export function Trouble() {
           <Grid container justifyContent="space-between">
             <Grid container width="8.5rem" justifyContent="space-between">
               <Grid container width="4.5rem" justifyContent="flex-end">
-                {spaceJSX(home[3][2], 3)}
+                {spaceJSX(home[3][2], 3, 0)}
               </Grid>
-              {spaceJSX(track[22], 3)}
+              {spaceJSX(track[22], 3, 0)}
             </Grid>
-            {spaceJSX(finish[2][3], 2)}
+            {spaceJSX(finish[2][3], 2, 0)}
             <Grid container width="8.5rem" justifyContent="space-between">
-              {spaceJSX(track[10], 1)}
+              {spaceJSX(track[10], 1, 0)}
 
               <Grid container width="4.5rem" justifyContent="flex-start">
-                {spaceJSX(home[1][2], 1)}
+                {spaceJSX(home[1][2], 1, 0)}
               </Grid>
             </Grid>
           </Grid>
 
           {/* BOTTOM ROW FOR COLUMNS */}
           <Grid container item width="24rem" justifyContent="space-between">
-            {spaceJSX(track[21], 3)}
-            {spaceJSX(finish[2][2], 2)}
-            {spaceJSX(track[11], 1)}
+            {spaceJSX(track[21], 3, 0)}
+            {spaceJSX(finish[2][2], 2, 1)}
+            {spaceJSX(track[11], 1, 2)}
           </Grid>
         </Grid>
 
@@ -824,33 +844,35 @@ export function Trouble() {
 
         <Grid container justifyContent="center">
           <Grid container width="21rem" justifyContent="space-between">
-            {spaceJSX(track[20], 3)}
-            {spaceJSX(finish[2][1], 2)}
-            {spaceJSX(track[12], 1)}
+            {spaceJSX(track[20], 3, 0)}
+            {spaceJSX(finish[2][1], 2, 1)}
+            {spaceJSX(track[12], 1, 2)}
           </Grid>
         </Grid>
         <Grid container justifyContent="center">
           <Grid container width="18rem" justifyContent="space-between">
-            {spaceJSX(track[19], 2)}
-            {spaceJSX(finish[2][0], 2)}
-            {spaceJSX(track[13], 2)}
+            {spaceJSX(track[19], 2, 0)}
+            {spaceJSX(finish[2][0], 2, 1)}
+            {spaceJSX(track[13], 2, 2)}
           </Grid>
         </Grid>
 
         {/* BOTTOM ROW */}
         <Grid container justifyContent="center" spacing={2}>
-          {[18, 17, 16, 15, 14].map((space) => spaceJSX(track[space], 2))}
+          {[18, 17, 16, 15, 14].map((space, idx) =>
+            spaceJSX(track[space], 2, idx)
+          )}
         </Grid>
 
         {/* HOME 2 */}
         <Grid direction="column" container>
           <Grid container justifyContent="center">
-            {spaceJSX(home[2][3], 2)}
+            {spaceJSX(home[2][3], 2, 0)}
           </Grid>
           <Grid container justifyContent="center">
             {new Array(3)
               .fill(undefined)
-              .map((_, idx) => spaceJSX(home[2][idx], 2))}
+              .map((_, idx) => spaceJSX(home[2][idx], 2, idx))}
           </Grid>
         </Grid>
       </Grid>
