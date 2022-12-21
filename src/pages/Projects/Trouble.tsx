@@ -504,7 +504,7 @@ export function Trouble() {
       }
     } else if (peg.inFinish) {
       //IN FINISH LINE
-      if (startSpace + lastRoll <= startEnd + 5) {
+      if (finalSpace <= startEnd + 5) {
         const otherPeg = finish[peg.player][finishLine];
         isValid = !otherPeg;
       } else {
@@ -824,7 +824,8 @@ export function Trouble() {
             <Grid container item width="17rem" justifyContent="flex-start">
               {new Array(4)
                 .fill(undefined)
-                .map((_, idx) => spaceJSX(finish[1][idx], 1, idx))}
+                .map((_, idx) => spaceJSX(finish[1][idx], 1, idx))
+                .reverse()}
               {spaceJSX(track[9], 1, 0)}
               {spaceJSX(home[1][3], 1, 1)}
               {spaceJSX(home[1][1], 1, 2)}
