@@ -187,7 +187,7 @@ export function Trouble() {
   };
 
   const spaceJSX = (peg: Peg, colorIdx: number, idx: number) => {
-    return peg && peg.space ? (
+    return peg && peg.space !== undefined ? (
       pegJSX(peg, colorMapping[peg.player], idx)
     ) : (
       <Grid item key={idx}>
