@@ -39,7 +39,7 @@ export function Home() {
           textAlign: "center",
         }}
       >
-        <Stack direction="column">
+        <Stack direction="column" sx={{ paddingTop: "1rem" }}>
           <Typography variant="h1" color="white">
             <u>WELCOME!</u>
           </Typography>
@@ -58,12 +58,12 @@ export function Home() {
               width={width > introWidth ? "90%" : "90%"}
               padding="0rem 1rem 0rem 1rem"
             >
-              <Typography variant="h5" color="white" textAlign="left">
+              <Typography variant="h4" color="white" textAlign="left">
                 {intro}
               </Typography>
               <br></br>
               <br></br>
-              <Typography variant="h5" color="white" textAlign="left">
+              <Typography variant="h4" color="white" textAlign="left">
                 {websiteInfo}
               </Typography>
             </Stack>

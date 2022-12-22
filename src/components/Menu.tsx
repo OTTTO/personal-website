@@ -5,39 +5,49 @@ import {
   HomeOutlined,
 } from "@mui/icons-material";
 import {
-  Box,
   Fab,
-  Stack,
   Typography,
   Menu as MuiMenu,
   MenuItem,
+  Grid,
 } from "@mui/material";
+import useWindowDimensions from "hooks/useWindowDimensions";
 import PopupState, { bindTrigger, bindMenu } from "material-ui-popup-state";
 
 export function Menu({ backgroundColor }) {
+  const { width } = useWindowDimensions();
+  const smallerSize = 550;
   return (
-    <Box
+    <Grid
       sx={{
         backgroundColor: { backgroundColor },
         padding: "0rem 0rem 1rem 1rem",
       }}
     >
-      <Stack direction="row">
-        <Stack direction="row">
+      <Grid container direction="row" justifyContent="space-between">
+        <Grid direction="row" display="inline-block" width="auto" spacing={0}>
           <Fab
             variant="extended"
             href="/"
-            sx={{ margin: "1rem 1rem 0rem 0rem" }}
+            sx={{ margin: "1rem 0.5rem 0rem 0rem" }}
+            size={width > smallerSize ? "large" : "small"}
           >
-            <HomeOutlined sx={{ mr: 1 }} />
+            <HomeOutlined
+              sx={{ mr: 1 }}
+              fontSize={width > smallerSize ? "large" : "small"}
+            />
             <Typography variant="h6">HOME</Typography>
           </Fab>
           <Fab
             variant="extended"
             href="/resume"
-            sx={{ margin: "1rem 1rem 0rem 0rem" }}
+            sx={{ margin: "1rem 0.5rem 0rem 0rem" }}
+            size={width > smallerSize ? "large" : "small"}
           >
-            <ArticleOutlined sx={{ mr: 1 }} />
+            <ArticleOutlined
+              sx={{ mr: 1 }}
+              fontSize={width > smallerSize ? "large" : "small"}
+            />
             <Typography variant="h6">RESUME</Typography>
           </Fab>
           <PopupState variant="popover" popupId="projects-popup">
@@ -45,10 +55,14 @@ export function Menu({ backgroundColor }) {
               <>
                 <Fab
                   variant="extended"
-                  sx={{ margin: "1rem 1rem 0rem 0rem" }}
+                  sx={{ margin: "1rem 0.5rem 0rem 0rem" }}
+                  size={width > smallerSize ? "large" : "small"}
                   {...bindTrigger(popupState)}
                 >
-                  <CrisisAlertOutlined sx={{ mr: 1 }} />
+                  <CrisisAlertOutlined
+                    sx={{ mr: 1 }}
+                    fontSize={width > smallerSize ? "large" : "small"}
+                  />
                   <Typography variant="h6">PROJECTS</Typography>
                 </Fab>
                 <MuiMenu {...bindMenu(popupState)}>
@@ -64,24 +78,29 @@ export function Menu({ backgroundColor }) {
               </>
             )}
           </PopupState>
-        </Stack>
-        <Stack
+        </Grid>
+        <Grid
           direction="row"
           sx={{
             justifyContent: "flex-end",
-            width: "100%",
           }}
+          display="inline-block"
+          width="auto"
         >
           <Fab
             variant="extended"
             href="/admin"
             sx={{ margin: "1rem 1rem 0rem 0rem" }}
+            size={width > smallerSize ? "large" : "small"}
           >
-            <AdminPanelSettingsOutlined sx={{ mr: 1 }} />
+            <AdminPanelSettingsOutlined
+              sx={{ mr: 1 }}
+              fontSize={width > smallerSize ? "large" : "small"}
+            />
             <Typography variant="h6">ADMIN</Typography>
           </Fab>
-        </Stack>
-      </Stack>
-    </Box>
+        </Grid>
+      </Grid>
+    </Grid>
   );
 }

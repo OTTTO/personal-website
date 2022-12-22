@@ -25,6 +25,7 @@ import { Footer } from "components/Footer";
 import { Menu } from "components/Menu";
 import mainTheme from "themes/mainTheme";
 import useWindowDimensions from "hooks/useWindowDimensions";
+import { positions } from "@mui/system";
 
 const HOME = -1;
 const startEndSpaces = [1, 8, 15, 22];
@@ -138,7 +139,7 @@ function Console({ text, update, finished }) {
         padding: "2rem 0rem",
         borderRadius: "1rem",
         maxWidth: "37rem",
-        width: "90%",
+        width: "80%",
       }}
     >
       {output.split("\n").map((out, key) => (
@@ -1155,12 +1156,12 @@ export function Trouble() {
           </Typography>
           <hr></hr>
           {instructions.split("\n").map((instruction, idx) => (
-            <>
-              <Typography variant={"h5"} textAlign="center" key={idx}>
+            <Grid key={idx}>
+              <Typography variant={"h5"} textAlign="center">
                 {instruction}
               </Typography>
               {idx !== instructions.split("\n").length - 1 && <hr></hr>}
-            </>
+            </Grid>
           ))}
         </Grid>
       </Modal>
