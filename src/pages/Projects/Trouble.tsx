@@ -30,15 +30,25 @@ const dieMapping = {
   6: sixDie,
 };
 
-const introText = `WELCOME TO THE GAME OF TROUBLE`;
-// The rules are simple
-// Players roll to see who goes first
-// All pegs start in HOME, in order to leave HOME the player must roll a 6
-// The game ends when a player has moved all of their pegs into their FINISH line
-// Players cannot move a peg onto a space occupied by another one of their pegs
-// If your peg lands on an opponent's peg, their peg is sent back HOME`;
+const introText = `WELCOME TO THE GAME OF TROUBLE
+The rules are simple
+Players roll to see who goes first
+All pegs start in HOME, in order to leave HOME the player must roll a 6
+The game ends when a player has moved all of their pegs into their FINISH line
+Players cannot move a peg onto a space occupied by another one of their pegs
+If your peg lands on an opponent's peg, their peg is sent back HOME`;
+//add text to start rolling
+//click the die to roll
+//click a valid peg to move it the number of spaces shown on the die
+//when you leave home you land on the entry space
 
-const startRollText = `ROLL TO SEE WHO GOES FIRST`;
+const startRollText = `ROLL TO SEE WHO GOES FIRST
+PLAYER 1: YOUR UP`;
+
+const rollingText = (playerId: number) => {
+  return `PLAYER ${playerId}: YOUR UP`;
+};
+
 const startRollTieText = `THERE WAS A TIE
     LET'S ROLL SOME MORE!`;
 
@@ -88,7 +98,7 @@ class Player {
   }
 }
 
-function Console({ text, update }) {
+function Console({ text, update, finished }) {
   const [output, setOutput] = React.useState(text[0]);
 
   const [lastUpdate, setLastUpdate] = React.useState(update);
@@ -125,7 +135,12 @@ function Console({ text, update }) {
       }}
     >
       {output.split("\n").map((out, key) => (
-        <Typography variant="h6" color="white" textAlign="center" key={key}>
+        <Typography
+          variant={!finished ? "h6" : "h4"}
+          color="white"
+          textAlign="center"
+          key={key}
+        >
           {out}
         </Typography>
       ))}
@@ -351,6 +366,7 @@ export function Trouble() {
       const nextTurn = (playerTurn + 1) % playersToRoll.length;
       const maxRolls = maxRollers[0].id;
       setPlayerTurn(!ended ? nextTurn : maxRolls);
+      changeOutput(rollingText(nextTurn + 1));
       if (nextTurn === 0) {
         setMaxRoll(0);
         setRolls(new Array(numPlayers).fill(0));
@@ -672,7 +688,7 @@ export function Trouble() {
   };
 
   return (
-    <Grid container direction="column">
+    <Grid container direction="column" className={finished ? "fireworks" : ""}>
       <Menu backgroundColor="black"></Menu>
       <Grid paddingTop="1rem">
         {/* BOARD */}
@@ -781,7 +797,9 @@ export function Trouble() {
                       sx={{ width: "50%", margin: "0 auto 1rem" }}
                       onClick={() => {
                         handleClose();
-                        initGame();
+                        if (numPlayers > 0) {
+                          initGame();
+                        }
                       }}
                     >
                       LET'S GO
@@ -967,7 +985,19 @@ export function Trouble() {
           </Grid>
         </Grid>
         {/* CONSOLE OUTPUT */}
-        <Console text={outputText} update={update}></Console>
+        <Console
+          text={outputText}
+          update={update}
+          finished={finished}
+        ></Console>
+        {/* FIREWORKS CELEBRATION */}
+        {finished && (
+          <Grid container>
+            {new Array(4).fill(undefined).map((_, idx) => (
+              <Grid item className="firework" key={idx}></Grid>
+            ))}
+          </Grid>
+        )}
       </Grid>
       <Footer backgroundColor="black"></Footer>
     </Grid>

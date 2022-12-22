@@ -7,7 +7,7 @@ import useWindowDimensions from "hooks/useWindowDimensions";
 import { Footer } from "components/Footer";
 
 export function Home() {
-  const intro = `I've been a professional software developer since 2017. I started learning
+  const intro = `I am Dylan Beckwith, I have been a professional software developer since 2017. I started learning
     a couple of years before that by reading books and doing code challenges.
     Although I did eventually end up getting a bachelors in CS, 
     I pride myself on being self taught because to me the discipline of
@@ -16,7 +16,7 @@ export function Home() {
     that I face the exact same technology stack that I have worked with previously so
     I am grateful that I have cultivated the ability to learn on the fly. I
     enjoy helping others get started in their programming careers as well as
-    pairing with fellow developers both inside and outside of work. If you'd
+    pairing with fellow developers both inside and outside of work. If you would
     like to contact me for any reason you can reach me at contact.dylan.beckwith@gmail.com`;
 
   const websiteInfo = `This website was built from the ground up with NodeJS, GraphQL, Postgres, and React. 
