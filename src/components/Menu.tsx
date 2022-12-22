@@ -4,7 +4,15 @@ import {
   CrisisAlertOutlined,
   HomeOutlined,
 } from "@mui/icons-material";
-import { Box, Fab, Stack, Typography } from "@mui/material";
+import {
+  Box,
+  Fab,
+  Stack,
+  Typography,
+  Menu as MuiMenu,
+  MenuItem,
+} from "@mui/material";
+import PopupState, { bindTrigger, bindMenu } from "material-ui-popup-state";
 
 export function Menu({ backgroundColor }) {
   return (
@@ -32,14 +40,30 @@ export function Menu({ backgroundColor }) {
             <ArticleOutlined sx={{ mr: 1 }} />
             <Typography variant="h6">RESUME</Typography>
           </Fab>
-          <Fab
-            variant="extended"
-            href="/trouble"
-            sx={{ margin: "1rem 1rem 0rem 0rem" }}
-          >
-            <CrisisAlertOutlined sx={{ mr: 1 }} />
-            <Typography variant="h6">PROJECTS</Typography>
-          </Fab>
+          <PopupState variant="popover" popupId="projects-popup">
+            {(popupState) => (
+              <>
+                <Fab
+                  variant="extended"
+                  sx={{ margin: "1rem 1rem 0rem 0rem" }}
+                  {...bindTrigger(popupState)}
+                >
+                  <CrisisAlertOutlined sx={{ mr: 1 }} />
+                  <Typography variant="h6">PROJECTS</Typography>
+                </Fab>
+                <MuiMenu {...bindMenu(popupState)}>
+                  <MenuItem
+                    onClick={() => {
+                      popupState.close();
+                      window.location.replace("/trouble");
+                    }}
+                  >
+                    <Typography variant="h6">TROUBLE</Typography>
+                  </MenuItem>
+                </MuiMenu>
+              </>
+            )}
+          </PopupState>
         </Stack>
         <Stack
           direction="row"
