@@ -158,12 +158,12 @@ function Console({ text, update, finished }) {
 
 export function Trouble() {
   //BOARD
-  const [track, setTrack] = React.useState(new Array<Peg>(28).fill(undefined));
+  const [track, setTrack] = React.useState(new Array<Peg>(28).fill(null));
   const [home, setHome] = React.useState(
-    new Array<[Peg]>(4).fill(undefined).map(() => new Array<Peg>(4))
+    new Array<[Peg]>(4).fill(null).map(() => new Array<Peg>(4))
   );
   const [finish, setFinish] = React.useState(
-    new Array<[Peg]>(4).fill(undefined).map(() => new Array<Peg>(4))
+    new Array<[Peg]>(4).fill(null).map(() => new Array<Peg>(4))
   );
 
   //GAME PLAY
@@ -267,7 +267,7 @@ export function Trouble() {
   const turnBoardJSX = () => {
     return (
       <Grid container direction="column">
-        {new Array(numPlayers).fill(undefined).map((_, idx) => {
+        {new Array(numPlayers).fill(null).map((_, idx) => {
           const player = playersToRoll[playerTurn];
           const isTurn = player && player.id === idx;
           return (
@@ -502,7 +502,7 @@ export function Trouble() {
     let finalMove = false;
 
     if (startSpace === HOME) {
-      newHome[player.id][pegId] = undefined;
+      newHome[player.id][pegId] = null;
       setHome(newHome);
 
       const oppPeg = track[finalSpace];
@@ -511,7 +511,7 @@ export function Trouble() {
       newTrack[finalSpace] = peg;
       setTrack(newTrack);
     } else if (peg.inFinish) {
-      newFinish[player.id][startSpace - (startEnd + 2)] = undefined;
+      newFinish[player.id][startSpace - (startEnd + 2)] = null;
       newFinish[player.id][finalSpace - (startEnd + 2)] = peg;
       setFinish(newFinish);
       finalMove = checkWin(newFinish[player.id]);
@@ -519,12 +519,12 @@ export function Trouble() {
       newFinish[player.id][finalSpace - (startEnd + 2)] = peg;
       peg.inFinish = true;
       peg.space = finalSpace;
-      newTrack[startSpace] = undefined;
+      newTrack[startSpace] = null;
       setTrack(newTrack);
       setFinish(newFinish);
       finalMove = checkWin(newFinish[player.id]);
     } else {
-      newTrack[startSpace] = undefined;
+      newTrack[startSpace] = null;
 
       if (startSpace === startEnd + 1) peg.isStarted = true;
       const oppPeg = newTrack[finalSpace];
@@ -678,9 +678,9 @@ export function Trouble() {
 
   const reset = () => {
     //BOARD
-    setTrack(new Array<Peg>(28).fill(undefined));
-    setHome(new Array<[Peg]>(4).fill(undefined).map(() => new Array<Peg>(4)));
-    setFinish(new Array<[Peg]>(4).fill(undefined).map(() => new Array<Peg>(4)));
+    setTrack(new Array<Peg>(28).fill(null));
+    setHome(new Array<[Peg]>(4).fill(null).map(() => new Array<Peg>(4)));
+    setFinish(new Array<[Peg]>(4).fill(null).map(() => new Array<Peg>(4)));
 
     //GAME PLAY
     setLastRoll(6);
@@ -773,7 +773,7 @@ export function Trouble() {
             <Grid container direction="column" sx={{ width: "20%" }}>
               <Grid container justifyContent="center">
                 {new Array(3)
-                  .fill(undefined)
+                  .fill(null)
                   .map((_, idx) => spaceJSX(home[0][idx], 0, idx))}
               </Grid>
               <Grid container justifyContent="center">
@@ -897,7 +897,7 @@ export function Trouble() {
                 {spaceJSX(home[3][3], 3, 1)}
                 {spaceJSX(track[23], 3, 2)}
                 {new Array(4)
-                  .fill(undefined)
+                  .fill(null)
                   .map((_, idx) => spaceJSX(finish[3][idx], 3, idx))}
               </Grid>
               {dieJSX(lastRoll)}
@@ -908,7 +908,7 @@ export function Trouble() {
                 justifyContent="flex-start"
               >
                 {new Array(4)
-                  .fill(undefined)
+                  .fill(null)
                   .map((_, idx) => spaceJSX(finish[1][idx], 1, idx))
                   .reverse()}
                 {spaceJSX(track[9], 1, 0)}
@@ -1001,7 +1001,7 @@ export function Trouble() {
               </Grid>
               <Grid container justifyContent="center">
                 {new Array(3)
-                  .fill(undefined)
+                  .fill(null)
                   .map((_, idx) => spaceJSX(home[2][idx], 2, idx))}
               </Grid>
             </Grid>
@@ -1036,7 +1036,7 @@ export function Trouble() {
         {/* FIREWORKS CELEBRATION */}
         {finished && (
           <Grid container>
-            {new Array(4).fill(undefined).map((_, idx) => (
+            {new Array(4).fill(null).map((_, idx) => (
               <Grid item className="firework" key={idx}></Grid>
             ))}
           </Grid>
