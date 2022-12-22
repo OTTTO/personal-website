@@ -216,7 +216,7 @@ export function Trouble() {
     };
     return [
       <Grid item key={idx}>
-        <IconButton onClick={onClick} sx={{ padding: 0, fontSize: "2rem" }}>
+        <IconButton onClick={onClick} sx={{ padding: 0, fontSize: "1.5rem" }}>
           <LooksOne
             fontSize={width > smallerDeviceWidth ? "large" : "inherit"}
             style={style}
@@ -224,7 +224,7 @@ export function Trouble() {
         </IconButton>
       </Grid>,
       <Grid item key={idx}>
-        <IconButton onClick={onClick} sx={{ padding: 0, fontSize: "2rem" }}>
+        <IconButton onClick={onClick} sx={{ padding: 0, fontSize: "1.5rem" }}>
           <LooksTwo
             fontSize={width > smallerDeviceWidth ? "large" : "inherit"}
             style={style}
@@ -232,7 +232,7 @@ export function Trouble() {
         </IconButton>
       </Grid>,
       <Grid item key={idx}>
-        <IconButton onClick={onClick} sx={{ padding: 0, fontSize: "2rem" }}>
+        <IconButton onClick={onClick} sx={{ padding: 0, fontSize: "1.5rem" }}>
           <Looks3
             fontSize={width > smallerDeviceWidth ? "large" : "inherit"}
             style={style}
@@ -240,7 +240,7 @@ export function Trouble() {
         </IconButton>
       </Grid>,
       <Grid item key={idx}>
-        <IconButton onClick={onClick} sx={{ padding: 0, fontSize: "2rem" }}>
+        <IconButton onClick={onClick} sx={{ padding: 0, fontSize: "1.5rem" }}>
           <Looks4
             fontSize={width > smallerDeviceWidth ? "large" : "inherit"}
             style={style}
@@ -254,7 +254,7 @@ export function Trouble() {
     return peg && peg.space !== undefined ? (
       pegJSX(peg, colorMapping[peg.player], idx)
     ) : (
-      <Grid item key={idx} sx={{ fontSize: "2rem" }}>
+      <Grid item key={idx} sx={{ fontSize: "1.5rem" }}>
         <CropDinOutlined
           fontSize={width > smallerDeviceWidth ? "large" : "inherit"}
           style={{ color: colorMapping[colorIdx] }}
@@ -275,11 +275,10 @@ export function Trouble() {
               sx={{
                 backgroundColor: isTurn ? colorMapping[idx] : "white",
               }}
-              textAlign={!started ? "left" : "center"}
+              textAlign={"center"}
             >
               <Typography
                 fontSize="1rem"
-                paddingLeft={!started ? ".5rem" : "0rem"}
                 fontWeight={isTurn ? "bold" : "normal"}
                 color={
                   isTurn && (player.id === 0 || player.id === 2)
@@ -713,7 +712,7 @@ export function Trouble() {
   };
 
   const { width } = useWindowDimensions();
-  const smallerDeviceWidth = 600;
+  const smallerDeviceWidth = 650;
 
   return (
     <Grid container direction="column" className={finished ? "fireworks" : ""}>
@@ -725,7 +724,7 @@ export function Trouble() {
         <Grid
           container
           justifyContent="center"
-          width={width > smallerDeviceWidth ? "37rem" : "32em"}
+          width={width > smallerDeviceWidth ? "37rem" : "26em"}
           direction="column"
           sx={{
             backgroundColor: "black",
@@ -740,8 +739,7 @@ export function Trouble() {
               <Button
                 variant="contained"
                 sx={{
-                  width: "20%",
-                  //   width:width > smallerDeviceWidth ? "20%" : "15%
+                  width: "25%",
                   height: "20%",
                   backgroundColor: "white",
                   color: "black",
@@ -758,7 +756,7 @@ export function Trouble() {
               <Button
                 variant="contained"
                 sx={{
-                  width: "20%",
+                  width: "25%",
                   height: "20%",
                   backgroundColor: "white",
                   color: "black",
@@ -786,10 +784,10 @@ export function Trouble() {
                 container
                 direction="column"
                 sx={{
-                  width: "20%",
+                  width: "25%",
                   backgroundColor: "white",
                   borderRadius: ".5rem",
-                  margin: "-1rem 0rem",
+                  margin: "-1rem 0rem -2rem 0rem",
                 }}
                 justifyItems="center"
                 overflow="hidden"
@@ -797,7 +795,7 @@ export function Trouble() {
                 {turnBoardJSX()}
               </Grid>
             ) : (
-              <Grid width="20%"></Grid>
+              <Grid width="25%"></Grid>
             )}
           </Grid>
 
@@ -805,7 +803,7 @@ export function Trouble() {
           <Grid
             container
             justifyContent="center"
-            spacing={width > smallerDeviceWidth ? 2 : 1}
+            spacing={width > smallerDeviceWidth ? 2 : 0}
           >
             {[0, 1, 2, 3, 4].map((space, idx) =>
               spaceJSX(track[space], 0, idx)
@@ -814,14 +812,22 @@ export function Trouble() {
 
           {/* TOP DIAGONALS AND MIDDLE HOME */}
           <Grid container justifyContent="center">
-            <Grid container width="50%" justifyContent="space-between">
+            <Grid
+              container
+              width={width > smallerDeviceWidth ? "50%" : "35%"}
+              justifyContent="space-between"
+            >
               {spaceJSX(track[27], 0, 0)}
               {spaceJSX(finish[0][0], 0, 1)}
               {spaceJSX(track[5], 0, 2)}
             </Grid>
           </Grid>
           <Grid container justifyContent="center">
-            <Grid container width="55%" justifyContent="space-between">
+            <Grid
+              container
+              width={width > smallerDeviceWidth ? "55%" : "45%"}
+              justifyContent="space-between"
+            >
               {spaceJSX(track[26], 3, 0)}
               {spaceJSX(finish[0][1], 0, 1)}
               {spaceJSX(track[6], 1, 2)}
@@ -837,7 +843,12 @@ export function Trouble() {
             alignItems="center"
           >
             {/* TOP ROW FOR COLUMNS*/}
-            <Grid container item width="60%" justifyContent="space-between">
+            <Grid
+              container
+              item
+              width={width > smallerDeviceWidth ? "60%" : "55%"}
+              justifyContent="space-between"
+            >
               {spaceJSX(track[25], 3, 0)}
               {spaceJSX(finish[0][2], 0, 1)}
               {spaceJSX(track[7], 1, 2)}
@@ -845,14 +856,22 @@ export function Trouble() {
 
             {/* TOP HOME AND FINISH */}
             <Grid container justifyContent="space-between">
-              <Grid container width="8.5rem" justifyContent="space-between">
+              <Grid
+                container
+                width={width > smallerDeviceWidth ? "8.5rem" : "6.5rem"}
+                justifyContent="space-between"
+              >
                 <Grid container width="4.5rem" justifyContent="flex-end">
                   <Grid item>{spaceJSX(home[3][0], 3, 0)}</Grid>
                 </Grid>
                 <Grid item>{spaceJSX(track[24], 3, 0)}</Grid>
               </Grid>
               <Grid item>{spaceJSX(finish[0][3], 0, 0)}</Grid>
-              <Grid container width="8.5rem" justifyContent="space-between">
+              <Grid
+                container
+                width={width > smallerDeviceWidth ? "8.5rem" : "6.5rem"}
+                justifyContent="space-between"
+              >
                 {spaceJSX(track[8], 1, 0)}
                 <Grid container width="4.5rem" justifyContent="flex-start">
                   <Grid item>{spaceJSX(home[1][0], 1, 0)}</Grid>
@@ -865,12 +884,12 @@ export function Trouble() {
               container
               justifyContent="space-between"
               alignItems="center"
-              width={width > smallerDeviceWidth ? "36rem" : "30rem"}
+              width={width > smallerDeviceWidth ? "36rem" : "26rem"}
             >
               <Grid
                 container
                 item
-                width={width > smallerDeviceWidth ? "17rem" : "14rem"}
+                width={width > smallerDeviceWidth ? "17rem" : "12rem"}
                 justifyContent="flex-end"
               >
                 {spaceJSX(home[3][1], 3, 0)}
@@ -884,7 +903,7 @@ export function Trouble() {
               <Grid
                 container
                 item
-                width={width > smallerDeviceWidth ? "17rem" : "14rem"}
+                width={width > smallerDeviceWidth ? "17rem" : "12rem"}
                 justifyContent="flex-start"
               >
                 {new Array(4)
@@ -899,14 +918,22 @@ export function Trouble() {
 
             {/* BOTTOM HOME AND FINISH */}
             <Grid container justifyContent="space-between">
-              <Grid container width="8.5rem" justifyContent="space-between">
+              <Grid
+                container
+                width={width > smallerDeviceWidth ? "8.5rem" : "6.5rem"}
+                justifyContent="space-between"
+              >
                 <Grid container width="4.5rem" justifyContent="flex-end">
                   {spaceJSX(home[3][2], 3, 0)}
                 </Grid>
                 {spaceJSX(track[22], 3, 0)}
               </Grid>
               {spaceJSX(finish[2][3], 2, 0)}
-              <Grid container width="8.5rem" justifyContent="space-between">
+              <Grid
+                container
+                width={width > smallerDeviceWidth ? "8.5rem" : "6.5rem"}
+                justifyContent="space-between"
+              >
                 {spaceJSX(track[10], 1, 0)}
 
                 <Grid container width="4.5rem" justifyContent="flex-start">
@@ -916,7 +943,12 @@ export function Trouble() {
             </Grid>
 
             {/* BOTTOM ROW FOR COLUMNS */}
-            <Grid container item width="60%" justifyContent="space-between">
+            <Grid
+              container
+              item
+              width={width > smallerDeviceWidth ? "60%" : "55%"}
+              justifyContent="space-between"
+            >
               {spaceJSX(track[21], 3, 0)}
               {spaceJSX(finish[2][2], 2, 1)}
               {spaceJSX(track[11], 1, 2)}
@@ -926,14 +958,22 @@ export function Trouble() {
           {/* BOTTOM DIAGONALS AND MIDDLE HOME */}
 
           <Grid container justifyContent="center">
-            <Grid container width="55%" justifyContent="space-between">
+            <Grid
+              container
+              width={width > smallerDeviceWidth ? "55%" : "45%"}
+              justifyContent="space-between"
+            >
               {spaceJSX(track[20], 3, 0)}
               {spaceJSX(finish[2][1], 2, 1)}
               {spaceJSX(track[12], 1, 2)}
             </Grid>
           </Grid>
           <Grid container justifyContent="center">
-            <Grid container width="50%" justifyContent="space-between">
+            <Grid
+              container
+              width={width > smallerDeviceWidth ? "50%" : "35%"}
+              justifyContent="space-between"
+            >
               {spaceJSX(track[19], 2, 0)}
               {spaceJSX(finish[2][0], 2, 1)}
               {spaceJSX(track[13], 2, 2)}
@@ -944,7 +984,7 @@ export function Trouble() {
           <Grid
             container
             justifyContent="center"
-            spacing={width > smallerDeviceWidth ? 2 : 1}
+            spacing={width > smallerDeviceWidth ? 2 : 0}
           >
             {[18, 17, 16, 15, 14].map((space, idx) =>
               spaceJSX(track[space], 2, idx)
@@ -977,6 +1017,7 @@ export function Trouble() {
                 sx={{
                   backgroundColor: "white",
                   color: "black",
+                  fontSize: width > smallerDeviceWidth ? "1rem" : ".7rem",
                 }}
                 onClick={handleOpenInstructions}
               >
