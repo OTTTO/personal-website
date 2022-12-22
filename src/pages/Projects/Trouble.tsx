@@ -30,20 +30,17 @@ const dieMapping = {
   6: sixDie,
 };
 
-const introText = `WELCOME TO THE GAME OF TROUBLE
-The rules are simple
-Players roll to see who goes first
+const introText = `WELCOME TO THE GAME OF TROUBLE`;
+
+const instructions = `Players roll to see who goes first
 All pegs start in HOME, in order to leave HOME the player must roll a 6
-The game ends when a player has moved all of their pegs into their FINISH line
+When you leave HOME you only advance to the entry space
 Players cannot move a peg onto a space occupied by another one of their pegs
-If your peg lands on an opponent's peg, their peg is sent back HOME`;
-//add text to start rolling
-//click the die to roll
-//click a valid peg to move it the number of spaces shown on the die
-//when you leave home you land on the entry space
+If your peg lands on an opponent's peg, their peg is sent back HOME
+The game ends when a player has moved all of their pegs into their FINISH line`;
 
 const startRollText = `ROLL TO SEE WHO GOES FIRST
-PLAYER 1: YOUR UP`;
+PLAYER 1: YOUR UP, CLICK THE DIE`;
 
 const rollingText = (playerId: number) => {
   return `PLAYER ${playerId}: YOUR UP`;
@@ -176,10 +173,15 @@ export function Trouble() {
   const [rolling, setRolling] = React.useState(false);
   const [rolls, setRolls] = React.useState(new Array(4).fill(0));
 
-  //MODAL
-  const [open, setOpen] = React.useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  //SELECT MODAL
+  const [openSelect, setOpenSelect] = React.useState(false);
+  const handleOpenSelect = () => setOpenSelect(true);
+  const handleCloseSelect = () => setOpenSelect(false);
+
+  //INSTRUCTIONS MODAL
+  const [openInstructions, setOpenInstructions] = React.useState(false);
+  const handleOpenInstructions = () => setOpenInstructions(true);
+  const handleCloseInstructions = () => setOpenInstructions(false);
 
   //TEXT
   const [outputText, setOutputText] = React.useState(introText);
@@ -705,7 +707,7 @@ export function Trouble() {
           margin="auto"
         >
           <Grid container justifyContent="space-between" padding="0rem 1rem">
-            {/* START BUTTON AND MODAL */}
+            {/* START BUTTON */}
             {rolling || started || finished ? (
               <Button
                 variant="contained"
@@ -717,7 +719,8 @@ export function Trouble() {
                 }}
                 onClick={() => {
                   reset();
-                  handleOpen();
+                  changeOutput(introText);
+                  handleOpenSelect();
                 }}
               >
                 RESTART
@@ -731,83 +734,11 @@ export function Trouble() {
                   backgroundColor: "white",
                   color: "black",
                 }}
-                onClick={handleOpen}
+                onClick={handleOpenSelect}
               >
                 START
               </Button>
             )}
-            <Modal open={open} onClose={handleClose}>
-              <Grid
-                alignItems="center"
-                justifyContent="center"
-                sx={{ margin: "auto" }}
-              >
-                <Grid
-                  width="50%"
-                  sx={{
-                    margin: "auto",
-                    backgroundColor: "white",
-                    borderRadius: ".5rem",
-                    opacity: ".9",
-                  }}
-                >
-                  <IconButton onClick={handleClose} sx={{ float: "left" }}>
-                    <Close sx={{ color: "red" }}></Close>
-                  </IconButton>
-                  <Typography
-                    variant="h6"
-                    component="h2"
-                    textAlign="center"
-                    paddingTop="1rem"
-                  >
-                    SELECT NUMBER OF PLAYERS
-                  </Typography>
-                  <Grid container justifyContent="center">
-                    <Grid item>
-                      <IconButton onClick={() => setNumPlayers(2)}>
-                        <LooksTwo
-                          className="selectTwo"
-                          fontSize={numPlayers === 2 ? "large" : "small"}
-                          style={{ color: colorMapping[1] }}
-                        />
-                      </IconButton>
-                    </Grid>
-                    <Grid item>
-                      <IconButton onClick={() => setNumPlayers(3)}>
-                        <Looks3
-                          className="selectThree"
-                          fontSize={numPlayers === 3 ? "large" : "small"}
-                          style={{ color: colorMapping[2] }}
-                        />
-                      </IconButton>
-                    </Grid>
-                    <Grid item>
-                      <IconButton onClick={() => setNumPlayers(4)}>
-                        <Looks4
-                          className="selectFour"
-                          fontSize={numPlayers === 4 ? "large" : "small"}
-                          style={{ color: colorMapping[3] }}
-                        />
-                      </IconButton>
-                    </Grid>
-                  </Grid>
-                  <Grid container justifyContent="center">
-                    <Button
-                      variant="contained"
-                      sx={{ width: "50%", margin: "0 auto 1rem" }}
-                      onClick={() => {
-                        handleClose();
-                        if (numPlayers > 0) {
-                          initGame();
-                        }
-                      }}
-                    >
-                      LET'S GO
-                    </Button>
-                  </Grid>
-                </Grid>
-              </Grid>
-            </Modal>
 
             {/* HOME 0 */}
 
@@ -972,15 +903,37 @@ export function Trouble() {
             )}
           </Grid>
 
-          {/* HOME 2 */}
-          <Grid direction="column" container>
-            <Grid container justifyContent="center">
-              {spaceJSX(home[2][3], 2, 0)}
+          <Grid container justifyContent="space-between" padding="0rem 1rem">
+            <Grid width="30%"></Grid>
+            {/* HOME 2 */}
+            <Grid container direction="column" sx={{ width: "20%" }}>
+              <Grid container justifyContent="center">
+                {spaceJSX(home[2][3], 2, 0)}
+              </Grid>
+              <Grid container justifyContent="center">
+                {new Array(3)
+                  .fill(undefined)
+                  .map((_, idx) => spaceJSX(home[2][idx], 2, idx))}
+              </Grid>
             </Grid>
-            <Grid container justifyContent="center">
-              {new Array(3)
-                .fill(undefined)
-                .map((_, idx) => spaceJSX(home[2][idx], 2, idx))}
+
+            {/* INSTRUCTIONS BUTTON */}
+            <Grid
+              container
+              direction="column"
+              justifyContent="flex-end"
+              width="30%"
+            >
+              <Button
+                variant="contained"
+                sx={{
+                  backgroundColor: "white",
+                  color: "black",
+                }}
+                onClick={handleOpenInstructions}
+              >
+                INSTRUCTIONS
+              </Button>
             </Grid>
           </Grid>
         </Grid>
@@ -1000,6 +953,128 @@ export function Trouble() {
         )}
       </Grid>
       <Footer backgroundColor="black"></Footer>
+
+      {/* SELECT PLAYERS MODAL */}
+      <Modal
+        open={openSelect}
+        onClose={handleCloseSelect}
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          marginTop: "-6.5rem",
+        }}
+      >
+        <Grid
+          width="50%"
+          sx={{
+            margin: "auto",
+            backgroundColor: "white",
+            borderRadius: ".5rem",
+            opacity: ".9",
+          }}
+        >
+          <IconButton onClick={handleCloseSelect} sx={{ float: "left" }}>
+            <Close sx={{ color: "red" }}></Close>
+          </IconButton>
+          <Typography
+            variant="h6"
+            component="h2"
+            textAlign="center"
+            paddingTop="1rem"
+          >
+            SELECT NUMBER OF PLAYERS
+          </Typography>
+          <Grid container justifyContent="center">
+            <Grid item>
+              <IconButton onClick={() => setNumPlayers(2)}>
+                <LooksTwo
+                  className="selectTwo"
+                  fontSize={numPlayers === 2 ? "large" : "small"}
+                  style={{ color: colorMapping[1] }}
+                />
+              </IconButton>
+            </Grid>
+            <Grid item>
+              <IconButton onClick={() => setNumPlayers(3)}>
+                <Looks3
+                  className="selectThree"
+                  fontSize={numPlayers === 3 ? "large" : "small"}
+                  style={{ color: colorMapping[2] }}
+                />
+              </IconButton>
+            </Grid>
+            <Grid item>
+              <IconButton onClick={() => setNumPlayers(4)}>
+                <Looks4
+                  className="selectFour"
+                  fontSize={numPlayers === 4 ? "large" : "small"}
+                  style={{ color: colorMapping[3] }}
+                />
+              </IconButton>
+            </Grid>
+          </Grid>
+          <Grid container justifyContent="center">
+            <Button
+              variant="contained"
+              sx={{ width: "50%", margin: "0 auto 1rem" }}
+              onClick={() => {
+                handleCloseSelect();
+                if (numPlayers > 0) {
+                  initGame();
+                }
+              }}
+            >
+              LET'S GO
+            </Button>
+          </Grid>
+        </Grid>
+      </Modal>
+
+      {/* INSTRUCTIONS MODAL */}
+      <Modal
+        open={openInstructions}
+        onClose={handleCloseInstructions}
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          marginTop: "-8rem",
+        }}
+      >
+        <Grid
+          width="50%"
+          sx={{
+            margin: "auto",
+            backgroundColor: "white",
+            borderRadius: ".5rem",
+            opacity: ".9",
+            paddingBottom: "1rem",
+          }}
+        >
+          <IconButton onClick={handleCloseInstructions} sx={{ float: "left" }}>
+            <Close sx={{ color: "red" }}></Close>
+          </IconButton>
+          <Typography
+            variant="h4"
+            component="h2"
+            textAlign="center"
+            paddingTop="1rem"
+            fontWeight="bold"
+          >
+            INSTRUCTIONS
+          </Typography>
+          <hr></hr>
+          {instructions.split("\n").map((instruction, idx) => (
+            <>
+              <Typography variant={"h5"} textAlign="center" key={idx}>
+                {instruction}
+              </Typography>
+              {idx !== instructions.split("\n").length - 1 && <hr></hr>}
+            </>
+          ))}
+        </Grid>
+      </Modal>
     </Grid>
   );
 }
