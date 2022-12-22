@@ -1,4 +1,11 @@
-import { Button, Grid, IconButton, Modal, Typography } from "@mui/material";
+import {
+  Button,
+  Grid,
+  IconButton,
+  Modal,
+  ThemeProvider,
+  Typography,
+} from "@mui/material";
 import {
   CropDinOutlined,
   LooksOne,
@@ -16,6 +23,8 @@ import sixDie from "images/dice/dice-six.svg";
 import React, { useRef } from "react";
 import { Footer } from "components/Footer";
 import { Menu } from "components/Menu";
+import mainTheme from "themes/mainTheme";
+import useWindowDimensions from "hooks/useWindowDimensions";
 
 const HOME = -1;
 const startEndSpaces = [1, 8, 15, 22];
@@ -128,7 +137,8 @@ function Console({ text, update, finished }) {
         margin: "2rem auto",
         padding: "2rem 0rem",
         borderRadius: "1rem",
-        width: "37rem",
+        maxWidth: "37rem",
+        width: "90%",
       }}
     >
       {output.split("\n").map((out, key) => (
@@ -206,23 +216,35 @@ export function Trouble() {
     };
     return [
       <Grid item key={idx}>
-        <IconButton onClick={onClick} sx={{ padding: 0 }}>
-          <LooksOne fontSize="large" style={style} />
+        <IconButton onClick={onClick} sx={{ padding: 0, fontSize: "2rem" }}>
+          <LooksOne
+            fontSize={width > smallerDeviceWidth ? "large" : "inherit"}
+            style={style}
+          />
         </IconButton>
       </Grid>,
       <Grid item key={idx}>
-        <IconButton onClick={onClick} sx={{ padding: 0 }}>
-          <LooksTwo fontSize="large" style={style} />
+        <IconButton onClick={onClick} sx={{ padding: 0, fontSize: "2rem" }}>
+          <LooksTwo
+            fontSize={width > smallerDeviceWidth ? "large" : "inherit"}
+            style={style}
+          />
         </IconButton>
       </Grid>,
       <Grid item key={idx}>
-        <IconButton onClick={onClick} sx={{ padding: 0 }}>
-          <Looks3 fontSize="large" style={style} />
+        <IconButton onClick={onClick} sx={{ padding: 0, fontSize: "2rem" }}>
+          <Looks3
+            fontSize={width > smallerDeviceWidth ? "large" : "inherit"}
+            style={style}
+          />
         </IconButton>
       </Grid>,
       <Grid item key={idx}>
-        <IconButton onClick={onClick} sx={{ padding: 0 }}>
-          <Looks4 fontSize="large" style={style} />
+        <IconButton onClick={onClick} sx={{ padding: 0, fontSize: "2rem" }}>
+          <Looks4
+            fontSize={width > smallerDeviceWidth ? "large" : "inherit"}
+            style={style}
+          />
         </IconButton>
       </Grid>,
     ][peg.id];
@@ -232,9 +254,9 @@ export function Trouble() {
     return peg && peg.space !== undefined ? (
       pegJSX(peg, colorMapping[peg.player], idx)
     ) : (
-      <Grid item key={idx}>
+      <Grid item key={idx} sx={{ fontSize: "2rem" }}>
         <CropDinOutlined
-          fontSize="large"
+          fontSize={width > smallerDeviceWidth ? "large" : "inherit"}
           style={{ color: colorMapping[colorIdx] }}
         />
       </Grid>
@@ -256,7 +278,8 @@ export function Trouble() {
               textAlign={!started ? "left" : "center"}
             >
               <Typography
-                paddingLeft={!started ? "1rem" : "0rem"}
+                fontSize="1rem"
+                paddingLeft={!started ? ".5rem" : "0rem"}
                 fontWeight={isTurn ? "bold" : "normal"}
                 color={
                   isTurn && (player.id === 0 || player.id === 2)
@@ -300,7 +323,7 @@ export function Trouble() {
       <img
         key={Math.random()}
         src={dieMapping[face]}
-        width="5%"
+        width={width > smallerDeviceWidth ? "5%" : "6%"}
         onClick={onClick}
         className={className}
         alt="die"
@@ -689,15 +712,20 @@ export function Trouble() {
     return true;
   };
 
+  const { width } = useWindowDimensions();
+  const smallerDeviceWidth = 600;
+
   return (
     <Grid container direction="column" className={finished ? "fireworks" : ""}>
-      <Menu backgroundColor="black"></Menu>
-      <Grid paddingTop="1rem">
+      <ThemeProvider theme={mainTheme}>
+        <Menu backgroundColor="black"></Menu>
+      </ThemeProvider>
+      <Grid paddingTop="1rem" margin="0rem 1rem">
         {/* BOARD */}
         <Grid
           container
           justifyContent="center"
-          width="37rem"
+          width={width > smallerDeviceWidth ? "37rem" : "32em"}
           direction="column"
           sx={{
             backgroundColor: "black",
@@ -713,6 +741,7 @@ export function Trouble() {
                 variant="contained"
                 sx={{
                   width: "20%",
+                  //   width:width > smallerDeviceWidth ? "20%" : "15%
                   height: "20%",
                   backgroundColor: "white",
                   color: "black",
@@ -760,7 +789,7 @@ export function Trouble() {
                   width: "20%",
                   backgroundColor: "white",
                   borderRadius: ".5rem",
-                  marginTop: "-1rem",
+                  margin: "-1rem 0rem",
                 }}
                 justifyItems="center"
                 overflow="hidden"
@@ -773,7 +802,11 @@ export function Trouble() {
           </Grid>
 
           {/* TOP ROW */}
-          <Grid container justifyContent="center" spacing={2}>
+          <Grid
+            container
+            justifyContent="center"
+            spacing={width > smallerDeviceWidth ? 2 : 1}
+          >
             {[0, 1, 2, 3, 4].map((space, idx) =>
               spaceJSX(track[space], 0, idx)
             )}
@@ -781,14 +814,14 @@ export function Trouble() {
 
           {/* TOP DIAGONALS AND MIDDLE HOME */}
           <Grid container justifyContent="center">
-            <Grid container width="18rem" justifyContent="space-between">
+            <Grid container width="50%" justifyContent="space-between">
               {spaceJSX(track[27], 0, 0)}
               {spaceJSX(finish[0][0], 0, 1)}
               {spaceJSX(track[5], 0, 2)}
             </Grid>
           </Grid>
           <Grid container justifyContent="center">
-            <Grid container width="21rem" justifyContent="space-between">
+            <Grid container width="55%" justifyContent="space-between">
               {spaceJSX(track[26], 3, 0)}
               {spaceJSX(finish[0][1], 0, 1)}
               {spaceJSX(track[6], 1, 2)}
@@ -798,17 +831,18 @@ export function Trouble() {
           {/* COLUMNS */}
           <Grid
             container
-            width="37rem"
+            width="100%"
             direction="column"
             justifyContent="center"
             alignItems="center"
           >
             {/* TOP ROW FOR COLUMNS*/}
-            <Grid container item width="24rem" justifyContent="space-between">
+            <Grid container item width="60%" justifyContent="space-between">
               {spaceJSX(track[25], 3, 0)}
               {spaceJSX(finish[0][2], 0, 1)}
               {spaceJSX(track[7], 1, 2)}
             </Grid>
+
             {/* TOP HOME AND FINISH */}
             <Grid container justifyContent="space-between">
               <Grid container width="8.5rem" justifyContent="space-between">
@@ -831,9 +865,14 @@ export function Trouble() {
               container
               justifyContent="space-between"
               alignItems="center"
-              width="36rem"
+              width={width > smallerDeviceWidth ? "36rem" : "30rem"}
             >
-              <Grid container item width="17rem" justifyContent="flex-end">
+              <Grid
+                container
+                item
+                width={width > smallerDeviceWidth ? "17rem" : "14rem"}
+                justifyContent="flex-end"
+              >
                 {spaceJSX(home[3][1], 3, 0)}
                 {spaceJSX(home[3][3], 3, 1)}
                 {spaceJSX(track[23], 3, 2)}
@@ -842,7 +881,12 @@ export function Trouble() {
                   .map((_, idx) => spaceJSX(finish[3][idx], 3, idx))}
               </Grid>
               {dieJSX(lastRoll)}
-              <Grid container item width="17rem" justifyContent="flex-start">
+              <Grid
+                container
+                item
+                width={width > smallerDeviceWidth ? "17rem" : "14rem"}
+                justifyContent="flex-start"
+              >
                 {new Array(4)
                   .fill(undefined)
                   .map((_, idx) => spaceJSX(finish[1][idx], 1, idx))
@@ -872,7 +916,7 @@ export function Trouble() {
             </Grid>
 
             {/* BOTTOM ROW FOR COLUMNS */}
-            <Grid container item width="24rem" justifyContent="space-between">
+            <Grid container item width="60%" justifyContent="space-between">
               {spaceJSX(track[21], 3, 0)}
               {spaceJSX(finish[2][2], 2, 1)}
               {spaceJSX(track[11], 1, 2)}
@@ -882,14 +926,14 @@ export function Trouble() {
           {/* BOTTOM DIAGONALS AND MIDDLE HOME */}
 
           <Grid container justifyContent="center">
-            <Grid container width="21rem" justifyContent="space-between">
+            <Grid container width="55%" justifyContent="space-between">
               {spaceJSX(track[20], 3, 0)}
               {spaceJSX(finish[2][1], 2, 1)}
               {spaceJSX(track[12], 1, 2)}
             </Grid>
           </Grid>
           <Grid container justifyContent="center">
-            <Grid container width="18rem" justifyContent="space-between">
+            <Grid container width="50%" justifyContent="space-between">
               {spaceJSX(track[19], 2, 0)}
               {spaceJSX(finish[2][0], 2, 1)}
               {spaceJSX(track[13], 2, 2)}
@@ -897,7 +941,11 @@ export function Trouble() {
           </Grid>
 
           {/* BOTTOM ROW */}
-          <Grid container justifyContent="center" spacing={2}>
+          <Grid
+            container
+            justifyContent="center"
+            spacing={width > smallerDeviceWidth ? 2 : 1}
+          >
             {[18, 17, 16, 15, 14].map((space, idx) =>
               spaceJSX(track[space], 2, idx)
             )}
@@ -1043,7 +1091,7 @@ export function Trouble() {
         }}
       >
         <Grid
-          width="50%"
+          width="70%"
           sx={{
             margin: "auto",
             backgroundColor: "white",
