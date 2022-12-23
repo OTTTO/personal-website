@@ -1,15 +1,14 @@
 import { useLazyQuery } from "@apollo/client";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import {
-  Box,
   Button,
   FormControl,
+  Grid,
   IconButton,
   InputAdornment,
   OutlinedInput,
   ThemeProvider,
 } from "@mui/material";
-import { Stack } from "@mui/system";
 import { Footer } from "components/Footer";
 import { Menu } from "components/Menu";
 import { ADMIN_LOGIN } from "queries/adminLogin";
@@ -64,6 +63,12 @@ function AdminLogin() {
     }
   };
 
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      handleSubmit();
+    }
+  };
+
   const backgroundColor = "black";
 
   return (
@@ -72,8 +77,8 @@ function AdminLogin() {
       {new Array(9).fill(true).map((el, idx) => (
         <hr key={idx}></hr>
       ))}
-      <Box sx={{ margin: "0 auto", width: "80%" }}>
-        <Stack direction="column">
+      <Grid sx={{ margin: "0 auto", width: "80%" }}>
+        <Grid container direction="column">
           <FormControl sx={{ m: 1 }} variant="outlined">
             <OutlinedInput
               id="outlined-email"
@@ -81,6 +86,8 @@ function AdminLogin() {
               value={values.email}
               onChange={handleChange("email")}
               placeholder="Email"
+              onKeyDown={handleKeyDown}
+              autoFocus
             ></OutlinedInput>
           </FormControl>
           <FormControl sx={{ m: 1 }} variant="outlined">
@@ -90,6 +97,7 @@ function AdminLogin() {
               value={values.password}
               onChange={handleChange("password")}
               placeholder="Password"
+              onKeyDown={handleKeyDown}
               endAdornment={
                 <InputAdornment position="end">
                   <IconButton
@@ -105,14 +113,7 @@ function AdminLogin() {
               label="Password"
             />
           </FormControl>
-          <Button
-            sx={{ m: 1 }}
-            variant="contained"
-            onClick={handleSubmit}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") handleSubmit();
-            }}
-          >
+          <Button sx={{ m: 1 }} variant="contained" onKeyDown={handleKeyDown}>
             LOG IN
           </Button>
           <Button
@@ -142,8 +143,8 @@ function AdminLogin() {
           >
             TEST ADMIN FUNCTIONALITY
           </Button>
-        </Stack>
-      </Box>
+        </Grid>
+      </Grid>
       {new Array(9).fill(true).map((el, idx) => (
         <hr key={idx}></hr>
       ))}
