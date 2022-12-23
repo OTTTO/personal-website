@@ -38,7 +38,8 @@ import {
   ISkillGroup,
 } from "types/resume";
 
-const isAuthenticated = localStorage.getItem("token");
+const isAuthenticated = !!localStorage.getItem("token");
+const isTestAuthenticated = !!localStorage.getItem("testToken");
 
 export function Resume() {
   const [skillGroupList, setSkillGroupList] = React.useState<ISkillGroup[]>([]);
@@ -48,6 +49,14 @@ export function Resume() {
     skillGroups: skillGroupList,
     experience: experienceList,
     education: educationList,
+  };
+
+  const getResume = (): IResume => {
+    return JSON.parse(localStorage.getItem("resume"));
+  };
+
+  const getTestEdit = (): boolean => {
+    return JSON.parse(localStorage.getItem("testEdit"));
   };
 
   const [canSubmitArr, setCanSubmitArr] = React.useState<boolean[]>([]);
@@ -320,9 +329,19 @@ export function Resume() {
 
   useEffect(() => {
     if (!loading && data) {
-      setSkillGroupList(data.resume.skillGroupList);
-      setExperienceList(data.resume.experienceList);
-      setEducationList(data.resume.educationList);
+      setSkillGroupList(
+        isTestAuthenticated
+          ? getResume().skillGroups
+          : data.resume.skillGroupList
+      );
+      setExperienceList(
+        isTestAuthenticated
+          ? getResume().experience
+          : data.resume.experienceList
+      );
+      setEducationList(
+        isTestAuthenticated ? getResume().education : data.resume.educationList
+      );
     }
   }, [loading, data]);
 
@@ -407,32 +426,58 @@ export function Resume() {
           padding="1rem"
           sx={{ margin: "auto", width: "55%", backgroundColor: "white" }}
         >
-          {isAuthenticated && (
-            <>
-              <Stack direction="row" sx={{ float: "right" }} spacing={2}>
-                <Button
-                  variant="contained"
-                  onClick={async () => {
+          {isAuthenticated || isTestAuthenticated ? (
+            <Stack direction="row" sx={{ float: "right" }} spacing={2}>
+              <Button
+                variant="contained"
+                onClick={async () => {
+                  if (isTestAuthenticated) {
+                    localStorage.setItem("resume", JSON.stringify(resume));
+                  } else {
                     await updateResume({ variables: { resume } });
-                    window.location.replace("/resume");
-                  }}
-                  disabled={canSubmitArr.length > 0}
-                >
-                  SAVE
-                </Button>
+                  }
+                  window.location.replace("/resume");
+                }}
+                disabled={canSubmitArr.length > 0}
+              >
+                SAVE
+              </Button>
+              <Button
+                variant="contained"
+                color="error"
+                onClick={() => {
+                  localStorage.removeItem("token");
+                  localStorage.removeItem("testToken");
+                  window.location.replace("/resume");
+                }}
+              >
+                LOGOUT
+              </Button>
+              {getTestEdit() ? (
                 <Button
                   variant="contained"
-                  color="error"
+                  color="success"
                   onClick={() => {
-                    localStorage.removeItem("token");
+                    localStorage.setItem("testEdit", "false");
                     window.location.replace("/resume");
                   }}
                 >
-                  LOGOUT
+                  VIEW
                 </Button>
-              </Stack>
-            </>
-          )}
+              ) : (
+                <Button
+                  variant="contained"
+                  color="success"
+                  onClick={() => {
+                    localStorage.setItem("testEdit", "true");
+                    window.location.replace("/resume");
+                  }}
+                >
+                  EDIT
+                </Button>
+              )}
+            </Stack>
+          ) : null}
           <Box>
             <Typography variant="h1"> Dylan Beckwith </Typography>
             <Typography variant="h3"> Software Engineer </Typography>
@@ -461,11 +506,11 @@ export function Resume() {
             <Typography variant="h4" padding="1rem">
               TECHNICAL SKILLS
             </Typography>
-            {isAuthenticated && (
+            {isAuthenticated || (isTestAuthenticated && getTestEdit()) ? (
               <IconButton onClick={handleAddSkillGroup}>
                 <AddCircle sx={{ mr: 1 }} />
               </IconButton>
-            )}
+            ) : null}
           </Stack>
           {structuredClone(skillGroupList || data.resume.skillGroupList)
             .sort((a, b) => a.position - b.position)
@@ -474,11 +519,8 @@ export function Resume() {
                 <Stack direction="row" key={skillGroup.id}>
                   <Accordion sx={{ width: "100%" }}>
                     <AccordionSummary expandIcon={<ExpandMore />}>
-                      {!isAuthenticated ? (
-                        <Typography>
-                          <b>{skillGroup.name}</b>
-                        </Typography>
-                      ) : (
+                      {isAuthenticated ||
+                      (isTestAuthenticated && getTestEdit()) ? (
                         <TextField
                           id="skillGroupName"
                           error={skillGroup.name.length === 0}
@@ -489,12 +531,15 @@ export function Resume() {
                             handleSkillGroupListChange(e, skillGroup, idx)
                           }
                         ></TextField>
+                      ) : (
+                        <Typography>
+                          <b>{skillGroup.name}</b>
+                        </Typography>
                       )}
                     </AccordionSummary>
                     <AccordionDetails>
-                      {!isAuthenticated ? (
-                        <Typography>{skillGroup.skills}</Typography>
-                      ) : (
+                      {isAuthenticated ||
+                      (isTestAuthenticated && getTestEdit()) ? (
                         <TextField
                           id="skillGroupSkills"
                           error={skillGroup.skills.length === 0}
@@ -504,14 +549,16 @@ export function Resume() {
                             handleSkillGroupListChange(e, skillGroup, idx)
                           }
                         ></TextField>
+                      ) : (
+                        <Typography>{skillGroup.skills}</Typography>
                       )}
                     </AccordionDetails>
                   </Accordion>
-                  {isAuthenticated && (
+                  {isAuthenticated || (isTestAuthenticated && getTestEdit()) ? (
                     <IconButton onClick={() => handleRemoveSkillGroup(idx)}>
                       <RemoveCircle sx={{ mr: 1 }} />
                     </IconButton>
-                  )}
+                  ) : null}
                 </Stack>
               );
             })}
@@ -519,31 +566,18 @@ export function Resume() {
             <Typography variant="h4" padding="1rem">
               PROFESSIONAL EXPERIENCE
             </Typography>
-            {isAuthenticated && (
+            {isAuthenticated || (isTestAuthenticated && getTestEdit()) ? (
               <IconButton onClick={handleAddExperience}>
                 <AddCircle sx={{ mr: 1 }} />
               </IconButton>
-            )}
+            ) : null}
           </Stack>
           {structuredClone(experienceList || data.resume.experienceList)
             .sort((a, b) => a.position - b.position)
             .map((experience: IExperience, expIdx: number) => (
               <Accordion key={experience.id}>
                 <AccordionSummary expandIcon={<ExpandMore />}>
-                  {!isAuthenticated ? (
-                    <Box>
-                      <Typography variant="subtitle2">
-                        <b>
-                          <i>{experience.role}</i>, {experience.company}
-                        </b>
-                      </Typography>
-                      <Typography variant="subtitle2">
-                        <b>
-                          {experience.location} : {experience.time}
-                        </b>
-                      </Typography>
-                    </Box>
-                  ) : (
+                  {isAuthenticated || (isTestAuthenticated && getTestEdit()) ? (
                     <Stack direction="row">
                       <TextField
                         id="experienceRole"
@@ -583,27 +617,33 @@ export function Resume() {
                         <RemoveCircle sx={{ mr: 1 }} />
                       </IconButton>
                     </Stack>
+                  ) : (
+                    <Box>
+                      <Typography variant="subtitle2">
+                        <b>
+                          <i>{experience.role}</i>, {experience.company}
+                        </b>
+                      </Typography>
+                      <Typography variant="subtitle2">
+                        <b>
+                          {experience.location} : {experience.time}
+                        </b>
+                      </Typography>
+                    </Box>
                   )}
                 </AccordionSummary>
-                {isAuthenticated && (
-                  <IconButton onClick={() => handleAddResponsibility(expIdx)}>
-                    <AddCircle sx={{ mr: 1 }} />
-                  </IconButton>
-                )}
+                {isAuthenticated ||
+                  (isTestAuthenticated && getTestEdit() && (
+                    <IconButton onClick={() => handleAddResponsibility(expIdx)}>
+                      <AddCircle sx={{ mr: 1 }} />
+                    </IconButton>
+                  ))}
                 <AccordionDetails>
                   {experience.responsibilities
                     .sort((a, b) => a.position - b.position)
                     .map((responsibility: IResponsibility, resIdx: number) => {
-                      return !isAuthenticated ? (
-                        <Typography key={responsibility.id}>
-                          <li
-                            key={resIdx}
-                            dangerouslySetInnerHTML={{
-                              __html: responsibility.details,
-                            }}
-                          />
-                        </Typography>
-                      ) : (
+                      return isAuthenticated ||
+                        (isTestAuthenticated && getTestEdit()) ? (
                         <Stack key={responsibility.id}>
                           <Stack direction="row">
                             <TextField
@@ -630,6 +670,15 @@ export function Resume() {
                             </IconButton>
                           </Stack>
                         </Stack>
+                      ) : (
+                        <Typography key={responsibility.id}>
+                          <li
+                            key={resIdx}
+                            dangerouslySetInnerHTML={{
+                              __html: responsibility.details,
+                            }}
+                          />
+                        </Typography>
                       );
                     })}
                 </AccordionDetails>
@@ -639,28 +688,17 @@ export function Resume() {
             <Typography variant="h4" padding="1rem">
               EDUCATION
             </Typography>
-            {isAuthenticated && (
+            {isAuthenticated || (isTestAuthenticated && getTestEdit()) ? (
               <IconButton onClick={handleAddEducation}>
                 <AddCircle sx={{ mr: 1 }} />
               </IconButton>
-            )}
+            ) : null}
           </Stack>
           {structuredClone(educationList || data.resume.educationList)
             .sort((a, b) => a.position - b.position)
             .map((education: IEducation, idx: number) => {
-              return !isAuthenticated ? (
-                <Grid key={education.id}>
-                  <Grid container={true} justifyContent="space-between">
-                    <Typography align="left">
-                      <b>{education.institution}</b> - {education.achievement}
-                    </Typography>
-                    <Typography align="right">
-                      <b>{education.time}</b>
-                    </Typography>
-                  </Grid>
-                  {idx + 1 < educationList.length && <Divider />}
-                </Grid>
-              ) : (
+              return isAuthenticated ||
+                (isTestAuthenticated && getTestEdit()) ? (
                 <Stack direction="row" key={education.id}>
                   <TextField
                     id="educationInstitution"
@@ -690,6 +728,18 @@ export function Resume() {
                     <RemoveCircle sx={{ mr: 1 }} />
                   </IconButton>
                 </Stack>
+              ) : (
+                <Grid key={education.id}>
+                  <Grid container={true} justifyContent="space-between">
+                    <Typography align="left">
+                      <b>{education.institution}</b> - {education.achievement}
+                    </Typography>
+                    <Typography align="right">
+                      <b>{education.time}</b>
+                    </Typography>
+                  </Grid>
+                  {idx + 1 < educationList.length && <Divider />}
+                </Grid>
               );
             })}
         </Box>

@@ -115,6 +115,33 @@ function AdminLogin() {
           >
             LOG IN
           </Button>
+          <Button
+            sx={{
+              m: 1,
+              backgroundColor: "green",
+              "&:hover": {
+                color: "white",
+                backgroundColor: "red",
+              },
+            }}
+            variant="contained"
+            onClick={() => {
+              localStorage.removeItem("token");
+              localStorage.setItem("testToken", "TEST");
+              if (!localStorage.getItem("resume")) {
+                const resume = {
+                  skillGroups: [],
+                  experience: [],
+                  education: [],
+                };
+                localStorage.setItem("resume", JSON.stringify(resume));
+              }
+              localStorage.setItem("testEdit", "true");
+              window.location.replace("/resume");
+            }}
+          >
+            TEST ADMIN FUNCTIONALITY
+          </Button>
         </Stack>
       </Box>
       {new Array(9).fill(true).map((el, idx) => (
