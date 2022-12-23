@@ -25,7 +25,13 @@ export function Menu({ backgroundColor }) {
       }}
     >
       <Grid container direction="row" justifyContent="space-between">
-        <Grid direction="row" display="inline-block" width="auto" spacing={0}>
+        <Grid
+          container
+          direction="row"
+          display="inline-block"
+          width="auto"
+          spacing={0}
+        >
           <Fab
             variant="extended"
             href="/"
@@ -80,6 +86,7 @@ export function Menu({ backgroundColor }) {
           </PopupState>
         </Grid>
         <Grid
+          container
           direction="row"
           sx={{
             justifyContent: "flex-end",

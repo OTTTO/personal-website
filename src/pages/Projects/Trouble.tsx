@@ -20,12 +20,11 @@ import threeDie from "images/dice/dice-three.svg";
 import fourDie from "images/dice/dice-four.svg";
 import fiveDie from "images/dice/dice-five.svg";
 import sixDie from "images/dice/dice-six.svg";
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { Footer } from "components/Footer";
 import { Menu } from "components/Menu";
 import mainTheme from "themes/mainTheme";
 import useWindowDimensions from "hooks/useWindowDimensions";
-import { positions } from "@mui/system";
 
 const HOME = -1;
 const startEndSpaces = [1, 8, 15, 22];
@@ -158,31 +157,168 @@ function Console({ text, update, finished }) {
 
 export function Trouble() {
   //BOARD
-  const [track, setTrack] = React.useState(new Array<Peg>(28).fill(null));
-  const [home, setHome] = React.useState(
+  const [track, setTrackState] = React.useState(new Array<Peg>(28).fill(null));
+  const [home, setHomeState] = React.useState(
     new Array<[Peg]>(4).fill(null).map(() => new Array<Peg>(4))
   );
-  const [finish, setFinish] = React.useState(
+  const [finish, setFinishState] = React.useState(
     new Array<[Peg]>(4).fill(null).map(() => new Array<Peg>(4))
   );
+
+  //BOARD STORAGE
+  const getTrack = () => {
+    return JSON.parse(sessionStorage.getItem("track")) || track;
+  };
+  const setTrack = (track) => {
+    sessionStorage.setItem("track", JSON.stringify(track));
+    setTrackState(track);
+  };
+
+  const getHome = () => {
+    return JSON.parse(sessionStorage.getItem("home")) || home;
+  };
+  const setHome = (home) => {
+    sessionStorage.setItem("home", JSON.stringify(home));
+    setHomeState(home);
+  };
+
+  const getFinish = () => {
+    return JSON.parse(sessionStorage.getItem("finish")) || finish;
+  };
+
+  const setFinish = (finish) => {
+    sessionStorage.setItem("finish", JSON.stringify(finish));
+    setFinishState(finish);
+  };
 
   //GAME PLAY
-  const [lastRoll, setLastRoll] = React.useState(6);
-  const [started, setStarted] = React.useState(false);
-  const [finished, setFinished] = React.useState(false);
-  const [numPlayers, setNumPlayers] = React.useState(0);
-  const [players, setPlayers] = React.useState([]);
-  const [playerTurn, setPlayerTurn] = React.useState(0);
-  const [playerCanMove, setPlayerCanMove] = React.useState(false);
-  const [isRolling, setisRolling] = React.useState(false);
+  const [lastRoll, setLastRollState] = React.useState(6);
+  const [started, setStartedState] = React.useState(false);
+  const [finished, setFinishedState] = React.useState(false);
+  const [numPlayers, setNumPlayersState] = React.useState(0);
+  const [players, setPlayersState] = React.useState([]);
+  const [playerTurn, setPlayerTurnState] = React.useState(0);
+  const [playerCanMove, setPlayerCanMoveState] = React.useState(false);
+  const [isRolling, setIsRollingState] = React.useState(false);
+
+  //GAME PLAY STORAGE
+  const getLastRoll = () => {
+    return JSON.parse(sessionStorage.getItem("lastRoll")) || lastRoll;
+  };
+  const setLastRoll = (lastRoll) => {
+    sessionStorage.setItem("lastRoll", JSON.stringify(lastRoll));
+    setLastRollState(lastRoll);
+  };
+  const getStarted = () => {
+    return JSON.parse(sessionStorage.getItem("started")) || started;
+  };
+  const setStarted = (started) => {
+    sessionStorage.setItem("started", JSON.stringify(started));
+    setStartedState(started);
+  };
+  const getFinished = () => {
+    return JSON.parse(sessionStorage.getItem("finished")) || finished;
+  };
+  const setFinished = (finished) => {
+    sessionStorage.setItem("finished", JSON.stringify(finished));
+    setFinishedState(finished);
+  };
+  const getNumPlayers = () => {
+    return JSON.parse(sessionStorage.getItem("numPlayers")) || numPlayers;
+  };
+  const setNumPlayers = (numPlayers) => {
+    sessionStorage.setItem("numPlayers", JSON.stringify(numPlayers));
+    setNumPlayersState(numPlayers);
+  };
+  const getPlayers = () => {
+    return JSON.parse(sessionStorage.getItem("players")) || players;
+  };
+  const setPlayers = (players) => {
+    sessionStorage.setItem("players", JSON.stringify(players));
+    setPlayersState(players);
+  };
+  const getPlayerTurn = () => {
+    return JSON.parse(sessionStorage.getItem("playerTurn")) || playerTurn;
+  };
+  const setPlayerTurn = (playerTurn) => {
+    sessionStorage.setItem("playerTurn", JSON.stringify(playerTurn));
+    setPlayerTurnState(playerTurn);
+  };
+  const getPlayerCanMove = () => {
+    return JSON.parse(sessionStorage.getItem("playerCanMove")) || playerCanMove;
+  };
+  const setPlayerCanMove = (playerCanMove) => {
+    sessionStorage.setItem("playerCanMove", JSON.stringify(playerCanMove));
+    setPlayerCanMoveState(playerCanMove);
+  };
+  const getIsRolling = () => {
+    return JSON.parse(sessionStorage.getItem("isRolling")) || isRolling;
+  };
+  const setIsRolling = (isRolling) => {
+    sessionStorage.setItem("isRolling", JSON.stringify(isRolling));
+    setIsRollingState(isRolling);
+  };
 
   //ROLL TO START
-  const [playersWithMaxRoll, setPlayersWithMaxRoll] = React.useState([]);
-  const [playersToRemove, setPlayersToRemove] = React.useState([]);
-  const [playersToRoll, setPlayersToRoll] = React.useState([]);
-  const [maxRoll, setMaxRoll] = React.useState(0);
-  const [rolling, setRolling] = React.useState(false);
-  const [rolls, setRolls] = React.useState(new Array(4).fill(0));
+  const [playersWithMaxRoll, setPlayersWithMaxRollState] = React.useState([]);
+  const [playersToRemove, setPlayersToRemoveState] = React.useState([]);
+  const [playersToRoll, setPlayersToRollState] = React.useState([]);
+  const [maxRoll, setMaxRollState] = React.useState(0);
+  const [rolling, setRollingState] = React.useState(false);
+  const [rolls, setRollsState] = React.useState(new Array(4).fill(0));
+
+  //ROLL TO START STORAGE
+  const getPlayersWithMaxRoll = () => {
+    return (
+      JSON.parse(sessionStorage.getItem("playersWithMaxRoll")) ||
+      playersWithMaxRoll
+    );
+  };
+  const setPlayersWithMaxRoll = (playersWithMaxRoll) => {
+    sessionStorage.setItem(
+      "playersWithMaxRoll",
+      JSON.stringify(playersWithMaxRoll)
+    );
+    setPlayersWithMaxRollState(playersWithMaxRoll);
+  };
+  const getPlayersToRemove = () => {
+    return (
+      JSON.parse(sessionStorage.getItem("playersToRemove")) || playersToRemove
+    );
+  };
+  const setPlayersToRemove = (playersToRemove) => {
+    sessionStorage.setItem("playersToRemove", JSON.stringify(playersToRemove));
+    setPlayersToRemoveState(playersToRemove);
+  };
+  const getPlayersToRoll = () => {
+    return JSON.parse(sessionStorage.getItem("playersToRoll")) || playersToRoll;
+  };
+  const setPlayersToRoll = (playersToRoll) => {
+    sessionStorage.setItem("playersToRoll", JSON.stringify(playersToRoll));
+    setPlayersToRollState(playersToRoll);
+  };
+  const getMaxRoll = () => {
+    return JSON.parse(sessionStorage.getItem("maxRoll")) || maxRoll;
+  };
+  const setMaxRoll = (maxRoll) => {
+    sessionStorage.setItem("maxRoll", JSON.stringify(maxRoll));
+    setMaxRollState(maxRoll);
+  };
+  const getRolling = () => {
+    return JSON.parse(sessionStorage.getItem("rolling")) || rolling;
+  };
+
+  const setRolling = (rolling) => {
+    sessionStorage.setItem("rolling", JSON.stringify(rolling));
+    setRollingState(rolling);
+  };
+  const getRolls = () => {
+    return JSON.parse(sessionStorage.getItem("rolls")) || rolls;
+  };
+  const setRolls = (rolls) => {
+    sessionStorage.setItem("rolls", JSON.stringify(rolls));
+    setRollsState(rolls);
+  };
 
   //SELECT MODAL
   const [openSelect, setOpenSelect] = React.useState(false);
@@ -195,13 +331,43 @@ export function Trouble() {
   const handleCloseInstructions = () => setOpenInstructions(false);
 
   //TEXT
-  const [outputText, setOutputText] = React.useState(introText);
+  const [outputText, setOutputTextState] = React.useState(introText);
+  const getOutputText = () => {
+    return JSON.parse(sessionStorage.getItem("outputText")) || outputText;
+  };
+  const setOutputText = (outputText) => {
+    sessionStorage.setItem("outputText", JSON.stringify(outputText));
+    setOutputTextState(outputText);
+  };
   const [update, updateState] = React.useState({});
 
   const changeOutput = (text: string) => {
     setOutputText(text);
     updateState({});
   };
+
+  //SET STATE WITH SESSION
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    setTrack(getTrack());
+    setHome(getHome());
+    setFinish(getFinish());
+    setLastRoll(getLastRoll());
+    setStarted(getStarted());
+    setFinished(getFinished());
+    setNumPlayers(getNumPlayers());
+    setPlayers(getPlayers());
+    setPlayerTurn(getPlayerTurn());
+    setPlayerCanMove(getPlayerCanMove());
+    setIsRolling(getIsRolling());
+    setPlayersWithMaxRoll(getPlayersWithMaxRoll());
+    setPlayersToRemove(getPlayersToRemove());
+    setPlayersToRoll(getPlayersToRoll());
+    setMaxRoll(getMaxRoll());
+    setRolling(getRolling());
+    setRolls(getRolls());
+    setOutputText(getOutputText());
+  }, []);
 
   const pegJSX = (peg: Peg, color: string, idx: number) => {
     const style = { color };
@@ -336,12 +502,12 @@ export function Trouble() {
     const rolling = setInterval(() => {
       thisRoll = Math.floor(Math.random() * 6) + 1;
       setLastRoll(thisRoll);
-      setisRolling(true);
+      setIsRolling(true);
     }, 100);
 
     setTimeout(() => {
       clearInterval(rolling);
-      setisRolling(false);
+      setIsRolling(false);
       if (checkValidMoves(thisRoll)) {
         setPlayerCanMove(true);
       }
@@ -353,12 +519,12 @@ export function Trouble() {
     const rolling = setInterval(() => {
       thisRoll = Math.floor(Math.random() * 6) + 1;
       setLastRoll(thisRoll);
-      setisRolling(true);
+      setIsRolling(true);
     }, 100);
 
     setTimeout(() => {
       clearInterval(rolling);
-      setisRolling(false);
+      setIsRolling(false);
 
       setLastRoll(thisRoll);
       rolls[playersToRoll[playerTurn].id] = thisRoll;
@@ -415,6 +581,7 @@ export function Trouble() {
 
   const initGame = () => {
     const newPlayers = new Array(numPlayers);
+    const home = getHome();
     const newHome = [...home];
 
     for (let i = 0; i < newPlayers.length; i++) {
@@ -740,10 +907,11 @@ export function Trouble() {
               <Button
                 variant="contained"
                 sx={{
-                  width: "25%",
+                  width: width > smallerDeviceWidth ? "20%" : "25%",
                   height: "20%",
                   backgroundColor: "white",
                   color: "black",
+                  marginTop: "-1rem",
                 }}
                 onClick={() => {
                   reset();
@@ -757,10 +925,11 @@ export function Trouble() {
               <Button
                 variant="contained"
                 sx={{
-                  width: "25%",
+                  width: width > smallerDeviceWidth ? "20%" : "25%",
                   height: "20%",
                   backgroundColor: "white",
                   color: "black",
+                  marginTop: "-1rem",
                 }}
                 onClick={handleOpenSelect}
               >
@@ -770,7 +939,11 @@ export function Trouble() {
 
             {/* HOME 0 */}
 
-            <Grid container direction="column" sx={{ width: "20%" }}>
+            <Grid
+              container
+              direction="column"
+              sx={{ width: width > smallerDeviceWidth ? "20%" : "25%" }}
+            >
               <Grid container justifyContent="center">
                 {new Array(3)
                   .fill(null)
@@ -785,10 +958,11 @@ export function Trouble() {
                 container
                 direction="column"
                 sx={{
-                  width: "25%",
+                  width: width > smallerDeviceWidth ? "20%" : "25%",
                   backgroundColor: "white",
                   borderRadius: ".5rem",
-                  margin: "-1rem 0rem -2rem 0rem",
+                  marginTop: "-1rem",
+                  marginBottom: width > smallerDeviceWidth ? "-1rem" : "-2rem",
                 }}
                 justifyItems="center"
                 overflow="hidden"
@@ -796,7 +970,9 @@ export function Trouble() {
                 {turnBoardJSX()}
               </Grid>
             ) : (
-              <Grid width="25%"></Grid>
+              <Grid
+                sx={{ width: width > smallerDeviceWidth ? "20%" : "25%" }}
+              ></Grid>
             )}
           </Grid>
 
@@ -1019,6 +1195,7 @@ export function Trouble() {
                   backgroundColor: "white",
                   color: "black",
                   fontSize: width > smallerDeviceWidth ? "1rem" : ".7rem",
+                  marginBottom: "-1rem",
                 }}
                 onClick={handleOpenInstructions}
               >
