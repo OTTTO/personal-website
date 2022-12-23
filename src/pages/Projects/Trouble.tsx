@@ -25,6 +25,7 @@ import { Footer } from "components/Footer";
 import { Menu } from "components/Menu";
 import mainTheme from "themes/mainTheme";
 import useWindowDimensions from "hooks/useWindowDimensions";
+import { Peg, Player } from "types/trouble";
 
 const HOME = -1;
 const startEndSpaces = [1, 8, 15, 22];
@@ -86,23 +87,6 @@ const winRollText = (playerId: number) => {
 const gameOverText = (playerId: number) => {
   return `PLAYER ${playerId} WON THE GAME!`;
 };
-
-interface Peg {
-  id: number;
-  player: number;
-  space: number;
-  isStarted: boolean;
-  inFinish: boolean;
-}
-
-class Player {
-  id: number;
-  pegs: Peg[] = [];
-
-  constructor(iter: number) {
-    this.id = iter;
-  }
-}
 
 function Console({ text, update, finished }) {
   const [output, setOutput] = React.useState(text[0]);
