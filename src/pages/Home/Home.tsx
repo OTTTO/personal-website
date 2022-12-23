@@ -1,36 +1,76 @@
-import { ThemeProvider, Typography } from "@mui/material";
+import {
+  Button,
+  Grid,
+  TextField,
+  ThemeProvider,
+  Typography,
+} from "@mui/material";
 import { Menu } from "components/Menu";
-import { Box, Stack } from "@mui/system";
 import mainTheme from "themes/mainTheme";
 import angel from "images/angel.jpeg";
 import useWindowDimensions from "hooks/useWindowDimensions";
 import { Footer } from "components/Footer";
+import { useMutation, useQuery } from "@apollo/client";
+import { HOME, UPDATE_HOME } from "queries/home";
+import { useEffect } from "react";
+import React from "react";
+import { v4 as uuid } from "uuid";
 
 export function Home() {
-  const intro = `I am Dylan Beckwith, I have been a professional software developer since 2017. I started learning
-    a couple of years before that by reading books and doing code challenges.
-    Although I did eventually end up getting a bachelors in CS, 
-    I pride myself on being self taught because to me the discipline of
-    software development is an iterative process of teaching oneself 
-    by building project after project. Being in consulting, it is not very often
-    that I face the exact same technology stack that I have worked with previously so
-    I am grateful that I have cultivated the ability to learn on the fly. I
-    enjoy helping others get started in their programming careers as well as
-    pairing with fellow developers both inside and outside of work. If you would
-    like to contact me for any reason you can reach me at contact.dylan.beckwith@gmail.com`;
-
-  const websiteInfo = `This website was built from the ground up with NodeJS, GraphQL, Postgres, and React. 
-    It currently serves as a personal resume and portfolio, 
-    but it is also a CMS behind the scenes which I use to administer changes to the frontend`;
-
   const { width } = useWindowDimensions();
   const introWidth = 950;
 
+  const [intro, setIntro] = React.useState("");
+  const [websiteInfo, setWebsiteInfo] = React.useState("");
+
+  const handleTextChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    currentState: string,
+    setState: (text: string) => void
+  ) => {
+    updateErrorCount(currentState, e.target.value);
+    setState(e.target.value);
+  };
+
+  const [canSubmitArr, setCanSubmitArr] = React.useState<boolean[]>([]);
+
+  const updateErrorCount = (oldString: string, newString: string) => {
+    const newCanSubmitArr: boolean[] = structuredClone(canSubmitArr);
+    if (oldString.length > 0 && newString.length === 0) {
+      newCanSubmitArr.push(true);
+    } else if (oldString.length === 0 && newString.length > 0) {
+      newCanSubmitArr.pop();
+    }
+    setCanSubmitArr(newCanSubmitArr);
+  };
+
+  const [updateHome] = useMutation(UPDATE_HOME);
+  const { data, loading, error } = useQuery(HOME);
+
+  useEffect(() => {
+    if (!loading && data) {
+      setIntro(data.home.intro);
+      setWebsiteInfo(data.home.websiteInfo);
+    }
+  }, [loading, data]);
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error : {error.message}</p>;
+
   const backgroundColor = "black";
+
+  const isAuthenticated = localStorage.getItem("token");
+
+  const home = {
+    intro,
+    websiteInfo,
+    id: data.home.id.length ? data.home.id : uuid(),
+  };
+
   return (
     <ThemeProvider theme={mainTheme}>
       <Menu backgroundColor={backgroundColor}></Menu>
-      <Box
+      <Grid
         sx={{
           backgroundColor: "black",
           height: "100vh",
@@ -39,37 +79,111 @@ export function Home() {
           textAlign: "center",
         }}
       >
-        <Stack direction="column" sx={{ paddingTop: "1rem" }}>
-          <Typography variant="h1" color="white">
-            <u>WELCOME!</u>
-          </Typography>
+        <Grid container direction="column" sx={{ paddingTop: "1rem" }}>
+          <Grid container>
+            <Grid width="30%"></Grid>
+            <Typography variant="h1" color="white" width="40%">
+              <u>WELCOME!</u>
+            </Typography>
+            {isAuthenticated && (
+              <>
+                <Grid
+                  container
+                  spacing={2}
+                  width="30%"
+                  justifyContent="right"
+                  alignItems="center"
+                >
+                  <Grid item>
+                    <Button
+                      variant="contained"
+                      onClick={async () => {
+                        await updateHome({ variables: { home } });
+                        window.location.replace("/");
+                      }}
+                      disabled={canSubmitArr.length > 0}
+                      sx={{ height: "2rem" }}
+                    >
+                      SAVE
+                    </Button>
+                  </Grid>
+                  <Grid item>
+                    <Button
+                      variant="contained"
+                      color="error"
+                      onClick={() => {
+                        localStorage.removeItem("token");
+                        window.location.replace("/");
+                      }}
+                      sx={{ height: "2rem" }}
+                    >
+                      LOGOUT
+                    </Button>
+                  </Grid>
+                </Grid>
+              </>
+            )}
+          </Grid>
           <br></br>
           {width < introWidth && (
-            <Box>
+            <Grid>
               <img src={angel} alt="Angel's Landing" className="angelImg"></img>
-            </Box>
+            </Grid>
           )}
-          <Stack direction="row" sx={{ padding: "2rem 0rem 0rem 1rem" }}>
+          <Grid sx={{ padding: "2rem 0rem 0rem 1rem" }}>
             {width > introWidth && (
               <img src={angel} alt="Angel's Landing" className="angelImg"></img>
             )}
-            <Stack
+            <Grid
+              container
               direction="column"
               width={width > introWidth ? "90%" : "90%"}
               padding="0rem 1rem 0rem 1rem"
             >
-              <Typography variant="h4" color="white" textAlign="left">
-                {intro}
-              </Typography>
+              {!isAuthenticated ? (
+                <Typography variant="h4" color="white" textAlign="left">
+                  {intro}
+                </Typography>
+              ) : (
+                <TextField
+                  error={intro.length === 0}
+                  fullWidth={true}
+                  multiline
+                  value={intro}
+                  sx={{
+                    backgroundColor: "white",
+                    opacity: ".7 ",
+                    borderRadius: ".5rem",
+                  }}
+                  onChange={(e) => handleTextChange(e, intro, setIntro)}
+                ></TextField>
+              )}
               <br></br>
               <br></br>
-              <Typography variant="h4" color="white" textAlign="left">
-                {websiteInfo}
-              </Typography>
-            </Stack>
-          </Stack>
-        </Stack>
-      </Box>
+              {!isAuthenticated ? (
+                <Typography variant="h4" color="white" textAlign="left">
+                  {websiteInfo}
+                </Typography>
+              ) : (
+                <TextField
+                  error={websiteInfo.length === 0}
+                  fullWidth={true}
+                  multiline
+                  value={websiteInfo}
+                  sx={{
+                    backgroundColor: "white",
+                    opacity: ".7 ",
+                    borderRadius: ".5rem",
+                  }}
+                  onChange={(e) =>
+                    handleTextChange(e, websiteInfo, setWebsiteInfo)
+                  }
+                ></TextField>
+              )}
+            </Grid>
+          </Grid>
+        </Grid>
+      </Grid>
       <Footer backgroundColor={backgroundColor}></Footer>
     </ThemeProvider>
   );

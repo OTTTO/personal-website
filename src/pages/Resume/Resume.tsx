@@ -412,8 +412,8 @@ export function Resume() {
               <Stack direction="row" sx={{ float: "right" }} spacing={2}>
                 <Button
                   variant="contained"
-                  onClick={() => {
-                    updateResume({ variables: { resume } });
+                  onClick={async () => {
+                    await updateResume({ variables: { resume } });
                     window.location.replace("/resume");
                   }}
                   disabled={canSubmitArr.length > 0}
@@ -425,7 +425,7 @@ export function Resume() {
                   color="error"
                   onClick={() => {
                     localStorage.removeItem("token");
-                    window.location.replace("/");
+                    window.location.replace("/resume");
                   }}
                 >
                   LOGOUT

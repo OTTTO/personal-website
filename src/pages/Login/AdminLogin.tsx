@@ -56,12 +56,11 @@ function AdminLogin() {
     const response = await adminLogin({
       variables: { email: values.email, password: values.password },
     });
-    console.log(response);
     if (!response.data.signInAdmin) {
       alert("Wrong email and password");
     } else {
       localStorage.setItem("token", response.data.signInAdmin);
-      window.location.replace("/resume");
+      window.location.replace("/");
     }
   };
 
