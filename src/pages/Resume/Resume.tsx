@@ -40,12 +40,15 @@ import {
 
 const isAuthenticated = !!localStorage.getItem("token");
 const isTestAuthenticated = !!localStorage.getItem("testToken");
+const header = { name: "", title: "" };
 
 export function Resume() {
+  const [resumeHeader, setResumeHeader] = React.useState(header);
   const [skillGroupList, setSkillGroupList] = React.useState<ISkillGroup[]>([]);
   const [experienceList, setExperienceList] = React.useState<IExperience[]>([]);
   const [educationList, setEducationList] = React.useState<IEducation[]>([]);
   const resume: IResume = {
+    resumeHeader: resumeHeader,
     skillGroups: skillGroupList,
     experience: experienceList,
     education: educationList,
@@ -69,6 +72,15 @@ export function Resume() {
       newCanSubmitArr.pop();
     }
     setCanSubmitArr(newCanSubmitArr);
+  };
+
+  const handleTextChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    currentState: string,
+    setState: (text: string) => void
+  ) => {
+    updateErrorCount(currentState, e.target.value);
+    setState(e.target.value);
   };
 
   const handleSkillGroupListChange = (
@@ -329,6 +341,11 @@ export function Resume() {
 
   useEffect(() => {
     if (!loading && data) {
+      setResumeHeader(
+        isTestAuthenticated
+          ? getResume().resumeHeader
+          : data.resume.resumeHeader
+      );
       setSkillGroupList(
         isTestAuthenticated
           ? getResume().skillGroups
@@ -434,7 +451,9 @@ export function Resume() {
                   if (isTestAuthenticated) {
                     localStorage.setItem("resume", JSON.stringify(resume));
                   } else {
-                    await updateResume({ variables: { resume } });
+                    await updateResume({
+                      variables: { resume },
+                    });
                   }
                   window.location.replace("/resume");
                 }}
@@ -453,7 +472,7 @@ export function Resume() {
               >
                 LOGOUT
               </Button>
-              {getTestEdit() ? (
+              {isTestAuthenticated && getTestEdit() && (
                 <Button
                   variant="contained"
                   color="success"
@@ -464,7 +483,8 @@ export function Resume() {
                 >
                   VIEW
                 </Button>
-              ) : (
+              )}
+              {isTestAuthenticated && !getTestEdit() && (
                 <Button
                   variant="contained"
                   color="success"
@@ -479,8 +499,45 @@ export function Resume() {
             </Stack>
           ) : null}
           <Box>
-            <Typography variant="h1"> Dylan Beckwith </Typography>
-            <Typography variant="h3"> Software Engineer </Typography>
+            {isAuthenticated || (isTestAuthenticated && getTestEdit()) ? (
+              <Grid>
+                <TextField
+                  // error={skillGroup.skills.length === 0}
+                  fullWidth={true}
+                  defaultValue={
+                    resumeHeader.name || data.resume.resumeHeader.name
+                  }
+                  onChange={(e) =>
+                    setResumeHeader({
+                      ...resumeHeader,
+                      name: e.target.value,
+                    })
+                  }
+                ></TextField>
+                <TextField
+                  // error={skillGroup.skills.length === 0}
+                  fullWidth={true}
+                  defaultValue={
+                    resumeHeader.title || data.resume.resumeHeader.title
+                  }
+                  onChange={(e) =>
+                    setResumeHeader({
+                      ...resumeHeader,
+                      title: e.target.value,
+                    })
+                  }
+                ></TextField>
+              </Grid>
+            ) : (
+              <Grid>
+                <Typography variant="h1">
+                  {resumeHeader.name || data.resume.resumeHeader.name}
+                </Typography>
+                <Typography variant="h3">
+                  {resumeHeader.title || data.resume.resumeHeader.title}
+                </Typography>
+              </Grid>
+            )}
             <Fab
               variant="extended"
               href="mailto:contact.dylanbeckwith@gmail.com"

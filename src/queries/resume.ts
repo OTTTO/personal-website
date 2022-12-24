@@ -3,6 +3,11 @@ import { gql } from "@apollo/client";
 export const RESUME = gql`
   query {
     resume {
+      resumeHeader {
+        id
+        name
+        title
+      }
       skillGroupList {
         id
         position

@@ -131,6 +131,7 @@ function AdminLogin() {
               localStorage.setItem("testToken", "TEST");
               if (!localStorage.getItem("resume")) {
                 const resume = {
+                  resumeHeader: { id: "", name: "", title: "" },
                   skillGroups: [],
                   experience: [],
                   education: [],

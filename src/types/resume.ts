@@ -29,7 +29,14 @@ export interface IEducation {
   time: string;
 }
 
+export interface IResumeHeader {
+  id?: string;
+  name: string;
+  title: string;
+}
+
 export interface IResume {
+  resumeHeader: IResumeHeader;
   skillGroups: ISkillGroup[];
   experience: IExperience[];
   education: IEducation[];
