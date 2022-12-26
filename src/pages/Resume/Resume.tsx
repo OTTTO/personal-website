@@ -37,6 +37,7 @@ import {
   IResume,
   ISkillGroup,
 } from "types/resume";
+import { LogoutButton } from "components/LogoutButton";
 
 const isAuthenticated = !!localStorage.getItem("token");
 const isTestAuthenticated = !!localStorage.getItem("testToken");
@@ -447,6 +448,7 @@ export function Resume() {
             <Stack direction="row" sx={{ float: "right" }} spacing={2}>
               <Button
                 variant="contained"
+                sx={{ height: "2rem" }}
                 onClick={async () => {
                   if (isTestAuthenticated) {
                     localStorage.setItem("resume", JSON.stringify(resume));
@@ -461,20 +463,10 @@ export function Resume() {
               >
                 SAVE
               </Button>
-              <Button
-                variant="contained"
-                color="error"
-                onClick={() => {
-                  localStorage.removeItem("token");
-                  localStorage.removeItem("testToken");
-                  window.location.replace("/resume");
-                }}
-              >
-                LOGOUT
-              </Button>
               {isTestAuthenticated && getTestEdit() && (
                 <Button
                   variant="contained"
+                  sx={{ height: "2rem" }}
                   color="success"
                   onClick={() => {
                     localStorage.setItem("testEdit", "false");
@@ -496,6 +488,7 @@ export function Resume() {
                   EDIT
                 </Button>
               )}
+              {isTestAuthenticated && <LogoutButton replaceUrl="/resume" />}
             </Stack>
           ) : null}
           <Box>

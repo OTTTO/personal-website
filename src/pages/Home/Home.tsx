@@ -107,19 +107,6 @@ export function Home() {
                       SAVE
                     </Button>
                   </Grid>
-                  <Grid item>
-                    <Button
-                      variant="contained"
-                      color="error"
-                      onClick={() => {
-                        localStorage.removeItem("token");
-                        window.location.replace("/");
-                      }}
-                      sx={{ height: "2rem" }}
-                    >
-                      LOGOUT
-                    </Button>
-                  </Grid>
                 </Grid>
               </>
             )}

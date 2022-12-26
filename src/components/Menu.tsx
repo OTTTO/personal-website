@@ -14,6 +14,8 @@ import {
 import useWindowDimensions from "hooks/useWindowDimensions";
 import PopupState, { bindTrigger, bindMenu } from "material-ui-popup-state";
 
+const isAuthenticated = !!localStorage.getItem("token");
+
 export function Menu({ backgroundColor }) {
   const { width } = useWindowDimensions();
   const smallerSize = 550;
@@ -94,18 +96,48 @@ export function Menu({ backgroundColor }) {
           display="inline-block"
           width="auto"
         >
-          <Fab
-            variant="extended"
-            href="/admin"
-            sx={{ margin: "1rem 1rem 0rem 0rem" }}
-            size={width > smallerSize ? "large" : "small"}
-          >
-            <AdminPanelSettingsOutlined
-              sx={{ mr: 1 }}
-              fontSize={width > smallerSize ? "large" : "small"}
-            />
-            <Typography variant="h6">ADMIN</Typography>
-          </Fab>
+          <PopupState variant="popover" popupId="admin-popup">
+            {(popupState) => (
+              <>
+                <Fab
+                  variant="extended"
+                  sx={{ margin: "1rem 1rem 0rem 0rem" }}
+                  size={width > smallerSize ? "large" : "small"}
+                  color={!isAuthenticated ? "info" : "warning"}
+                  {...bindTrigger(popupState)}
+                >
+                  <AdminPanelSettingsOutlined
+                    sx={{ mr: 1 }}
+                    fontSize={width > smallerSize ? "large" : "small"}
+                  />
+                  <Typography variant="h6">ADMIN</Typography>
+                </Fab>
+                <MuiMenu {...bindMenu(popupState)}>
+                  {!isAuthenticated ? (
+                    <MenuItem
+                      onClick={() => {
+                        popupState.close();
+                        window.location.replace("/admin");
+                      }}
+                    >
+                      <Typography variant="h6">LOGIN</Typography>
+                    </MenuItem>
+                  ) : (
+                    <MenuItem
+                      onClick={() => {
+                        popupState.close();
+                        localStorage.removeItem("token");
+                        localStorage.removeItem("testToken");
+                        window.location.reload();
+                      }}
+                    >
+                      <Typography variant="h6">LOGOUT</Typography>
+                    </MenuItem>
+                  )}
+                </MuiMenu>
+              </>
+            )}
+          </PopupState>
         </Grid>
       </Grid>
     </Grid>

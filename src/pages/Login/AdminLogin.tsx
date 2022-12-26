@@ -113,7 +113,12 @@ function AdminLogin() {
               label="Password"
             />
           </FormControl>
-          <Button sx={{ m: 1 }} variant="contained" onKeyDown={handleKeyDown}>
+          <Button
+            sx={{ m: 1 }}
+            variant="contained"
+            onKeyDown={handleKeyDown}
+            onClick={handleSubmit}
+          >
             LOG IN
           </Button>
           <Button
