@@ -15,6 +15,7 @@ import { HOME, UPDATE_HOME } from "queries/home";
 import { useEffect } from "react";
 import React from "react";
 import { v4 as uuid } from "uuid";
+import { authenticationCheck } from "utils/utils";
 
 export function Home() {
   const { width } = useWindowDimensions();
@@ -59,7 +60,8 @@ export function Home() {
 
   const backgroundColor = "black";
 
-  const isAuthenticated = localStorage.getItem("token");
+  // const isAuthenticated = localStorage.getItem("token");
+  const isAuthenticated = authenticationCheck();
 
   const home = {
     intro,

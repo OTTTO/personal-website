@@ -38,8 +38,9 @@ import {
   ISkillGroup,
 } from "types/resume";
 import { LogoutButton } from "components/LogoutButton";
+import { authenticationCheck } from "utils/utils";
 
-const isAuthenticated = !!localStorage.getItem("token");
+const isAuthenticated = authenticationCheck();
 const isTestAuthenticated = !!localStorage.getItem("testToken");
 const header = { name: "", title: "" };
 

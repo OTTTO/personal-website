@@ -13,8 +13,9 @@ import {
 } from "@mui/material";
 import useWindowDimensions from "hooks/useWindowDimensions";
 import PopupState, { bindTrigger, bindMenu } from "material-ui-popup-state";
+import { authenticationCheck } from "utils/utils";
 
-const isAuthenticated = !!localStorage.getItem("token");
+const isAuthenticated = authenticationCheck();
 
 export function Menu({ backgroundColor }) {
   const { width } = useWindowDimensions();
