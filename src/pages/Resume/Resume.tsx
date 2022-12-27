@@ -76,13 +76,24 @@ export function Resume() {
     setCanSubmitArr(newCanSubmitArr);
   };
 
-  const handleTextChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-    currentState: string,
-    setState: (text: string) => void
+  const handleResumeHeaderNameChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    updateErrorCount(currentState, e.target.value);
-    setState(e.target.value);
+    setResumeHeader({
+      ...resumeHeader,
+      name: e.target.value,
+    });
+    updateErrorCount(resumeHeader.name, e.target.value);
+  };
+
+  const handleResumeHeaderTitleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    setResumeHeader({
+      ...resumeHeader,
+      title: e.target.value,
+    });
+    updateErrorCount(resumeHeader.title, e.target.value);
   };
 
   const handleSkillGroupListChange = (
@@ -376,7 +387,7 @@ export function Resume() {
         padding="1rem 0rem 1rem 0rem"
         sx={{ backgroundColor: "black", position: "relative" }}
       >
-        <Grid direction="row" justifyContent="space-between">
+        <Grid justifyContent="space-between">
           <Grid
             item
             xs={2}
@@ -496,30 +507,20 @@ export function Resume() {
             {isAuthenticated || (isTestAuthenticated && getTestEdit()) ? (
               <Grid>
                 <TextField
-                  // error={skillGroup.skills.length === 0}
+                  error={resumeHeader.name.length === 0}
                   fullWidth={true}
                   defaultValue={
                     resumeHeader.name || data.resume.resumeHeader.name
                   }
-                  onChange={(e) =>
-                    setResumeHeader({
-                      ...resumeHeader,
-                      name: e.target.value,
-                    })
-                  }
+                  onChange={handleResumeHeaderNameChange}
                 ></TextField>
                 <TextField
-                  // error={skillGroup.skills.length === 0}
+                  error={resumeHeader.title.length === 0}
                   fullWidth={true}
                   defaultValue={
                     resumeHeader.title || data.resume.resumeHeader.title
                   }
-                  onChange={(e) =>
-                    setResumeHeader({
-                      ...resumeHeader,
-                      title: e.target.value,
-                    })
-                  }
+                  onChange={handleResumeHeaderTitleChange}
                 ></TextField>
               </Grid>
             ) : (
@@ -663,6 +664,14 @@ export function Resume() {
                         }
                       ></TextField>
                       <IconButton
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleAddResponsibility(expIdx);
+                        }}
+                      >
+                        <AddCircle sx={{ mr: 1 }} />
+                      </IconButton>
+                      <IconButton
                         onClick={() => handleRemoveExperience(expIdx)}
                       >
                         <RemoveCircle sx={{ mr: 1 }} />
@@ -683,12 +692,6 @@ export function Resume() {
                     </Box>
                   )}
                 </AccordionSummary>
-                {isAuthenticated ||
-                  (isTestAuthenticated && getTestEdit() && (
-                    <IconButton onClick={() => handleAddResponsibility(expIdx)}>
-                      <AddCircle sx={{ mr: 1 }} />
-                    </IconButton>
-                  ))}
                 <AccordionDetails>
                   {experience.responsibilities
                     .sort((a, b) => a.position - b.position)

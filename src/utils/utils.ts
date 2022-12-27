@@ -2,7 +2,6 @@ export function authenticationCheck() {
   const token = localStorage.getItem("token");
   if (token) {
     const decoded = parseJwt(token);
-    console.log(decoded.exp * 1000);
     return decoded.exp * 1000 > new Date().getTime();
   }
   return false;

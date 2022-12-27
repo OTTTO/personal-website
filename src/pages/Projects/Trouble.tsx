@@ -331,7 +331,6 @@ export function Trouble() {
   };
 
   //SET STATE WITH SESSION
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     setTrack(getTrack());
     setHome(getHome());
@@ -351,6 +350,7 @@ export function Trouble() {
     setRolling(getRolling());
     setRolls(getRolls());
     setOutputText(getOutputText());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const pegJSX = (peg: Peg, color: string, idx: number) => {
