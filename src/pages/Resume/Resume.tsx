@@ -375,11 +375,25 @@ export function Resume() {
     }
   }, [loading, data]);
 
+  useEffect(() => {
+    if (!isTestAuthenticated) return;
+    //Add error count for empty resume header fields to canSubmitArr
+    let emptyFieldCount = 0;
+    if (!getResume().resumeHeader.name) emptyFieldCount++;
+    if (!getResume().resumeHeader.title) emptyFieldCount++;
+    const newCanSubmitArr: boolean[] = structuredClone(canSubmitArr);
+    for (let i = 0; i < emptyFieldCount; i++) {
+      newCanSubmitArr.push(true);
+    }
+    setCanSubmitArr(newCanSubmitArr);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error : {error.message}</p>;
 
   const backgroundColor = "black";
-
+  console.log(resumeHeader);
   return (
     <ThemeProvider theme={mainTheme}>
       <Menu backgroundColor={backgroundColor} />
@@ -509,9 +523,7 @@ export function Resume() {
                 <TextField
                   error={resumeHeader.name.length === 0}
                   fullWidth={true}
-                  defaultValue={
-                    resumeHeader.name || data.resume.resumeHeader.name
-                  }
+                  value={resumeHeader.name}
                   onChange={handleResumeHeaderNameChange}
                   label="Name"
                 ></TextField>
@@ -520,21 +532,15 @@ export function Resume() {
                 <TextField
                   error={resumeHeader.title.length === 0}
                   fullWidth={true}
-                  defaultValue={
-                    resumeHeader.title || data.resume.resumeHeader.title
-                  }
+                  value={resumeHeader.title}
                   onChange={handleResumeHeaderTitleChange}
                   label="Title"
                 ></TextField>
               </Grid>
             ) : (
               <Grid>
-                <Typography variant="h1">
-                  {resumeHeader.name || data.resume.resumeHeader.name}
-                </Typography>
-                <Typography variant="h3">
-                  {resumeHeader.title || data.resume.resumeHeader.title}
-                </Typography>
+                <Typography variant="h1">{resumeHeader.name}</Typography>
+                <Typography variant="h3">{resumeHeader.title}</Typography>
               </Grid>
             )}
             <Fab
