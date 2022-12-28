@@ -39,6 +39,8 @@ import {
 } from "types/resume";
 import { LogoutButton } from "components/LogoutButton";
 import { authenticationCheck } from "utils/utils";
+import useWindowDimensions from "hooks/useWindowDimensions";
+import { padding } from "@mui/system";
 
 const isAuthenticated = authenticationCheck();
 const isTestAuthenticated = !!localStorage.getItem("testToken");
@@ -389,11 +391,14 @@ export function Resume() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const { width } = useWindowDimensions();
+  const isDeviceWidth = width < 735;
+
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error : {error.message}</p>;
 
   const backgroundColor = "black";
-  console.log(resumeHeader);
+
   return (
     <ThemeProvider theme={mainTheme}>
       <Menu backgroundColor={backgroundColor} />
@@ -401,80 +406,89 @@ export function Resume() {
         padding="1rem 0rem 1rem 0rem"
         sx={{ backgroundColor: "black", position: "relative" }}
       >
-        <Grid justifyContent="space-between">
-          <Grid
-            item
-            xs={2}
-            container={true}
-            justifyContent="space-between"
-            direction="column"
-            height="100%"
-            sx={{ position: "absolute", left: "0rem", marginLeft: "2%" }}
-          >
-            <Grid item>
+        {!isDeviceWidth && (
+          <Grid justifyContent="space-between">
+            <Grid
+              item
+              xs={2}
+              container={true}
+              justifyContent="space-between"
+              direction="column"
+              height="100%"
+              sx={{ position: "absolute", left: "0rem", marginLeft: "2%" }}
+            >
+              <Grid item>
+                <img
+                  src={reactIcon}
+                  className="App-logo-left"
+                  alt="react-icon"
+                  width="80%"
+                />
+              </Grid>
+              <Grid item>
+                <img
+                  src={graphQlIcon}
+                  className="App-logo-left"
+                  alt="graphql-icon"
+                  width="80%"
+                />
+              </Grid>
+              <Grid item>
+                <img
+                  src={nodeIcon}
+                  className="App-logo-left"
+                  alt="node-icon"
+                  width="80%"
+                />
+              </Grid>
+            </Grid>
+            <Grid
+              item
+              xs={2}
+              container={true}
+              justifyContent="space-between"
+              direction="column"
+              height="100%"
+              sx={{ position: "absolute", right: "0rem", marginRight: "1%" }}
+            >
               <img
                 src={reactIcon}
-                className="App-logo-left"
+                className="App-logo-right"
                 alt="react-icon"
                 width="80%"
               />
-            </Grid>
-            <Grid item>
               <img
                 src={graphQlIcon}
-                className="App-logo-left"
+                className="App-logo-right"
                 alt="graphql-icon"
                 width="80%"
               />
-            </Grid>
-            <Grid item>
+
               <img
                 src={nodeIcon}
-                className="App-logo-left"
+                className="App-logo-right"
                 alt="node-icon"
                 width="80%"
               />
             </Grid>
           </Grid>
-          <Grid
-            item
-            xs={2}
-            container={true}
-            justifyContent="space-between"
-            direction="column"
-            height="100%"
-            sx={{ position: "absolute", right: "0rem", marginRight: "1%" }}
-          >
-            <img
-              src={reactIcon}
-              className="App-logo-right"
-              alt="react-icon"
-              width="80%"
-            />
-            <img
-              src={graphQlIcon}
-              className="App-logo-right"
-              alt="graphql-icon"
-              width="80%"
-            />
-
-            <img
-              src={nodeIcon}
-              className="App-logo-right"
-              alt="node-icon"
-              width="80%"
-            />
-          </Grid>
-        </Grid>
+        )}
         <Box
           padding="1rem"
-          sx={{ margin: "auto", width: "55%", backgroundColor: "white" }}
+          sx={{
+            margin: "auto",
+            width: isDeviceWidth ? "80%" : "55%",
+            backgroundColor: "white",
+          }}
         >
           {isAuthenticated || isTestAuthenticated ? (
             <Stack direction="row" sx={{ float: "right" }} spacing={2}>
               <Button
                 variant="contained"
-                sx={{ height: "2rem" }}
+                sx={{
+                  height: "2rem",
+                  padding: isDeviceWidth ? "0rem 0rem" : "0rem 0rem",
+                }}
                 onClick={async () => {
                   if (isTestAuthenticated) {
                     localStorage.setItem("resume", JSON.stringify(resume));
@@ -505,6 +519,7 @@ export function Resume() {
               {isTestAuthenticated && !getTestEdit() && (
                 <Button
                   variant="contained"
+                  sx={{ height: "2rem" }}
                   color="success"
                   onClick={() => {
                     localStorage.setItem("testEdit", "true");
@@ -517,7 +532,7 @@ export function Resume() {
               {isTestAuthenticated && <LogoutButton replaceUrl="/resume" />}
             </Stack>
           ) : null}
-          <Box>
+          <Grid>
             {isAuthenticated || (isTestAuthenticated && getTestEdit()) ? (
               <Grid>
                 <TextField
@@ -543,30 +558,59 @@ export function Resume() {
                 <Typography variant="h3">{resumeHeader.title}</Typography>
               </Grid>
             )}
-            <Fab
-              variant="extended"
-              href="mailto:contact.dylanbeckwith@gmail.com"
-              sx={{ margin: "1rem 1rem 0rem 0rem" }}
-            >
-              <MailOutline sx={{ mr: 1 }} />
-              <Typography variant="h6">
-                contact.dylan.beckwith@gmail.com
-              </Typography>
-            </Fab>
-            <Fab
-              variant="extended"
-              href="https://www.github.com/OTTTO"
-              sx={{ margin: "1rem 1rem 0rem 0rem" }}
-            >
-              <GitHub sx={{ mr: 1 }} />
-              <Typography variant="h6"> github.com/OTTTO </Typography>
-            </Fab>
+            <Grid container direction="column">
+              {isDeviceWidth ? (
+                <>
+                  <Button
+                    variant="contained"
+                    href="mailto:contact.dylanbeckwith@gmail.com"
+                    color="info"
+                    sx={{ margin: "1rem 0rem .5rem" }}
+                  >
+                    <Typography variant="h6">
+                      contact.dylan.beckwith@gmail.com
+                    </Typography>
+                  </Button>
+                </>
+              ) : (
+                <Fab
+                  variant="extended"
+                  href="mailto:contact.dylanbeckwith@gmail.com"
+                  sx={{ margin: "1rem 1rem 0rem 0rem" }}
+                  size="small"
+                >
+                  <MailOutline sx={{ mr: 1 }} />
+                  <Typography variant="h6">
+                    contact.dylan.beckwith@gmail.com
+                  </Typography>
+                </Fab>
+              )}
+              {isDeviceWidth ? (
+                <Button
+                  variant="contained"
+                  href="https://www.github.com/OTTTO"
+                  color="warning"
+                >
+                  <Typography variant="h6">github.com/OTTTO</Typography>
+                </Button>
+              ) : (
+                <Fab
+                  variant="extended"
+                  href="https://www.github.com/OTTTO"
+                  sx={{ margin: "1rem 1rem 0rem 0rem" }}
+                  size="small"
+                >
+                  <GitHub sx={{ mr: 1 }} />
+                  <Typography variant="h6"> github.com/OTTTO </Typography>
+                </Fab>
+              )}
+            </Grid>
 
             <Typography variant="h6"> </Typography>
-          </Box>
+          </Grid>
           <Stack direction="row">
-            <Typography variant="h4" padding="1rem">
-              TECHNICAL SKILLS
+            <Typography variant="h4" padding="1rem 0rem">
+              <b>TECHNICAL SKILLS</b>
             </Typography>
             {isAuthenticated || (isTestAuthenticated && getTestEdit()) ? (
               <IconButton onClick={handleAddSkillGroup}>
@@ -602,9 +646,7 @@ export function Resume() {
                           label="Skill Group"
                         ></TextField>
                       ) : (
-                        <Typography>
-                          <b>{skillGroup.name}</b>
-                        </Typography>
+                        <Typography>{skillGroup.name}</Typography>
                       )}
                     </AccordionSummary>
                     <AccordionDetails>
@@ -634,8 +676,8 @@ export function Resume() {
               );
             })}
           <Stack direction="row">
-            <Typography variant="h4" padding="1rem">
-              PROFESSIONAL EXPERIENCE
+            <Typography variant="h4" padding="1rem 0rem">
+              <b>PROFESSIONAL EXPERIENCE</b>
             </Typography>
             {isAuthenticated || (isTestAuthenticated && getTestEdit()) ? (
               <IconButton onClick={handleAddExperience}>
@@ -658,7 +700,10 @@ export function Resume() {
                   <AccordionSummary expandIcon={<ExpandMore />}>
                     {isAuthenticated ||
                     (isTestAuthenticated && getTestEdit()) ? (
-                      <Stack direction="row">
+                      <Stack
+                        direction={isDeviceWidth ? "column" : "row"}
+                        spacing={isDeviceWidth ? 2 : 1}
+                      >
                         <TextField
                           id="experienceRole"
                           error={experience.role.length === 0}
@@ -695,31 +740,44 @@ export function Resume() {
                           }
                           label="Time"
                         ></TextField>
-                        <IconButton
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleAddResponsibility(expIdx);
-                          }}
-                        >
-                          <AddCircle sx={{ mr: 1 }} />
-                        </IconButton>
-                        <IconButton
-                          onClick={() => handleRemoveExperience(expIdx)}
-                        >
-                          <RemoveCircle sx={{ mr: 1 }} />
-                        </IconButton>
+                        <Stack direction="row">
+                          <IconButton
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleAddResponsibility(expIdx);
+                            }}
+                          >
+                            <AddCircle sx={{ mr: 1 }} />
+                          </IconButton>
+                          <IconButton
+                            onClick={() => handleRemoveExperience(expIdx)}
+                          >
+                            <RemoveCircle sx={{ mr: 1 }} />
+                          </IconButton>
+                        </Stack>
                       </Stack>
+                    ) : isDeviceWidth ? (
+                      <Box>
+                        <Typography variant="subtitle2">
+                          <i>{experience.role}</i>
+                        </Typography>
+                        <Typography variant="subtitle2">
+                          {experience.company}
+                        </Typography>
+                        <Typography variant="subtitle2">
+                          {experience.location}
+                        </Typography>
+                        <Typography variant="subtitle2">
+                          {experience.time}
+                        </Typography>
+                      </Box>
                     ) : (
                       <Box>
                         <Typography variant="subtitle2">
-                          <b>
-                            <i>{experience.role}</i>, {experience.company}
-                          </b>
+                          <i>{experience.role}</i>, {experience.company}
                         </Typography>
                         <Typography variant="subtitle2">
-                          <b>
-                            {experience.location} : {experience.time}
-                          </b>
+                          {experience.location} : {experience.time}
                         </Typography>
                       </Box>
                     )}
@@ -788,8 +846,8 @@ export function Resume() {
               );
             })}
           <Stack direction="row">
-            <Typography variant="h4" padding="1rem">
-              EDUCATION
+            <Typography variant="h4" padding="1rem 0rem">
+              <b>EDUCATION</b>
             </Typography>
             {isAuthenticated || (isTestAuthenticated && getTestEdit()) ? (
               <IconButton onClick={handleAddEducation}>
@@ -811,7 +869,10 @@ export function Resume() {
                 (isTestAuthenticated && getTestEdit()) ? (
                 <Stack direction="column" key={education.id}>
                   {idx > 0 && <br></br>}
-                  <Stack direction="row">
+                  <Stack
+                    direction={isDeviceWidth ? "column" : "row"}
+                    spacing={isDeviceWidth ? 2 : 1}
+                  >
                     <TextField
                       id="educationInstitution"
                       error={education.institution.length === 0}
@@ -846,14 +907,25 @@ export function Resume() {
                 </Stack>
               ) : (
                 <Grid key={education.id}>
-                  <Grid container={true} justifyContent="space-between">
-                    <Typography align="left">
-                      <b>{education.institution}</b> - {education.achievement}
-                    </Typography>
-                    <Typography align="right">
-                      <b>{education.time}</b>
-                    </Typography>
-                  </Grid>
+                  {isDeviceWidth ? (
+                    <Grid container direction="column">
+                      <Typography align="left">
+                        <b>{education.institution}</b>
+                      </Typography>
+                      <Typography align="left">
+                        {education.achievement}
+                      </Typography>
+                      <Typography align="left">{education.time}</Typography>
+                    </Grid>
+                  ) : (
+                    <Grid container={true} justifyContent="space-between">
+                      <Typography align="left">
+                        {education.institution} - {education.achievement}
+                      </Typography>
+                      <Typography align="right">{education.time}</Typography>
+                    </Grid>
+                  )}
+
                   {idx + 1 < educationList.length && <Divider />}
                 </Grid>
               );
