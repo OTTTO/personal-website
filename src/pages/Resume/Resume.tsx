@@ -570,7 +570,14 @@ export function Resume() {
           </Stack>
           {structuredClone(skillGroupList || data.resume.skillGroupList)
             .sort((a, b) => a.position - b.position)
-            .map((skillGroup: ISkillGroup, idx: number) => {
+            .map((skillGroup: ISkillGroup) => {
+              let idx: number;
+              for (let i = 0; i < skillGroupList.length; i++) {
+                if (skillGroupList[i].id === skillGroup.id) {
+                  idx = i;
+                  break;
+                }
+              }
               return (
                 <Stack direction="row" key={skillGroup.id}>
                   <Accordion sx={{ width: "100%" }}>
@@ -632,124 +639,148 @@ export function Resume() {
           </Stack>
           {structuredClone(experienceList || data.resume.experienceList)
             .sort((a, b) => a.position - b.position)
-            .map((experience: IExperience, expIdx: number) => (
-              <Accordion key={experience.id}>
-                <AccordionSummary expandIcon={<ExpandMore />}>
-                  {isAuthenticated || (isTestAuthenticated && getTestEdit()) ? (
-                    <Stack direction="row">
-                      <TextField
-                        id="experienceRole"
-                        error={experience.role.length === 0}
-                        defaultValue={experience.role}
-                        onChange={(e) =>
-                          handleExperienceListChange(e, experience, expIdx)
-                        }
-                        label="Role"
-                      ></TextField>
-                      <TextField
-                        id="experienceCompany"
-                        error={experience.company.length === 0}
-                        defaultValue={experience.company}
-                        onChange={(e) =>
-                          handleExperienceListChange(e, experience, expIdx)
-                        }
-                        label="Company"
-                      ></TextField>
-                      <TextField
-                        id="experienceLocation"
-                        error={experience.location.length === 0}
-                        defaultValue={experience.location}
-                        onChange={(e) =>
-                          handleExperienceListChange(e, experience, expIdx)
-                        }
-                        label="Location"
-                      ></TextField>
-                      <TextField
-                        id="experienceTime"
-                        error={experience.time.length === 0}
-                        defaultValue={experience.time}
-                        onChange={(e) =>
-                          handleExperienceListChange(e, experience, expIdx)
-                        }
-                        label="Time"
-                      ></TextField>
-                      <IconButton
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleAddResponsibility(expIdx);
-                        }}
-                      >
-                        <AddCircle sx={{ mr: 1 }} />
-                      </IconButton>
-                      <IconButton
-                        onClick={() => handleRemoveExperience(expIdx)}
-                      >
-                        <RemoveCircle sx={{ mr: 1 }} />
-                      </IconButton>
-                    </Stack>
-                  ) : (
-                    <Box>
-                      <Typography variant="subtitle2">
-                        <b>
-                          <i>{experience.role}</i>, {experience.company}
-                        </b>
-                      </Typography>
-                      <Typography variant="subtitle2">
-                        <b>
-                          {experience.location} : {experience.time}
-                        </b>
-                      </Typography>
-                    </Box>
-                  )}
-                </AccordionSummary>
-                <AccordionDetails>
-                  {experience.responsibilities
-                    .sort((a, b) => a.position - b.position)
-                    .map((responsibility: IResponsibility, resIdx: number) => {
-                      return isAuthenticated ||
-                        (isTestAuthenticated && getTestEdit()) ? (
-                        <Stack key={responsibility.id}>
-                          {resIdx > 0 && <br></br>}
-                          <Stack direction="row">
-                            <TextField
-                              id="responsibility"
-                              error={responsibility.details.length === 0}
-                              fullWidth={true}
-                              multiline
-                              defaultValue={responsibility.details}
-                              onChange={(e) =>
-                                handleResponsibilityListChange(
-                                  e,
-                                  responsibility,
-                                  expIdx,
-                                  resIdx
-                                )
-                              }
-                              label="Responsibility"
-                            ></TextField>
-                            <IconButton
-                              onClick={() =>
-                                handleRemoveResponsibility(expIdx, resIdx)
-                              }
-                            >
-                              <RemoveCircle sx={{ mr: 1 }} />
-                            </IconButton>
-                          </Stack>
-                        </Stack>
-                      ) : (
-                        <Typography key={responsibility.id}>
-                          <li
-                            key={resIdx}
-                            dangerouslySetInnerHTML={{
-                              __html: responsibility.details,
-                            }}
-                          />
+            .map((experience: IExperience) => {
+              let expIdx: number;
+              for (let i = 0; i < experienceList.length; i++) {
+                if (experienceList[i].id === experience.id) {
+                  expIdx = i;
+                  break;
+                }
+              }
+              return (
+                <Accordion key={experience.id}>
+                  <AccordionSummary expandIcon={<ExpandMore />}>
+                    {isAuthenticated ||
+                    (isTestAuthenticated && getTestEdit()) ? (
+                      <Stack direction="row">
+                        <TextField
+                          id="experienceRole"
+                          error={experience.role.length === 0}
+                          defaultValue={experience.role}
+                          onChange={(e) =>
+                            handleExperienceListChange(e, experience, expIdx)
+                          }
+                          label="Role"
+                        ></TextField>
+                        <TextField
+                          id="experienceCompany"
+                          error={experience.company.length === 0}
+                          defaultValue={experience.company}
+                          onChange={(e) =>
+                            handleExperienceListChange(e, experience, expIdx)
+                          }
+                          label="Company"
+                        ></TextField>
+                        <TextField
+                          id="experienceLocation"
+                          error={experience.location.length === 0}
+                          defaultValue={experience.location}
+                          onChange={(e) =>
+                            handleExperienceListChange(e, experience, expIdx)
+                          }
+                          label="Location"
+                        ></TextField>
+                        <TextField
+                          id="experienceTime"
+                          error={experience.time.length === 0}
+                          defaultValue={experience.time}
+                          onChange={(e) =>
+                            handleExperienceListChange(e, experience, expIdx)
+                          }
+                          label="Time"
+                        ></TextField>
+                        <IconButton
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleAddResponsibility(expIdx);
+                          }}
+                        >
+                          <AddCircle sx={{ mr: 1 }} />
+                        </IconButton>
+                        <IconButton
+                          onClick={() => handleRemoveExperience(expIdx)}
+                        >
+                          <RemoveCircle sx={{ mr: 1 }} />
+                        </IconButton>
+                      </Stack>
+                    ) : (
+                      <Box>
+                        <Typography variant="subtitle2">
+                          <b>
+                            <i>{experience.role}</i>, {experience.company}
+                          </b>
                         </Typography>
-                      );
-                    })}
-                </AccordionDetails>
-              </Accordion>
-            ))}
+                        <Typography variant="subtitle2">
+                          <b>
+                            {experience.location} : {experience.time}
+                          </b>
+                        </Typography>
+                      </Box>
+                    )}
+                  </AccordionSummary>
+                  <AccordionDetails>
+                    {experience.responsibilities
+                      .sort((a, b) => a.position - b.position)
+                      .map((responsibility: IResponsibility) => {
+                        let resIdx: number;
+                        for (
+                          let i = 0;
+                          i < experienceList[expIdx].responsibilities.length;
+                          i++
+                        ) {
+                          if (
+                            experienceList[expIdx].responsibilities[i].id ===
+                            responsibility.id
+                          ) {
+                            resIdx = i;
+                            break;
+                          }
+                        }
+                        return isAuthenticated ||
+                          (isTestAuthenticated && getTestEdit()) ? (
+                          <Stack key={responsibility.id}>
+                            {resIdx > 0 && <br></br>}
+                            <Stack direction="row">
+                              <TextField
+                                id="responsibility"
+                                error={responsibility.details.length === 0}
+                                fullWidth={true}
+                                multiline
+                                defaultValue={responsibility.details}
+                                onChange={(e) =>
+                                  handleResponsibilityListChange(
+                                    e,
+                                    responsibility,
+                                    expIdx,
+                                    resIdx
+                                  )
+                                }
+                                label="Responsibility"
+                              ></TextField>
+                              <IconButton
+                                onClick={() =>
+                                  handleRemoveResponsibility(expIdx, resIdx)
+                                }
+                              >
+                                <RemoveCircle sx={{ mr: 1 }} />
+                              </IconButton>
+                            </Stack>
+                          </Stack>
+                        ) : (
+                          <Typography key={responsibility.id}>
+                            <li
+                              key={resIdx}
+                              dangerouslySetInnerHTML={{
+                                __html: responsibility.details,
+                              }}
+                            />
+                          </Typography>
+                        );
+                      })}
+                  </AccordionDetails>
+                </Accordion>
+              );
+            })}
           <Stack direction="row">
             <Typography variant="h4" padding="1rem">
               EDUCATION
@@ -762,7 +793,14 @@ export function Resume() {
           </Stack>
           {structuredClone(educationList || data.resume.educationList)
             .sort((a, b) => a.position - b.position)
-            .map((education: IEducation, idx: number) => {
+            .map((education: IEducation) => {
+              let idx: number;
+              for (let i = 0; i < educationList.length; i++) {
+                if (educationList[i].id === education.id) {
+                  idx = i;
+                  break;
+                }
+              }
               return isAuthenticated ||
                 (isTestAuthenticated && getTestEdit()) ? (
                 <Stack direction="column" key={education.id}>
