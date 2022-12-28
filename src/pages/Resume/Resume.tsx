@@ -513,7 +513,10 @@ export function Resume() {
                     resumeHeader.name || data.resume.resumeHeader.name
                   }
                   onChange={handleResumeHeaderNameChange}
+                  label="Name"
                 ></TextField>
+                <br></br>
+                <br></br>
                 <TextField
                   error={resumeHeader.title.length === 0}
                   fullWidth={true}
@@ -521,6 +524,7 @@ export function Resume() {
                     resumeHeader.title || data.resume.resumeHeader.title
                   }
                   onChange={handleResumeHeaderTitleChange}
+                  label="Title"
                 ></TextField>
               </Grid>
             ) : (
@@ -582,6 +586,7 @@ export function Resume() {
                           onChange={(e) =>
                             handleSkillGroupListChange(e, skillGroup, idx)
                           }
+                          label="Skill Group"
                         ></TextField>
                       ) : (
                         <Typography>
@@ -600,6 +605,7 @@ export function Resume() {
                           onChange={(e) =>
                             handleSkillGroupListChange(e, skillGroup, idx)
                           }
+                          label="Skills"
                         ></TextField>
                       ) : (
                         <Typography>{skillGroup.skills}</Typography>
@@ -638,6 +644,7 @@ export function Resume() {
                         onChange={(e) =>
                           handleExperienceListChange(e, experience, expIdx)
                         }
+                        label="Role"
                       ></TextField>
                       <TextField
                         id="experienceCompany"
@@ -646,6 +653,7 @@ export function Resume() {
                         onChange={(e) =>
                           handleExperienceListChange(e, experience, expIdx)
                         }
+                        label="Company"
                       ></TextField>
                       <TextField
                         id="experienceLocation"
@@ -654,6 +662,7 @@ export function Resume() {
                         onChange={(e) =>
                           handleExperienceListChange(e, experience, expIdx)
                         }
+                        label="Location"
                       ></TextField>
                       <TextField
                         id="experienceTime"
@@ -662,6 +671,7 @@ export function Resume() {
                         onChange={(e) =>
                           handleExperienceListChange(e, experience, expIdx)
                         }
+                        label="Time"
                       ></TextField>
                       <IconButton
                         onClick={(e) => {
@@ -699,6 +709,7 @@ export function Resume() {
                       return isAuthenticated ||
                         (isTestAuthenticated && getTestEdit()) ? (
                         <Stack key={responsibility.id}>
+                          {resIdx > 0 && <br></br>}
                           <Stack direction="row">
                             <TextField
                               id="responsibility"
@@ -714,6 +725,7 @@ export function Resume() {
                                   resIdx
                                 )
                               }
+                              label="Responsibility"
                             ></TextField>
                             <IconButton
                               onClick={() =>
@@ -753,34 +765,40 @@ export function Resume() {
             .map((education: IEducation, idx: number) => {
               return isAuthenticated ||
                 (isTestAuthenticated && getTestEdit()) ? (
-                <Stack direction="row" key={education.id}>
-                  <TextField
-                    id="educationInstitution"
-                    error={education.institution.length === 0}
-                    defaultValue={education.institution}
-                    onChange={(e) =>
-                      handleEducationListChange(e, education, idx)
-                    }
-                  ></TextField>
-                  <TextField
-                    id="educationAchievement"
-                    error={education.achievement.length === 0}
-                    defaultValue={education.achievement}
-                    onChange={(e) =>
-                      handleEducationListChange(e, education, idx)
-                    }
-                  ></TextField>
-                  <TextField
-                    id="educationTime"
-                    error={education.time.length === 0}
-                    defaultValue={education.time}
-                    onChange={(e) =>
-                      handleEducationListChange(e, education, idx)
-                    }
-                  ></TextField>
-                  <IconButton onClick={() => handleRemoveEducation(idx)}>
-                    <RemoveCircle sx={{ mr: 1 }} />
-                  </IconButton>
+                <Stack direction="column" key={education.id}>
+                  {idx > 0 && <br></br>}
+                  <Stack direction="row">
+                    <TextField
+                      id="educationInstitution"
+                      error={education.institution.length === 0}
+                      defaultValue={education.institution}
+                      onChange={(e) =>
+                        handleEducationListChange(e, education, idx)
+                      }
+                      label="Institution"
+                    ></TextField>
+                    <TextField
+                      id="educationAchievement"
+                      error={education.achievement.length === 0}
+                      defaultValue={education.achievement}
+                      onChange={(e) =>
+                        handleEducationListChange(e, education, idx)
+                      }
+                      label="Achievement"
+                    ></TextField>
+                    <TextField
+                      id="educationTime"
+                      error={education.time.length === 0}
+                      defaultValue={education.time}
+                      onChange={(e) =>
+                        handleEducationListChange(e, education, idx)
+                      }
+                      label="Time"
+                    ></TextField>
+                    <IconButton onClick={() => handleRemoveEducation(idx)}>
+                      <RemoveCircle sx={{ mr: 1 }} />
+                    </IconButton>
+                  </Stack>
                 </Stack>
               ) : (
                 <Grid key={education.id}>
