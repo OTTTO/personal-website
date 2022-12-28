@@ -19,7 +19,7 @@ import { authenticationCheck } from "utils/utils";
 
 export function Home() {
   const { width } = useWindowDimensions();
-  const introWidth = 950;
+  const introWidth = 735;
 
   const [intro, setIntro] = React.useState("");
   const [websiteInfo, setWebsiteInfo] = React.useState("");
@@ -113,21 +113,13 @@ export function Home() {
               </>
             )}
           </Grid>
-          <br></br>
-          {width < introWidth && (
-            <Grid>
-              <img src={angel} alt="Angel's Landing" className="angelImg"></img>
-            </Grid>
-          )}
-          <Grid sx={{ padding: "2rem 0rem 0rem 1rem" }}>
-            {width > introWidth && (
-              <img src={angel} alt="Angel's Landing" className="angelImg"></img>
-            )}
+          <Grid container justifyContent="center" sx={{ paddingTop: "2rem" }}>
+            <img src={angel} alt="Angel's Landing" className="angelImg"></img>
             <Grid
               container
               direction="column"
-              width={width > introWidth ? "90%" : "90%"}
-              padding="0rem 1rem 0rem 1rem"
+              width={width > introWidth ? "90%" : "95%"}
+              padding="1rem 2rem 0rem 2rem"
             >
               {!isAuthenticated ? (
                 <Typography variant="h4" color="white" textAlign="left">
@@ -147,7 +139,7 @@ export function Home() {
                   onChange={(e) => handleTextChange(e, intro, setIntro)}
                 ></TextField>
               )}
-              <br></br>
+
               <br></br>
               {!isAuthenticated ? (
                 <Typography variant="h4" color="white" textAlign="left">
