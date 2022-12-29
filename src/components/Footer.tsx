@@ -10,7 +10,7 @@ export function Footer({ backgroundColor }) {
     >
       <Grid item>
         <Typography
-          color="white"
+          color={backgroundColor === "white" ? "black" : "white"}
           padding="1rem 1rem 0rem 0rem"
           textAlign="right"
         >

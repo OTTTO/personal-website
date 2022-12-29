@@ -16,6 +16,7 @@ import { useEffect } from "react";
 import React from "react";
 import { v4 as uuid } from "uuid";
 import { authenticationCheck } from "utils/utils";
+import { ErrorPage } from "pages/Error/Error";
 
 export function Home() {
   const { width } = useWindowDimensions();
@@ -56,7 +57,7 @@ export function Home() {
   }, [loading, data]);
 
   if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error : {error.message}</p>;
+  if (error) return <ErrorPage />;
 
   const backgroundColor = "black";
 

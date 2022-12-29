@@ -41,6 +41,7 @@ import { LogoutButton } from "components/LogoutButton";
 import { authenticationCheck } from "utils/utils";
 import useWindowDimensions from "hooks/useWindowDimensions";
 import * as DOMPurify from "dompurify";
+import { ErrorPage } from "pages/Error/Error";
 
 const isAuthenticated = authenticationCheck();
 const isTestAuthenticated = !!localStorage.getItem("testToken");
@@ -395,7 +396,7 @@ export function Resume() {
   const isDeviceWidth = width < 735;
 
   if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error : {error.message}</p>;
+  if (error) return <ErrorPage />;
 
   const backgroundColor = "black";
 
