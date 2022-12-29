@@ -14,15 +14,8 @@ import { Menu } from "components/Menu";
 import { ADMIN_LOGIN } from "queries/adminLogin";
 import React from "react";
 import mainTheme from "themes/mainTheme";
-
-interface LoginForm {
-  email: string;
-  password: string;
-}
-
-interface State extends LoginForm {
-  showPassword: boolean;
-}
+import { State } from "types/adminLogin";
+import { testResume } from "types/resume";
 
 function AdminLogin() {
   const [values, setValues] = React.useState<State>({
@@ -135,13 +128,7 @@ function AdminLogin() {
               localStorage.removeItem("token");
               localStorage.setItem("testToken", "TEST");
               if (!localStorage.getItem("resume")) {
-                const resume = {
-                  resumeHeader: { id: "", name: "", title: "" },
-                  skillGroups: [],
-                  experience: [],
-                  education: [],
-                };
-                localStorage.setItem("resume", JSON.stringify(resume));
+                localStorage.setItem("resume", JSON.stringify(testResume));
               }
               localStorage.setItem("testEdit", "true");
               window.location.replace("/resume");

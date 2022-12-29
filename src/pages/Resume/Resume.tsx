@@ -541,9 +541,8 @@ export function Resume() {
                   value={resumeHeader.name}
                   onChange={handleResumeHeaderNameChange}
                   label="Name"
+                  sx={{ margin: "1rem 0rem" }}
                 ></TextField>
-                <br></br>
-                <br></br>
                 <TextField
                   error={resumeHeader.title.length === 0}
                   fullWidth={true}
@@ -759,7 +758,9 @@ export function Resume() {
                     ) : isDeviceWidth ? (
                       <Box>
                         <Typography variant="subtitle2">
-                          <i>{experience.role}</i>
+                          <b>
+                            <i>{experience.role}</i>
+                          </b>
                         </Typography>
                         <Typography variant="subtitle2">
                           {experience.company}
@@ -783,28 +784,27 @@ export function Resume() {
                     )}
                   </AccordionSummary>
                   <AccordionDetails>
-                    {experience.responsibilities
-                      .sort((a, b) => a.position - b.position)
-                      .map((responsibility: IResponsibility) => {
-                        let resIdx: number;
-                        for (
-                          let i = 0;
-                          i < experienceList[expIdx].responsibilities.length;
-                          i++
-                        ) {
-                          if (
-                            experienceList[expIdx].responsibilities[i].id ===
-                            responsibility.id
+                    <Stack direction="column" spacing={2}>
+                      {experience.responsibilities
+                        .sort((a, b) => a.position - b.position)
+                        .map((responsibility: IResponsibility, idx: number) => {
+                          let resIdx: number;
+                          for (
+                            let i = 0;
+                            i < experienceList[expIdx].responsibilities.length;
+                            i++
                           ) {
-                            resIdx = i;
-                            break;
+                            if (
+                              experienceList[expIdx].responsibilities[i].id ===
+                              responsibility.id
+                            ) {
+                              resIdx = i;
+                              break;
+                            }
                           }
-                        }
-                        return isAuthenticated ||
-                          (isTestAuthenticated && getTestEdit()) ? (
-                          <Stack key={responsibility.id}>
-                            {resIdx > 0 && <br></br>}
-                            <Stack direction="row">
+                          return isAuthenticated ||
+                            (isTestAuthenticated && getTestEdit()) ? (
+                            <Stack direction="row" key={responsibility.id}>
                               <TextField
                                 id="responsibility"
                                 error={responsibility.details.length === 0}
@@ -829,20 +829,20 @@ export function Resume() {
                                 <RemoveCircle sx={{ mr: 1 }} />
                               </IconButton>
                             </Stack>
-                          </Stack>
-                        ) : (
-                          <Typography key={responsibility.id}>
-                            <li
-                              key={resIdx}
-                              dangerouslySetInnerHTML={{
-                                __html: DOMPurify.sanitize(
-                                  responsibility.details
-                                ),
-                              }}
-                            />
-                          </Typography>
-                        );
-                      })}
+                          ) : (
+                            <Typography key={responsibility.id}>
+                              <li
+                                key={resIdx}
+                                dangerouslySetInnerHTML={{
+                                  __html: DOMPurify.sanitize(
+                                    responsibility.details
+                                  ),
+                                }}
+                              />
+                            </Typography>
+                          );
+                        })}
+                    </Stack>
                   </AccordionDetails>
                 </Accordion>
               );
@@ -870,7 +870,6 @@ export function Resume() {
               return isAuthenticated ||
                 (isTestAuthenticated && getTestEdit()) ? (
                 <Stack direction="column" key={education.id}>
-                  {idx > 0 && <br></br>}
                   <Stack
                     direction={isDeviceWidth ? "column" : "row"}
                     spacing={isDeviceWidth ? 2 : 1}
