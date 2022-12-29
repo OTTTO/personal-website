@@ -40,7 +40,7 @@ import {
 import { LogoutButton } from "components/LogoutButton";
 import { authenticationCheck } from "utils/utils";
 import useWindowDimensions from "hooks/useWindowDimensions";
-import { padding } from "@mui/system";
+import * as DOMPurify from "dompurify";
 
 const isAuthenticated = authenticationCheck();
 const isTestAuthenticated = !!localStorage.getItem("testToken");
@@ -835,7 +835,9 @@ export function Resume() {
                             <li
                               key={resIdx}
                               dangerouslySetInnerHTML={{
-                                __html: responsibility.details,
+                                __html: DOMPurify.sanitize(
+                                  responsibility.details
+                                ),
                               }}
                             />
                           </Typography>
