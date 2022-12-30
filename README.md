@@ -1,6 +1,6 @@
 # personal-website
 
-My personal website to display my resume and portfolio
+My personal website built in React to display my resume and portfolio
 
 ## Getting Started
 
@@ -27,6 +27,12 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
 The page will reload if you make edits.
 You will also see any lint errors in the console.
+
+### Setting up the backend
+
+Before setting up the backend you can expect to see an error page on website pages that rely on data from the backend for rendering.
+
+To set up the backend please follow the documentation [here](https://github.com/OTTTO/personal-website-backend).
 
 ### Logging in
 
