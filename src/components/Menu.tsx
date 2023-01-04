@@ -20,6 +20,7 @@ const isAuthenticated = authenticationCheck();
 export function Menu({ backgroundColor }) {
   const { width } = useWindowDimensions();
   const smallerSize = 550;
+  const isLarger = width > smallerSize;
   return (
     <Grid
       sx={{
@@ -39,24 +40,28 @@ export function Menu({ backgroundColor }) {
             variant="extended"
             href="/"
             sx={{ margin: "1rem 0.5rem 0rem 0rem" }}
-            size={width > smallerSize ? "large" : "small"}
+            size={isLarger ? "large" : "small"}
           >
-            <HomeOutlined
-              sx={{ mr: 1 }}
-              fontSize={width > smallerSize ? "large" : "small"}
-            />
+            {isLarger ? (
+              <HomeOutlined
+                sx={{ mr: 1 }}
+                fontSize={isLarger ? "large" : "small"}
+              />
+            ) : null}
             <Typography variant="h6">HOME</Typography>
           </Fab>
           <Fab
             variant="extended"
             href="/resume"
             sx={{ margin: "1rem 0.5rem 0rem 0rem" }}
-            size={width > smallerSize ? "large" : "small"}
+            size={isLarger ? "large" : "small"}
           >
-            <ArticleOutlined
-              sx={{ mr: 1 }}
-              fontSize={width > smallerSize ? "large" : "small"}
-            />
+            {isLarger ? (
+              <ArticleOutlined
+                sx={{ mr: 1 }}
+                fontSize={isLarger ? "large" : "small"}
+              />
+            ) : null}
             <Typography variant="h6">RESUME</Typography>
           </Fab>
           <PopupState variant="popover" popupId="projects-popup">
@@ -65,13 +70,15 @@ export function Menu({ backgroundColor }) {
                 <Fab
                   variant="extended"
                   sx={{ margin: "1rem 0.5rem 0rem 0rem" }}
-                  size={width > smallerSize ? "large" : "small"}
+                  size={isLarger ? "large" : "small"}
                   {...bindTrigger(popupState)}
                 >
-                  <CrisisAlertOutlined
-                    sx={{ mr: 1 }}
-                    fontSize={width > smallerSize ? "large" : "small"}
-                  />
+                  {isLarger ? (
+                    <CrisisAlertOutlined
+                      sx={{ mr: 1 }}
+                      fontSize={isLarger ? "large" : "small"}
+                    />
+                  ) : null}
                   <Typography variant="h6">PROJECTS</Typography>
                 </Fab>
                 <MuiMenu {...bindMenu(popupState)}>
@@ -103,14 +110,16 @@ export function Menu({ backgroundColor }) {
                 <Fab
                   variant="extended"
                   sx={{ margin: "1rem 1rem 0rem 0rem" }}
-                  size={width > smallerSize ? "large" : "small"}
+                  size={isLarger ? "large" : "small"}
                   color={!isAuthenticated ? "info" : "warning"}
                   {...bindTrigger(popupState)}
                 >
-                  <AdminPanelSettingsOutlined
-                    sx={{ mr: 1 }}
-                    fontSize={width > smallerSize ? "large" : "small"}
-                  />
+                  {isLarger ? (
+                    <AdminPanelSettingsOutlined
+                      sx={{ mr: 1 }}
+                      fontSize={isLarger ? "large" : "small"}
+                    />
+                  ) : null}
                   <Typography variant="h6">ADMIN</Typography>
                 </Fab>
                 <MuiMenu {...bindMenu(popupState)}>

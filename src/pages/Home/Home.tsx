@@ -60,8 +60,6 @@ export function Home() {
   if (error) return <ErrorPage />;
 
   const backgroundColor = "black";
-
-  // const isAuthenticated = localStorage.getItem("token");
   const isAuthenticated = authenticationCheck();
 
   const home = {
