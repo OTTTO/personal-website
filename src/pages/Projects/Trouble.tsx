@@ -876,7 +876,7 @@ export function Trouble() {
         <Grid
           container
           justifyContent="center"
-          width={width > smallerDeviceWidth ? "37rem" : "26em"}
+          width={width > smallerDeviceWidth ? "37rem" : "24rem"}
           direction="column"
           sx={{
             backgroundColor: "black",
@@ -1006,7 +1006,6 @@ export function Trouble() {
             {/* TOP ROW FOR COLUMNS*/}
             <Grid
               container
-              item
               width={width > smallerDeviceWidth ? "60%" : "55%"}
               justifyContent="space-between"
             >
@@ -1022,7 +1021,11 @@ export function Trouble() {
                 width={width > smallerDeviceWidth ? "8.5rem" : "6.5rem"}
                 justifyContent="space-between"
               >
-                <Grid container width="4.5rem" justifyContent="flex-end">
+                <Grid
+                  container
+                  width={width > smallerDeviceWidth ? "4.5rem" : "2rem"}
+                  justifyContent="flex-end"
+                >
                   <Grid item>{spaceJSX(home[3][0], 3, 0)}</Grid>
                 </Grid>
                 <Grid item>{spaceJSX(track[24], 3, 0)}</Grid>
@@ -1034,7 +1037,11 @@ export function Trouble() {
                 justifyContent="space-between"
               >
                 {spaceJSX(track[8], 1, 0)}
-                <Grid container width="4.5rem" justifyContent="flex-start">
+                <Grid
+                  container
+                  width={width > smallerDeviceWidth ? "4.5rem" : "2rem"}
+                  justifyContent="flex-start"
+                >
                   <Grid item>{spaceJSX(home[1][0], 1, 0)}</Grid>
                 </Grid>
               </Grid>
@@ -1045,12 +1052,12 @@ export function Trouble() {
               container
               justifyContent="space-between"
               alignItems="center"
-              width={width > smallerDeviceWidth ? "36rem" : "26rem"}
+              width={width > smallerDeviceWidth ? "36rem" : "24rem"}
             >
               <Grid
                 container
                 item
-                width={width > smallerDeviceWidth ? "17rem" : "12rem"}
+                width={width > smallerDeviceWidth ? "17rem" : "11rem"}
                 justifyContent="flex-end"
               >
                 {spaceJSX(home[3][1], 3, 0)}
@@ -1064,7 +1071,7 @@ export function Trouble() {
               <Grid
                 container
                 item
-                width={width > smallerDeviceWidth ? "17rem" : "12rem"}
+                width={width > smallerDeviceWidth ? "17rem" : "11rem"}
                 justifyContent="flex-start"
               >
                 {new Array(4)
@@ -1084,7 +1091,11 @@ export function Trouble() {
                 width={width > smallerDeviceWidth ? "8.5rem" : "6.5rem"}
                 justifyContent="space-between"
               >
-                <Grid container width="4.5rem" justifyContent="flex-end">
+                <Grid
+                  container
+                  width={width > smallerDeviceWidth ? "4.5rem" : "2rem"}
+                  justifyContent="flex-end"
+                >
                   {spaceJSX(home[3][2], 3, 0)}
                 </Grid>
                 {spaceJSX(track[22], 3, 0)}
@@ -1097,7 +1108,11 @@ export function Trouble() {
               >
                 {spaceJSX(track[10], 1, 0)}
 
-                <Grid container width="4.5rem" justifyContent="flex-start">
+                <Grid
+                  container
+                  width={width > smallerDeviceWidth ? "4.5rem" : "2rem"}
+                  justifyContent="flex-start"
+                >
                   {spaceJSX(home[1][2], 1, 0)}
                 </Grid>
               </Grid>
@@ -1155,7 +1170,7 @@ export function Trouble() {
           <Grid container justifyContent="space-between" padding="0rem 1rem">
             <Grid width="30%"></Grid>
             {/* HOME 2 */}
-            <Grid container direction="column" sx={{ width: "20%" }}>
+            <Grid container direction="column" sx={{ width: "30%" }}>
               <Grid container justifyContent="center">
                 {spaceJSX(home[2][3], 2, 0)}
               </Grid>
