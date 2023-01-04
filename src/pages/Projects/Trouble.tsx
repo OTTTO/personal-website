@@ -968,7 +968,7 @@ export function Trouble() {
           <Grid
             container
             justifyContent="center"
-            spacing={width > smallerDeviceWidth ? 2 : 0}
+            spacing={width > smallerDeviceWidth ? 2 : 1}
           >
             {[0, 1, 2, 3, 4].map((space, idx) =>
               spaceJSX(track[space], 0, idx)
@@ -979,7 +979,7 @@ export function Trouble() {
           <Grid container justifyContent="center">
             <Grid
               container
-              width={width > smallerDeviceWidth ? "50%" : "35%"}
+              width={width > smallerDeviceWidth ? "50%" : "50%"}
               justifyContent="space-between"
             >
               {spaceJSX(track[27], 0, 0)}
@@ -990,7 +990,7 @@ export function Trouble() {
           <Grid container justifyContent="center">
             <Grid
               container
-              width={width > smallerDeviceWidth ? "55%" : "45%"}
+              width={width > smallerDeviceWidth ? "55%" : "55%"}
               justifyContent="space-between"
             >
               {spaceJSX(track[26], 3, 0)}
@@ -1010,7 +1010,7 @@ export function Trouble() {
             {/* TOP ROW FOR COLUMNS*/}
             <Grid
               container
-              width={width > smallerDeviceWidth ? "60%" : "55%"}
+              width={width > smallerDeviceWidth ? "60%" : "60%"}
               justifyContent="space-between"
             >
               {spaceJSX(track[25], 3, 0)}
@@ -1022,7 +1022,7 @@ export function Trouble() {
             <Grid container justifyContent="space-between">
               <Grid
                 container
-                width={width > smallerDeviceWidth ? "8.5rem" : "6.5rem"}
+                width={width > smallerDeviceWidth ? "8.5rem" : "5.5rem"}
                 justifyContent="space-between"
               >
                 <Grid
@@ -1037,7 +1037,7 @@ export function Trouble() {
               <Grid item>{spaceJSX(finish[0][3], 0, 0)}</Grid>
               <Grid
                 container
-                width={width > smallerDeviceWidth ? "8.5rem" : "6.5rem"}
+                width={width > smallerDeviceWidth ? "8.5rem" : "5.5rem"}
                 justifyContent="space-between"
               >
                 {spaceJSX(track[8], 1, 0)}
@@ -1092,7 +1092,7 @@ export function Trouble() {
             <Grid container justifyContent="space-between">
               <Grid
                 container
-                width={width > smallerDeviceWidth ? "8.5rem" : "6.5rem"}
+                width={width > smallerDeviceWidth ? "8.5rem" : "5.5rem"}
                 justifyContent="space-between"
               >
                 <Grid
@@ -1107,7 +1107,7 @@ export function Trouble() {
               {spaceJSX(finish[2][3], 2, 0)}
               <Grid
                 container
-                width={width > smallerDeviceWidth ? "8.5rem" : "6.5rem"}
+                width={width > smallerDeviceWidth ? "8.5rem" : "5.5rem"}
                 justifyContent="space-between"
               >
                 {spaceJSX(track[10], 1, 0)}
@@ -1126,7 +1126,7 @@ export function Trouble() {
             <Grid
               container
               item
-              width={width > smallerDeviceWidth ? "60%" : "55%"}
+              width={width > smallerDeviceWidth ? "60%" : "60%"}
               justifyContent="space-between"
             >
               {spaceJSX(track[21], 3, 0)}
@@ -1140,7 +1140,7 @@ export function Trouble() {
           <Grid container justifyContent="center">
             <Grid
               container
-              width={width > smallerDeviceWidth ? "55%" : "45%"}
+              width={width > smallerDeviceWidth ? "55%" : "55%"}
               justifyContent="space-between"
             >
               {spaceJSX(track[20], 3, 0)}
@@ -1151,7 +1151,7 @@ export function Trouble() {
           <Grid container justifyContent="center">
             <Grid
               container
-              width={width > smallerDeviceWidth ? "50%" : "35%"}
+              width={width > smallerDeviceWidth ? "50%" : "50%"}
               justifyContent="space-between"
             >
               {spaceJSX(track[19], 2, 0)}
@@ -1164,7 +1164,7 @@ export function Trouble() {
           <Grid
             container
             justifyContent="center"
-            spacing={width > smallerDeviceWidth ? 2 : 0}
+            spacing={width > smallerDeviceWidth ? 2 : 1}
           >
             {[18, 17, 16, 15, 14].map((space, idx) =>
               spaceJSX(track[space], 2, idx)
