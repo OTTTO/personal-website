@@ -1,5 +1,9 @@
 import {
   Button,
+  Dialog,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
   Grid,
   IconButton,
   Modal,
@@ -1298,18 +1302,19 @@ export function Trouble() {
       </Modal>
 
       {/* INSTRUCTIONS MODAL */}
-      <Modal
+      <Dialog
         open={openInstructions}
         onClose={handleCloseInstructions}
+        scroll="paper"
+        fullWidth
+        maxWidth="sm"
         sx={{
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          marginTop: "-8rem",
         }}
       >
         <Grid
-          width="70%"
           sx={{
             margin: "auto",
             backgroundColor: "white",
@@ -1321,26 +1326,34 @@ export function Trouble() {
           <IconButton onClick={handleCloseInstructions} sx={{ float: "left" }}>
             <Close sx={{ color: "red" }}></Close>
           </IconButton>
-          <Typography
-            variant="h4"
-            component="h2"
-            textAlign="center"
-            paddingTop="1rem"
-            fontWeight="bold"
-          >
-            INSTRUCTIONS
-          </Typography>
-          <hr></hr>
-          {instructions.split("\n").map((instruction, idx) => (
-            <Grid key={idx}>
-              <Typography variant={"h5"} textAlign="center">
-                {instruction}
-              </Typography>
-              {idx !== instructions.split("\n").length - 1 && <hr></hr>}
-            </Grid>
-          ))}
+          <DialogTitle>
+            <Typography
+              variant="h4"
+              component="h2"
+              textAlign="center"
+              paddingTop="1rem"
+              fontWeight="bold"
+            >
+              INSTRUCTIONS
+            </Typography>
+          </DialogTitle>
+          <DialogContent dividers>
+            <DialogContentText>
+              {instructions.split("\n").map((instruction, idx) => (
+                <Grid key={idx}>
+                  <Typography
+                    variant={width > smallerDeviceWidth ? "h5" : "h6"}
+                    textAlign="center"
+                  >
+                    {instruction}
+                  </Typography>
+                  {idx !== instructions.split("\n").length - 1 && <hr></hr>}
+                </Grid>
+              ))}
+            </DialogContentText>
+          </DialogContent>
         </Grid>
-      </Modal>
+      </Dialog>
     </Grid>
   );
 }
