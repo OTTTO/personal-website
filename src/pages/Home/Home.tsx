@@ -1,5 +1,6 @@
 import {
   Button,
+  Divider,
   Grid,
   TextField,
   ThemeProvider,
@@ -121,9 +122,19 @@ export function Home() {
               padding="1rem 2rem 0rem 2rem"
             >
               {!isAuthenticated ? (
-                <Typography variant="h4" color="white" textAlign="left">
-                  {intro}
-                </Typography>
+                intro.split("\n").map((line, idx) => (
+                  <>
+                    {idx !== 0 && <br></br>}
+                    <Typography
+                      variant="h4"
+                      color="white"
+                      textAlign="left"
+                      key={idx}
+                    >
+                      {line}
+                    </Typography>
+                  </>
+                ))
               ) : (
                 <TextField
                   error={intro.length === 0}
@@ -140,10 +151,22 @@ export function Home() {
               )}
 
               <br></br>
+              <Divider sx={{ backgroundColor: "grey", borderBottomWidth: 2 }} />
+              <br></br>
               {!isAuthenticated ? (
-                <Typography variant="h4" color="white" textAlign="left">
-                  {websiteInfo}
-                </Typography>
+                websiteInfo.split("\n").map((line, idx) => (
+                  <>
+                    {idx !== 0 && <br></br>}
+                    <Typography
+                      variant="h4"
+                      color="white"
+                      textAlign="left"
+                      key={idx}
+                    >
+                      {line}
+                    </Typography>
+                  </>
+                ))
               ) : (
                 <TextField
                   error={websiteInfo.length === 0}

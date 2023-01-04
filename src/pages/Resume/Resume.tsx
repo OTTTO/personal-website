@@ -782,7 +782,9 @@ export function Resume() {
                       ) : (
                         <Box>
                           <Typography variant="subtitle2">
-                            <i>{experience.role}</i>, {experience.company}
+                            <b>
+                              <i>{experience.role}</i>, {experience.company}
+                            </b>
                           </Typography>
                           <Typography variant="subtitle2">
                             {experience.location} : {experience.time}
