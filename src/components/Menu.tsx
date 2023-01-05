@@ -64,36 +64,20 @@ export function Menu({ backgroundColor }) {
             ) : null}
             <Typography variant="h6">RESUME</Typography>
           </Fab>
-          <PopupState variant="popover" popupId="projects-popup">
-            {(popupState) => (
-              <>
-                <Fab
-                  variant="extended"
-                  sx={{ margin: "1rem 0.5rem 0rem 0rem" }}
-                  size={isLarger ? "large" : "small"}
-                  {...bindTrigger(popupState)}
-                >
-                  {isLarger ? (
-                    <CrisisAlertOutlined
-                      sx={{ mr: 1 }}
-                      fontSize={isLarger ? "large" : "small"}
-                    />
-                  ) : null}
-                  <Typography variant="h6">PROJECTS</Typography>
-                </Fab>
-                <MuiMenu {...bindMenu(popupState)}>
-                  <MenuItem
-                    onClick={() => {
-                      popupState.close();
-                      window.location.replace("/trouble");
-                    }}
-                  >
-                    <Typography variant="h6">TROUBLE</Typography>
-                  </MenuItem>
-                </MuiMenu>
-              </>
-            )}
-          </PopupState>
+          <Fab
+            variant="extended"
+            href="/projects"
+            sx={{ margin: "1rem 0.5rem 0rem 0rem" }}
+            size={isLarger ? "large" : "small"}
+          >
+            {isLarger ? (
+              <CrisisAlertOutlined
+                sx={{ mr: 1 }}
+                fontSize={isLarger ? "large" : "small"}
+              />
+            ) : null}
+            <Typography variant="h6">PROJECTS</Typography>
+          </Fab>
         </Grid>
         <Grid
           container
