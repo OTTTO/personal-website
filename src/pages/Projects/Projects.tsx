@@ -73,13 +73,27 @@ export function Projects() {
                 This board game was developed in 2020 for an Object Oriented
                 Programming course while studying computer science. It was
                 orignally written in{" "}
-                <a href="https://github.com/OTTTO/GameOfTrouble">Java</a> and
-                was a{" "}
-                <a href="https://replit.com/@DylanBeckwith/Trouble#Main.java">
+                <a
+                  href="https://github.com/OTTTO/GameOfTrouble"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  Java{" "}
+                </a>{" "}
+                and was a{" "}
+                <a
+                  href="https://replit.com/@DylanBeckwith/Trouble#Main.java"
+                  target="_blank"
+                  rel="noreferrer"
+                >
                   terminal game
                 </a>{" "}
                 <b>(just click ▷Run)</b>. At the end of 2022 it was ported to{" "}
-                <a href="https://github.com/OTTTO/personal-website/blob/main/src/pages/Projects/Trouble.tsx">
+                <a
+                  href="https://github.com/OTTTO/personal-website/blob/main/src/pages/Projects/Trouble.tsx"
+                  target="_blank"
+                  rel="noreferrer"
+                >
                   React
                 </a>{" "}
                 to allow users to play in the browser.{" "}

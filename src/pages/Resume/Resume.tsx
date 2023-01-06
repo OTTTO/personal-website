@@ -562,6 +562,8 @@ export function Resume() {
                     <Button
                       variant="contained"
                       href="mailto:contact.dylanbeckwith@gmail.com"
+                      target="_blank"
+                      rel="noreferrer"
                       color="info"
                       sx={{ margin: "1rem 0rem .5rem" }}
                     >
@@ -574,6 +576,8 @@ export function Resume() {
                   <Fab
                     variant="extended"
                     href="mailto:contact.dylanbeckwith@gmail.com"
+                    target="_blank"
+                    rel="noreferrer"
                     sx={{ margin: "1rem 1rem 0rem 0rem" }}
                     size="small"
                   >
@@ -587,6 +591,8 @@ export function Resume() {
                   <Button
                     variant="contained"
                     href="https://www.github.com/OTTTO"
+                    target="_blank"
+                    rel="noreferrer"
                     color="warning"
                   >
                     <Typography variant="h6">github.com/OTTTO</Typography>
@@ -595,6 +601,8 @@ export function Resume() {
                   <Fab
                     variant="extended"
                     href="https://www.github.com/OTTTO"
+                    target="_blank"
+                    rel="noreferrer"
                     sx={{ margin: "1rem 1rem 0rem 0rem" }}
                     size="small"
                   >
