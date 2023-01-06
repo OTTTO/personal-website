@@ -64,7 +64,12 @@
 }
 
 .projectImg {
-  width: 100%;
+  max-width: 100%;
+}
+
+.projectImgSmallDevice {
+  width: 20rem;
+  max-width: 100%;
 }
 
 .brokenRobot {
