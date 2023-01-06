@@ -56,6 +56,12 @@ export function Projects() {
                     className="projectImg"
                   ></img>
                 </Button>
+                <Typography
+                  variant={isSmaller ? "h3" : "h6"}
+                  textAlign="center"
+                >
+                  <b>Click to play!</b>
+                </Typography>
               </Grid>
 
               <Typography
@@ -64,11 +70,19 @@ export function Projects() {
                 paddingLeft={isSmaller ? "0rem" : "2rem"}
                 textAlign={isSmaller ? "center" : "left"}
               >
-                This board game was developed in 2020 for a course while
-                studying computer science. It was orignally written in Java and
-                was a terminal game, at the end of 2022 it was ported to React
+                This board game was developed in 2020 for an Object Oriented
+                Programming course while studying computer science. It was
+                orignally written in{" "}
+                <a href="https://github.com/OTTTO/GameOfTrouble">Java</a> and
+                was a{" "}
+                <a href="https://replit.com/@DylanBeckwith/Trouble#Main.java">
+                  terminal game
+                </a>{" "}
+                <b>(just click ▷Run)</b>. At the end of 2022 it was ported to{" "}
+                <a href="https://github.com/OTTTO/personal-website/blob/main/src/pages/Projects/Trouble.tsx">
+                  React
+                </a>{" "}
                 to allow users to play in the browser.{" "}
-                <b>(Click image to play)</b>
               </Typography>
             </Grid>
             <Grid width="5%"></Grid>
