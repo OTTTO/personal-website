@@ -2,6 +2,7 @@ import {
   Button,
   Divider,
   Grid,
+  Stack,
   TextField,
   ThemeProvider,
   Typography,
@@ -24,6 +25,7 @@ export function Home() {
   const { width } = useWindowDimensions();
   const introWidth = 735;
 
+  const [edit, setEdit] = React.useState(true);
   const [intro, setIntro] = React.useState("");
   const [websiteInfo, setWebsiteInfo] = React.useState("");
 
@@ -83,38 +85,16 @@ export function Home() {
         }}
       >
         <Menu backgroundColor={backgroundColor}></Menu>
-        <Grid container direction="column" sx={{ paddingTop: "1rem" }}>
-          <Grid container>
-            <Grid width="30%"></Grid>
-            <Typography variant="h1" color="white" width="40%">
-              <u>WELCOME!</u>
-            </Typography>
-            {isAuthenticated && (
-              <>
-                <Grid
-                  container
-                  spacing={2}
-                  width="30%"
-                  justifyContent="right"
-                  alignItems="center"
-                >
-                  <Grid item>
-                    <Button
-                      variant="contained"
-                      onClick={async () => {
-                        await updateHome({ variables: { home } });
-                        window.location.replace("/");
-                      }}
-                      disabled={canSubmitArr.length > 0}
-                      sx={{ height: "2rem" }}
-                    >
-                      SAVE
-                    </Button>
-                  </Grid>
-                </Grid>
-              </>
-            )}
-          </Grid>
+        <Grid
+          container
+          direction="column"
+          sx={{ paddingTop: "1rem" }}
+          alignItems="center"
+        >
+          <Typography variant="h1" color="white" key="1">
+            <u>WELCOME!</u>
+          </Typography>
+
           <Grid container justifyContent="center" sx={{ paddingTop: "2rem" }}>
             <img src={angel} alt="Angel's Landing" className="angelImg"></img>
             <Grid
@@ -123,7 +103,20 @@ export function Home() {
               width={width > introWidth ? "90%" : "95%"}
               padding="1rem 2rem 0rem 2rem"
             >
-              {!isAuthenticated ? (
+              {isAuthenticated && edit ? (
+                <TextField
+                  error={intro.length === 0}
+                  fullWidth={true}
+                  multiline
+                  value={intro}
+                  sx={{
+                    backgroundColor: "white",
+                    opacity: ".7 ",
+                    borderRadius: ".5rem",
+                  }}
+                  onChange={(e) => handleTextChange(e, intro, setIntro)}
+                ></TextField>
+              ) : (
                 intro.split("\n").map((line, idx) => (
                   <>
                     {idx !== 0 && <br></br>}
@@ -137,39 +130,12 @@ export function Home() {
                     </Typography>
                   </>
                 ))
-              ) : (
-                <TextField
-                  error={intro.length === 0}
-                  fullWidth={true}
-                  multiline
-                  value={intro}
-                  sx={{
-                    backgroundColor: "white",
-                    opacity: ".7 ",
-                    borderRadius: ".5rem",
-                  }}
-                  onChange={(e) => handleTextChange(e, intro, setIntro)}
-                ></TextField>
               )}
 
               <br></br>
               <Divider sx={{ backgroundColor: "grey", borderBottomWidth: 2 }} />
               <br></br>
-              {!isAuthenticated ? (
-                websiteInfo.split("\n").map((line, idx) => (
-                  <>
-                    {idx !== 0 && <br></br>}
-                    <Typography
-                      variant="h4"
-                      color="white"
-                      textAlign="left"
-                      key={idx}
-                    >
-                      {line}
-                    </Typography>
-                  </>
-                ))
-              ) : (
+              {isAuthenticated && edit ? (
                 <TextField
                   error={websiteInfo.length === 0}
                   fullWidth={true}
@@ -184,10 +150,70 @@ export function Home() {
                     handleTextChange(e, websiteInfo, setWebsiteInfo)
                   }
                 ></TextField>
+              ) : (
+                websiteInfo.split("\n").map((line, idx) => (
+                  <>
+                    {idx !== 0 && <br></br>}
+                    <Typography
+                      variant="h4"
+                      color="white"
+                      textAlign="left"
+                      key={idx}
+                    >
+                      {line}
+                    </Typography>
+                  </>
+                ))
               )}
             </Grid>
           </Grid>
         </Grid>
+        <Stack
+          direction="row"
+          alignItems="center"
+          justifyContent="right"
+          padding="1rem 1rem 0rem 0rem"
+          spacing={2}
+        >
+          {isAuthenticated && (
+            <Button
+              variant="contained"
+              onClick={async () => {
+                await updateHome({ variables: { home } });
+                window.location.replace("/");
+              }}
+              disabled={canSubmitArr.length > 0}
+              key="0"
+            >
+              <Typography variant="h6"> SAVE</Typography>
+            </Button>
+          )}
+
+          {isAuthenticated && edit && (
+            <Button
+              variant="contained"
+              color="success"
+              onClick={() => {
+                setEdit(false);
+              }}
+              key="2"
+            >
+              <Typography variant="h6"> VIEW</Typography>
+            </Button>
+          )}
+          {isAuthenticated && !edit && (
+            <Button
+              variant="contained"
+              color="success"
+              onClick={() => {
+                setEdit(true);
+              }}
+              key="2"
+            >
+              <Typography variant="h6"> EDIT</Typography>
+            </Button>
+          )}
+        </Stack>
         <Footer backgroundColor={backgroundColor}></Footer>
       </Grid>
     </ThemeProvider>

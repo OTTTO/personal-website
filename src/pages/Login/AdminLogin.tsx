@@ -52,6 +52,7 @@ function AdminLogin() {
       alert("Wrong email and password");
     } else {
       localStorage.setItem("token", response.data.signInAdmin);
+      localStorage.setItem("edit", "true");
       window.location.replace("/");
     }
   };
@@ -130,7 +131,7 @@ function AdminLogin() {
               if (!localStorage.getItem("resume")) {
                 localStorage.setItem("resume", JSON.stringify(testResume));
               }
-              localStorage.setItem("testEdit", "true");
+              localStorage.setItem("edit", "true");
               window.location.replace("/resume");
             }}
           >

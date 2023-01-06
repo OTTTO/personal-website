@@ -64,9 +64,7 @@ export function Resume() {
     return JSON.parse(localStorage.getItem("resume"));
   };
 
-  const getTestEdit = (): boolean => {
-    return JSON.parse(localStorage.getItem("testEdit"));
-  };
+  const [edit, setEdit] = React.useState(true);
 
   const [canSubmitArr, setCanSubmitArr] = React.useState<boolean[]>([]);
 
@@ -506,27 +504,25 @@ export function Resume() {
                 >
                   SAVE
                 </Button>
-                {isTestAuthenticated && getTestEdit() && (
+                {(isAuthenticated || isTestAuthenticated) && edit && (
                   <Button
                     variant="contained"
                     sx={{ height: "2rem" }}
                     color="success"
                     onClick={() => {
-                      localStorage.setItem("testEdit", "false");
-                      window.location.replace("/resume");
+                      setEdit(false);
                     }}
                   >
                     VIEW
                   </Button>
                 )}
-                {isTestAuthenticated && !getTestEdit() && (
+                {(isAuthenticated || isTestAuthenticated) && !edit && (
                   <Button
                     variant="contained"
                     sx={{ height: "2rem" }}
                     color="success"
                     onClick={() => {
-                      localStorage.setItem("testEdit", "true");
-                      window.location.replace("/resume");
+                      setEdit(true);
                     }}
                   >
                     EDIT
@@ -536,7 +532,7 @@ export function Resume() {
               </Stack>
             ) : null}
             <Grid>
-              {isAuthenticated || (isTestAuthenticated && getTestEdit()) ? (
+              {(isAuthenticated || isTestAuthenticated) && edit ? (
                 <Grid>
                   <TextField
                     error={resumeHeader.name.length === 0}
@@ -614,7 +610,7 @@ export function Resume() {
               <Typography variant="h4" padding="1rem 0rem">
                 <b>TECHNICAL SKILLS</b>
               </Typography>
-              {isAuthenticated || (isTestAuthenticated && getTestEdit()) ? (
+              {(isAuthenticated || isTestAuthenticated) && edit ? (
                 <IconButton onClick={handleAddSkillGroup}>
                   <AddCircle sx={{ mr: 1 }} />
                 </IconButton>
@@ -635,8 +631,7 @@ export function Resume() {
                     <Stack direction="row" key={skillGroup.id}>
                       <Accordion sx={{ width: "100%" }}>
                         <AccordionSummary expandIcon={<ExpandMore />}>
-                          {isAuthenticated ||
-                          (isTestAuthenticated && getTestEdit()) ? (
+                          {(isAuthenticated || isTestAuthenticated) && edit ? (
                             <TextField
                               id="skillGroupName"
                               error={skillGroup.name.length === 0}
@@ -655,8 +650,7 @@ export function Resume() {
                           )}
                         </AccordionSummary>
                         <AccordionDetails>
-                          {isAuthenticated ||
-                          (isTestAuthenticated && getTestEdit()) ? (
+                          {(isAuthenticated || isTestAuthenticated) && edit ? (
                             <TextField
                               id="skillGroupSkills"
                               error={skillGroup.skills.length === 0}
@@ -672,8 +666,7 @@ export function Resume() {
                           )}
                         </AccordionDetails>
                       </Accordion>
-                      {isAuthenticated ||
-                      (isTestAuthenticated && getTestEdit()) ? (
+                      {(isAuthenticated || isTestAuthenticated) && edit ? (
                         <IconButton onClick={() => handleRemoveSkillGroup(idx)}>
                           <RemoveCircle sx={{ mr: 1 }} />
                         </IconButton>
@@ -686,7 +679,7 @@ export function Resume() {
               <Typography variant="h4" padding="1rem 0rem">
                 <b>PROFESSIONAL EXPERIENCE</b>
               </Typography>
-              {isAuthenticated || (isTestAuthenticated && getTestEdit()) ? (
+              {(isAuthenticated || isTestAuthenticated) && edit ? (
                 <IconButton onClick={handleAddExperience}>
                   <AddCircle sx={{ mr: 1 }} />
                 </IconButton>
@@ -706,8 +699,7 @@ export function Resume() {
                   return (
                     <Accordion key={experience.id}>
                       <AccordionSummary expandIcon={<ExpandMore />}>
-                        {isAuthenticated ||
-                        (isTestAuthenticated && getTestEdit()) ? (
+                        {(isAuthenticated || isTestAuthenticated) && edit ? (
                           <Stack
                             direction={isDeviceWidth ? "column" : "row"}
                             spacing={isDeviceWidth ? 2 : 1}
@@ -835,8 +827,9 @@ export function Resume() {
                                     break;
                                   }
                                 }
-                                return isAuthenticated ||
-                                  (isTestAuthenticated && getTestEdit()) ? (
+                                return (isAuthenticated ||
+                                  isTestAuthenticated) &&
+                                  edit ? (
                                   <Stack
                                     direction="row"
                                     key={responsibility.id}
@@ -894,7 +887,7 @@ export function Resume() {
               <Typography variant="h4" padding="1rem 0rem">
                 <b>EDUCATION</b>
               </Typography>
-              {isAuthenticated || (isTestAuthenticated && getTestEdit()) ? (
+              {(isAuthenticated || isTestAuthenticated) && edit ? (
                 <IconButton onClick={handleAddEducation}>
                   <AddCircle sx={{ mr: 1 }} />
                 </IconButton>
@@ -911,8 +904,7 @@ export function Resume() {
                       break;
                     }
                   }
-                  return isAuthenticated ||
-                    (isTestAuthenticated && getTestEdit()) ? (
+                  return (isAuthenticated || isTestAuthenticated) && edit ? (
                     <Stack direction="column" key={education.id}>
                       <Stack
                         direction={isDeviceWidth ? "column" : "row"}
