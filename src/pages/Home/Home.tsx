@@ -71,7 +71,6 @@ export function Home() {
 
   return (
     <ThemeProvider theme={mainTheme}>
-      <Menu backgroundColor={backgroundColor}></Menu>
       <Grid
         sx={{
           backgroundColor: "black",
@@ -79,8 +78,10 @@ export function Home() {
           overflowY: "auto",
           margin: "0 auto",
           textAlign: "center",
+          border: "white solid .5rem",
         }}
       >
+        <Menu backgroundColor={backgroundColor}></Menu>
         <Grid container direction="column" sx={{ paddingTop: "1rem" }}>
           <Grid container>
             <Grid width="30%"></Grid>
@@ -186,8 +187,8 @@ export function Home() {
             </Grid>
           </Grid>
         </Grid>
+        <Footer backgroundColor={backgroundColor}></Footer>
       </Grid>
-      <Footer backgroundColor={backgroundColor}></Footer>
     </ThemeProvider>
   );
 }

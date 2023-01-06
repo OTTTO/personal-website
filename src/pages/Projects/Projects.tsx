@@ -16,7 +16,7 @@ export function Projects() {
   const smallerDeviceWidth = 900;
   const isSmaller = width < smallerDeviceWidth;
   return (
-    <Grid sx={{ height: "vh100" }}>
+    <Grid sx={{ height: "vh100" }} border="black solid .5rem">
       <ThemeProvider theme={projectsTheme}>
         <Menu backgroundColor="white"></Menu>
         <Grid container direction="column" width="90%" margin="0 auto">
@@ -66,8 +66,8 @@ export function Projects() {
               >
                 This board game was developed in 2020 for a course while
                 studying computer science. It was orignally written in Java and
-                was a terminal game, at the beginning of 2023 it was ported to
-                React to allow users to play in the browser.{" "}
+                was a terminal game, at the end of 2022 it was ported to React
+                to allow users to play in the browser.{" "}
                 <b>(Click image to play)</b>
               </Typography>
             </Grid>

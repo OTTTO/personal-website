@@ -871,11 +871,16 @@ export function Trouble() {
   const smallerDeviceWidth = 650;
 
   return (
-    <Grid container direction="column" className={finished ? "fireworks" : ""}>
+    <Grid
+      container
+      direction="column"
+      className={finished ? "fireworks" : ""}
+      border={width > smallerDeviceWidth ? "solid black .5rem" : null}
+    >
       <ThemeProvider theme={mainTheme}>
-        <Menu backgroundColor="black"></Menu>
+        <Menu backgroundColor="black" borderSides></Menu>
       </ThemeProvider>
-      <Grid paddingTop="1rem" margin="0rem 1rem">
+      <Grid padding="1rem 1rem 1rem 0rem" borderTop="solid black .5rem">
         {/* BOARD */}
         <Grid
           container

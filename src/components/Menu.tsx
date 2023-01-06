@@ -17,15 +17,34 @@ import { authenticationCheck } from "utils/utils";
 
 const isAuthenticated = authenticationCheck();
 
-export function Menu({ backgroundColor }) {
+export function Menu({ backgroundColor, borderSides = false }) {
   const { width } = useWindowDimensions();
   const smallerSize = 550;
   const isLarger = width > smallerSize;
   return (
     <Grid
       sx={{
-        backgroundColor: { backgroundColor },
+        backgroundColor,
         padding: "0rem 0rem 1rem 1rem",
+        borderBottom:
+          backgroundColor === "black"
+            ? "solid white .25rem"
+            : "solid black .25rem",
+        borderLeft: borderSides
+          ? backgroundColor === "black"
+            ? "solid white .5rem"
+            : "solid black .5rem"
+          : null,
+        borderRight: borderSides
+          ? backgroundColor === "black"
+            ? "solid white .5rem"
+            : "solid black .5rem"
+          : null,
+        borderTop: borderSides
+          ? backgroundColor === "black"
+            ? "solid white .5rem"
+            : "solid black .5rem"
+          : null,
       }}
     >
       <Grid container direction="row" justifyContent="space-between">
