@@ -42,6 +42,7 @@ import { authenticationCheck } from "utils/utils";
 import useWindowDimensions from "hooks/useWindowDimensions";
 import * as DOMPurify from "dompurify";
 import { ErrorPage } from "pages/Error/Error";
+import { Loading } from "components/Loading";
 
 const isAuthenticated = authenticationCheck();
 const isTestAuthenticated = !!localStorage.getItem("testToken");
@@ -395,7 +396,7 @@ export function Resume() {
   const { width } = useWindowDimensions();
   const isDeviceWidth = width < 735;
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) return <Loading />;
   if (error) return <ErrorPage />;
 
   const backgroundColor = "black";
