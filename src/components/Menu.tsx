@@ -17,7 +17,11 @@ import { authenticationCheck } from "utils/utils";
 
 const isAuthenticated = authenticationCheck();
 
-export function Menu({ backgroundColor, borderSides = false }) {
+export function Menu({
+  backgroundColor,
+  borderSides = false,
+  bottomBorder = true,
+}) {
   const { width } = useWindowDimensions();
   const smallerSize = 550;
   const isLarger = width > smallerSize;
@@ -26,10 +30,11 @@ export function Menu({ backgroundColor, borderSides = false }) {
       sx={{
         backgroundColor,
         padding: "0rem 0rem 1rem 1rem",
-        borderBottom:
-          backgroundColor === "black"
+        borderBottom: bottomBorder
+          ? backgroundColor === "black"
             ? "solid white .25rem"
-            : "solid black .25rem",
+            : "solid black .25rem"
+          : null,
         borderLeft: borderSides
           ? backgroundColor === "black"
             ? "solid white .5rem"

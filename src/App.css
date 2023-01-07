@@ -78,9 +78,6 @@
 }
 
 /* firework */
-.fireworks {
-  background: linear-gradient(#0007, #0000), #123;
-}
 
 @keyframes firework {
   0% {
