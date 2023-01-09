@@ -17,7 +17,9 @@ function AppRoutes() {
         <Route path="/projects" element={<Projects />} />
         <Route path="/projects/trouble" element={<Trouble />} />
         <Route path="/blog" element={<Blog />} />
-        <Route path="/blog/:id" element={<Post />} />
+        <Route path="/blog/post/new" element={<Post />} />
+        <Route path="/blog/post/:id" element={<Post />} />
+        <Route path="/blog/post/edit/:id" element={<Post />} />
       </Routes>
     </BrowserRouter>
   );
