@@ -5,6 +5,7 @@ import { Home } from "pages/Home/Home";
 import { Trouble } from "pages/Projects/Trouble";
 import { Projects } from "pages/Projects/Projects";
 import { Blog } from "pages/Blog/Blog";
+import { Post } from "pages/Blog/Post";
 
 function AppRoutes() {
   return (
@@ -16,6 +17,7 @@ function AppRoutes() {
         <Route path="/projects" element={<Projects />} />
         <Route path="/projects/trouble" element={<Trouble />} />
         <Route path="/blog" element={<Blog />} />
+        <Route path="/blog/:id" element={<Post />} />
       </Routes>
     </BrowserRouter>
   );
