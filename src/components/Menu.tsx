@@ -3,6 +3,7 @@ import {
   ArticleOutlined,
   CrisisAlertOutlined,
   HomeOutlined,
+  ReceiptOutlined,
 } from "@mui/icons-material";
 import {
   Fab,
@@ -23,7 +24,7 @@ export function Menu({
   bottomBorder = true,
 }) {
   const { width } = useWindowDimensions();
-  const smallerSize = 550;
+  const smallerSize = 650;
   const isLarger = width > smallerSize;
   return (
     <Grid
@@ -101,6 +102,20 @@ export function Menu({
               />
             ) : null}
             <Typography variant="h6">PROJECTS</Typography>
+          </Fab>
+          <Fab
+            variant="extended"
+            href="/blog"
+            sx={{ margin: "1rem 0.5rem 0rem 0rem" }}
+            size={isLarger ? "large" : "small"}
+          >
+            {isLarger ? (
+              <ReceiptOutlined
+                sx={{ mr: 1 }}
+                fontSize={isLarger ? "large" : "small"}
+              />
+            ) : null}
+            <Typography variant="h6">BLOG</Typography>
           </Fab>
         </Grid>
         <Grid
