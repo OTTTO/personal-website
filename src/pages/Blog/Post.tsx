@@ -103,7 +103,6 @@ export function Post() {
             <Grid
               container
               sx={{
-                backgroundColor: "#dadde3",
                 padding: "1rem",
                 marginTop: "2rem",
                 border: "solid black",

@@ -87,7 +87,7 @@ export function Blog() {
                         ? "1rem"
                         : "1rem 1rem 0rem 1rem",
                       marginTop: "2rem",
-                      border: "solid black .5rem",
+                      border: "solid black",
                     }}
                     width="90%"
                     alignItems="center"
@@ -99,6 +99,7 @@ export function Blog() {
                     >
                       <b>{post.title}</b>
                     </Typography>
+                    <Typography variant="h5">{post.author}</Typography>
                     <Typography variant="h6">
                       {new Date(post.createdAt).toLocaleDateString()}
                     </Typography>
@@ -110,10 +111,11 @@ export function Blog() {
                         ),
                       }}
                     ></Typography>
-                    <Typography variant="h4">
-                      <a href={`/blog/post/${post.id}`}>- READ MORE -</a>
-                    </Typography>
-                    {isAuthenticated && (
+                    {!isAuthenticated ? (
+                      <Typography variant="h4">
+                        <a href={`/blog/post/${post.id}`}>- READ MORE -</a>
+                      </Typography>
+                    ) : (
                       <Grid>
                         <IconButton
                           onClick={async () => {
