@@ -1,4 +1,4 @@
-import { AddCircle } from "@mui/icons-material";
+import { AddCircle, EditOutlined, RemoveCircle } from "@mui/icons-material";
 import {
   Divider,
   Grid,
@@ -44,6 +44,12 @@ export function Blog() {
     },
   ]);
 
+  const handleRemovePost = (idx) => {
+    let newPosts: IPost[] = structuredClone(posts);
+    newPosts.splice(idx, 1);
+    setPosts(newPosts);
+  };
+
   return (
     <Grid sx={{ height: "vh100" }} border="black solid .5rem">
       <ThemeProvider theme={mainTheme}>
@@ -69,7 +75,9 @@ export function Blog() {
                     direction="column"
                     sx={{
                       backgroundColor: "#dadde3",
-                      padding: "1rem",
+                      padding: !isAuthenticated
+                        ? "1rem"
+                        : "1rem 1rem 0rem 1rem",
                       marginTop: "2rem",
                       border: "solid black",
                     }}
@@ -92,7 +100,16 @@ export function Blog() {
                     <Typography variant="h4">
                       <a href={`/blog/post/${post.id}`}>- READ MORE -</a>
                     </Typography>
+                    <Grid>
+                      <IconButton onClick={() => handleRemovePost(idx)}>
+                        <RemoveCircle sx={{ mr: 1 }} />
+                      </IconButton>
+                      <IconButton href={`/blog/post/edit/${post.id}`}>
+                        <EditOutlined sx={{ mr: 1 }} />
+                      </IconButton>
+                    </Grid>
                   </Grid>
+
                   <Grid width="5%"></Grid>
                 </Grid>
               );
