@@ -100,14 +100,16 @@ export function Blog() {
                     <Typography variant="h4">
                       <a href={`/blog/post/${post.id}`}>- READ MORE -</a>
                     </Typography>
-                    <Grid>
-                      <IconButton onClick={() => handleRemovePost(idx)}>
-                        <RemoveCircle sx={{ mr: 1 }} />
-                      </IconButton>
-                      <IconButton href={`/blog/post/edit/${post.id}`}>
-                        <EditOutlined sx={{ mr: 1 }} />
-                      </IconButton>
-                    </Grid>
+                    {isAuthenticated && (
+                      <Grid>
+                        <IconButton onClick={() => handleRemovePost(idx)}>
+                          <RemoveCircle sx={{ mr: 1 }} />
+                        </IconButton>
+                        <IconButton href={`/blog/post/edit/${post.id}`}>
+                          <EditOutlined sx={{ mr: 1 }} />
+                        </IconButton>
+                      </Grid>
+                    )}
                   </Grid>
 
                   <Grid width="5%"></Grid>
