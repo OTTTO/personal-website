@@ -1,8 +1,14 @@
-import { AddCircle, EditOutlined, RemoveCircle } from "@mui/icons-material";
+import {
+  AddCircle,
+  DeleteForeverOutlined,
+  EditOutlined,
+  RemoveCircle,
+} from "@mui/icons-material";
 import {
   Divider,
   Grid,
   IconButton,
+  Modal,
   ThemeProvider,
   Typography,
 } from "@mui/material";
@@ -26,11 +32,19 @@ interface IPost {
 
 export function Blog() {
   const [posts, setPosts] = React.useState([]);
+  const [deleteId, setDeleteId] = React.useState({ id: "", idx: -1 });
+  const [openDelete, setOpenDelete] = React.useState(false);
+  const handleOpenDelete = () => setOpenDelete(true);
+  const handleCloseDelete = () => setOpenDelete(false);
 
-  const handleRemovePost = (idx) => {
+  const handleDeletePost = async () => {
     let newPosts: IPost[] = structuredClone(posts);
-    newPosts.splice(idx, 1);
+    newPosts.splice(deleteId.idx, 1);
     setPosts(newPosts);
+
+    await axios.delete(
+      `${process.env.REACT_APP_API_ENDPOINT}/blog/post/delete/${deleteId.id}`
+    );
   };
 
   useEffect(() => {
@@ -69,12 +83,11 @@ export function Blog() {
                     container
                     direction="column"
                     sx={{
-                      backgroundColor: "#dadde3",
                       padding: !isAuthenticated
                         ? "1rem"
                         : "1rem 1rem 0rem 1rem",
                       marginTop: "2rem",
-                      border: "solid black",
+                      border: "solid black .5rem",
                     }}
                     width="90%"
                     alignItems="center"
@@ -102,7 +115,12 @@ export function Blog() {
                     </Typography>
                     {isAuthenticated && (
                       <Grid>
-                        <IconButton onClick={() => handleRemovePost(idx)}>
+                        <IconButton
+                          onClick={() => {
+                            setDeleteId({ id: post.id, idx });
+                            handleOpenDelete();
+                          }}
+                        >
                           <RemoveCircle sx={{ mr: 1 }} />
                         </IconButton>
                         <IconButton href={`/blog/post/edit/${post.id}`}>
@@ -118,6 +136,47 @@ export function Blog() {
             })}
         </Grid>
         <Footer backgroundColor="white" />
+
+        {/* DELETE MODAL */}
+        <Modal
+          open={openDelete}
+          onClose={handleCloseDelete}
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            // marginTop: "-6.5rem",
+          }}
+        >
+          <Grid
+            width="80%"
+            sx={{
+              margin: "auto",
+              backgroundColor: "white",
+              borderRadius: ".5rem",
+              opacity: ".9",
+            }}
+          >
+            <Typography
+              variant="h5"
+              component="h2"
+              textAlign="center"
+              paddingTop="1rem"
+            >
+              Are you sure that you want to delete this post?
+              <IconButton
+                onClick={() => {
+                  handleDeletePost();
+                  handleCloseDelete();
+                }}
+              >
+                <DeleteForeverOutlined
+                  style={{ color: "red" }}
+                ></DeleteForeverOutlined>
+              </IconButton>
+            </Typography>
+          </Grid>
+        </Modal>
       </ThemeProvider>
     </Grid>
   );
