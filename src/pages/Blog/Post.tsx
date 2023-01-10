@@ -153,7 +153,7 @@ export function Post() {
                     `${process.env.REACT_APP_API_ENDPOINT}/blog/post/save`,
                     post
                   );
-                  window.location.reload();
+                  window.location.href = `/blog/post/edit/${post.id}`;
                 }}
                 key="0"
               >
