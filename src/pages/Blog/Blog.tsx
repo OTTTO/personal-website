@@ -19,6 +19,8 @@ import mainTheme from "themes/mainTheme";
 import { authenticationCheck } from "utils/utils";
 import axios from "axios";
 import * as DOMPurify from "dompurify";
+import { AUTHENTICATE } from "queries/auth";
+import { useLazyQuery } from "@apollo/client";
 
 const isAuthenticated = authenticationCheck();
 
@@ -46,6 +48,8 @@ export function Blog() {
       `${process.env.REACT_APP_API_ENDPOINT}/blog/post/delete/${deleteId.id}`
     );
   };
+
+  const [authenticate] = useLazyQuery(AUTHENTICATE);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -116,7 +120,7 @@ export function Blog() {
                     {isAuthenticated && (
                       <Grid>
                         <IconButton
-                          onClick={() => {
+                          onClick={async () => {
                             setDeleteId({ id: post.id, idx });
                             handleOpenDelete();
                           }}
@@ -145,7 +149,6 @@ export function Blog() {
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            // marginTop: "-6.5rem",
           }}
         >
           <Grid
@@ -165,9 +168,15 @@ export function Blog() {
             >
               Are you sure that you want to delete this post?
               <IconButton
-                onClick={() => {
-                  handleDeletePost();
-                  handleCloseDelete();
+                onClick={async () => {
+                  const response = await authenticate();
+                  if (response?.data?.authenticate) {
+                    handleDeletePost();
+                    handleCloseDelete();
+                    alert("Delete successful!");
+                  } else {
+                    alert("Bad authentication, sorry!");
+                  }
                 }}
               >
                 <DeleteForeverOutlined

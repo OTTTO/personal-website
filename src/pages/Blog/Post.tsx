@@ -18,6 +18,8 @@ import { v4 as uuid } from "uuid";
 import { TextEditor } from "./TextEditor";
 import * as DOMPurify from "dompurify";
 import axios from "axios";
+import { AUTHENTICATE } from "queries/auth";
+import { useLazyQuery } from "@apollo/client";
 
 const isAuthenticated = authenticationCheck();
 
@@ -44,6 +46,8 @@ export function Post() {
     const newPost = { ...post, content };
     setPost(newPost);
   };
+
+  const [authenticate] = useLazyQuery(AUTHENTICATE);
 
   const { id } = useParams();
 
@@ -149,11 +153,17 @@ export function Post() {
               <Button
                 variant="contained"
                 onClick={async () => {
-                  await axios.put(
-                    `${process.env.REACT_APP_API_ENDPOINT}/blog/post/save`,
-                    post
-                  );
-                  window.location.href = `/blog/post/edit/${post.id}`;
+                  const response = await authenticate();
+                  if (response?.data?.authenticate) {
+                    alert("Save successful!");
+                    await axios.put(
+                      `${process.env.REACT_APP_API_ENDPOINT}/blog/post/save`,
+                      post
+                    );
+                    window.location.href = `/blog/post/edit/${post.id}`;
+                  } else {
+                    alert("Bad authentication, sorry!");
+                  }
                 }}
                 key="0"
               >
