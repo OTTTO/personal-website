@@ -75,7 +75,7 @@ export function Post() {
       </Grid>
       <Grid
         sx={{ height: "vh100" }}
-        border="black solid .25rem"
+        border="double thick black"
         display={isLoading ? "none" : "visible"}
       >
         <ThemeProvider theme={mainTheme}>
@@ -84,8 +84,8 @@ export function Post() {
             container
             direction="column"
             paddingBottom="2rem"
-            border="black solid .25rem"
-            margin="0 auto"
+            border="double thick black"
+            margin="0 auto .25rem auto"
             width="99%"
           >
             {!isAuthenticated || !edit ? (
@@ -101,7 +101,9 @@ export function Post() {
                 sx={{ margin: "1rem 0rem" }}
               ></TextField>
             )}
-            <Divider sx={{ backgroundColor: "black", borderBottomWidth: 2 }} />
+            <Divider sx={{ backgroundColor: "black", borderBottomWidth: 1 }} />
+            <Divider sx={{ backgroundColor: "white", borderBottomWidth: 1 }} />
+            <Divider sx={{ backgroundColor: "black", borderBottomWidth: 1 }} />
             <Grid padding=".5rem 0">
               {!isAuthenticated || !edit ? (
                 <Typography variant="h3" textAlign="center" fontWeight="light">
@@ -122,7 +124,9 @@ export function Post() {
                 </Typography>
               )}
             </Grid>
-            <Divider sx={{ backgroundColor: "black", borderBottomWidth: 2 }} />
+            <Divider sx={{ backgroundColor: "black", borderBottomWidth: 1 }} />
+            <Divider sx={{ backgroundColor: "white", borderBottomWidth: 1 }} />
+            <Divider sx={{ backgroundColor: "black", borderBottomWidth: 1 }} />
             <Grid container>
               <Grid width="5%"></Grid>
               <Grid
@@ -130,11 +134,11 @@ export function Post() {
                 sx={{
                   padding: "1rem",
                   marginTop: "1rem",
-                  border: "solid black",
                 }}
                 width="90%"
                 alignItems="center"
                 justifyContent="center"
+                border="double thick black"
               >
                 <Grid>
                   {(!isAuthenticated || !edit) && (
