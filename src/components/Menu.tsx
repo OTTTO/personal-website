@@ -38,18 +38,18 @@ export function Menu({
           : null,
         borderLeft: borderSides
           ? backgroundColor === "black"
-            ? "solid white .5rem"
-            : "solid black .5rem"
+            ? "solid white .25rem"
+            : "solid black .25rem"
           : null,
         borderRight: borderSides
           ? backgroundColor === "black"
-            ? "solid white .5rem"
-            : "solid black .5rem"
+            ? "solid white .25rem"
+            : "solid black .25rem"
           : null,
         borderTop: borderSides
           ? backgroundColor === "black"
-            ? "solid white .5rem"
-            : "solid black .5rem"
+            ? "solid white .25rem"
+            : "solid black .25rem"
           : null,
       }}
     >

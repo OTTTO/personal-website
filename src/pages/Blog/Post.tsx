@@ -75,7 +75,7 @@ export function Post() {
       </Grid>
       <Grid
         sx={{ height: "vh100" }}
-        border="black solid .5rem"
+        border="black solid .25rem"
         display={isLoading ? "none" : "visible"}
       >
         <ThemeProvider theme={mainTheme}>
@@ -83,9 +83,10 @@ export function Post() {
           <Grid
             container
             direction="column"
-            width="90%"
-            margin="0 auto"
             paddingBottom="2rem"
+            border="black solid .25rem"
+            margin="0 auto"
+            width="99%"
           >
             {!isAuthenticated || !edit ? (
               <Typography variant="h1" textAlign="center">
@@ -100,33 +101,35 @@ export function Post() {
                 sx={{ margin: "1rem 0rem" }}
               ></TextField>
             )}
-            <Divider sx={{ backgroundColor: "grey", borderBottomWidth: 2 }} />
-            {!isAuthenticated || !edit ? (
-              <Typography variant="h3" textAlign="center" fontWeight="light">
-                {post.author}
-              </Typography>
-            ) : (
-              <TextField
-                fullWidth={true}
-                value={post.author}
-                onChange={(e) => handleTextChange(e, "author")}
-                label="Author"
-                sx={{ margin: "1rem 0rem" }}
-              ></TextField>
-            )}
-            {(!isAuthenticated || !edit) && (
-              <Typography variant="h4" textAlign="center">
-                {new Date(post.createdAt).toLocaleDateString()}
-              </Typography>
-            )}
-            <Divider sx={{ backgroundColor: "grey", borderBottomWidth: 2 }} />
+            <Divider sx={{ backgroundColor: "black", borderBottomWidth: 2 }} />
+            <Grid padding=".5rem 0">
+              {!isAuthenticated || !edit ? (
+                <Typography variant="h3" textAlign="center" fontWeight="light">
+                  {post.author}
+                </Typography>
+              ) : (
+                <TextField
+                  fullWidth={true}
+                  value={post.author}
+                  onChange={(e) => handleTextChange(e, "author")}
+                  label="Author"
+                  sx={{ margin: "1rem 0rem" }}
+                ></TextField>
+              )}
+              {(!isAuthenticated || !edit) && (
+                <Typography variant="h4" textAlign="center">
+                  {new Date(post.createdAt).toLocaleDateString()}
+                </Typography>
+              )}
+            </Grid>
+            <Divider sx={{ backgroundColor: "black", borderBottomWidth: 2 }} />
             <Grid container>
               <Grid width="5%"></Grid>
               <Grid
                 container
                 sx={{
                   padding: "1rem",
-                  marginTop: "2rem",
+                  marginTop: "1rem",
                   border: "solid black",
                 }}
                 width="90%"
