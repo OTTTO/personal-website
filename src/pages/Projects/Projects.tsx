@@ -23,23 +23,26 @@ export function Projects() {
         <Grid
           container
           direction="column"
-          width="90%"
           margin="0 auto"
           paddingBottom="2rem"
+          borderBottom=".25rem white solid"
+          borderLeft=".5rem white solid"
+          borderRight=".5rem white solid"
+          sx={{ backgroundColor: "black" }}
         >
-          <Typography variant="h1" textAlign="center">
+          <Typography variant="h1" textAlign="center" color="white">
             PERSONAL PROJECTS
           </Typography>
-          <Divider sx={{ backgroundColor: "grey", borderBottomWidth: 2 }} />
+          <Divider sx={{ backgroundColor: "white", borderBottomWidth: 2 }} />
           <Grid container>
             <Grid width="5%"></Grid>
             <Grid
               container
               sx={{
-                backgroundColor: "#dadde3",
+                backgroundColor: "white",
                 padding: "1rem",
                 marginTop: "2rem",
-                border: "solid black",
+                border: "thick double black",
               }}
               width="90%"
               alignItems="center"
@@ -104,16 +107,16 @@ export function Projects() {
           </Grid>
           <br></br>
           <br></br>
-          <Divider sx={{ backgroundColor: "grey", borderBottomWidth: 2 }} />
+          <Divider sx={{ backgroundColor: "white", borderBottomWidth: 2 }} />
           <Grid container>
             <Grid width="5%"></Grid>
             <Grid
               container
               sx={{
-                backgroundColor: "#dadde3",
+                backgroundColor: "white",
                 padding: "1rem",
                 marginTop: "2rem",
-                border: "solid black",
+                border: "thick double black",
               }}
               width="90%"
               alignItems="center"

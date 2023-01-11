@@ -15,11 +15,12 @@ import {
 import { Footer } from "components/Footer";
 import { Menu } from "components/Menu";
 import React, { useEffect } from "react";
-import mainTheme from "themes/mainTheme";
+
 import { authenticationCheck } from "utils/utils";
 import axios from "axios";
 import * as DOMPurify from "dompurify";
 import { Loading } from "components/Loading";
+import projectsTheme from "themes/projectsTheme";
 
 const isAuthenticated = authenticationCheck();
 
@@ -68,25 +69,26 @@ export function Blog() {
   if (loading) return <Loading />;
 
   return (
-    <Grid sx={{ height: "vh100" }} border="black solid .5rem">
-      <ThemeProvider theme={mainTheme}>
-        <Menu backgroundColor="black" borderSides></Menu>
+    <Grid sx={{ height: "vh100" }} border=".5rem white solid">
+      <ThemeProvider theme={projectsTheme}>
+        <Menu backgroundColor="black"></Menu>
         <Grid
           container
           direction="column"
-          width="90%"
           margin="0 auto"
           paddingBottom="2rem"
+          borderBottom=".25rem white solid"
+          sx={{ backgroundColor: "black" }}
         >
-          <Typography variant="h1" textAlign="center">
+          <Typography variant="h1" textAlign="center" color="white">
             PERSONAL BLOG
           </Typography>
           {isAuthenticated ? (
             <IconButton href="/blog/post/new">
-              <AddCircle sx={{ mr: 1 }} />
+              <AddCircle sx={{ mr: 1 }} style={{ color: "white" }} />
             </IconButton>
           ) : null}
-          <Divider sx={{ backgroundColor: "grey", borderBottomWidth: 2 }} />
+          <Divider sx={{ backgroundColor: "white", borderBottomWidth: 2 }} />
           {posts
             .sort((a, b) => a.createdAt - b.createdAt)
             .map((post, idx) => {
@@ -101,7 +103,8 @@ export function Blog() {
                         ? "1rem"
                         : "1rem 1rem 0rem 1rem",
                       marginTop: "2rem",
-                      border: "solid black",
+                      border: "thick black double",
+                      backgroundColor: "white",
                     }}
                     width="90%"
                     alignItems="center"
@@ -137,10 +140,16 @@ export function Blog() {
                             handleOpenDelete();
                           }}
                         >
-                          <RemoveCircle sx={{ mr: 1 }} />
+                          <RemoveCircle
+                            sx={{ mr: 1 }}
+                            style={{ color: "black" }}
+                          />
                         </IconButton>
                         <IconButton href={`/blog/post/edit/${post.id}`}>
-                          <EditOutlined sx={{ mr: 1 }} />
+                          <EditOutlined
+                            sx={{ mr: 1 }}
+                            style={{ color: "black" }}
+                          />
                         </IconButton>
                       </Grid>
                     )}

@@ -5,7 +5,7 @@ const projectsTheme = createTheme();
 projectsTheme.typography.h1 = {
   fontSize: "2.2rem",
   fontWeight: "normal",
-  "@media (min-width:650px)": {
+  "@media (min-width:750px)": {
     fontSize: "3.5rem",
   },
   "@media (min-width:900px)": {
@@ -32,7 +32,7 @@ projectsTheme.typography.h4 = {
 
 projectsTheme.typography.h6 = {
   fontSize: "0.5rem",
-  "@media (min-width:650px)": {
+  "@media (min-width:750px)": {
     fontSize: "0.8rem",
   },
   "@media (min-width:900px)": {

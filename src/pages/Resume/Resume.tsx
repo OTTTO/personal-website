@@ -476,6 +476,7 @@ export function Resume() {
           )}
           <Box
             padding="1rem"
+            border="black thick double"
             sx={{
               margin: "auto",
               width: isDeviceWidth ? "80%" : "55%",
