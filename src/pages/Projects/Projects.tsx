@@ -98,7 +98,21 @@ export function Projects() {
                 </a>{" "}
                 is built with Typescript; it uses NestJS and Postgres with
                 TypeORM, as well as GraphQL to serve up data to the frontend. It
-                is hosted on an EC2 server which I administer.
+                is hosted on an EC2 server which I administer. The{" "}
+                <a
+                  href="https://github.com/OTTTO/personal-website-serverless"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  serverless api
+                </a>{" "}
+                which handles blogging exists entirely in the cloud on AWS
+                infrastructure.{" "}
+                <a href="/blog/post/12db148b-d53d-4a10-81e6-b8f49f4b0c67">
+                  {" "}
+                  This post
+                </a>{" "}
+                explains what I learned during the website's creation.
               </Typography>
             </Grid>
             <Grid width="5%"></Grid>
