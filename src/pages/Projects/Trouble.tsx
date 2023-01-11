@@ -865,12 +865,17 @@ export function Trouble() {
       container
       direction="column"
       className={finished ? "fireworks" : ""}
-      border="solid black .25rem"
+      border="double thick black"
     >
       <ThemeProvider theme={mainTheme}>
-        <Menu backgroundColor="black" borderSides bottomBorder={false}></Menu>
+        <Menu backgroundColor="black" borderSides></Menu>
       </ThemeProvider>
-      <Grid padding="1rem 0rem">
+      <Grid
+        padding="1rem 0rem"
+        border="solid black .1rem"
+        width="99%"
+        margin="0 auto .25rem auto"
+      >
         {/* BOARD */}
         <Grid
           container

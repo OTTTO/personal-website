@@ -73,149 +73,150 @@ export function Home() {
   };
 
   return (
-    <ThemeProvider theme={mainTheme}>
-      <Grid
-        sx={{
-          backgroundColor: "black",
-          height: "100vh",
-          overflowY: "auto",
-          margin: "0 auto",
-          textAlign: "center",
-          border: "white solid .25rem",
-        }}
-      >
-        <Menu backgroundColor={backgroundColor}></Menu>
+    <Grid border="thick double black">
+      <ThemeProvider theme={mainTheme}>
         <Grid
-          container
-          direction="column"
-          sx={{ paddingTop: "1rem" }}
-          alignItems="center"
+          sx={{
+            backgroundColor: "black",
+            height: "100vh",
+            overflowY: "auto",
+            margin: "0 auto",
+            textAlign: "center",
+            border: "white solid .25rem",
+          }}
         >
-          <Typography variant="h1" color="white" key="1">
-            <u>WELCOME!</u>
-          </Typography>
+          <Menu backgroundColor={backgroundColor}></Menu>
+          <Grid
+            container
+            direction="column"
+            sx={{ paddingTop: "1rem" }}
+            alignItems="center"
+          >
+            <Typography variant="h1" color="white" key="1">
+              <u>WELCOME!</u>
+            </Typography>
 
-          <Grid container justifyContent="center" sx={{ paddingTop: "2rem" }}>
-            <img src={angel} alt="Angel's Landing" className="angelImg"></img>
-            <Grid
-              container
-              direction="column"
-              width={width > introWidth ? "90%" : "95%"}
-              padding="1rem 2rem 0rem 2rem"
-            >
-              {isAuthenticated && edit ? (
-                <TextField
-                  error={intro.length === 0}
-                  fullWidth={true}
-                  multiline
-                  value={intro}
-                  sx={{
-                    backgroundColor: "white",
-                    opacity: ".7 ",
-                    borderRadius: ".5rem",
-                  }}
-                  onChange={(e) => handleTextChange(e, intro, setIntro)}
-                ></TextField>
-              ) : (
-                intro.split("\n").map((line, idx) => (
-                  <>
-                    {idx !== 0 && <br></br>}
-                    <Typography
-                      variant="h4"
-                      color="white"
-                      textAlign="left"
-                      key={idx}
-                    >
-                      {line}
-                    </Typography>
-                  </>
-                ))
-              )}
+            <Grid container justifyContent="center" sx={{ paddingTop: "2rem" }}>
+              <img src={angel} alt="Angel's Landing" className="angelImg"></img>
+              <Grid
+                container
+                direction="column"
+                width={width > introWidth ? "90%" : "95%"}
+                padding="1rem 2rem 0rem 2rem"
+              >
+                {isAuthenticated && edit ? (
+                  <TextField
+                    error={intro.length === 0}
+                    fullWidth={true}
+                    multiline
+                    value={intro}
+                    sx={{
+                      backgroundColor: "white",
+                      opacity: ".7 ",
+                      borderRadius: ".5rem",
+                    }}
+                    onChange={(e) => handleTextChange(e, intro, setIntro)}
+                  ></TextField>
+                ) : (
+                  intro.split("\n").map((line, idx) => (
+                    <>
+                      {idx !== 0 && <br></br>}
+                      <Typography color="white" textAlign="left" key={idx}>
+                        {line}
+                      </Typography>
+                    </>
+                  ))
+                )}
 
-              <br></br>
-              <Divider sx={{ backgroundColor: "grey", borderBottomWidth: 2 }} />
-              <br></br>
-              {isAuthenticated && edit ? (
-                <TextField
-                  error={websiteInfo.length === 0}
-                  fullWidth={true}
-                  multiline
-                  value={websiteInfo}
-                  sx={{
-                    backgroundColor: "white",
-                    opacity: ".7 ",
-                    borderRadius: ".5rem",
-                  }}
-                  onChange={(e) =>
-                    handleTextChange(e, websiteInfo, setWebsiteInfo)
-                  }
-                ></TextField>
-              ) : (
-                websiteInfo.split("\n").map((line, idx) => (
-                  <>
-                    {idx !== 0 && <br></br>}
-                    <Typography
-                      variant="h4"
-                      color="white"
-                      textAlign="left"
-                      key={idx}
-                    >
-                      {line}
-                    </Typography>
-                  </>
-                ))
-              )}
+                <Grid margin="1rem 0">
+                  <Divider
+                    sx={{ backgroundColor: "white", borderBottomWidth: 1 }}
+                  />
+                  <Divider
+                    sx={{ backgroundColor: "black", borderBottomWidth: 1 }}
+                  />
+                  <Divider
+                    sx={{ backgroundColor: "white", borderBottomWidth: 1 }}
+                  />
+                </Grid>
+
+                {isAuthenticated && edit ? (
+                  <TextField
+                    error={websiteInfo.length === 0}
+                    fullWidth={true}
+                    multiline
+                    value={websiteInfo}
+                    sx={{
+                      backgroundColor: "white",
+                      opacity: ".7 ",
+                      borderRadius: ".5rem",
+                    }}
+                    onChange={(e) =>
+                      handleTextChange(e, websiteInfo, setWebsiteInfo)
+                    }
+                  ></TextField>
+                ) : (
+                  websiteInfo.split("\n").map((line, idx) => (
+                    <>
+                      {idx !== 0 && <br></br>}
+                      <Typography color="white" textAlign="left" key={idx}>
+                        {line}
+                      </Typography>
+                    </>
+                  ))
+                )}
+              </Grid>
             </Grid>
           </Grid>
-        </Grid>
-        <Stack
-          direction="row"
-          alignItems="center"
-          justifyContent="right"
-          padding="1rem 1rem 0rem 0rem"
-          spacing={2}
-        >
-          {isAuthenticated && (
-            <Button
-              variant="contained"
-              onClick={async () => {
-                await updateHome({ variables: { home } });
-                window.location.replace("/");
-              }}
-              disabled={canSubmitArr.length > 0}
-              key="0"
-            >
-              <Typography variant="h6"> SAVE</Typography>
-            </Button>
-          )}
+          <Stack
+            direction="row"
+            alignItems="center"
+            justifyContent="right"
+            padding="1rem 1rem 0rem 0rem"
+            spacing={2}
+          >
+            {isAuthenticated && (
+              <Button
+                variant="contained"
+                onClick={async () => {
+                  await updateHome({ variables: { home } });
+                  window.location.replace("/");
+                }}
+                disabled={canSubmitArr.length > 0}
+                key="0"
+              >
+                <Typography variant="h6"> SAVE</Typography>
+              </Button>
+            )}
 
-          {isAuthenticated && edit && (
-            <Button
-              variant="contained"
-              color="success"
-              onClick={() => {
-                setEdit(false);
-              }}
-              key="2"
-            >
-              <Typography variant="h6"> VIEW</Typography>
-            </Button>
-          )}
-          {isAuthenticated && !edit && (
-            <Button
-              variant="contained"
-              color="success"
-              onClick={() => {
-                setEdit(true);
-              }}
-              key="2"
-            >
-              <Typography variant="h6"> EDIT</Typography>
-            </Button>
-          )}
-        </Stack>
-        <Footer backgroundColor={backgroundColor}></Footer>
-      </Grid>
-    </ThemeProvider>
+            {isAuthenticated && edit && (
+              <Button
+                variant="contained"
+                color="success"
+                onClick={() => {
+                  setEdit(false);
+                }}
+                key="2"
+              >
+                <Typography variant="h6"> VIEW</Typography>
+              </Button>
+            )}
+            {isAuthenticated && !edit && (
+              <Button
+                variant="contained"
+                color="success"
+                onClick={() => {
+                  setEdit(true);
+                }}
+                key="2"
+              >
+                <Typography variant="h6"> EDIT</Typography>
+              </Button>
+            )}
+          </Stack>
+          <Footer backgroundColor={backgroundColor}></Footer>
+        </Grid>
+      </ThemeProvider>
+    </Grid>
   );
 }

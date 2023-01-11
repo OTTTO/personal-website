@@ -75,7 +75,7 @@ export function Post() {
       </Grid>
       <Grid
         sx={{ height: "vh100" }}
-        border="black solid .25rem"
+        border="double thick black"
         display={isLoading ? "none" : "visible"}
       >
         <ThemeProvider theme={mainTheme}>
@@ -84,27 +84,54 @@ export function Post() {
             container
             direction="column"
             paddingBottom="2rem"
-            border="black solid .25rem"
-            margin="0 auto"
+            border="double thick black"
+            margin="0 auto .25rem auto"
             width="99%"
+            sx={{
+              backgroundColor: !isAuthenticated || !edit ? "black" : "white",
+            }}
           >
-            {!isAuthenticated || !edit ? (
-              <Typography variant="h1" textAlign="center">
-                {post.title}
-              </Typography>
-            ) : (
-              <TextField
-                fullWidth={true}
-                value={post.title}
-                onChange={(e) => handleTextChange(e, "title")}
-                label="Title"
-                sx={{ margin: "1rem 0rem" }}
-              ></TextField>
-            )}
-            <Divider sx={{ backgroundColor: "black", borderBottomWidth: 2 }} />
-            <Grid padding=".5rem 0">
+            <Grid padding=".5rem 0" width="95%" margin="0 auto">
               {!isAuthenticated || !edit ? (
-                <Typography variant="h3" textAlign="center" fontWeight="light">
+                <Typography variant="h1" textAlign="center" color="white">
+                  {post.title}
+                </Typography>
+              ) : (
+                <TextField
+                  fullWidth={true}
+                  value={post.title}
+                  onChange={(e) => handleTextChange(e, "title")}
+                  label="Title"
+                  sx={{ margin: "1rem 0rem" }}
+                ></TextField>
+              )}
+            </Grid>
+            <Divider
+              sx={{
+                backgroundColor: !isAuthenticated || !edit ? "white" : "black",
+                borderBottomWidth: 1,
+              }}
+            />
+            <Divider
+              sx={{
+                backgroundColor: !isAuthenticated || !edit ? "black" : "white",
+                borderBottomWidth: 1,
+              }}
+            />
+            <Divider
+              sx={{
+                backgroundColor: !isAuthenticated || !edit ? "white" : "black",
+                borderBottomWidth: 1,
+              }}
+            />
+            <Grid padding=".5rem 0" width="95%" margin="0 auto">
+              {!isAuthenticated || !edit ? (
+                <Typography
+                  variant="h3"
+                  textAlign="center"
+                  fontWeight="light"
+                  color="white"
+                >
                   {post.author}
                 </Typography>
               ) : (
@@ -117,12 +144,29 @@ export function Post() {
                 ></TextField>
               )}
               {(!isAuthenticated || !edit) && (
-                <Typography variant="h4" textAlign="center">
+                <Typography variant="h4" textAlign="center" color="white">
                   {new Date(post.createdAt).toLocaleDateString()}
                 </Typography>
               )}
             </Grid>
-            <Divider sx={{ backgroundColor: "black", borderBottomWidth: 2 }} />
+            <Divider
+              sx={{
+                backgroundColor: !isAuthenticated || !edit ? "white" : "black",
+                borderBottomWidth: 1,
+              }}
+            />
+            <Divider
+              sx={{
+                backgroundColor: !isAuthenticated || !edit ? "black" : "white",
+                borderBottomWidth: 1,
+              }}
+            />
+            <Divider
+              sx={{
+                backgroundColor: !isAuthenticated || !edit ? "white" : "black",
+                borderBottomWidth: 1,
+              }}
+            />
             <Grid container>
               <Grid width="5%"></Grid>
               <Grid
@@ -130,16 +174,16 @@ export function Post() {
                 sx={{
                   padding: "1rem",
                   marginTop: "1rem",
-                  border: "solid black",
+                  backgroundColor: "white",
                 }}
                 width="90%"
                 alignItems="center"
                 justifyContent="center"
+                border="double thick black"
               >
                 <Grid>
                   {(!isAuthenticated || !edit) && (
                     <Typography
-                      variant="h4"
                       dangerouslySetInnerHTML={{
                         __html: DOMPurify.sanitize(post.content),
                       }}

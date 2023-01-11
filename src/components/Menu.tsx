@@ -1,3 +1,4 @@
+import { MenuList } from "@material-ui/core";
 import {
   AdminPanelSettingsOutlined,
   ArticleOutlined,
@@ -5,15 +6,19 @@ import {
   HomeOutlined,
   ReceiptOutlined,
 } from "@mui/icons-material";
+import { Menu as MenuIcon } from "@mui/icons-material";
 import {
   Fab,
   Typography,
   Menu as MuiMenu,
   MenuItem,
   Grid,
+  Button,
+  ThemeProvider,
 } from "@mui/material";
 import useWindowDimensions from "hooks/useWindowDimensions";
 import PopupState, { bindTrigger, bindMenu } from "material-ui-popup-state";
+import muiMenuTheme from "themes/muiMenuTheme";
 import { authenticationCheck } from "utils/utils";
 
 const isAuthenticated = authenticationCheck();
@@ -24,8 +29,9 @@ export function Menu({
   bottomBorder = true,
 }) {
   const { width } = useWindowDimensions();
-  const smallerSize = 650;
+  const smallerSize = 770;
   const isLarger = width > smallerSize;
+
   return (
     <Grid
       sx={{
@@ -61,62 +67,135 @@ export function Menu({
           width="auto"
           spacing={0}
         >
-          <Fab
-            variant="extended"
-            href="/"
-            sx={{ margin: "1rem 0.5rem 0rem 0rem" }}
-            size={isLarger ? "large" : "small"}
-          >
-            {isLarger ? (
-              <HomeOutlined
-                sx={{ mr: 1 }}
-                fontSize={isLarger ? "large" : "small"}
-              />
-            ) : null}
-            <Typography variant="h6">HOME</Typography>
-          </Fab>
-          <Fab
-            variant="extended"
-            href="/resume"
-            sx={{ margin: "1rem 0.5rem 0rem 0rem" }}
-            size={isLarger ? "large" : "small"}
-          >
-            {isLarger ? (
-              <ArticleOutlined
-                sx={{ mr: 1 }}
-                fontSize={isLarger ? "large" : "small"}
-              />
-            ) : null}
-            <Typography variant="h6">RESUME</Typography>
-          </Fab>
-          <Fab
-            variant="extended"
-            href="/projects"
-            sx={{ margin: "1rem 0.5rem 0rem 0rem" }}
-            size={isLarger ? "large" : "small"}
-          >
-            {isLarger ? (
-              <CrisisAlertOutlined
-                sx={{ mr: 1 }}
-                fontSize={isLarger ? "large" : "small"}
-              />
-            ) : null}
-            <Typography variant="h6">PROJECTS</Typography>
-          </Fab>
-          <Fab
-            variant="extended"
-            href="/blog"
-            sx={{ margin: "1rem 0.5rem 0rem 0rem" }}
-            size={isLarger ? "large" : "small"}
-          >
-            {isLarger ? (
-              <ReceiptOutlined
-                sx={{ mr: 1 }}
-                fontSize={isLarger ? "large" : "small"}
-              />
-            ) : null}
-            <Typography variant="h6">BLOG</Typography>
-          </Fab>
+          {!isLarger ? (
+            <PopupState variant="popover" popupId="main-popup">
+              {(popupState) => (
+                <>
+                  <Button
+                    sx={{
+                      margin: "1.2rem 1rem 0rem 0rem",
+                      border: "white solid ",
+                    }}
+                    size="medium"
+                    {...bindTrigger(popupState)}
+                  >
+                    <MenuIcon
+                      sx={{ mr: 1 }}
+                      fontSize={isLarger ? "large" : "small"}
+                      style={{ color: "white" }}
+                    />
+                  </Button>
+                  <ThemeProvider theme={muiMenuTheme}>
+                    <MuiMenu
+                      {...bindMenu(popupState)}
+                      className=".MuiMenu-list"
+                      sx={{
+                        list: {
+                          padding: 0,
+                        },
+                      }}
+                    >
+                      <MenuItem
+                        sx={{ border: "black solid" }}
+                        onClick={() => {
+                          popupState.close();
+                          window.location.href = "/";
+                        }}
+                      >
+                        <Typography variant="h6">HOME</Typography>
+                      </MenuItem>
+                      <MenuItem
+                        sx={{ border: "black solid" }}
+                        onClick={() => {
+                          popupState.close();
+                          window.location.href = "/resume";
+                        }}
+                      >
+                        <Typography variant="h6">RESUME</Typography>
+                      </MenuItem>
+                      <MenuItem
+                        sx={{ border: "black solid" }}
+                        onClick={() => {
+                          popupState.close();
+                          window.location.href = "/projects";
+                        }}
+                      >
+                        <Typography variant="h6">PROJECTS</Typography>
+                      </MenuItem>
+                      <MenuItem
+                        sx={{ border: "black solid" }}
+                        onClick={() => {
+                          popupState.close();
+                          window.location.href = "/blog";
+                        }}
+                      >
+                        <Typography variant="h6">BLOG</Typography>
+                      </MenuItem>
+                    </MuiMenu>
+                  </ThemeProvider>
+                </>
+              )}
+            </PopupState>
+          ) : (
+            <>
+              <Fab
+                variant="extended"
+                href="/"
+                sx={{ margin: "1rem 0.5rem 0rem 0rem" }}
+                size={isLarger ? "large" : "small"}
+              >
+                {isLarger ? (
+                  <HomeOutlined
+                    sx={{ mr: 1 }}
+                    fontSize={isLarger ? "large" : "small"}
+                  />
+                ) : null}
+                <Typography variant="h4">HOME</Typography>
+              </Fab>
+              <Fab
+                variant="extended"
+                href="/resume"
+                sx={{ margin: "1rem 0.5rem 0rem 0rem" }}
+                size={isLarger ? "large" : "small"}
+              >
+                {isLarger ? (
+                  <ArticleOutlined
+                    sx={{ mr: 1 }}
+                    fontSize={isLarger ? "large" : "small"}
+                  />
+                ) : null}
+                <Typography variant="h4">RESUME</Typography>
+              </Fab>
+              <Fab
+                variant="extended"
+                href="/projects"
+                sx={{ margin: "1rem 0.5rem 0rem 0rem" }}
+                size={isLarger ? "large" : "small"}
+              >
+                {isLarger ? (
+                  <CrisisAlertOutlined
+                    sx={{ mr: 1 }}
+                    fontSize={isLarger ? "large" : "small"}
+                  />
+                ) : null}
+                <Typography variant="h4">PROJECTS</Typography>
+              </Fab>
+              <Fab
+                variant="extended"
+                href="/blog"
+                sx={{ margin: "1rem 0.5rem 0rem 0rem" }}
+                size={isLarger ? "large" : "small"}
+              >
+                {isLarger ? (
+                  <ReceiptOutlined
+                    sx={{ mr: 1 }}
+                    fontSize={isLarger ? "large" : "small"}
+                  />
+                ) : null}
+                <Typography variant="h4">BLOG</Typography>
+              </Fab>
+            </>
+          )}
         </Grid>
         <Grid
           container
@@ -127,50 +206,29 @@ export function Menu({
           display="inline-block"
           width="auto"
         >
-          <PopupState variant="popover" popupId="admin-popup">
-            {(popupState) => (
-              <>
-                <Fab
-                  variant="extended"
-                  sx={{ margin: "1rem 1rem 0rem 0rem" }}
-                  size={isLarger ? "large" : "small"}
-                  color={!isAuthenticated ? "info" : "warning"}
-                  {...bindTrigger(popupState)}
-                >
-                  {isLarger ? (
-                    <AdminPanelSettingsOutlined
-                      sx={{ mr: 1 }}
-                      fontSize={isLarger ? "large" : "small"}
-                    />
-                  ) : null}
-                  <Typography variant="h6">ADMIN</Typography>
-                </Fab>
-                <MuiMenu {...bindMenu(popupState)}>
-                  {!isAuthenticated ? (
-                    <MenuItem
-                      onClick={() => {
-                        popupState.close();
-                        window.location.replace("/admin");
-                      }}
-                    >
-                      <Typography variant="h6">LOGIN</Typography>
-                    </MenuItem>
-                  ) : (
-                    <MenuItem
-                      onClick={() => {
-                        popupState.close();
-                        localStorage.removeItem("token");
-                        localStorage.removeItem("testToken");
-                        window.location.reload();
-                      }}
-                    >
-                      <Typography variant="h6">LOGOUT</Typography>
-                    </MenuItem>
-                  )}
-                </MuiMenu>
-              </>
-            )}
-          </PopupState>
+          <Fab
+            variant="extended"
+            sx={{ margin: "1rem 1rem 0rem 0rem" }}
+            size={isLarger ? "large" : "medium"}
+            color={!isAuthenticated ? "info" : "warning"}
+            onClick={() => {
+              if (!isAuthenticated) {
+                window.location.href = "/admin";
+              } else {
+                localStorage.removeItem("token");
+                localStorage.removeItem("testToken");
+                window.location.reload();
+              }
+            }}
+          >
+            <AdminPanelSettingsOutlined
+              sx={{ mr: 1 }}
+              fontSize={isLarger ? "large" : "medium"}
+            />
+            <Typography variant="h4">
+              {!isAuthenticated ? "LOGIN" : "LOGOUT"}
+            </Typography>
+          </Fab>
         </Grid>
       </Grid>
     </Grid>
