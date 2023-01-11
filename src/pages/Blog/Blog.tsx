@@ -19,6 +19,7 @@ import mainTheme from "themes/mainTheme";
 import { authenticationCheck } from "utils/utils";
 import axios from "axios";
 import * as DOMPurify from "dompurify";
+import { Loading } from "components/Loading";
 
 const isAuthenticated = authenticationCheck();
 
@@ -31,6 +32,7 @@ interface IPost {
 }
 
 export function Blog() {
+  const [loading, setLoading] = React.useState(true);
   const [posts, setPosts] = React.useState([]);
   const [deleteId, setDeleteId] = React.useState({ id: "", idx: -1 });
   const [openDelete, setOpenDelete] = React.useState(false);
@@ -58,9 +60,12 @@ export function Blog() {
       if (resp) {
         setPosts(resp.data);
       }
+      setLoading(false);
     };
     fetchData();
   }, []);
+
+  if (loading) return <Loading />;
 
   return (
     <Grid sx={{ height: "vh100" }} border="black solid .5rem">
