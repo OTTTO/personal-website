@@ -79,8 +79,14 @@ export function Post() {
         display={isLoading ? "none" : "visible"}
       >
         <ThemeProvider theme={mainTheme}>
-          <Menu backgroundColor="white"></Menu>
-          <Grid container direction="column" width="90%" margin="0 auto">
+          <Menu backgroundColor="black" borderSides></Menu>
+          <Grid
+            container
+            direction="column"
+            width="90%"
+            margin="0 auto"
+            paddingBottom="2rem"
+          >
             {!isAuthenticated || !edit ? (
               <Typography variant="h1" textAlign="center">
                 {post.title}
@@ -94,6 +100,7 @@ export function Post() {
                 sx={{ margin: "1rem 0rem" }}
               ></TextField>
             )}
+            <Divider sx={{ backgroundColor: "grey", borderBottomWidth: 2 }} />
             {!isAuthenticated || !edit ? (
               <Typography variant="h3" textAlign="center" fontWeight="light">
                 {post.author}
@@ -208,7 +215,7 @@ export function Post() {
               </Stack>
             )}
           </Grid>
-          <Footer backgroundColor="white" />
+          <Footer backgroundColor="black" />
         </ThemeProvider>
       </Grid>
     </>

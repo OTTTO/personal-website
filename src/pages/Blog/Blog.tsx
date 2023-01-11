@@ -70,8 +70,14 @@ export function Blog() {
   return (
     <Grid sx={{ height: "vh100" }} border="black solid .5rem">
       <ThemeProvider theme={mainTheme}>
-        <Menu backgroundColor="white"></Menu>
-        <Grid container direction="column" width="90%" margin="0 auto">
+        <Menu backgroundColor="black" borderSides></Menu>
+        <Grid
+          container
+          direction="column"
+          width="90%"
+          margin="0 auto"
+          paddingBottom="2rem"
+        >
           <Typography variant="h1" textAlign="center">
             PERSONAL BLOG
           </Typography>
@@ -145,7 +151,7 @@ export function Blog() {
               );
             })}
         </Grid>
-        <Footer backgroundColor="white" />
+        <Footer backgroundColor="black" />
 
         {/* DELETE MODAL */}
         <Modal
