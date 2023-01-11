@@ -7,7 +7,7 @@ import mainTheme from "themes/mainTheme";
 export function ErrorPage() {
   return (
     <ThemeProvider theme={mainTheme}>
-      <Grid border="black solid .5rem">
+      <Grid border="black solid .25rem">
         <Menu backgroundColor="white"></Menu>
         <Grid
           container

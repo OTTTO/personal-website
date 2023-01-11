@@ -865,7 +865,7 @@ export function Trouble() {
       container
       direction="column"
       className={finished ? "fireworks" : ""}
-      border="solid black .5rem"
+      border="solid black .25rem"
     >
       <ThemeProvider theme={mainTheme}>
         <Menu backgroundColor="black" borderSides bottomBorder={false}></Menu>

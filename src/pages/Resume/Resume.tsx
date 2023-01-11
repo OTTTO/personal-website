@@ -401,7 +401,7 @@ export function Resume() {
 
   return (
     <ThemeProvider theme={mainTheme}>
-      <Grid border="white solid .5rem">
+      <Grid border="white solid .25rem">
         <Menu backgroundColor={backgroundColor} />
         <Grid
           padding="1rem 0rem 1rem 0rem"

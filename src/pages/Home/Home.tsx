@@ -81,7 +81,7 @@ export function Home() {
           overflowY: "auto",
           margin: "0 auto",
           textAlign: "center",
-          border: "white solid .5rem",
+          border: "white solid .25rem",
         }}
       >
         <Menu backgroundColor={backgroundColor}></Menu>

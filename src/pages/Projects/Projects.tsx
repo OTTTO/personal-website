@@ -17,17 +17,15 @@ export function Projects() {
   const smallerDeviceWidth = 1000;
   const isSmaller = width < smallerDeviceWidth;
   return (
-    <Grid sx={{ height: "vh100" }} border="black solid .5rem">
+    <Grid sx={{ height: "vh100" }} border="white solid .25rem">
       <ThemeProvider theme={projectsTheme}>
-        <Menu backgroundColor="black" borderSides></Menu>
+        <Menu backgroundColor="black"></Menu>
         <Grid
           container
           direction="column"
           margin="0 auto"
           paddingBottom="2rem"
           borderBottom=".25rem white solid"
-          borderLeft=".5rem white solid"
-          borderRight=".5rem white solid"
           sx={{ backgroundColor: "black" }}
         >
           <Typography variant="h1" textAlign="center" color="white">

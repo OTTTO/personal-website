@@ -67,86 +67,88 @@ function AdminLogin() {
 
   return (
     <ThemeProvider theme={mainTheme}>
-      <Grid
-        sx={{
-          border: "white solid .5rem",
-        }}
-      >
+      <Grid border="white solid .25rem">
         <Menu backgroundColor={backgroundColor}></Menu>
-        {new Array(9).fill(true).map((el, idx) => (
-          <hr key={idx}></hr>
-        ))}
-        <Grid sx={{ margin: "0 auto", width: "80%" }}>
-          <Grid container direction="column">
-            <FormControl sx={{ m: 1 }} variant="outlined">
-              <OutlinedInput
-                id="outlined-email"
-                type="text"
-                value={values.email}
-                onChange={handleChange("email")}
-                placeholder="Email"
+        <Grid border="black solid .25rem">
+          {new Array(9).fill(true).map((el, idx) => (
+            <hr key={idx}></hr>
+          ))}
+          <Grid sx={{ margin: "0 auto", width: "80%" }}>
+            <Grid container direction="column">
+              <FormControl sx={{ m: 1 }} variant="outlined">
+                <OutlinedInput
+                  id="outlined-email"
+                  type="text"
+                  value={values.email}
+                  onChange={handleChange("email")}
+                  placeholder="Email"
+                  onKeyDown={handleKeyDown}
+                  autoFocus
+                ></OutlinedInput>
+              </FormControl>
+              <FormControl sx={{ m: 1 }} variant="outlined">
+                <OutlinedInput
+                  id="outlined-adornment-password"
+                  type={values.showPassword ? "text" : "password"}
+                  value={values.password}
+                  onChange={handleChange("password")}
+                  placeholder="Password"
+                  onKeyDown={handleKeyDown}
+                  endAdornment={
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label="toggle password visibility"
+                        onClick={handleClickShowPassword}
+                        onMouseDown={handleMouseDownPassword}
+                        edge="end"
+                      >
+                        {values.showPassword ? (
+                          <VisibilityOff />
+                        ) : (
+                          <Visibility />
+                        )}
+                      </IconButton>
+                    </InputAdornment>
+                  }
+                  label="Password"
+                />
+              </FormControl>
+              <Button
+                sx={{ m: 1 }}
+                variant="contained"
                 onKeyDown={handleKeyDown}
-                autoFocus
-              ></OutlinedInput>
-            </FormControl>
-            <FormControl sx={{ m: 1 }} variant="outlined">
-              <OutlinedInput
-                id="outlined-adornment-password"
-                type={values.showPassword ? "text" : "password"}
-                value={values.password}
-                onChange={handleChange("password")}
-                placeholder="Password"
-                onKeyDown={handleKeyDown}
-                endAdornment={
-                  <InputAdornment position="end">
-                    <IconButton
-                      aria-label="toggle password visibility"
-                      onClick={handleClickShowPassword}
-                      onMouseDown={handleMouseDownPassword}
-                      edge="end"
-                    >
-                      {values.showPassword ? <VisibilityOff /> : <Visibility />}
-                    </IconButton>
-                  </InputAdornment>
-                }
-                label="Password"
-              />
-            </FormControl>
-            <Button
-              sx={{ m: 1 }}
-              variant="contained"
-              onKeyDown={handleKeyDown}
-              onClick={handleSubmit}
-            >
-              LOG IN
-            </Button>
-            <Button
-              sx={{
-                m: 1,
-                backgroundColor: "green",
-                "&:hover": {
-                  color: "white",
-                  backgroundColor: "red",
-                },
-              }}
-              variant="contained"
-              onClick={() => {
-                localStorage.removeItem("token");
-                localStorage.setItem("testToken", "TEST");
-                if (!localStorage.getItem("resume")) {
-                  localStorage.setItem("resume", JSON.stringify(testResume));
-                }
-                localStorage.setItem("edit", "true");
-                window.location.replace("/resume");
-              }}
-            >
-              TEST ADMIN FUNCTIONALITY
-            </Button>
+                onClick={handleSubmit}
+              >
+                LOG IN
+              </Button>
+              <Button
+                sx={{
+                  m: 1,
+                  backgroundColor: "green",
+                  "&:hover": {
+                    color: "white",
+                    backgroundColor: "red",
+                  },
+                }}
+                variant="contained"
+                onClick={() => {
+                  localStorage.removeItem("token");
+                  localStorage.setItem("testToken", "TEST");
+                  if (!localStorage.getItem("resume")) {
+                    localStorage.setItem("resume", JSON.stringify(testResume));
+                  }
+                  localStorage.setItem("edit", "true");
+                  window.location.replace("/resume");
+                }}
+              >
+                TEST ADMIN FUNCTIONALITY
+              </Button>
+            </Grid>
           </Grid>
+          {new Array(9).fill(true).map((el, idx) => (
+            <hr key={idx}></hr>
+          ))}
         </Grid>
-        {new Array(9).fill(true).map((el, idx) => (
-          <hr key={idx}></hr>
-        ))}
         <Footer backgroundColor={backgroundColor}></Footer>
       </Grid>
     </ThemeProvider>

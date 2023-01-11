@@ -69,7 +69,7 @@ export function Blog() {
   if (loading) return <Loading />;
 
   return (
-    <Grid sx={{ height: "vh100" }} border=".5rem white solid">
+    <Grid sx={{ height: "vh100" }} border=".25rem white solid">
       <ThemeProvider theme={projectsTheme}>
         <Menu backgroundColor="black"></Menu>
         <Grid
