@@ -43,7 +43,10 @@ export function Blog() {
     setPosts(newPosts);
 
     await axios.delete(
-      `${process.env.REACT_APP_API_ENDPOINT}/blog/post/delete/${deleteId.id}`
+      `${process.env.REACT_APP_API_ENDPOINT}/blog/post/delete/${deleteId.id}`,
+      {
+        headers: { Authorization: localStorage.getItem("token") },
+      }
     );
   };
 

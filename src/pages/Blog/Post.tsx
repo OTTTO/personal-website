@@ -150,7 +150,10 @@ export function Post() {
                 onClick={async () => {
                   await axios.put(
                     `${process.env.REACT_APP_API_ENDPOINT}/blog/post/save`,
-                    post
+                    post,
+                    {
+                      headers: { Authorization: localStorage.getItem("token") },
+                    }
                   );
                   window.location.href = `/blog/post/edit/${post.id}`;
                 }}
