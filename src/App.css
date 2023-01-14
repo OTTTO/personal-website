@@ -77,6 +77,34 @@
   margin: auto;
 }
 
+.rdw-editor-wrapper {
+  width: 100%;
+}
+.rdw-editor-main {
+  border: 1px solid #f1f1f1;
+  padding: 5px;
+  border-radius: 2px;
+  height: 200px;
+}
+.rdw-editor-toolbar {
+  width: 100%;
+  display: inline;
+}
+.rdw-storybook-textarea {
+  margin-top: 20px;
+  resize: none;
+  width: 100%;
+  border: 1px solid #f1f1f1;
+  height: 100px;
+}
+.rdw-option-wrapper,
+.rdw-inline-wrapper,
+.rdw-link-wrapper {
+  width: 2rem !important;
+  display: inline !important;
+  padding-right: 0.5rem;
+}
+
 /* firework */
 
 @keyframes firework {
