@@ -65,6 +65,7 @@
 
 .projectImg {
   max-width: 100%;
+  border: solid black;
 }
 
 .projectImgSmallDevice {
