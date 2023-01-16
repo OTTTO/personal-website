@@ -1,17 +1,24 @@
 import { Editor } from "react-draft-wysiwyg";
-import { EditorState } from "draft-js";
+import { ContentState, convertFromHTML, EditorState } from "draft-js";
+import { toHTML } from "react-mui-draft-wysiwyg";
 import React from "react";
 
-export function WysiwygEditor() {
+export function WysiwygEditor({ content, onChange, idx }) {
   const [editorState, setEditorState] = React.useState(
-    EditorState.createEmpty()
+    EditorState.createWithContent(
+      ContentState.createFromBlockArray(convertFromHTML(content).contentBlocks)
+    )
   );
+
+  const handleChangeEditor = (val) => {
+    setEditorState(val);
+    onChange(toHTML(val.getCurrentContent()), idx);
+  };
 
   return (
     <Editor
       editorState={editorState}
-      onEditorStateChange={setEditorState}
-      editorClassName="rdw-storybook-editor"
+      onEditorStateChange={handleChangeEditor}
       toolbar={{ options: ["inline", "link"] }}
       placeholder="Text goes here.."
     />

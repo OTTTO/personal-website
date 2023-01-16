@@ -2,235 +2,305 @@ import {
   Button,
   Divider,
   Grid,
+  IconButton,
+  Stack,
+  TextField,
   ThemeProvider,
   Typography,
 } from "@mui/material";
 import { Footer } from "components/Footer";
 import { Menu } from "components/Menu";
 import useWindowDimensions from "hooks/useWindowDimensions";
-import trouble from "images/trouble.jpeg";
-import website from "images/personal-website.jpeg";
 import projectsTheme from "themes/projectsTheme";
+import { authenticationCheck } from "utils/utils";
+import { WysiwygEditor } from "components/WysiwygEditor";
+import * as DOMPurify from "dompurify";
+import { useMutation, useQuery } from "@apollo/client";
+import { PROJECTS, UPDATE_PROJECT } from "queries/project";
+import { useEffect } from "react";
 import React from "react";
+import { Loading } from "components/Loading";
+import { ErrorPage } from "pages/Error/Error";
+import { AddCircle, RemoveCircle } from "@mui/icons-material";
+import { ProjectImage } from "./ProjectImage";
+import { Project } from "types/project";
+
+const isAuthenticated = authenticationCheck();
 
 export function Projects() {
   const { width } = useWindowDimensions();
   const smallerDeviceWidth = 1000;
   const isSmaller = width < smallerDeviceWidth;
+
+  const [edit, setEdit] = React.useState(true);
+  const [projects, setProjects] = React.useState([]);
+
+  const handleTextChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    key: string,
+    idx: number
+  ) => {
+    const newProjects = structuredClone(projects);
+    const newProject = structuredClone(newProjects[idx]);
+    newProject[key] = e.target.value;
+    newProjects[idx] = newProject;
+    setProjects(newProjects);
+  };
+
+  const handleContentChange = (content: string, idx: number) => {
+    const newProjects = structuredClone(projects);
+    const newProject = structuredClone(newProjects[idx]);
+    newProject.content = content;
+    newProjects[idx] = newProject;
+    setProjects(newProjects);
+  };
+
+  const addProject = () => {
+    const newProjects = structuredClone(projects);
+    newProjects.push(new Project());
+    setProjects(newProjects);
+  };
+
+  const removeProject = (idx: number) => {
+    let newProjects = structuredClone(projects);
+    newProjects.splice(idx, 1);
+    setProjects(newProjects);
+  };
+
+  const [updateProjects] = useMutation(UPDATE_PROJECT);
+  const { data, loading, error } = useQuery(PROJECTS);
+
+  useEffect(() => {
+    if (!loading && data) {
+      setProjects(data.projects);
+    }
+  }, [loading, data]);
+
+  if (loading) return <Loading />;
+  if (error) return <ErrorPage />;
+
   return (
-    <>
-      <Grid border="thick double black">
-        <Grid sx={{ height: "vh100" }} border="white solid .25rem">
-          <ThemeProvider theme={projectsTheme}>
-            <Menu backgroundColor="black"></Menu>
-            <Grid
-              container
-              direction="column"
-              margin="0 auto"
-              paddingBottom="2rem"
-              borderBottom=".25rem white solid"
+    <Grid border="thick double black">
+      <Grid sx={{ height: "vh100" }} border="white solid .25rem">
+        <ThemeProvider theme={projectsTheme}>
+          <Menu backgroundColor="black"></Menu>
+          <Grid
+            container
+            direction="column"
+            margin="0 auto"
+            paddingBottom="2rem"
+            borderBottom={!isAuthenticated ? ".25rem white solid" : null}
+            sx={{ backgroundColor: "black" }}
+          >
+            <Typography variant="h1" textAlign="center" color="white">
+              PERSONAL PROJECTS
+            </Typography>
+            {isAuthenticated && edit ? (
+              <IconButton onClick={addProject}>
+                <AddCircle sx={{ mr: 1 }} style={{ color: "white" }} />
+              </IconButton>
+            ) : null}
+            <Divider sx={{ backgroundColor: "white", borderBottomWidth: 4 }} />
+            {[...projects]
+              .sort((a, b) => a.createdAt - b.createdAt)
+              .map((project, idx) => (
+                <Grid container key={idx}>
+                  <Grid width="5%"></Grid>
+
+                  <Grid
+                    container
+                    sx={{
+                      backgroundColor: "white",
+                      padding: "1rem",
+                      margin:
+                        idx !== projects.length - 1
+                          ? "1rem 0"
+                          : "1rem 0rem 0rem 0rem",
+                      border: "thick double black",
+                    }}
+                    width="90%"
+                    alignItems="center"
+                    justifyContent="center"
+                  >
+                    <Grid
+                      container
+                      direction="column"
+                      width={isSmaller ? "80%" : "15%"}
+                    >
+                      {!isAuthenticated || !edit ? (
+                        <Typography
+                          variant={isSmaller ? "h3" : "h4"}
+                          textAlign="center"
+                        >
+                          <b>{project.title && project.title.toUpperCase()}</b>
+                        </Typography>
+                      ) : (
+                        <TextField
+                          fullWidth={true}
+                          value={project.title || ""}
+                          onChange={(e) => handleTextChange(e, "title", idx)}
+                          label="Title"
+                          sx={{ margin: "1rem 0rem" }}
+                        ></TextField>
+                      )}
+                      <Grid
+                        padding={isSmaller ? "1rem 0rem" : ".5rem 0rem"}
+                        margin="0 auto"
+                        width="100%"
+                      >
+                        {!isAuthenticated && project.href ? (
+                          <Button
+                            href={project.href}
+                            target={project.openNewTab ? "_blank" : null}
+                            rel={project.openNewTab ? "noreffer" : null}
+                            sx={{
+                              padding: isSmaller ? "1rem 0rem" : ".5rem 0rem",
+                            }}
+                          >
+                            <ProjectImage
+                              projects={projects}
+                              isSmaller={isSmaller}
+                              edit={edit}
+                              idx={idx}
+                              handleTextChange={handleTextChange}
+                              isAuthenticated={isAuthenticated}
+                              setProjects={setProjects}
+                            ></ProjectImage>
+                          </Button>
+                        ) : (
+                          <ProjectImage
+                            projects={projects}
+                            isSmaller={isSmaller}
+                            edit={edit}
+                            idx={idx}
+                            handleTextChange={handleTextChange}
+                            isAuthenticated={isAuthenticated}
+                            setProjects={setProjects}
+                          ></ProjectImage>
+                        )}
+                        {!isAuthenticated || !edit ? (
+                          <Typography
+                            variant={isSmaller ? "h3" : "h6"}
+                            textAlign="center"
+                          >
+                            <b>{project.subtitle}</b>
+                          </Typography>
+                        ) : (
+                          <TextField
+                            fullWidth={true}
+                            value={project.subtitle || ""}
+                            onChange={(e) =>
+                              handleTextChange(e, "subtitle", idx)
+                            }
+                            label="Subtitle"
+                            sx={{ margin: "1rem 0rem" }}
+                          ></TextField>
+                        )}
+                      </Grid>
+                      <Typography
+                        variant={isSmaller ? "h3" : "h6"}
+                        textAlign="center"
+                      ></Typography>
+                    </Grid>
+                    {!isAuthenticated || !edit ? (
+                      <Typography
+                        variant={isSmaller ? null : "h5"}
+                        width={isSmaller ? "100%" : "75%"}
+                        paddingLeft={isSmaller ? "0rem" : "2rem"}
+                        textAlign={isSmaller ? "center" : "left"}
+                        dangerouslySetInnerHTML={{
+                          __html: DOMPurify.sanitize(project.content),
+                        }}
+                      ></Typography>
+                    ) : (
+                      <Grid
+                        width={isSmaller ? "100%" : "75%"}
+                        paddingLeft={isSmaller ? null : "1rem"}
+                      >
+                        <WysiwygEditor
+                          content={project.content}
+                          onChange={handleContentChange}
+                          idx={idx}
+                        />
+                      </Grid>
+                    )}
+
+                    <Grid width="5%">
+                      {isAuthenticated && edit && (
+                        <IconButton onClick={() => removeProject(idx)}>
+                          <RemoveCircle
+                            sx={{ mr: 1 }}
+                            style={{ color: "black" }}
+                          />
+                        </IconButton>
+                      )}
+                    </Grid>
+                  </Grid>
+                  {idx !== projects.length - 1 && (
+                    <Grid width="95%" margin="0 auto">
+                      <Divider
+                        sx={{ backgroundColor: "white", borderBottomWidth: 2 }}
+                      />
+                      <Divider
+                        sx={{ backgroundColor: "black", borderBottomWidth: 1 }}
+                      />
+                      <Divider
+                        sx={{ backgroundColor: "white", borderBottomWidth: 2 }}
+                      />
+                    </Grid>
+                  )}
+                </Grid>
+              ))}
+          </Grid>
+          {isAuthenticated && (
+            <Stack
+              direction="row"
+              alignItems="center"
+              justifyContent="right"
+              padding="0rem 1rem 0rem 0rem"
+              spacing={2}
               sx={{ backgroundColor: "black" }}
             >
-              <Typography variant="h1" textAlign="center" color="white">
-                PERSONAL PROJECTS
-              </Typography>
-              <Divider
-                sx={{ backgroundColor: "white", borderBottomWidth: 4 }}
-              />
-              <Grid container>
-                <Grid width="5%"></Grid>
-                <Grid
-                  container
-                  sx={{
-                    backgroundColor: "white",
-                    padding: "1rem",
-                    margin: "1rem 0",
-                    border: "thick double black",
+              <Button
+                variant="contained"
+                key="0"
+                onClick={async () => {
+                  await updateProjects({ variables: { projects } });
+                  window.location.replace("/projects");
+                }}
+              >
+                <Typography variant="h6"> SAVE</Typography>
+              </Button>
+
+              {edit && (
+                <Button
+                  variant="contained"
+                  color="success"
+                  onClick={() => {
+                    setEdit(false);
                   }}
-                  width="90%"
-                  alignItems="center"
-                  justifyContent="center"
+                  key="2"
                 >
-                  <Grid
-                    container
-                    direction="column"
-                    width={isSmaller ? "80%" : "15%"}
-                  >
-                    <Typography
-                      variant={isSmaller ? "h3" : "h4"}
-                      textAlign="center"
-                    >
-                      <b>PERSONAL WEBSITE</b>
-                    </Typography>
-                    <Grid
-                      padding={isSmaller ? "1rem 0rem" : ".5rem 0rem"}
-                      margin="0 auto"
-                    >
-                      <img
-                        src={website}
-                        alt="Personal Website"
-                        className={
-                          isSmaller ? "projectImgSmallDevice" : "projectImg"
-                        }
-                      ></img>
-                    </Grid>
-                    <Typography
-                      variant={isSmaller ? "h3" : "h6"}
-                      textAlign="center"
-                    ></Typography>
-                  </Grid>
-
-                  <Typography
-                    variant={isSmaller ? null : "h5"}
-                    width={isSmaller ? "100%" : "75%"}
-                    paddingLeft={isSmaller ? "0rem" : "2rem"}
-                    textAlign={isSmaller ? "center" : "left"}
-                  >
-                    This is the website that you are currently on! It was
-                    developed in December of 2022 and then put online in January
-                    of 2023. The{" "}
-                    <a
-                      href="https://github.com/OTTTO/personal-website"
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      frontend
-                    </a>{" "}
-                    is built in React and deployed on an S3 bucket served by
-                    Cloudfront. The{" "}
-                    <a
-                      href="https://github.com/OTTTO/personal-website-backend"
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      backend
-                    </a>{" "}
-                    is built with Typescript; it uses NestJS and Postgres with
-                    TypeORM, as well as GraphQL to serve up data to the
-                    frontend. It is hosted on an EC2 server which I administer.
-                    The{" "}
-                    <a
-                      href="https://github.com/OTTTO/personal-website-serverless"
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      serverless api
-                    </a>{" "}
-                    which handles blogging exists entirely in the cloud on AWS
-                    infrastructure.{" "}
-                    <a
-                      href="/blog/post/12db148b-d53d-4a10-81e6-b8f49f4b0c67"
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      {" "}
-                      This post
-                    </a>{" "}
-                    explains what I learned during the website's creation.
-                  </Typography>
-                </Grid>
-                <Grid width="5%"></Grid>
-              </Grid>
-
-              <Grid width="95%" margin="0 auto">
-                <Divider
-                  sx={{ backgroundColor: "white", borderBottomWidth: 2 }}
-                />
-                <Divider
-                  sx={{ backgroundColor: "black", borderBottomWidth: 1 }}
-                />
-                <Divider
-                  sx={{ backgroundColor: "white", borderBottomWidth: 2 }}
-                />
-              </Grid>
-              <Grid container>
-                <Grid width="5%"></Grid>
-                <Grid
-                  container
-                  sx={{
-                    backgroundColor: "white",
-                    padding: "1rem",
-                    marginTop: "1rem",
-                    border: "thick double black",
+                  <Typography variant="h6"> VIEW</Typography>
+                </Button>
+              )}
+              {!edit && (
+                <Button
+                  variant="contained"
+                  color="success"
+                  onClick={() => {
+                    setEdit(true);
                   }}
-                  width="90%"
-                  alignItems="center"
-                  justifyContent="center"
+                  key="2"
                 >
-                  <Grid
-                    container
-                    direction="column"
-                    width={isSmaller ? "80%" : "15%"}
-                  >
-                    <Typography
-                      variant={isSmaller ? "h3" : "h4"}
-                      textAlign="center"
-                    >
-                      <b>GAME OF TROUBLE</b>
-                    </Typography>
-                    <Button
-                      href="/projects/trouble"
-                      sx={{ padding: isSmaller ? "1rem 0rem" : ".5rem 0rem" }}
-                    >
-                      <img
-                        src={trouble}
-                        alt="Trouble Game"
-                        className={
-                          isSmaller ? "projectImgSmallDevice" : "projectImg"
-                        }
-                      ></img>
-                    </Button>
-                    <Typography
-                      variant={isSmaller ? "h3" : "h6"}
-                      textAlign="center"
-                    >
-                      <b>Click to play!</b>
-                    </Typography>
-                  </Grid>
-
-                  <Typography
-                    variant={isSmaller ? null : "h5"}
-                    width={isSmaller ? "100%" : "75%"}
-                    paddingLeft={isSmaller ? "0rem" : "2rem"}
-                    textAlign={isSmaller ? "center" : "left"}
-                  >
-                    This board game was developed in 2020 for an Object Oriented
-                    Programming course while studying computer science. It was
-                    orignally written in{" "}
-                    <a
-                      href="https://github.com/OTTTO/GameOfTrouble"
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      Java{" "}
-                    </a>{" "}
-                    and was a{" "}
-                    <a
-                      href="https://replit.com/@DylanBeckwith/Trouble#Main.java"
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      terminal game
-                    </a>{" "}
-                    <b>(just click ▷Run)</b>. At the end of 2022 it was ported
-                    to{" "}
-                    <a
-                      href="https://github.com/OTTTO/personal-website/blob/main/src/pages/Projects/Trouble.tsx"
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      React
-                    </a>{" "}
-                    to allow users to play in the browser.{" "}
-                  </Typography>
-                </Grid>
-                <Grid width="5%"></Grid>
-              </Grid>
-            </Grid>
-            <Footer backgroundColor="black"></Footer>
-          </ThemeProvider>
-        </Grid>
+                  <Typography variant="h6"> EDIT</Typography>
+                </Button>
+              )}
+            </Stack>
+          )}
+          <Footer backgroundColor="black"></Footer>
+        </ThemeProvider>
       </Grid>
-    </>
+    </Grid>
   );
 }

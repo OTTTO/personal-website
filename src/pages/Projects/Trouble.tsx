@@ -1294,7 +1294,7 @@ export function Trouble() {
         </Grid>
       </Modal>
 
-      {/* INSTRUCTIONS MODAL */}
+      {/* INSTRUCTIONS DIALOG */}
       <Dialog
         open={openInstructions}
         onClose={handleCloseInstructions}

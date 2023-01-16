@@ -65,6 +65,7 @@
 
 .projectImg {
   max-width: 100%;
+  border: double thick black;
 }
 
 .projectImgSmallDevice {
@@ -77,6 +78,11 @@
   margin: auto;
 }
 
+.imagesModalImg {
+  height: 5rem;
+  border: double thick black;
+}
+
 .rdw-editor-wrapper {
   width: 100%;
 }
@@ -84,7 +90,6 @@
   border: 1px solid #f1f1f1;
   padding: 5px;
   border-radius: 2px;
-  height: 200px;
 }
 .rdw-editor-toolbar {
   width: 100%;
