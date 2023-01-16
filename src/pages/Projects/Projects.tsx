@@ -219,8 +219,7 @@ export function Projects() {
                       >
                         <WysiwygEditor
                           content={project.content}
-                          onChange={handleContentChange}
-                          idx={idx}
+                          onChange={(value) => handleContentChange(value, idx)}
                         />
                       </Grid>
                     )}
