@@ -15,10 +15,10 @@ import { useParams } from "react-router-dom";
 import mainTheme from "themes/mainTheme";
 import { authenticationCheck } from "utils/utils";
 import { v4 as uuid } from "uuid";
-import { TextEditor } from "./TextEditor";
 import * as DOMPurify from "dompurify";
 import axios from "axios";
 import { Loading } from "components/Loading";
+import { WysiwygEditor } from "components/WysiwygEditor";
 
 const isAuthenticated = authenticationCheck();
 const now = new Date().getTime();
@@ -196,12 +196,19 @@ export function Post() {
                   }}
                 >
                   <Container>
-                    <TextEditor
-                      value={post.content}
+                    <WysiwygEditor
+                      content={post.content}
                       onChange={(content: string) =>
                         handleContentChange(content)
                       }
                       first={post.content.length > 0}
+                      options={[
+                        "inline",
+                        "textAlign",
+                        "list",
+                        "link",
+                        "fontSize",
+                      ]}
                     />
                   </Container>
                 </Grid>

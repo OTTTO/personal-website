@@ -220,6 +220,8 @@ export function Projects() {
                         <WysiwygEditor
                           content={project.content}
                           onChange={(value) => handleContentChange(value, idx)}
+                          options={["inline", "link"]}
+                          expanded
                         />
                       </Grid>
                     )}
