@@ -13,7 +13,11 @@ import { Menu } from "components/Menu";
 import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import mainTheme from "themes/mainTheme";
-import { authenticationCheck } from "utils/utils";
+import {
+  authenticationCheck,
+  getStorage,
+  testAuthenticationCheck,
+} from "utils/utils";
 import { v4 as uuid } from "uuid";
 import * as DOMPurify from "dompurify";
 import axios from "axios";
@@ -21,6 +25,7 @@ import { Loading } from "components/Loading";
 import { WysiwygEditor } from "components/WysiwygEditor";
 
 const isAuthenticated = authenticationCheck();
+const isTestAuthenticated = testAuthenticationCheck();
 const now = new Date().getTime();
 
 export function Post() {
@@ -49,6 +54,7 @@ export function Post() {
   };
 
   const { id } = useParams();
+  const testPosts = getStorage("posts");
 
   useEffect(() => {
     if (id) {
@@ -61,7 +67,12 @@ export function Post() {
         }
         setLoading(false);
       };
-      fetchData();
+      if (!isTestAuthenticated) fetchData();
+      else {
+        const post = testPosts.find((el) => el.id === id);
+        setPost(post);
+        setLoading(false);
+      }
     }
   }, []);
 
@@ -88,11 +99,14 @@ export function Post() {
             margin="0 auto .25rem auto"
             width="99%"
             sx={{
-              backgroundColor: !isAuthenticated || !edit ? "black" : "white",
+              backgroundColor:
+                (!isAuthenticated && !isTestAuthenticated) || !edit
+                  ? "black"
+                  : "white",
             }}
           >
             <Grid padding=".5rem 0" width="95%" margin="0 auto">
-              {!isAuthenticated || !edit ? (
+              {(!isAuthenticated && !isTestAuthenticated) || !edit ? (
                 <Typography variant="h1" textAlign="center" color="white">
                   {post.title}
                 </Typography>
@@ -108,24 +122,33 @@ export function Post() {
             </Grid>
             <Divider
               sx={{
-                backgroundColor: !isAuthenticated || !edit ? "white" : "black",
+                backgroundColor:
+                  (!isAuthenticated && !isTestAuthenticated) || !edit
+                    ? "white"
+                    : "black",
                 borderBottomWidth: 1,
               }}
             />
             <Divider
               sx={{
-                backgroundColor: !isAuthenticated || !edit ? "black" : "white",
+                backgroundColor:
+                  (!isAuthenticated && !isTestAuthenticated) || !edit
+                    ? "black"
+                    : "white",
                 borderBottomWidth: 1,
               }}
             />
             <Divider
               sx={{
-                backgroundColor: !isAuthenticated || !edit ? "white" : "black",
+                backgroundColor:
+                  (!isAuthenticated && !isTestAuthenticated) || !edit
+                    ? "white"
+                    : "black",
                 borderBottomWidth: 1,
               }}
             />
             <Grid padding=".5rem 0" width="95%" margin="0 auto">
-              {!isAuthenticated || !edit ? (
+              {(!isAuthenticated && !isTestAuthenticated) || !edit ? (
                 <Typography
                   variant="h3"
                   textAlign="center"
@@ -143,7 +166,7 @@ export function Post() {
                   sx={{ margin: "1rem 0rem" }}
                 ></TextField>
               )}
-              {(!isAuthenticated || !edit) && (
+              {((!isAuthenticated && !isTestAuthenticated) || !edit) && (
                 <Typography variant="h4" textAlign="center" color="white">
                   {new Date(post.createdAt).toLocaleDateString()}
                 </Typography>
@@ -151,19 +174,28 @@ export function Post() {
             </Grid>
             <Divider
               sx={{
-                backgroundColor: !isAuthenticated || !edit ? "white" : "black",
+                backgroundColor:
+                  (!isAuthenticated && !isTestAuthenticated) || !edit
+                    ? "white"
+                    : "black",
                 borderBottomWidth: 1,
               }}
             />
             <Divider
               sx={{
-                backgroundColor: !isAuthenticated || !edit ? "black" : "white",
+                backgroundColor:
+                  (!isAuthenticated && !isTestAuthenticated) || !edit
+                    ? "black"
+                    : "white",
                 borderBottomWidth: 1,
               }}
             />
             <Divider
               sx={{
-                backgroundColor: !isAuthenticated || !edit ? "white" : "black",
+                backgroundColor:
+                  (!isAuthenticated && !isTestAuthenticated) || !edit
+                    ? "white"
+                    : "black",
                 borderBottomWidth: 1,
               }}
             />
@@ -182,7 +214,7 @@ export function Post() {
                 border="double thick black"
               >
                 <Grid>
-                  {(!isAuthenticated || !edit) && (
+                  {((!isAuthenticated && !isTestAuthenticated) || !edit) && (
                     <Typography
                       dangerouslySetInnerHTML={{
                         __html: DOMPurify.sanitize(post.content),
@@ -192,7 +224,10 @@ export function Post() {
                 </Grid>
                 <Grid
                   sx={{
-                    display: !isAuthenticated || !edit ? "none" : "visible",
+                    display:
+                      (!isAuthenticated && !isTestAuthenticated) || !edit
+                        ? "none"
+                        : "visible",
                   }}
                 >
                   <Container>
@@ -215,7 +250,7 @@ export function Post() {
                 <Grid width="5%"></Grid>
               </Grid>
             </Grid>
-            {isAuthenticated && (
+            {(isAuthenticated || isTestAuthenticated) && (
               <Stack
                 direction="row"
                 alignItems="center"
@@ -226,15 +261,21 @@ export function Post() {
                 <Button
                   variant="contained"
                   onClick={async () => {
-                    await axios.put(
-                      `${process.env.REACT_APP_API_ENDPOINT}/blog/post/save`,
-                      post,
-                      {
-                        headers: {
-                          Authorization: localStorage.getItem("token"),
-                        },
-                      }
-                    );
+                    if (isTestAuthenticated) {
+                      const idx = testPosts.findIndex((el) => el.id === id);
+                      testPosts[idx] = post;
+                      localStorage.setItem("posts", JSON.stringify(testPosts));
+                    } else {
+                      await axios.put(
+                        `${process.env.REACT_APP_API_ENDPOINT}/blog/post/save`,
+                        post,
+                        {
+                          headers: {
+                            Authorization: localStorage.getItem("token"),
+                          },
+                        }
+                      );
+                    }
                     window.location.href = `/blog/post/edit/${post.id}`;
                   }}
                   key="0"

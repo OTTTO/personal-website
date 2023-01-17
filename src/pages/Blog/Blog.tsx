@@ -16,13 +16,18 @@ import { Footer } from "components/Footer";
 import { Menu } from "components/Menu";
 import React, { useEffect } from "react";
 
-import { authenticationCheck } from "utils/utils";
+import {
+  authenticationCheck,
+  getStorage,
+  testAuthenticationCheck,
+} from "utils/utils";
 import axios from "axios";
 import * as DOMPurify from "dompurify";
 import { Loading } from "components/Loading";
 import projectsTheme from "themes/projectsTheme";
 
 const isAuthenticated = authenticationCheck();
+const isTestAuthenticated = testAuthenticationCheck();
 
 interface IPost {
   id: string;
@@ -53,6 +58,8 @@ export function Blog() {
     );
   };
 
+  const testPosts = getStorage("posts");
+
   useEffect(() => {
     const fetchData = async () => {
       const resp = await axios.get(
@@ -63,7 +70,11 @@ export function Blog() {
       }
       setLoading(false);
     };
-    fetchData();
+    if (!isTestAuthenticated) fetchData();
+    else {
+      setPosts(testPosts);
+      setLoading(false);
+    }
   }, []);
 
   if (loading) return <Loading />;
@@ -84,81 +95,83 @@ export function Blog() {
             <Typography variant="h1" textAlign="center" color="white">
               PERSONAL BLOG
             </Typography>
-            {isAuthenticated ? (
+            {isAuthenticated || isTestAuthenticated ? (
               <IconButton href="/blog/post/new">
                 <AddCircle sx={{ mr: 1 }} style={{ color: "white" }} />
               </IconButton>
             ) : null}
             <Divider sx={{ backgroundColor: "white", borderBottomWidth: 4 }} />
-            {posts
-              .sort((a, b) => a.createdAt - b.createdAt)
-              .map((post, idx) => {
-                return (
-                  <Grid container key={idx}>
-                    <Grid width="5%"></Grid>
-                    <Grid
-                      container
-                      direction="column"
-                      sx={{
-                        padding: !isAuthenticated
-                          ? "1rem"
-                          : "1rem 1rem 0rem 1rem",
-                        marginTop: "2rem",
-                        border: "thick black double",
-                        backgroundColor: "white",
-                      }}
-                      width="90%"
-                      alignItems="center"
-                      justifyContent="center"
-                    >
-                      <Typography
-                        variant="h5"
-                        sx={{ textDecoration: "underline", display: "block" }}
-                      >
-                        <b>{post.title}</b>
-                      </Typography>
-                      <Typography variant="h5">{post.author}</Typography>
-                      <Typography>
-                        {new Date(post.createdAt).toLocaleDateString()}
-                      </Typography>
-                      <Typography
-                        dangerouslySetInnerHTML={{
-                          __html: DOMPurify.sanitize(
-                            `${post.content.slice(0, 500)}...`
-                          ),
+            {posts &&
+              posts
+                .sort((a, b) => a.createdAt - b.createdAt)
+                .map((post, idx) => {
+                  return (
+                    <Grid container key={idx}>
+                      <Grid width="5%"></Grid>
+                      <Grid
+                        container
+                        direction="column"
+                        sx={{
+                          padding:
+                            !isAuthenticated && !isTestAuthenticated
+                              ? "1rem"
+                              : "1rem 1rem 0rem 1rem",
+                          marginTop: "2rem",
+                          border: "thick black double",
+                          backgroundColor: "white",
                         }}
-                      ></Typography>
-                      {!isAuthenticated ? (
-                        <Typography>
-                          <a href={`/blog/post/${post.id}`}>- READ MORE -</a>
+                        width="90%"
+                        alignItems="center"
+                        justifyContent="center"
+                      >
+                        <Typography
+                          variant="h5"
+                          sx={{ textDecoration: "underline", display: "block" }}
+                        >
+                          <b>{post.title}</b>
                         </Typography>
-                      ) : (
-                        <Grid>
-                          <IconButton
-                            onClick={async () => {
-                              setDeleteId({ id: post.id, idx });
-                              handleOpenDelete();
-                            }}
-                          >
-                            <RemoveCircle
-                              sx={{ mr: 1 }}
-                              style={{ color: "black" }}
-                            />
-                          </IconButton>
-                          <IconButton href={`/blog/post/edit/${post.id}`}>
-                            <EditOutlined
-                              sx={{ mr: 1 }}
-                              style={{ color: "black" }}
-                            />
-                          </IconButton>
-                        </Grid>
-                      )}
-                    </Grid>
+                        <Typography variant="h5">{post.author}</Typography>
+                        <Typography>
+                          {new Date(post.createdAt).toLocaleDateString()}
+                        </Typography>
+                        <Typography
+                          dangerouslySetInnerHTML={{
+                            __html: DOMPurify.sanitize(
+                              `${post.content.slice(0, 500)}...`
+                            ),
+                          }}
+                        ></Typography>
+                        {!isAuthenticated && !isTestAuthenticated ? (
+                          <Typography>
+                            <a href={`/blog/post/${post.id}`}>- READ MORE -</a>
+                          </Typography>
+                        ) : (
+                          <Grid>
+                            <IconButton
+                              onClick={async () => {
+                                setDeleteId({ id: post.id, idx });
+                                handleOpenDelete();
+                              }}
+                            >
+                              <RemoveCircle
+                                sx={{ mr: 1 }}
+                                style={{ color: "black" }}
+                              />
+                            </IconButton>
+                            <IconButton href={`/blog/post/edit/${post.id}`}>
+                              <EditOutlined
+                                sx={{ mr: 1 }}
+                                style={{ color: "black" }}
+                              />
+                            </IconButton>
+                          </Grid>
+                        )}
+                      </Grid>
 
-                    <Grid width="5%"></Grid>
-                  </Grid>
-                );
-              })}
+                      <Grid width="5%"></Grid>
+                    </Grid>
+                  );
+                })}
           </Grid>
           <Footer backgroundColor="black" />
 

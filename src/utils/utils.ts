@@ -12,3 +12,11 @@ function parseJwt(token: string) {
   const base64 = base64Url.replace("-", "+").replace("_", "/");
   return JSON.parse(window.atob(base64));
 }
+
+export function testAuthenticationCheck() {
+  return !!localStorage.getItem("testToken");
+}
+
+export function getStorage(key: string) {
+  return JSON.parse(localStorage.getItem(key));
+}

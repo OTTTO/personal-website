@@ -12,7 +12,11 @@ import { Footer } from "components/Footer";
 import { Menu } from "components/Menu";
 import useWindowDimensions from "hooks/useWindowDimensions";
 import projectsTheme from "themes/projectsTheme";
-import { authenticationCheck } from "utils/utils";
+import {
+  authenticationCheck,
+  getStorage,
+  testAuthenticationCheck,
+} from "utils/utils";
 import { WysiwygEditor } from "components/WysiwygEditor";
 import * as DOMPurify from "dompurify";
 import { useMutation, useQuery } from "@apollo/client";
@@ -26,11 +30,14 @@ import { ProjectImage } from "./ProjectImage";
 import { Project } from "types/project";
 
 const isAuthenticated = authenticationCheck();
+const isTestAuthenticated = testAuthenticationCheck();
 
 export function Projects() {
   const { width } = useWindowDimensions();
   const smallerDeviceWidth = 1000;
   const isSmaller = width < smallerDeviceWidth;
+
+  const testProjects = getStorage("projects");
 
   const [edit, setEdit] = React.useState(true);
   const [projects, setProjects] = React.useState([]);
@@ -70,9 +77,10 @@ export function Projects() {
   const [updateProjects] = useMutation(UPDATE_PROJECT);
   const { data, loading, error } = useQuery(PROJECTS);
 
+  console.log(testProjects);
   useEffect(() => {
     if (!loading && data) {
-      setProjects(data.projects);
+      setProjects(isTestAuthenticated ? testProjects : data.projects);
     }
   }, [loading, data]);
 
@@ -89,13 +97,17 @@ export function Projects() {
             direction="column"
             margin="0 auto"
             paddingBottom="2rem"
-            borderBottom={!isAuthenticated ? ".25rem white solid" : null}
+            borderBottom={
+              !isAuthenticated && !isTestAuthenticated
+                ? ".25rem white solid"
+                : null
+            }
             sx={{ backgroundColor: "black" }}
           >
             <Typography variant="h1" textAlign="center" color="white">
               PERSONAL PROJECTS
             </Typography>
-            {isAuthenticated && edit ? (
+            {(isAuthenticated || isTestAuthenticated) && edit ? (
               <IconButton onClick={addProject}>
                 <AddCircle sx={{ mr: 1 }} style={{ color: "white" }} />
               </IconButton>
@@ -127,7 +139,7 @@ export function Projects() {
                       direction="column"
                       width={isSmaller ? "80%" : "15%"}
                     >
-                      {!isAuthenticated || !edit ? (
+                      {(!isAuthenticated && !isTestAuthenticated) || !edit ? (
                         <Typography
                           variant={isSmaller ? "h3" : "h4"}
                           textAlign="center"
@@ -148,7 +160,9 @@ export function Projects() {
                         margin="0 auto"
                         width="100%"
                       >
-                        {!isAuthenticated && project.href ? (
+                        {!isAuthenticated &&
+                        !isTestAuthenticated &&
+                        project.href ? (
                           <Button
                             href={project.href}
                             target={project.openNewTab ? "_blank" : null}
@@ -164,6 +178,7 @@ export function Projects() {
                               idx={idx}
                               handleTextChange={handleTextChange}
                               isAuthenticated={isAuthenticated}
+                              isTestAuthenticated={isTestAuthenticated}
                               setProjects={setProjects}
                             ></ProjectImage>
                           </Button>
@@ -175,10 +190,11 @@ export function Projects() {
                             idx={idx}
                             handleTextChange={handleTextChange}
                             isAuthenticated={isAuthenticated}
+                            isTestAuthenticated={isTestAuthenticated}
                             setProjects={setProjects}
                           ></ProjectImage>
                         )}
-                        {!isAuthenticated || !edit ? (
+                        {(!isAuthenticated && !isTestAuthenticated) || !edit ? (
                           <Typography
                             variant={isSmaller ? "h3" : "h6"}
                             textAlign="center"
@@ -202,7 +218,7 @@ export function Projects() {
                         textAlign="center"
                       ></Typography>
                     </Grid>
-                    {!isAuthenticated || !edit ? (
+                    {(!isAuthenticated && !isTestAuthenticated) || !edit ? (
                       <Typography
                         variant={isSmaller ? null : "h5"}
                         width={isSmaller ? "100%" : "75%"}
@@ -227,7 +243,7 @@ export function Projects() {
                     )}
 
                     <Grid width="5%">
-                      {isAuthenticated && edit && (
+                      {(isAuthenticated || isTestAuthenticated) && edit && (
                         <IconButton onClick={() => removeProject(idx)}>
                           <RemoveCircle
                             sx={{ mr: 1 }}
@@ -253,7 +269,7 @@ export function Projects() {
                 </Grid>
               ))}
           </Grid>
-          {isAuthenticated && (
+          {(isAuthenticated || isTestAuthenticated) && (
             <Stack
               direction="row"
               alignItems="center"
@@ -266,7 +282,11 @@ export function Projects() {
                 variant="contained"
                 key="0"
                 onClick={async () => {
-                  await updateProjects({ variables: { projects } });
+                  if (isTestAuthenticated) {
+                    localStorage.setItem("projects", JSON.stringify(projects));
+                  } else {
+                    await updateProjects({ variables: { projects } });
+                  }
                   window.location.replace("/projects");
                 }}
               >

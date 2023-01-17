@@ -19,9 +19,10 @@ import {
 import useWindowDimensions from "hooks/useWindowDimensions";
 import PopupState, { bindTrigger, bindMenu } from "material-ui-popup-state";
 import muiMenuTheme from "themes/muiMenuTheme";
-import { authenticationCheck } from "utils/utils";
+import { authenticationCheck, testAuthenticationCheck } from "utils/utils";
 
 const isAuthenticated = authenticationCheck();
+const isTestAuthenticated = testAuthenticationCheck();
 
 export function Menu({
   backgroundColor,
@@ -210,14 +211,16 @@ export function Menu({
             variant="extended"
             sx={{ margin: "1rem 1rem 0rem 0rem" }}
             size={isLarger ? "large" : "medium"}
-            color={!isAuthenticated ? "info" : "warning"}
+            color={
+              !isAuthenticated && !isTestAuthenticated ? "info" : "warning"
+            }
             onClick={() => {
-              if (!isAuthenticated) {
+              if (!isAuthenticated && !isTestAuthenticated) {
                 window.location.href = "/admin";
               } else {
                 localStorage.removeItem("token");
                 localStorage.removeItem("testToken");
-                window.location.reload();
+                window.location.href = "/";
               }
             }}
           >
@@ -226,7 +229,7 @@ export function Menu({
               fontSize={isLarger ? "large" : "medium"}
             />
             <Typography variant="h4">
-              {!isAuthenticated ? "LOGIN" : "LOGOUT"}
+              {!isAuthenticated && !isTestAuthenticated ? "LOGIN" : "LOGOUT"}
             </Typography>
           </Fab>
         </Grid>

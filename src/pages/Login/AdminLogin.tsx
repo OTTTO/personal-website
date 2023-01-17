@@ -15,6 +15,9 @@ import { ADMIN_LOGIN } from "queries/adminLogin";
 import React from "react";
 import mainTheme from "themes/mainTheme";
 import { State } from "types/adminLogin";
+import { testPosts } from "types/blog";
+import { testHome } from "types/home";
+import { testProjects } from "types/project";
 import { testResume } from "types/resume";
 
 function AdminLogin() {
@@ -61,6 +64,19 @@ function AdminLogin() {
     if (e.key === "Enter") {
       handleSubmit();
     }
+  };
+
+  const handleTestAdminClick = () => {
+    localStorage.removeItem("token");
+    localStorage.setItem("testToken", "TEST");
+
+    localStorage.setItem("home", JSON.stringify(testHome));
+    localStorage.setItem("resume", JSON.stringify(testResume));
+    localStorage.setItem("projects", JSON.stringify(testProjects));
+    localStorage.setItem("posts", JSON.stringify(testPosts));
+
+    localStorage.setItem("edit", "true");
+    window.location.replace("/");
   };
 
   const backgroundColor = "black";
@@ -131,15 +147,7 @@ function AdminLogin() {
                   },
                 }}
                 variant="contained"
-                onClick={() => {
-                  localStorage.removeItem("token");
-                  localStorage.setItem("testToken", "TEST");
-                  if (!localStorage.getItem("resume")) {
-                    localStorage.setItem("resume", JSON.stringify(testResume));
-                  }
-                  localStorage.setItem("edit", "true");
-                  window.location.replace("/resume");
-                }}
+                onClick={handleTestAdminClick}
               >
                 TEST ADMIN FUNCTIONALITY
               </Button>

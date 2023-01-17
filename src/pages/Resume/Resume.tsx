@@ -37,15 +37,18 @@ import {
   IResume,
   ISkillGroup,
 } from "types/resume";
-import { LogoutButton } from "components/LogoutButton";
-import { authenticationCheck } from "utils/utils";
+import {
+  authenticationCheck,
+  getStorage,
+  testAuthenticationCheck,
+} from "utils/utils";
 import useWindowDimensions from "hooks/useWindowDimensions";
 import * as DOMPurify from "dompurify";
 import { ErrorPage } from "pages/Error/Error";
 import { Loading } from "components/Loading";
 
 const isAuthenticated = authenticationCheck();
-const isTestAuthenticated = !!localStorage.getItem("testToken");
+const isTestAuthenticated = testAuthenticationCheck();
 const header = { name: "", title: "" };
 
 export function Resume() {
@@ -60,9 +63,7 @@ export function Resume() {
     education: educationList,
   };
 
-  const getResume = (): IResume => {
-    return JSON.parse(localStorage.getItem("resume"));
-  };
+  const testResume = getStorage("resume");
 
   const [edit, setEdit] = React.useState(true);
 
@@ -357,22 +358,18 @@ export function Resume() {
   useEffect(() => {
     if (!loading && data) {
       setResumeHeader(
-        isTestAuthenticated
-          ? getResume().resumeHeader
-          : data.resume.resumeHeader
+        isTestAuthenticated ? testResume.resumeHeader : data.resume.resumeHeader
       );
       setSkillGroupList(
         isTestAuthenticated
-          ? getResume().skillGroups
+          ? testResume.skillGroups
           : data.resume.skillGroupList
       );
       setExperienceList(
-        isTestAuthenticated
-          ? getResume().experience
-          : data.resume.experienceList
+        isTestAuthenticated ? testResume.experience : data.resume.experienceList
       );
       setEducationList(
-        isTestAuthenticated ? getResume().education : data.resume.educationList
+        isTestAuthenticated ? testResume.education : data.resume.educationList
       );
     }
   }, [loading, data]);
@@ -381,8 +378,8 @@ export function Resume() {
     if (!isTestAuthenticated) return;
     //Add error count for empty resume header fields to canSubmitArr
     let emptyFieldCount = 0;
-    if (!getResume().resumeHeader.name) emptyFieldCount++;
-    if (!getResume().resumeHeader.title) emptyFieldCount++;
+    if (!testResume.resumeHeader.name) emptyFieldCount++;
+    if (!testResume.resumeHeader.title) emptyFieldCount++;
     const newCanSubmitArr: boolean[] = structuredClone(canSubmitArr);
     for (let i = 0; i < emptyFieldCount; i++) {
       newCanSubmitArr.push(true);
@@ -534,7 +531,6 @@ export function Resume() {
                       EDIT
                     </Button>
                   )}
-                  {isTestAuthenticated && <LogoutButton replaceUrl="/resume" />}
                 </Stack>
               ) : null}
               <Grid>

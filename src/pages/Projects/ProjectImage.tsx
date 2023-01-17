@@ -27,6 +27,7 @@ export function ProjectImage({
   idx,
   handleTextChange,
   isAuthenticated,
+  isTestAuthenticated,
   setProjects,
 }) {
   const [openImages, setOpenImages] = React.useState(false);
@@ -76,13 +77,17 @@ export function ProjectImage({
       Body: file,
     };
 
-    s3.upload(params, (err) => {
-      if (err) {
-        console.log(err);
-      } else {
-        getImages();
-      }
-    });
+    if (isTestAuthenticated) {
+      alert("Sorry, test admins are not allowed to upload images!");
+    } else {
+      s3.upload(params, (err) => {
+        if (err) {
+          console.log(err);
+        } else {
+          getImages();
+        }
+      });
+    }
   };
 
   const handleSelectImage = (e, idx: number) => {
@@ -112,12 +117,16 @@ export function ProjectImage({
               project.img &&
               `${process.env.REACT_APP_S3_IMAGES_URI}/${project.img}`
             }
-            alt={!isAuthenticated || !edit ? project.title : ""}
+            alt={
+              (!isAuthenticated && !isTestAuthenticated) || !edit
+                ? project.title
+                : ""
+            }
             className={isSmaller ? "projectImgSmallDevice" : "projectImg"}
           ></img>
         </a>
       )}
-      {isAuthenticated && edit && (
+      {(isAuthenticated || isTestAuthenticated) && edit && (
         <>
           <Grid
             container

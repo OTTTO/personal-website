@@ -17,9 +17,16 @@ import { HOME, UPDATE_HOME } from "queries/home";
 import { useEffect } from "react";
 import React from "react";
 import { v4 as uuid } from "uuid";
-import { authenticationCheck } from "utils/utils";
+import {
+  authenticationCheck,
+  getStorage,
+  testAuthenticationCheck,
+} from "utils/utils";
 import { ErrorPage } from "pages/Error/Error";
 import { Loading } from "components/Loading";
+
+const isAuthenticated = authenticationCheck();
+const isTestAuthenticated = testAuthenticationCheck();
 
 export function Home() {
   const { width } = useWindowDimensions();
@@ -50,13 +57,18 @@ export function Home() {
     setCanSubmitArr(newCanSubmitArr);
   };
 
+  const testHome = getStorage("home");
+  console.log(testHome);
+
   const [updateHome] = useMutation(UPDATE_HOME);
   const { data, loading, error } = useQuery(HOME);
 
   useEffect(() => {
     if (!loading && data) {
-      setIntro(data.home.intro);
-      setWebsiteInfo(data.home.websiteInfo);
+      setIntro(isTestAuthenticated ? testHome.intro : data.home.intro);
+      setWebsiteInfo(
+        isTestAuthenticated ? testHome.websiteInfo : data.home.websiteInfo
+      );
     }
   }, [loading, data]);
 
@@ -64,7 +76,6 @@ export function Home() {
   if (error) return <ErrorPage />;
 
   const backgroundColor = "black";
-  const isAuthenticated = authenticationCheck();
 
   const home = {
     intro,
@@ -104,7 +115,7 @@ export function Home() {
                 width={width > introWidth ? "90%" : "95%"}
                 padding="1rem 2rem 0rem 2rem"
               >
-                {isAuthenticated && edit ? (
+                {(isAuthenticated || isTestAuthenticated) && edit ? (
                   <TextField
                     error={intro.length === 0}
                     fullWidth={true}
@@ -119,12 +130,12 @@ export function Home() {
                   ></TextField>
                 ) : (
                   intro.split("\n").map((line, idx) => (
-                    <>
+                    <Grid key={idx}>
                       {idx !== 0 && <br></br>}
-                      <Typography color="white" textAlign="left" key={idx}>
+                      <Typography color="white" textAlign="left">
                         {line}
                       </Typography>
-                    </>
+                    </Grid>
                   ))
                 )}
 
@@ -140,7 +151,7 @@ export function Home() {
                   />
                 </Grid>
 
-                {isAuthenticated && edit ? (
+                {(isAuthenticated || isTestAuthenticated) && edit ? (
                   <TextField
                     error={websiteInfo.length === 0}
                     fullWidth={true}
@@ -157,12 +168,12 @@ export function Home() {
                   ></TextField>
                 ) : (
                   websiteInfo.split("\n").map((line, idx) => (
-                    <>
+                    <Grid key={idx}>
                       {idx !== 0 && <br></br>}
-                      <Typography color="white" textAlign="left" key={idx}>
+                      <Typography color="white" textAlign="left">
                         {line}
                       </Typography>
-                    </>
+                    </Grid>
                   ))
                 )}
               </Grid>
@@ -175,11 +186,15 @@ export function Home() {
             padding="1rem 1rem 0rem 0rem"
             spacing={2}
           >
-            {isAuthenticated && (
+            {(isAuthenticated || isTestAuthenticated) && (
               <Button
                 variant="contained"
                 onClick={async () => {
-                  await updateHome({ variables: { home } });
+                  if (isTestAuthenticated) {
+                    localStorage.setItem("home", JSON.stringify(home));
+                  } else {
+                    await updateHome({ variables: { home } });
+                  }
                   window.location.replace("/");
                 }}
                 disabled={canSubmitArr.length > 0}
@@ -189,19 +204,19 @@ export function Home() {
               </Button>
             )}
 
-            {isAuthenticated && edit && (
+            {(isAuthenticated || isTestAuthenticated) && edit && (
               <Button
                 variant="contained"
                 color="success"
                 onClick={() => {
                   setEdit(false);
                 }}
-                key="2"
+                key="1"
               >
                 <Typography variant="h6"> VIEW</Typography>
               </Button>
             )}
-            {isAuthenticated && !edit && (
+            {(isAuthenticated || isTestAuthenticated) && !edit && (
               <Button
                 variant="contained"
                 color="success"
