@@ -30,7 +30,7 @@ export function Menu({
   bottomBorder = true,
 }) {
   const { width } = useWindowDimensions();
-  const smallerSize = 770;
+  const smallerSize = 785;
   const isLarger = width > smallerSize;
 
   return (

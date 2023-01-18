@@ -60,7 +60,7 @@ export function ProjectImage({
           <CloudImages
             isTestAuthenticated={isTestAuthenticated}
             handleSelectImage={handleSelectImage}
-            isSmaller={isSmaller}
+            paddingTop={true}
             idx={idx}
           ></CloudImages>
 

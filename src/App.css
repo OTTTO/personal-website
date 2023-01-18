@@ -83,10 +83,16 @@
   border: double thick black;
 }
 
-.rdw-editor-main {
+.rdw-editor-main,
+.rdw-editor-error {
   border: 1px solid #f1f1f1;
   padding: 5px;
   border-radius: 2px;
+  background-color: white;
+}
+
+.rdw-editor-error {
+  border: 1px solid red;
 }
 
 .rdw-inline-wrapper,

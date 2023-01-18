@@ -13,6 +13,7 @@ export function WysiwygEditor({
   options,
   expanded = false,
   first = false,
+  error = false,
 }) {
   const { width } = useWindowDimensions();
   const smallerDeviceWidth = 700;
@@ -46,6 +47,7 @@ export function WysiwygEditor({
     <Editor
       editorState={editorState}
       onEditorStateChange={handleChangeEditor}
+      editorClassName={!error ? "rdw-editor-main" : "rdw-editor-error"}
       toolbar={{
         options,
         fontSize: { options: [8, 12, 16, 24, 36, 48, 72, 128] },

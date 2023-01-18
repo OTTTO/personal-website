@@ -1,29 +1,24 @@
-import {
-  Divider,
-  Grid,
-  TextField,
-  ThemeProvider,
-  Typography,
-} from "@mui/material";
+import { Divider, Grid, ThemeProvider, Typography } from "@mui/material";
 import { Menu } from "components/Menu";
-import mainTheme from "themes/mainTheme";
-import angel from "images/angel.jpeg";
-import useWindowDimensions from "hooks/useWindowDimensions";
 import { Footer } from "components/Footer";
 import { useMutation, useQuery } from "@apollo/client";
 import { HOME, UPDATE_HOME } from "queries/home";
 import { useEffect } from "react";
-import React from "react";
 import { v4 as uuid } from "uuid";
+import { ErrorPage } from "pages/Error/Error";
+import { Loading } from "components/Loading";
+import { AuthButtons } from "components/AuthButtons";
+import { CloudImages } from "components/CloudImages";
+import { WysiwygEditor } from "components/WysiwygEditor";
 import {
   authenticationCheck,
   getStorage,
   testAuthenticationCheck,
 } from "utils/utils";
-import { ErrorPage } from "pages/Error/Error";
-import { Loading } from "components/Loading";
-import { AuthButtons } from "components/AuthButtons";
-import { CloudImages } from "components/CloudImages";
+import React from "react";
+import mainTheme from "themes/mainTheme";
+import useWindowDimensions from "hooks/useWindowDimensions";
+import * as DOMPurify from "dompurify";
 
 const isAuthenticated = authenticationCheck();
 const isTestAuthenticated = testAuthenticationCheck();
@@ -42,14 +37,12 @@ export function Home() {
   const [edit, setEdit] = React.useState(true);
   const [home, setHome] = React.useState(new HomeClass());
 
-  const handleTextChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-    currentState: string,
-    property: string
-  ) => {
-    updateErrorCount(currentState, e.target.value);
+  const handleContentChange = (content: string, property: string) => {
+    updateErrorCount(home[property], content);
     const newHome = structuredClone(home);
-    newHome[property] = e.target.value;
+    console.log("content: ", content);
+    newHome[property] = content;
+    console.log("property: ", newHome[property]);
     setHome(newHome);
   };
 
@@ -57,9 +50,12 @@ export function Home() {
 
   const updateErrorCount = (oldString: string, newString: string) => {
     const newCanSubmitArr: boolean[] = structuredClone(canSubmitArr);
-    if (oldString.length > 0 && newString.length === 0) {
+    if (!oldString.startsWith("<p></p>") && newString.startsWith("<p></p>")) {
       newCanSubmitArr.push(true);
-    } else if (oldString.length === 0 && newString.length > 0) {
+    } else if (
+      oldString.startsWith("<p></p>") &&
+      !newString.startsWith("<p></p>")
+    ) {
       newCanSubmitArr.pop();
     }
     setCanSubmitArr(newCanSubmitArr);
@@ -90,8 +86,6 @@ export function Home() {
     if (!loading && data) {
       if (isTestAuthenticated) setHome(testHome);
       else if (data.home.id.length > 0) setHome(data.home);
-
-      console.log("data: ", data);
     }
   }, [loading, data]);
 
@@ -150,7 +144,6 @@ export function Home() {
                   <CloudImages
                     isTestAuthenticated={isTestAuthenticated}
                     handleSelectImage={handleSelectImage}
-                    isSmaller={width < introWidth}
                   ></CloudImages>
                 </Grid>
               )}
@@ -159,29 +152,28 @@ export function Home() {
                 direction="column"
                 width={width > introWidth ? "90%" : "95%"}
                 padding="1rem 2rem 0rem 2rem"
+                margin="0 auto"
               >
                 {(isAuthenticated || isTestAuthenticated) && edit ? (
-                  <TextField
-                    error={home.intro.length === 0}
-                    fullWidth={true}
-                    multiline
-                    value={home.intro}
-                    sx={{
-                      backgroundColor: "white",
-                      opacity: ".7 ",
-                      borderRadius: ".5rem",
-                    }}
-                    onChange={(e) => handleTextChange(e, home.intro, "intro")}
-                  ></TextField>
+                  <WysiwygEditor
+                    content={home.intro}
+                    onChange={(value) => handleContentChange(value, "intro")}
+                    options={["inline", "link", "textAlign"]}
+                    expanded
+                    first={home.intro.length > 0}
+                    error={
+                      home.intro.length === 0 ||
+                      home.intro.startsWith("<p></p>")
+                    }
+                  />
                 ) : (
-                  home.intro.split("\n").map((line, idx) => (
-                    <Grid key={idx}>
-                      {idx !== 0 && <br></br>}
-                      <Typography color="white" textAlign="left">
-                        {line}
-                      </Typography>
-                    </Grid>
-                  ))
+                  <Typography
+                    color="white"
+                    textAlign="left"
+                    dangerouslySetInnerHTML={{
+                      __html: DOMPurify.sanitize(home.intro),
+                    }}
+                  ></Typography>
                 )}
 
                 <Grid margin="1rem 0">
@@ -197,29 +189,27 @@ export function Home() {
                 </Grid>
 
                 {(isAuthenticated || isTestAuthenticated) && edit ? (
-                  <TextField
-                    error={home.websiteInfo.length === 0}
-                    fullWidth={true}
-                    multiline
-                    value={home.websiteInfo}
-                    sx={{
-                      backgroundColor: "white",
-                      opacity: ".7 ",
-                      borderRadius: ".5rem",
-                    }}
-                    onChange={(e) =>
-                      handleTextChange(e, home.websiteInfo, "websiteInfo")
+                  <WysiwygEditor
+                    content={home.websiteInfo}
+                    onChange={(value) =>
+                      handleContentChange(value, "websiteInfo")
                     }
-                  ></TextField>
+                    options={["inline", "link", "textAlign"]}
+                    expanded
+                    first={home.websiteInfo.length > 0}
+                    error={
+                      home.websiteInfo.length === 0 ||
+                      home.websiteInfo.startsWith("<p></p>")
+                    }
+                  />
                 ) : (
-                  home.websiteInfo.split("\n").map((line, idx) => (
-                    <Grid key={idx}>
-                      {idx !== 0 && <br></br>}
-                      <Typography color="white" textAlign="left">
-                        {line}
-                      </Typography>
-                    </Grid>
-                  ))
+                  <Typography
+                    color="white"
+                    textAlign="left"
+                    dangerouslySetInnerHTML={{
+                      __html: DOMPurify.sanitize(home.websiteInfo),
+                    }}
+                  ></Typography>
                 )}
               </Grid>
             </Grid>

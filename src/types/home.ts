@@ -22,4 +22,5 @@ export const testHome = {
    ${lorem.generateParagraphs(1)}`,
   websiteInfo: `Oh, I can put more info about my website here and change it whenever, even from a mobile device!
    ${lorem.generateParagraphs(1)}`,
+  mainImg: "7e74ca8f-ea8a-4d09-ba31-f4d2ff52fff0",
 };

@@ -19,10 +19,10 @@ const s3 = new AWS.S3({
 
 export function CloudImages({
   isTestAuthenticated,
-  isSmaller,
   handleSelectImage,
   idx = -1,
   iconColor = "black",
+  paddingTop = false,
 }) {
   const [file, setFile] = React.useState();
   const handleFileChange = (event) => {
@@ -82,18 +82,18 @@ export function CloudImages({
       container
       justifyContent="flex-start"
       alignItems="center"
-      paddingTop={isSmaller ? 0 : "1rem"}
+      paddingTop={paddingTop ? "1rem" : 0}
     >
       <input type="file" onChange={handleFileChange} />
       <IconButton onClick={handleUploadImage}>
         <CloudUploadOutlined
-          fontSize="large"
+          fontSize="medium"
           style={{ color: iconColor }}
         ></CloudUploadOutlined>
       </IconButton>
       <IconButton onClick={handleOpenImages}>
         <ImageOutlined
-          fontSize="large"
+          fontSize="medium"
           style={{ color: iconColor }}
         ></ImageOutlined>
       </IconButton>
