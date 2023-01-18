@@ -6,6 +6,7 @@ export const HOME = gql`
       id
       intro
       websiteInfo
+      mainImg
     }
   }
 `;

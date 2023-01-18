@@ -1,8 +1,6 @@
 import {
-  Button,
   Divider,
   Grid,
-  Stack,
   TextField,
   ThemeProvider,
   Typography,
@@ -25,25 +23,34 @@ import {
 import { ErrorPage } from "pages/Error/Error";
 import { Loading } from "components/Loading";
 import { AuthButtons } from "components/AuthButtons";
+import { CloudImages } from "components/CloudImages";
 
 const isAuthenticated = authenticationCheck();
 const isTestAuthenticated = testAuthenticationCheck();
+
+class HomeClass {
+  id: string = uuid();
+  intro: string = "";
+  websiteInfo: string = "";
+  mainImg: string;
+}
 
 export function Home() {
   const { width } = useWindowDimensions();
   const introWidth = 735;
 
   const [edit, setEdit] = React.useState(true);
-  const [intro, setIntro] = React.useState("");
-  const [websiteInfo, setWebsiteInfo] = React.useState("");
+  const [home, setHome] = React.useState(new HomeClass());
 
   const handleTextChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
     currentState: string,
-    setState: (text: string) => void
+    property: string
   ) => {
     updateErrorCount(currentState, e.target.value);
-    setState(e.target.value);
+    const newHome = structuredClone(home);
+    newHome[property] = e.target.value;
+    setHome(newHome);
   };
 
   const [canSubmitArr, setCanSubmitArr] = React.useState<boolean[]>([]);
@@ -67,18 +74,24 @@ export function Home() {
     window.location.replace("/");
   };
 
+  const handleSelectImage = (e, idx: number) => {
+    const newHome = structuredClone(home);
+    const img = e.target.currentSrc.split("/").pop();
+    newHome.mainImg = img;
+    setHome(newHome);
+  };
+
   const testHome = getStorage("home");
-  console.log(testHome);
 
   const [updateHome] = useMutation(UPDATE_HOME);
   const { data, loading, error } = useQuery(HOME);
 
   useEffect(() => {
     if (!loading && data) {
-      setIntro(isTestAuthenticated ? testHome.intro : data.home.intro);
-      setWebsiteInfo(
-        isTestAuthenticated ? testHome.websiteInfo : data.home.websiteInfo
-      );
+      if (isTestAuthenticated) setHome(testHome);
+      else if (data.home.id.length > 0) setHome(data.home);
+
+      console.log("data: ", data);
     }
   }, [loading, data]);
 
@@ -87,11 +100,7 @@ export function Home() {
 
   const backgroundColor = "black";
 
-  const home = {
-    intro,
-    websiteInfo,
-    id: data.home.id.length ? data.home.id : uuid(),
-  };
+  console.log(home);
 
   return (
     <Grid border="thick double black">
@@ -117,8 +126,34 @@ export function Home() {
               <u>WELCOME!</u>
             </Typography>
 
-            <Grid container justifyContent="center" sx={{ paddingTop: "2rem" }}>
-              <img src={angel} alt="Angel's Landing" className="angelImg"></img>
+            <Grid
+              container
+              direction="column"
+              justifyContent="center"
+              sx={{ paddingTop: "2rem" }}
+            >
+              <img
+                src={`${process.env.REACT_APP_S3_IMAGES_URI}/${home.mainImg}`}
+                alt="Angel's Landing"
+                className="angelImg"
+              ></img>
+              {(isAuthenticated || isTestAuthenticated) && edit && (
+                <Grid
+                  sx={{
+                    backgroundColor: "white",
+                    borderRadius: "2px",
+                    opacity: ".9",
+                  }}
+                  margin="1rem auto 0rem auto"
+                  padding=".2rem .2rem 0rem .2rem"
+                >
+                  <CloudImages
+                    isTestAuthenticated={isTestAuthenticated}
+                    handleSelectImage={handleSelectImage}
+                    isSmaller={width < introWidth}
+                  ></CloudImages>
+                </Grid>
+              )}
               <Grid
                 container
                 direction="column"
@@ -127,19 +162,19 @@ export function Home() {
               >
                 {(isAuthenticated || isTestAuthenticated) && edit ? (
                   <TextField
-                    error={intro.length === 0}
+                    error={home.intro.length === 0}
                     fullWidth={true}
                     multiline
-                    value={intro}
+                    value={home.intro}
                     sx={{
                       backgroundColor: "white",
                       opacity: ".7 ",
                       borderRadius: ".5rem",
                     }}
-                    onChange={(e) => handleTextChange(e, intro, setIntro)}
+                    onChange={(e) => handleTextChange(e, home.intro, "intro")}
                   ></TextField>
                 ) : (
-                  intro.split("\n").map((line, idx) => (
+                  home.intro.split("\n").map((line, idx) => (
                     <Grid key={idx}>
                       {idx !== 0 && <br></br>}
                       <Typography color="white" textAlign="left">
@@ -163,21 +198,21 @@ export function Home() {
 
                 {(isAuthenticated || isTestAuthenticated) && edit ? (
                   <TextField
-                    error={websiteInfo.length === 0}
+                    error={home.websiteInfo.length === 0}
                     fullWidth={true}
                     multiline
-                    value={websiteInfo}
+                    value={home.websiteInfo}
                     sx={{
                       backgroundColor: "white",
                       opacity: ".7 ",
                       borderRadius: ".5rem",
                     }}
                     onChange={(e) =>
-                      handleTextChange(e, websiteInfo, setWebsiteInfo)
+                      handleTextChange(e, home.websiteInfo, "websiteInfo")
                     }
                   ></TextField>
                 ) : (
-                  websiteInfo.split("\n").map((line, idx) => (
+                  home.websiteInfo.split("\n").map((line, idx) => (
                     <Grid key={idx}>
                       {idx !== 0 && <br></br>}
                       <Typography color="white" textAlign="left">

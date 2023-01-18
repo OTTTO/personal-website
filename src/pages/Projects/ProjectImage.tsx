@@ -1,24 +1,6 @@
-import { Close, CloudUploadOutlined, ImageOutlined } from "@material-ui/icons";
-import {
-  Button,
-  Checkbox,
-  Dialog,
-  DialogContent,
-  DialogTitle,
-  FormControlLabel,
-  Grid,
-  IconButton,
-  TextField,
-  Typography,
-} from "@mui/material";
-import React, { useEffect } from "react";
-import AWS from "aws-sdk";
-import { v4 as uuid } from "uuid";
-
-const s3 = new AWS.S3({
-  accessKeyId: process.env.REACT_APP_AWS_ACCESS_KEY_ID,
-  secretAccessKey: process.env.REACT_APP_AWS_SECRET_ACCESS_KEY,
-});
+import { Checkbox, FormControlLabel, Grid, TextField } from "@mui/material";
+import { CloudImages } from "components/CloudImages";
+import React from "react";
 
 export function ProjectImage({
   projects,
@@ -30,31 +12,7 @@ export function ProjectImage({
   isTestAuthenticated,
   setProjects,
 }) {
-  const [openImages, setOpenImages] = React.useState(false);
-  const handleOpenImages = () => setOpenImages(true);
-  const handleCloseImages = () => setOpenImages(false);
-  const [images, setImages] = React.useState([]);
-
-  const getImages = async () =>
-    s3.listObjects(
-      {
-        Bucket: process.env.REACT_APP_AWS_BUCKET_NAME,
-      },
-      (err, data) => {
-        if (err) {
-          console.log(err);
-        } else {
-          setImages(
-            data.Contents.map(
-              (object) => `${process.env.REACT_APP_S3_IMAGES_URI}/${object.Key}`
-            )
-          );
-        }
-      }
-    );
-
   const project = projects[idx];
-  const [file, setFile] = React.useState();
   const [isChecked, setIsChecked] = React.useState(project.openNewTab);
 
   const checkboxOnChange = (idx: number) => {
@@ -66,30 +24,6 @@ export function ProjectImage({
     setProjects(newProjects);
   };
 
-  const handleFileChange = (event) => {
-    setFile(event.target.files[0]);
-  };
-
-  const handleUploadImage = () => {
-    const params = {
-      Bucket: process.env.REACT_APP_AWS_BUCKET_NAME,
-      Key: uuid(),
-      Body: file,
-    };
-
-    if (isTestAuthenticated) {
-      alert("Sorry, test admins are not allowed to upload images!");
-    } else {
-      s3.upload(params, (err) => {
-        if (err) {
-          console.log(err);
-        } else {
-          getImages();
-        }
-      });
-    }
-  };
-
   const handleSelectImage = (e, idx: number) => {
     const newProjects = structuredClone(projects);
     const newProject = structuredClone(newProjects[idx]);
@@ -97,12 +31,7 @@ export function ProjectImage({
     newProject.img = img;
     newProjects[idx] = newProject;
     setProjects(newProjects);
-    handleCloseImages();
   };
-
-  useEffect(() => {
-    getImages();
-  }, []);
 
   return (
     <Grid container direction="column" alignItems="center">
@@ -128,26 +57,12 @@ export function ProjectImage({
       )}
       {(isAuthenticated || isTestAuthenticated) && edit && (
         <>
-          <Grid
-            container
-            justifyContent="flex-start"
-            alignItems="center"
-            paddingTop={isSmaller ? 0 : "1rem"}
-          >
-            <input type="file" onChange={handleFileChange} />
-            <IconButton onClick={handleUploadImage}>
-              <CloudUploadOutlined
-                fontSize="large"
-                style={{ color: "black" }}
-              ></CloudUploadOutlined>
-            </IconButton>
-            <IconButton onClick={handleOpenImages}>
-              <ImageOutlined
-                fontSize="large"
-                style={{ color: "black" }}
-              ></ImageOutlined>
-            </IconButton>
-          </Grid>
+          <CloudImages
+            isTestAuthenticated={isTestAuthenticated}
+            handleSelectImage={handleSelectImage}
+            isSmaller={isSmaller}
+            idx={idx}
+          ></CloudImages>
 
           <Grid
             container
@@ -178,65 +93,6 @@ export function ProjectImage({
           </Grid>
         </>
       )}
-
-      {/* IIMAGES DIALOG */}
-      <Dialog
-        open={openImages}
-        onClose={handleCloseImages}
-        scroll="paper"
-        fullWidth
-        maxWidth="sm"
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        <Grid
-          sx={{
-            margin: "auto",
-            backgroundColor: "white",
-            borderRadius: ".5rem",
-            opacity: ".9",
-            paddingBottom: "1rem",
-          }}
-        >
-          <IconButton onClick={handleCloseImages} sx={{ float: "left" }}>
-            <Close style={{ color: "red" }}></Close>
-          </IconButton>
-          <DialogTitle>
-            <Grid>
-              <Typography
-                variant="h5"
-                component="h2"
-                textAlign="center"
-                paddingTop="1rem"
-                fontWeight="bold"
-              >
-                SELECT AN IMAGE
-              </Typography>
-            </Grid>
-          </DialogTitle>
-          <DialogContent dividers>
-            <Grid
-              container
-              direction="column"
-              alignItems="space-between"
-            ></Grid>
-            {images &&
-              images.map((img, i) => (
-                <Button
-                  key={i}
-                  size="small"
-                  sx={{ display: "inline-block" }}
-                  onClick={(e) => handleSelectImage(e, idx)}
-                >
-                  <img src={img} alt={img} className="imagesModalImg"></img>
-                </Button>
-              ))}
-          </DialogContent>
-        </Grid>
-      </Dialog>
     </Grid>
   );
 }
