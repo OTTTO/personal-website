@@ -1,9 +1,7 @@
 import {
-  Button,
   Container,
   Divider,
   Grid,
-  Stack,
   TextField,
   ThemeProvider,
   Typography,
@@ -23,6 +21,7 @@ import * as DOMPurify from "dompurify";
 import axios from "axios";
 import { Loading } from "components/Loading";
 import { WysiwygEditor } from "components/WysiwygEditor";
+import { AuthButtons } from "components/AuthButtons";
 
 const isAuthenticated = authenticationCheck();
 const isTestAuthenticated = testAuthenticationCheck();
@@ -51,6 +50,25 @@ export function Post() {
   const handleContentChange = (content: string) => {
     const newPost = { ...post, content };
     setPost(newPost);
+  };
+
+  const handleSaveOnClick = async () => {
+    if (isTestAuthenticated) {
+      const idx = testPosts.findIndex((el) => el.id === id);
+      testPosts[idx] = post;
+      localStorage.setItem("posts", JSON.stringify(testPosts));
+    } else {
+      await axios.put(
+        `${process.env.REACT_APP_API_ENDPOINT}/blog/post/save`,
+        post,
+        {
+          headers: {
+            Authorization: localStorage.getItem("token"),
+          },
+        }
+      );
+    }
+    window.location.href = `/blog/post/edit/${post.id}`;
   };
 
   const { id } = useParams();
@@ -251,63 +269,13 @@ export function Post() {
               </Grid>
             </Grid>
             {(isAuthenticated || isTestAuthenticated) && (
-              <Stack
-                direction="row"
-                alignItems="center"
-                justifyContent="right"
-                padding="1rem 1rem 0rem 0rem"
-                spacing={2}
-              >
-                <Button
-                  variant="contained"
-                  onClick={async () => {
-                    if (isTestAuthenticated) {
-                      const idx = testPosts.findIndex((el) => el.id === id);
-                      testPosts[idx] = post;
-                      localStorage.setItem("posts", JSON.stringify(testPosts));
-                    } else {
-                      await axios.put(
-                        `${process.env.REACT_APP_API_ENDPOINT}/blog/post/save`,
-                        post,
-                        {
-                          headers: {
-                            Authorization: localStorage.getItem("token"),
-                          },
-                        }
-                      );
-                    }
-                    window.location.href = `/blog/post/edit/${post.id}`;
-                  }}
-                  key="0"
-                >
-                  <Typography variant="h6"> SAVE</Typography>
-                </Button>
-
-                {edit && (
-                  <Button
-                    variant="contained"
-                    color="success"
-                    onClick={() => {
-                      setEdit(false);
-                    }}
-                    key="2"
-                  >
-                    <Typography variant="h6"> VIEW</Typography>
-                  </Button>
-                )}
-                {!edit && (
-                  <Button
-                    variant="contained"
-                    color="success"
-                    onClick={() => {
-                      setEdit(true);
-                    }}
-                    key="2"
-                  >
-                    <Typography variant="h6"> EDIT</Typography>
-                  </Button>
-                )}
-              </Stack>
+              <AuthButtons
+                backgroundColor={edit ? "white" : "black"}
+                topPadding={true}
+                handleSaveOnClick={handleSaveOnClick}
+                edit={edit}
+                setEdit={setEdit}
+              />
             )}
           </Grid>
           <Footer backgroundColor="black" />

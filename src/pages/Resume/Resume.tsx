@@ -46,6 +46,7 @@ import useWindowDimensions from "hooks/useWindowDimensions";
 import * as DOMPurify from "dompurify";
 import { ErrorPage } from "pages/Error/Error";
 import { Loading } from "components/Loading";
+import { AuthButtons } from "components/AuthButtons";
 
 const isAuthenticated = authenticationCheck();
 const isTestAuthenticated = testAuthenticationCheck();
@@ -352,6 +353,17 @@ export function Resume() {
     setEducationList(newEducationList);
   };
 
+  const handleSaveOnClick = async () => {
+    if (isTestAuthenticated) {
+      localStorage.setItem("resume", JSON.stringify(resume));
+    } else {
+      await updateResume({
+        variables: { resume },
+      });
+    }
+    window.location.replace("/resume");
+  };
+
   const [updateResume] = useMutation(UPDATE_RESUME);
   const { data, loading, error } = useQuery(RESUME);
 
@@ -485,54 +497,16 @@ export function Resume() {
                 backgroundColor: "white",
               }}
             >
-              {isAuthenticated || isTestAuthenticated ? (
-                <Stack direction="row" sx={{ float: "right" }} spacing={2}>
-                  <Button
-                    variant="contained"
-                    sx={{
-                      height: "2rem",
-                      padding: isDeviceWidth ? "0rem 0rem" : "0rem 0rem",
-                    }}
-                    onClick={async () => {
-                      if (isTestAuthenticated) {
-                        localStorage.setItem("resume", JSON.stringify(resume));
-                      } else {
-                        await updateResume({
-                          variables: { resume },
-                        });
-                      }
-                      window.location.replace("/resume");
-                    }}
-                    disabled={canSubmitArr.length > 0}
-                  >
-                    SAVE
-                  </Button>
-                  {(isAuthenticated || isTestAuthenticated) && edit && (
-                    <Button
-                      variant="contained"
-                      sx={{ height: "2rem" }}
-                      color="success"
-                      onClick={() => {
-                        setEdit(false);
-                      }}
-                    >
-                      VIEW
-                    </Button>
-                  )}
-                  {(isAuthenticated || isTestAuthenticated) && !edit && (
-                    <Button
-                      variant="contained"
-                      sx={{ height: "2rem" }}
-                      color="success"
-                      onClick={() => {
-                        setEdit(true);
-                      }}
-                    >
-                      EDIT
-                    </Button>
-                  )}
-                </Stack>
-              ) : null}
+              {(isAuthenticated || isTestAuthenticated) && (
+                <AuthButtons
+                  backgroundColor={"white"}
+                  topPadding={false}
+                  handleSaveOnClick={handleSaveOnClick}
+                  disabled={canSubmitArr.length > 0}
+                  edit={edit}
+                  setEdit={setEdit}
+                />
+              )}
               <Grid>
                 {(isAuthenticated || isTestAuthenticated) && edit ? (
                   <Grid>
@@ -622,11 +596,11 @@ export function Resume() {
                     <b>TECHNICAL SKILLS</b>
                   </u>
                 </Typography>
-                {(isAuthenticated || isTestAuthenticated) && edit ? (
+                {(isAuthenticated || isTestAuthenticated) && edit && (
                   <IconButton onClick={handleAddSkillGroup}>
                     <AddCircle sx={{ mr: 1 }} />
                   </IconButton>
-                ) : null}
+                )}
               </Stack>
               <Stack direction="column" spacing={1}>
                 {structuredClone(skillGroupList || data.resume.skillGroupList)
@@ -681,13 +655,13 @@ export function Resume() {
                             )}
                           </AccordionDetails>
                         </Accordion>
-                        {(isAuthenticated || isTestAuthenticated) && edit ? (
+                        {(isAuthenticated || isTestAuthenticated) && edit && (
                           <IconButton
                             onClick={() => handleRemoveSkillGroup(idx)}
                           >
                             <RemoveCircle sx={{ mr: 1 }} />
                           </IconButton>
-                        ) : null}
+                        )}
                       </Stack>
                     );
                   })}
@@ -698,11 +672,11 @@ export function Resume() {
                     <b>PROFESSIONAL EXPERIENCE</b>
                   </u>
                 </Typography>
-                {(isAuthenticated || isTestAuthenticated) && edit ? (
+                {(isAuthenticated || isTestAuthenticated) && edit && (
                   <IconButton onClick={handleAddExperience}>
                     <AddCircle sx={{ mr: 1 }} />
                   </IconButton>
-                ) : null}
+                )}
               </Stack>
               <Stack direction="column" spacing={1}>
                 {structuredClone(experienceList || data.resume.experienceList)
@@ -908,11 +882,11 @@ export function Resume() {
                     <b>EDUCATION</b>
                   </u>
                 </Typography>
-                {(isAuthenticated || isTestAuthenticated) && edit ? (
+                {(isAuthenticated || isTestAuthenticated) && edit && (
                   <IconButton onClick={handleAddEducation}>
                     <AddCircle sx={{ mr: 1 }} />
                   </IconButton>
-                ) : null}
+                )}
               </Stack>
               <Stack direction="column" spacing={1}>
                 {structuredClone(educationList || data.resume.educationList)

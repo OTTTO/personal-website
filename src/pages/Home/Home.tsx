@@ -24,6 +24,7 @@ import {
 } from "utils/utils";
 import { ErrorPage } from "pages/Error/Error";
 import { Loading } from "components/Loading";
+import { AuthButtons } from "components/AuthButtons";
 
 const isAuthenticated = authenticationCheck();
 const isTestAuthenticated = testAuthenticationCheck();
@@ -55,6 +56,15 @@ export function Home() {
       newCanSubmitArr.pop();
     }
     setCanSubmitArr(newCanSubmitArr);
+  };
+
+  const handleSaveOnClick = async () => {
+    if (isTestAuthenticated) {
+      localStorage.setItem("home", JSON.stringify(home));
+    } else {
+      await updateHome({ variables: { home } });
+    }
+    window.location.replace("/");
   };
 
   const testHome = getStorage("home");
@@ -179,56 +189,16 @@ export function Home() {
               </Grid>
             </Grid>
           </Grid>
-          <Stack
-            direction="row"
-            alignItems="center"
-            justifyContent="right"
-            padding="1rem 1rem 0rem 0rem"
-            spacing={2}
-          >
-            {(isAuthenticated || isTestAuthenticated) && (
-              <Button
-                variant="contained"
-                onClick={async () => {
-                  if (isTestAuthenticated) {
-                    localStorage.setItem("home", JSON.stringify(home));
-                  } else {
-                    await updateHome({ variables: { home } });
-                  }
-                  window.location.replace("/");
-                }}
-                disabled={canSubmitArr.length > 0}
-                key="0"
-              >
-                <Typography variant="h6"> SAVE</Typography>
-              </Button>
-            )}
-
-            {(isAuthenticated || isTestAuthenticated) && edit && (
-              <Button
-                variant="contained"
-                color="success"
-                onClick={() => {
-                  setEdit(false);
-                }}
-                key="1"
-              >
-                <Typography variant="h6"> VIEW</Typography>
-              </Button>
-            )}
-            {(isAuthenticated || isTestAuthenticated) && !edit && (
-              <Button
-                variant="contained"
-                color="success"
-                onClick={() => {
-                  setEdit(true);
-                }}
-                key="2"
-              >
-                <Typography variant="h6"> EDIT</Typography>
-              </Button>
-            )}
-          </Stack>
+          {(isAuthenticated || isTestAuthenticated) && (
+            <AuthButtons
+              backgroundColor={"black"}
+              topPadding={true}
+              handleSaveOnClick={handleSaveOnClick}
+              edit={edit}
+              setEdit={setEdit}
+              disabled={canSubmitArr.length > 0}
+            />
+          )}
           <Footer backgroundColor={backgroundColor}></Footer>
         </Grid>
       </ThemeProvider>

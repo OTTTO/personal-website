@@ -28,6 +28,7 @@ import { ErrorPage } from "pages/Error/Error";
 import { AddCircle, RemoveCircle } from "@mui/icons-material";
 import { ProjectImage } from "./ProjectImage";
 import { Project } from "types/project";
+import { AuthButtons } from "components/AuthButtons";
 
 const isAuthenticated = authenticationCheck();
 const isTestAuthenticated = testAuthenticationCheck();
@@ -74,10 +75,18 @@ export function Projects() {
     setProjects(newProjects);
   };
 
+  const handleSaveOnClick = async () => {
+    if (isTestAuthenticated) {
+      localStorage.setItem("projects", JSON.stringify(projects));
+    } else {
+      await updateProjects({ variables: { projects } });
+    }
+    window.location.replace("/projects");
+  };
+
   const [updateProjects] = useMutation(UPDATE_PROJECT);
   const { data, loading, error } = useQuery(PROJECTS);
 
-  console.log(testProjects);
   useEffect(() => {
     if (!loading && data) {
       setProjects(isTestAuthenticated ? testProjects : data.projects);
@@ -270,54 +279,13 @@ export function Projects() {
               ))}
           </Grid>
           {(isAuthenticated || isTestAuthenticated) && (
-            <Stack
-              direction="row"
-              alignItems="center"
-              justifyContent="right"
-              padding="0rem 1rem 0rem 0rem"
-              spacing={2}
-              sx={{ backgroundColor: "black" }}
-            >
-              <Button
-                variant="contained"
-                key="0"
-                onClick={async () => {
-                  if (isTestAuthenticated) {
-                    localStorage.setItem("projects", JSON.stringify(projects));
-                  } else {
-                    await updateProjects({ variables: { projects } });
-                  }
-                  window.location.replace("/projects");
-                }}
-              >
-                <Typography variant="h6"> SAVE</Typography>
-              </Button>
-
-              {edit && (
-                <Button
-                  variant="contained"
-                  color="success"
-                  onClick={() => {
-                    setEdit(false);
-                  }}
-                  key="2"
-                >
-                  <Typography variant="h6"> VIEW</Typography>
-                </Button>
-              )}
-              {!edit && (
-                <Button
-                  variant="contained"
-                  color="success"
-                  onClick={() => {
-                    setEdit(true);
-                  }}
-                  key="2"
-                >
-                  <Typography variant="h6"> EDIT</Typography>
-                </Button>
-              )}
-            </Stack>
+            <AuthButtons
+              backgroundColor={"black"}
+              topPadding={false}
+              handleSaveOnClick={handleSaveOnClick}
+              edit={edit}
+              setEdit={setEdit}
+            />
           )}
           <Footer backgroundColor="black"></Footer>
         </ThemeProvider>
