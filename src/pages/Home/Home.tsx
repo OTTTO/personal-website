@@ -87,6 +87,7 @@ export function Home() {
       if (isTestAuthenticated) setHome(testHome);
       else if (data.home.id.length > 0) setHome(data.home);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loading, data]);
 
   if (loading) return <Loading />;
@@ -117,7 +118,7 @@ export function Home() {
             alignItems="center"
           >
             <Typography variant="h1" color="white" key="1">
-              <u>WELCOME!</u>
+              <u>WELCOME!!</u>
             </Typography>
 
             <Grid

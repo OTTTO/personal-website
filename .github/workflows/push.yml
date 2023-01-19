@@ -1,0 +1,43 @@
+name: CI/CD
+
+on:
+  push:
+    branches:
+      - main
+
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  primary:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: Use Node.js 16.15
+        uses: actions/setup-node@v1
+        with:
+          node-version: 16.15
+
+      - name: install dependencies
+        run: npm install --legacy-peer-deps
+
+      - name: "Create env file"
+        run: |
+          touch .env
+          echo REACT_APP_AWS_ACCESS_KEY_ID=${{ secrets.REACT_APP_AWS_ACCESS_KEY_ID }} >> .env
+          echo REACT_APP_AWS_SECRET_ACCESS_KEY=${{ secrets.REACT_APP_AWS_SECRET_ACCESS_KEY }} >> .env
+          echo REACT_APP_GRAPHQL_URI=${{ secrets.REACT_APP_GRAPHQL_URI }} >> .env
+          echo REACT_APP_API_ENDPOINT=${{ secrets.REACT_APP_API_ENDPOINT }} >> .env
+          echo REACT_APP_AWS_BUCKET_NAME=${{ secrets.REACT_APP_AWS_BUCKET_NAME }} >> .env
+          echo REACT_APP_S3_IMAGES_URI=${{ secrets.REACT_APP_S3_IMAGES_URI }} >> .env          
+          cat .env
+
+      - name: build
+        run: npm run build
+
+      # - name: test
+      #   run: npm run test
+      - name: aws deploy
+        run: BUILD_DIRECTORY=build BUCKET_NAME=dylanbeckwith.fyi AWS_ACCESS_KEY_ID=${{ secrets.REACT_APP_AWS_ACCESS_KEY_ID }} AWS_SECRET_ACCESS_KEY=${{ secrets.REACT_APP_AWS_SECRET_ACCESS_KEY }} npm run deploy-aws

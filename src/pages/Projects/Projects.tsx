@@ -3,7 +3,6 @@ import {
   Divider,
   Grid,
   IconButton,
-  Stack,
   TextField,
   ThemeProvider,
   Typography,
@@ -91,6 +90,7 @@ export function Projects() {
     if (!loading && data) {
       setProjects(isTestAuthenticated ? testProjects : data.projects);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loading, data]);
 
   if (loading) return <Loading />;

@@ -384,6 +384,7 @@ export function Resume() {
         isTestAuthenticated ? testResume.education : data.resume.educationList
       );
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loading, data]);
 
   useEffect(() => {

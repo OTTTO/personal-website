@@ -13,7 +13,7 @@ REACT_APP_GRAPHQL_URI=http://localhost:3001/graphql
 ### Installation
 
 ```bash
-$ npm install
+$ npm install --legacy-peer-deps
 ```
 
 ### Running the app locally

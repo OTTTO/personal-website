@@ -1,7 +1,7 @@
 import { CompositeDecorator } from "draft-js";
 
-const HANDLE_REGEX = /\@[\w]+/g;
-const HASHTAG_REGEX = /\#[\w\u0590-\u05ff]+/g;
+const HANDLE_REGEX = /@[\w]+/g;
+const HASHTAG_REGEX = /#[\w\u0590-\u05ff]+/g;
 
 function handleStrategy(contentBlock, callback, contentState) {
   findWithRegex(HANDLE_REGEX, contentBlock, callback);

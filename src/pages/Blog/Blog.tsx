@@ -75,6 +75,7 @@ export function Blog() {
       setPosts(testPosts);
       setLoading(false);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (loading) return <Loading />;
