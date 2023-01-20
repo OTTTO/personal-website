@@ -95,8 +95,6 @@ export function Home() {
 
   const backgroundColor = "black";
 
-  console.log(home);
-
   return (
     <Grid border="thick double black">
       <ThemeProvider theme={mainTheme}>
@@ -141,6 +139,7 @@ export function Home() {
                   }}
                   margin="1rem auto 0rem auto"
                   padding=".2rem .2rem 0rem .2rem"
+                  width={"auto"}
                 >
                   <CloudImages
                     isTestAuthenticated={isTestAuthenticated}

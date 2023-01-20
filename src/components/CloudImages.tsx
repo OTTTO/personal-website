@@ -11,6 +11,7 @@ import {
 import { v4 as uuid } from "uuid";
 import React, { useEffect } from "react";
 import AWS from "aws-sdk";
+import useWindowDimensions from "hooks/useWindowDimensions";
 
 const s3 = new AWS.S3({
   accessKeyId: process.env.REACT_APP_AWS_ACCESS_KEY_ID,
@@ -24,6 +25,10 @@ export function CloudImages({
   iconColor = "black",
   paddingTop = false,
 }) {
+  const { width } = useWindowDimensions();
+  const smallerDeviceWidth = 500;
+  const isSmaller = width < smallerDeviceWidth;
+
   const [file, setFile] = React.useState();
   const handleFileChange = (event) => {
     setFile(event.target.files[0]);
@@ -83,17 +88,22 @@ export function CloudImages({
       justifyContent="flex-start"
       alignItems="center"
       paddingTop={paddingTop ? "1rem" : 0}
+      width={"100%"}
     >
-      <input type="file" onChange={handleFileChange} />
+      <input
+        type="file"
+        onChange={handleFileChange}
+        style={{ width: isSmaller ? "14rem" : "auto" }}
+      />
       <IconButton onClick={handleUploadImage}>
         <CloudUploadOutlined
-          fontSize="medium"
+          fontSize={isSmaller ? "small" : "large"}
           style={{ color: iconColor }}
         ></CloudUploadOutlined>
       </IconButton>
       <IconButton onClick={handleOpenImages}>
         <ImageOutlined
-          fontSize="medium"
+          fontSize={isSmaller ? "small" : "large"}
           style={{ color: iconColor }}
         ></ImageOutlined>
       </IconButton>
