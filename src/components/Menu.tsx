@@ -219,6 +219,7 @@ export function Menu({
               } else {
                 localStorage.removeItem("token");
                 localStorage.removeItem("testToken");
+                localStorage.removeItem("edit");
                 window.location.href = "/";
               }
             }}

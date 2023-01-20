@@ -126,6 +126,11 @@
 .rdw-right-aligned-block > * {
   text-align: right;
 }
+
+.draggingListItem {
+  background: "rgb(235,235,235)";
+}
+
 /* firework */
 
 @keyframes firework {
