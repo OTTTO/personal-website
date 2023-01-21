@@ -7,6 +7,7 @@ export class Project {
   subtitle: string;
   href: string;
   openNewTab: boolean = false;
+  position: number;
 }
 
 export const testProjects = [

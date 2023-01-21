@@ -739,8 +739,7 @@ export function Resume() {
                                 index={experience.position}
                                 key={experience.id}
                                 isDragDisabled={
-                                  !isAuthenticated ||
-                                  !isTestAuthenticated ||
+                                  (!isAuthenticated && !isTestAuthenticated) ||
                                   !edit
                                 }
                               >
@@ -755,6 +754,12 @@ export function Resume() {
                                         ? "draggingListItem"
                                         : ""
                                     }
+                                    sx={{
+                                      marginBottom:
+                                        idx !== experienceList.length - 1
+                                          ? "1rem"
+                                          : 0,
+                                    }}
                                   >
                                     <AccordionSummary
                                       expandIcon={<ExpandMore />}

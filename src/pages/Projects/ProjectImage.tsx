@@ -36,24 +36,18 @@ export function ProjectImage({
   return (
     <Grid container direction="column" alignItems="center">
       {project.img && (
-        <a
-          href={project.href}
-          target={project.openNewTab ? "_blank" : null}
-          rel={project.openNewTab ? "noreferrer" : null}
-        >
-          <img
-            src={
-              project.img &&
-              `${process.env.REACT_APP_S3_IMAGES_URI}/${project.img}`
-            }
-            alt={
-              (!isAuthenticated && !isTestAuthenticated) || !edit
-                ? project.title
-                : ""
-            }
-            className={isSmaller ? "projectImgSmallDevice" : "projectImg"}
-          ></img>
-        </a>
+        <img
+          src={
+            project.img &&
+            `${process.env.REACT_APP_S3_IMAGES_URI}/${project.img}`
+          }
+          alt={
+            (!isAuthenticated && !isTestAuthenticated) || !edit
+              ? project.title
+              : ""
+          }
+          className={isSmaller ? "projectImgSmallDevice" : "projectImg"}
+        ></img>
       )}
       {(isAuthenticated || isTestAuthenticated) && edit && (
         <>
