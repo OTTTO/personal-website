@@ -12,6 +12,7 @@ import { v4 as uuid } from "uuid";
 import React, { useEffect } from "react";
 import AWS from "aws-sdk";
 import useWindowDimensions from "hooks/useWindowDimensions";
+import { s3ImagesURI } from "utils/constants";
 
 const s3 = new AWS.S3({
   accessKeyId: process.env.REACT_APP_AWS_ACCESS_KEY_ID,
@@ -70,9 +71,7 @@ export function CloudImages({
           console.log(err);
         } else {
           setImages(
-            data.Contents.map(
-              (object) => `${process.env.REACT_APP_S3_IMAGES_URI}/${object.Key}`
-            )
+            data.Contents.map((object) => `${s3ImagesURI}/${object.Key}`)
           );
         }
       }

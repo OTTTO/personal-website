@@ -19,6 +19,7 @@ import React from "react";
 import mainTheme from "themes/mainTheme";
 import useWindowDimensions from "hooks/useWindowDimensions";
 import * as DOMPurify from "dompurify";
+import { s3ImagesURI } from "utils/constants";
 
 const isAuthenticated = authenticationCheck();
 const isTestAuthenticated = testAuthenticationCheck();
@@ -126,7 +127,7 @@ export function Home() {
               sx={{ paddingTop: "2rem" }}
             >
               <img
-                src={`${process.env.REACT_APP_S3_IMAGES_URI}/${home.mainImg}`}
+                src={`${s3ImagesURI}/${home.mainImg}`}
                 alt="Angel's Landing"
                 className="angelImg"
               ></img>
