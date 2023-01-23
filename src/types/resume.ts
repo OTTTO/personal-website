@@ -70,13 +70,14 @@ export const testResume = {
         {
           id: uuid(),
           position: 0,
-          details: "Worked on various <b>generic</b> tasks for my <b>boss</b>",
+          details:
+            "<p>Worked on various <strong>generic</strong> tasks for my <strong>boss</strong></p>",
         },
         {
           id: uuid(),
           position: 1,
           details:
-            "Interaced with a number of <b>clients</b> in regards to <b>non-specific</b> projects",
+            "<p>Interacted with a number of <strong>clients</strong> in regards to <strong>non-specific</strong> projects</p>",
         },
       ],
     },

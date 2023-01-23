@@ -53,10 +53,12 @@ import {
   Droppable,
   Draggable,
 } from "react-beautiful-dnd";
+import { WysiwygEditor } from "components/WysiwygEditor";
 
 const isAuthenticated = authenticationCheck();
 const isTestAuthenticated = testAuthenticationCheck();
 const header = { name: "", title: "" };
+const emptyWysiwyg = "<p></p>";
 
 export function Resume() {
   const [resumeHeader, setResumeHeader] = React.useState(header);
@@ -81,6 +83,23 @@ export function Resume() {
     if (oldString.length > 0 && newString.length === 0) {
       newCanSubmitArr.push(true);
     } else if (oldString.length === 0 && newString.length > 0) {
+      newCanSubmitArr.pop();
+    }
+    setCanSubmitArr(newCanSubmitArr);
+  };
+
+  const updateErrorCountWysiwyg = (oldString: string, newString: string) => {
+    const newCanSubmitArr: boolean[] = structuredClone(canSubmitArr);
+    if (
+      oldString.length !== 0 &&
+      !oldString.startsWith(emptyWysiwyg) &&
+      newString.startsWith(emptyWysiwyg)
+    ) {
+      newCanSubmitArr.push(true);
+    } else if (
+      oldString.startsWith(emptyWysiwyg) &&
+      !newString.startsWith(emptyWysiwyg)
+    ) {
       newCanSubmitArr.pop();
     }
     setCanSubmitArr(newCanSubmitArr);
@@ -149,14 +168,14 @@ export function Resume() {
   };
 
   const handleResponsibilityListChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    value: string,
     responsibility: IResponsibility,
     expIdx: number,
     resIdx: number
   ) => {
     const newResponsibility: IResponsibility = structuredClone(responsibility);
-    newResponsibility.details = e.target.value;
-    updateErrorCount(responsibility.details, newResponsibility.details);
+    newResponsibility.details = value;
+    updateErrorCountWysiwyg(responsibility.details, newResponsibility.details);
     const newExperienceList = structuredClone(experienceList);
     newExperienceList[expIdx].responsibilities[resIdx] = newResponsibility;
     setExperienceList(newExperienceList);
@@ -256,7 +275,10 @@ export function Resume() {
     ].responsibilities.splice(resIdx, 1)[0];
     const newCanSubmitArr: boolean[] = structuredClone(canSubmitArr);
 
-    if (responsbility.details.length === 0) {
+    if (
+      responsbility.details.length === 0 ||
+      responsbility.details.startsWith(emptyWysiwyg)
+    ) {
       newCanSubmitArr.pop();
     }
 
@@ -343,8 +365,17 @@ export function Resume() {
     experience.responsibilities.push({
       id: uuid(),
       details: "",
-      position: experienceList[expIdx].responsibilities.length,
+      position: -1,
     });
+
+    //Reset Position
+    const sortedNewResponsibilities = experience.responsibilities.sort(
+      (a, b) => a.position - b.position
+    );
+
+    for (let i = 0; i < sortedNewResponsibilities.length; i++) {
+      sortedNewResponsibilities[i].position = i;
+    }
 
     //Add error count to canSubmitArr
     const newCanSubmitArr: boolean[] = structuredClone(canSubmitArr);
@@ -911,30 +942,36 @@ export function Resume() {
                                                 isTestAuthenticated) &&
                                                 edit ? (
                                                 <Stack
-                                                  direction="row"
                                                   key={responsibility.id}
+                                                  direction="column"
+                                                  sx={{
+                                                    border: "#c4c4c4 solid 1px",
+                                                    borderRadius: "5px",
+                                                  }}
+                                                  padding="1rem 1rem 0 1rem"
                                                 >
-                                                  <TextField
-                                                    id="responsibility"
-                                                    error={
-                                                      responsibility.details
-                                                        .length === 0
-                                                    }
-                                                    fullWidth={true}
-                                                    multiline
-                                                    defaultValue={
+                                                  <WysiwygEditor
+                                                    content={
                                                       responsibility.details
                                                     }
-                                                    onChange={(e) =>
+                                                    onChange={(value) =>
                                                       handleResponsibilityListChange(
-                                                        e,
+                                                        value,
                                                         responsibility,
                                                         expIdx,
                                                         resIdx
                                                       )
                                                     }
-                                                    label="Responsibility"
-                                                  ></TextField>
+                                                    options={["inline"]}
+                                                    expanded
+                                                    error={
+                                                      responsibility.details
+                                                        .length === 0 ||
+                                                      responsibility.details.startsWith(
+                                                        emptyWysiwyg
+                                                      )
+                                                    }
+                                                  />
                                                   <IconButton
                                                     onClick={() =>
                                                       handleRemoveResponsibility(
@@ -953,6 +990,7 @@ export function Resume() {
                                                   key={responsibility.id}
                                                 >
                                                   <li
+                                                    className="responsibility-list"
                                                     key={resIdx}
                                                     dangerouslySetInnerHTML={{
                                                       __html:

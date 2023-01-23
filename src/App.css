@@ -83,6 +83,10 @@
   border: double thick black;
 }
 
+.responsibility-list p {
+  display: inline;
+}
+
 .rdw-editor-main,
 .rdw-editor-error {
   border: 1px solid #f1f1f1;
@@ -92,7 +96,7 @@
 }
 
 .rdw-editor-error {
-  border: 1px solid red;
+  border: 1px solid #d4352d;
 }
 
 .rdw-inline-wrapper,
