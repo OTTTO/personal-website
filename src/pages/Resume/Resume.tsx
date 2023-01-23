@@ -566,16 +566,6 @@ export function Resume() {
                 backgroundColor: "white",
               }}
             >
-              {(isAuthenticated || isTestAuthenticated) && (
-                <AuthButtons
-                  backgroundColor={"white"}
-                  topPadding={false}
-                  handleSaveOnClick={handleSaveOnClick}
-                  disabled={canSubmitArr.length > 0}
-                  edit={edit}
-                  setEdit={setEdit}
-                />
-              )}
               <Grid>
                 {(isAuthenticated || isTestAuthenticated) && edit ? (
                   <Grid>
@@ -1110,7 +1100,27 @@ export function Resume() {
                   })}
               </Stack>
             </Box>
+            <Box
+              margin="0 auto"
+              sx={{
+                width: isDeviceWidth ? "80%" : "55%",
+                backgroundColor: "black",
+              }}
+            >
+              {(isAuthenticated || isTestAuthenticated) && (
+                <AuthButtons
+                  backgroundColor={backgroundColor}
+                  topPadding={true}
+                  handleSaveOnClick={handleSaveOnClick}
+                  disabled={canSubmitArr.length > 0}
+                  edit={edit}
+                  setEdit={setEdit}
+                  resume={true}
+                />
+              )}
+            </Box>
           </Grid>
+
           <Footer backgroundColor={backgroundColor}></Footer>
         </Grid>
       </ThemeProvider>

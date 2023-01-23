@@ -5,6 +5,7 @@ export function AuthButtons({
   topPadding,
   handleSaveOnClick,
   disabled = false,
+  resume = false,
   setEdit,
   edit,
 }) {
@@ -14,6 +15,7 @@ export function AuthButtons({
       alignItems="center"
       justifyContent="right"
       padding={topPadding ? "1rem 1rem 0rem 0rem" : "0rem 1rem 0rem 0rem"}
+      margin={resume ? "0rem -2rem" : 0}
       spacing={2}
       sx={{ backgroundColor }}
     >
