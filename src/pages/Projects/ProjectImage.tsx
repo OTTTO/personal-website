@@ -1,7 +1,6 @@
 import { Checkbox, FormControlLabel, Grid, TextField } from "@mui/material";
 import { CloudImages } from "components/CloudImages";
 import React from "react";
-import { s3ImagesURI } from "utils/constants";
 
 export function ProjectImage({
   projects,
@@ -38,7 +37,10 @@ export function ProjectImage({
     <Grid container direction="column" alignItems="center">
       {project.img && (
         <img
-          src={project.img && `${s3ImagesURI}/${project.img}`}
+          src={
+            project.img &&
+            `${process.env.REACT_APP_S3_CLOUDFRONT}/${project.img}`
+          }
           alt={
             (!isAuthenticated && !isTestAuthenticated) || !edit
               ? project.title

@@ -9,7 +9,9 @@ My personal website built in React to display my resume and portfolio
 ```
 REACT_APP_GRAPHQL_URI=http://localhost:3001/graphql
 
-REACT_APP_AWS_BUCKET_NAME=dylan-beckwith-website-images
+REACT_APP_AWS_BUCKET_NAME=****
+
+REACT_APP_S3_CLOUDFRONT=****
 
 REACT_APP_API_ENDPOINT=****
 
