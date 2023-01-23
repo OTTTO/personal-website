@@ -203,7 +203,7 @@ export function Projects() {
                                   <Grid width={isSmaller ? "80%" : "15%"}>
                                     <Grid
                                       padding={
-                                        isSmaller ? "1rem 0rem" : ".5rem 0rem"
+                                        isSmaller ? "0rem 0rem" : ".5rem 0rem"
                                       }
                                       margin="0 auto"
                                       width="auto"
@@ -248,6 +248,7 @@ export function Projects() {
                                             padding: isSmaller
                                               ? "1rem 0rem"
                                               : ".5rem 0rem",
+                                            display: "block",
                                           }}
                                         >
                                           <ProjectImage
