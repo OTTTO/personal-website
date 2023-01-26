@@ -18,8 +18,6 @@ import {
 } from "utils/utils";
 import { WysiwygEditor } from "components/WysiwygEditor";
 import * as DOMPurify from "dompurify";
-import { useMutation, useQuery } from "@apollo/client";
-import { PROJECTS, UPDATE_PROJECT } from "queries/project";
 import { useEffect } from "react";
 import React from "react";
 import { Loading } from "components/Loading";
@@ -34,11 +32,15 @@ import {
   Droppable,
   Draggable,
 } from "react-beautiful-dnd";
+import axios from "axios";
 
 const isAuthenticated = authenticationCheck();
 const isTestAuthenticated = testAuthenticationCheck();
 
 export function Projects() {
+  const [loading, setLoading] = React.useState(true);
+  const [error, setError] = React.useState(false);
+
   const { width } = useWindowDimensions();
   const smallerDeviceWidth = 1000;
   const isSmaller = width < smallerDeviceWidth;
@@ -90,15 +92,6 @@ export function Projects() {
     setProjects(sortedNewProjects);
   };
 
-  const handleSaveOnClick = async () => {
-    if (isTestAuthenticated) {
-      localStorage.setItem("projects", JSON.stringify(projects));
-    } else {
-      await updateProjects({ variables: { projects } });
-    }
-    window.location.replace("/projects");
-  };
-
   const onDragEnd = ({ destination, source }: DropResult) => {
     if (!destination) return;
 
@@ -116,15 +109,43 @@ export function Projects() {
     setProjects(sortedProjects);
   };
 
-  const [updateProjects] = useMutation(UPDATE_PROJECT);
-  const { data, loading, error } = useQuery(PROJECTS);
+  const handleSaveOnClick = async () => {
+    if (isTestAuthenticated) {
+      localStorage.setItem("projects", JSON.stringify(projects));
+    } else {
+      console.log(projects);
+      await axios.put(
+        `${process.env.REACT_APP_API_ENDPOINT}/portfolio/projects/save`,
+        { items: projects },
+        {
+          headers: {
+            Authorization: localStorage.getItem("token"),
+          },
+        }
+      );
+    }
+    window.location.replace("/projects");
+  };
 
   useEffect(() => {
-    if (!loading && data) {
-      setProjects(isTestAuthenticated ? testProjects : data.projects);
+    const fetchData = async () => {
+      const resp = await axios
+        .get(`${process.env.REACT_APP_API_ENDPOINT}/portfolio/projects`)
+        .catch((err) => {
+          setError(true);
+        });
+      if (resp && resp?.data?.items) {
+        setProjects(resp.data.items);
+      }
+      setLoading(false);
+    };
+    if (!isTestAuthenticated) fetchData();
+    else {
+      setProjects(testProjects);
+      setLoading(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [loading, data]);
+  }, []);
 
   if (loading) return <Loading />;
   if (error) return <ErrorPage />;
