@@ -1,10 +1,7 @@
 import { Divider, Grid, ThemeProvider, Typography } from "@mui/material";
 import { Menu } from "components/Menu";
 import { Footer } from "components/Footer";
-import { useMutation, useQuery } from "@apollo/client";
-import { HOME, UPDATE_HOME } from "queries/home";
 import { useEffect } from "react";
-import { v4 as uuid } from "uuid";
 import { ErrorPage } from "pages/Error/Error";
 import { Loading } from "components/Loading";
 import { AuthButtons } from "components/AuthButtons";
@@ -19,18 +16,15 @@ import React from "react";
 import mainTheme from "themes/mainTheme";
 import useWindowDimensions from "hooks/useWindowDimensions";
 import * as DOMPurify from "dompurify";
+import axios from "axios";
+import { HomeClass } from "types/home";
 
 const isAuthenticated = authenticationCheck();
 const isTestAuthenticated = testAuthenticationCheck();
 
-class HomeClass {
-  id: string = uuid();
-  intro: string = "";
-  websiteInfo: string = "";
-  mainImg: string;
-}
-
 export function Home() {
+  const [loading, setLoading] = React.useState(true);
+  const [error, setError] = React.useState(false);
   const { width } = useWindowDimensions();
   const introWidth = 735;
 
@@ -40,9 +34,7 @@ export function Home() {
   const handleContentChange = (content: string, property: string) => {
     updateErrorCount(home[property], content);
     const newHome = structuredClone(home);
-    console.log("content: ", content);
     newHome[property] = content;
-    console.log("property: ", newHome[property]);
     setHome(newHome);
   };
 
@@ -65,7 +57,11 @@ export function Home() {
     if (isTestAuthenticated) {
       localStorage.setItem("home", JSON.stringify(home));
     } else {
-      await updateHome({ variables: { home } });
+      await axios.put(`${process.env.REACT_APP_API_ENDPOINT}/home/save`, home, {
+        headers: {
+          Authorization: localStorage.getItem("token"),
+        },
+      });
     }
     window.location.replace("/");
   };
@@ -79,16 +75,25 @@ export function Home() {
 
   const testHome = getStorage("home");
 
-  const [updateHome] = useMutation(UPDATE_HOME);
-  const { data, loading, error } = useQuery(HOME);
-
   useEffect(() => {
-    if (!loading && data) {
-      if (isTestAuthenticated) setHome(testHome);
-      else if (data.home.id.length > 0) setHome(data.home);
+    const fetchData = async () => {
+      const resp = await axios
+        .get(`${process.env.REACT_APP_API_ENDPOINT}/home`)
+        .catch((err) => {
+          setError(true);
+        });
+      if (resp && resp.data) {
+        setHome(resp.data);
+      }
+      setLoading(false);
+    };
+    if (!isTestAuthenticated) fetchData();
+    else {
+      setHome(testHome);
+      setLoading(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [loading, data]);
+  }, []);
 
   if (loading) return <Loading />;
   if (error) return <ErrorPage />;

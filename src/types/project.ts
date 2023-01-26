@@ -1,13 +1,15 @@
 import { v4 as uuid } from "uuid";
 
 export class Project {
-  title: string;
-  img: string;
+  id: string = uuid();
+  title: string = "";
+  img: string = "";
   content: string = "";
-  subtitle: string;
-  href: string;
+  subtitle: string = "";
+  href: string = "";
   openNewTab: boolean = false;
-  position: number;
+  position: number = -1;
+  createdAt: number = new Date().getTime();
 }
 
 export const testProjects = [

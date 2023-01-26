@@ -1,4 +1,5 @@
 import { LoremIpsum } from "lorem-ipsum";
+import { v4 as uuid } from "uuid";
 
 const lorem = new LoremIpsum({
   sentencesPerParagraph: {
@@ -24,3 +25,11 @@ export const testHome = {
    ${lorem.generateParagraphs(1)}`,
   mainImg: "7e74ca8f-ea8a-4d09-ba31-f4d2ff52fff0",
 };
+
+export class HomeClass {
+  id: string = uuid();
+  intro: string = "";
+  websiteInfo: string = "";
+  mainImg: string = "";
+  createdAt: number = new Date().getTime();
+}

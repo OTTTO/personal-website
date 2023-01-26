@@ -31,7 +31,7 @@ jobs:
           echo REACT_APP_GRAPHQL_URI=${{ secrets.REACT_APP_GRAPHQL_URI }} >> .env
           echo REACT_APP_API_ENDPOINT=${{ secrets.REACT_APP_API_ENDPOINT }} >> .env
           echo REACT_APP_AWS_BUCKET_NAME=${{ secrets.REACT_APP_AWS_BUCKET_NAME }} >> .env
-          echo REACT_APP_S3_IMAGES_URI=${{ secrets.REACT_APP_S3_IMAGES_URI }} >> .env          
+          echo REACT_APP_S3_CLOUDFRONT=${{ secrets.REACT_APP_S3_CLOUDFRONT }} >> .env
           cat .env
 
       - name: build
