@@ -113,7 +113,6 @@ export function Projects() {
     if (isTestAuthenticated) {
       localStorage.setItem("projects", JSON.stringify(projects));
     } else {
-      console.log(projects);
       await axios.put(
         `${process.env.REACT_APP_API_ENDPOINT}/portfolio/projects/save`,
         { items: projects },
