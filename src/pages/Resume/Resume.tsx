@@ -17,8 +17,6 @@ import mainTheme from "themes/mainTheme";
 import reactIcon from "images/reactjs-icon.svg";
 import nodeIcon from "images/nodejs-icon.svg";
 import graphQlIcon from "images/graphql-icon.svg";
-import { useMutation, useQuery } from "@apollo/client";
-import { RESUME, UPDATE_RESUME } from "queries/resume";
 import React, { useEffect } from "react";
 import {
   AddCircle,
@@ -54,6 +52,7 @@ import {
   Draggable,
 } from "react-beautiful-dnd";
 import { WysiwygEditor } from "components/WysiwygEditor";
+import axios from "axios";
 
 const isAuthenticated = authenticationCheck();
 const isTestAuthenticated = testAuthenticationCheck();
@@ -61,10 +60,20 @@ const header = { name: "", title: "" };
 const emptyWysiwyg = "<p></p>";
 
 export function Resume() {
+  const [loading, setLoading] = React.useState(true);
+  const [error, setError] = React.useState(false);
+
   const [resumeHeader, setResumeHeader] = React.useState(header);
   const [skillGroupList, setSkillGroupList] = React.useState<ISkillGroup[]>([]);
   const [experienceList, setExperienceList] = React.useState<IExperience[]>([]);
   const [educationList, setEducationList] = React.useState<IEducation[]>([]);
+  const setResume = (header, skillGroups, experience, education) => {
+    setResumeHeader(header);
+    setSkillGroupList(skillGroups);
+    setExperienceList(experience);
+    setEducationList(education);
+  };
+
   const resume: IResume = {
     resumeHeader: resumeHeader,
     skillGroups: skillGroupList,
@@ -404,17 +413,6 @@ export function Resume() {
     setEducationList(newEducationList);
   };
 
-  const handleSaveOnClick = async () => {
-    if (isTestAuthenticated) {
-      localStorage.setItem("resume", JSON.stringify(resume));
-    } else {
-      await updateResume({
-        variables: { resume },
-      });
-    }
-    window.location.replace("/resume");
-  };
-
   const onDragEnd = ({ destination, source }: DropResult) => {
     if (!destination) return;
 
@@ -432,28 +430,52 @@ export function Resume() {
     setExperienceList(experiences);
   };
 
-  const [updateResume] = useMutation(UPDATE_RESUME);
-  const { data, loading, error } = useQuery(RESUME);
-
-  useEffect(() => {
-    if (!loading && data) {
-      setResumeHeader(
-        isTestAuthenticated ? testResume.resumeHeader : data.resume.resumeHeader
-      );
-      setSkillGroupList(
-        isTestAuthenticated
-          ? testResume.skillGroups
-          : data.resume.skillGroupList
-      );
-      setExperienceList(
-        isTestAuthenticated ? testResume.experience : data.resume.experienceList
-      );
-      setEducationList(
-        isTestAuthenticated ? testResume.education : data.resume.educationList
+  const handleSaveOnClick = async () => {
+    if (isTestAuthenticated) {
+      localStorage.setItem("resume", JSON.stringify(resume));
+    } else {
+      await axios.put(
+        `${process.env.REACT_APP_API_ENDPOINT}/portfolio/resume/save`,
+        { items: resume },
+        {
+          headers: {
+            Authorization: localStorage.getItem("token"),
+          },
+        }
       );
     }
+    window.location.replace("/resume");
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const resp = await axios
+        .get(`${process.env.REACT_APP_API_ENDPOINT}/portfolio/resume`)
+        .catch((err) => {
+          setError(true);
+        });
+      if (resp && resp?.data?.items) {
+        setResume(
+          resp.data.items?.resumeHeader,
+          resp.data.items?.skillGroups,
+          resp.data.items?.experience,
+          resp.data.items?.education
+        );
+      }
+      setLoading(false);
+    };
+    if (!isTestAuthenticated) fetchData();
+    else {
+      setResume(
+        testResume.resumeHeader,
+        testResume.skillGroups,
+        testResume.experience,
+        testResume.education
+      );
+      setLoading(false);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [loading, data]);
+  }, []);
 
   useEffect(() => {
     if (!isTestAuthenticated) return;
@@ -662,7 +684,7 @@ export function Resume() {
                 )}
               </Stack>
               <Stack direction="column" spacing={1}>
-                {structuredClone(skillGroupList || data.resume.skillGroupList)
+                {structuredClone(skillGroupList)
                   .sort((a, b) => a.position - b.position)
                   .map((skillGroup: ISkillGroup) => {
                     let idx: number;
@@ -742,9 +764,7 @@ export function Resume() {
                   <Droppable droppableId="droppable-list">
                     {(provided) => (
                       <div ref={provided.innerRef} {...provided.droppableProps}>
-                        {structuredClone(
-                          experienceList || data.resume.experienceList
-                        )
+                        {structuredClone(experienceList)
                           .sort((a, b) => a.position - b.position)
                           .map((experience: IExperience, idx: number) => {
                             let expIdx: number;
@@ -1019,7 +1039,7 @@ export function Resume() {
                 )}
               </Stack>
               <Stack direction="column" spacing={1}>
-                {structuredClone(educationList || data.resume.educationList)
+                {structuredClone(educationList)
                   .sort((a, b) => a.position - b.position)
                   .map((education: IEducation) => {
                     let idx: number;
