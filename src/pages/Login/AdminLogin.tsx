@@ -9,6 +9,7 @@ import {
   OutlinedInput,
   ThemeProvider,
 } from "@mui/material";
+import axios from "axios";
 import { Footer } from "components/Footer";
 import { Menu } from "components/Menu";
 import { ADMIN_LOGIN } from "queries/adminLogin";
@@ -45,19 +46,22 @@ function AdminLogin() {
     event.preventDefault();
   };
 
-  const [adminLogin] = useLazyQuery(ADMIN_LOGIN);
-
   const handleSubmit = async () => {
-    const response = await adminLogin({
-      variables: { email: values.email, password: values.password },
-    });
-    if (!response.data.signInAdmin) {
-      alert("Wrong email and password");
-    } else {
-      localStorage.setItem("token", response.data.signInAdmin);
-      localStorage.setItem("edit", "true");
-      window.location.replace("/");
-    }
+    await axios
+      .post(`${process.env.REACT_APP_API_ENDPOINT}/adminLogin`, {
+        email: values.email,
+        password: values.password,
+      })
+      .then((resp) => {
+        if (resp.data.token) {
+          localStorage.setItem("token", resp.data.token);
+          localStorage.setItem("edit", "true");
+          window.location.replace("/");
+        } else {
+          alert("Wrong email and password!");
+        }
+      })
+      .catch(() => {});
   };
 
   const handleKeyDown = (e) => {
