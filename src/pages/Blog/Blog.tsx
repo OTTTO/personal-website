@@ -104,7 +104,7 @@ export function Blog() {
             <Divider sx={{ backgroundColor: "white", borderBottomWidth: 4 }} />
             {posts &&
               posts
-                .sort((a, b) => a.createdAt - b.createdAt)
+                .sort((a, b) => b.createdAt - a.createdAt)
                 .map((post, idx) => {
                   return (
                     <Grid container key={idx}>
