@@ -1,4 +1,3 @@
-import { useLazyQuery } from "@apollo/client";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import {
   Button,
@@ -12,7 +11,6 @@ import {
 import axios from "axios";
 import { Footer } from "components/Footer";
 import { Menu } from "components/Menu";
-import { ADMIN_LOGIN } from "queries/adminLogin";
 import React from "react";
 import mainTheme from "themes/mainTheme";
 import { State } from "types/adminLogin";

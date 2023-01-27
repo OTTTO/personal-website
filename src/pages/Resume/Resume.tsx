@@ -413,7 +413,7 @@ export function Resume() {
     setEducationList(newEducationList);
   };
 
-  const onDragEnd = ({ destination, source }: DropResult) => {
+  const onDragEndExperiences = ({ destination, source }: DropResult) => {
     if (!destination) return;
 
     const experiences = structuredClone(resume.experience).sort(
@@ -425,6 +425,28 @@ export function Resume() {
     //reset positions
     for (let i = 0; i < experiences.length; i++) {
       experiences[i].position = i;
+    }
+
+    setExperienceList(experiences);
+  };
+
+  const onDragEndResponsibilities = (
+    { destination, source }: DropResult,
+    expIdx: number
+  ) => {
+    if (!destination) return;
+
+    const experiences = structuredClone(resume.experience);
+    const responsibilities = experiences[expIdx].responsibilities.sort(
+      (a, b) => a.position - b.position
+    );
+
+    const [removed] = responsibilities.splice(source.index, 1);
+    responsibilities.splice(destination.index, 0, removed);
+
+    //reset positions
+    for (let i = 0; i < responsibilities.length; i++) {
+      responsibilities[i].position = i;
     }
 
     setExperienceList(experiences);
@@ -760,7 +782,7 @@ export function Resume() {
                 )}
               </Stack>
               <Stack direction="column" spacing={1}>
-                <DragDropContext onDragEnd={onDragEnd}>
+                <DragDropContext onDragEnd={onDragEndExperiences}>
                   <Droppable droppableId="droppable-list">
                     {(provided) => (
                       <div ref={provided.innerRef} {...provided.droppableProps}>
@@ -921,98 +943,173 @@ export function Resume() {
                                       )}
                                     </AccordionSummary>
                                     <AccordionDetails>
-                                      <Stack direction="column" spacing={2}>
-                                        {experience.responsibilities
-                                          .sort(
-                                            (a, b) => a.position - b.position
-                                          )
-                                          .map(
-                                            (
-                                              responsibility: IResponsibility,
-                                              idx: number
-                                            ) => {
-                                              let resIdx: number;
-                                              for (
-                                                let i = 0;
-                                                i <
-                                                experienceList[expIdx]
-                                                  .responsibilities.length;
-                                                i++
-                                              ) {
-                                                if (
-                                                  experienceList[expIdx]
-                                                    .responsibilities[i].id ===
-                                                  responsibility.id
-                                                ) {
-                                                  resIdx = i;
-                                                  break;
-                                                }
-                                              }
-                                              return (isAuthenticated ||
-                                                isTestAuthenticated) &&
-                                                edit ? (
-                                                <Stack
-                                                  key={responsibility.id}
-                                                  direction="column"
-                                                  sx={{
-                                                    border: "#c4c4c4 solid 1px",
-                                                    borderRadius: "5px",
-                                                  }}
-                                                  padding="1rem 1rem 0 1rem"
-                                                >
-                                                  <WysiwygEditor
-                                                    content={
-                                                      responsibility.details
+                                      <Stack
+                                        id="dropabble-stack"
+                                        direction="column"
+                                        spacing={2}
+                                      >
+                                        <DragDropContext
+                                          onDragEnd={(result) =>
+                                            onDragEndResponsibilities(
+                                              result,
+                                              expIdx
+                                            )
+                                          }
+                                        >
+                                          <Droppable
+                                            droppableId={`droppable-responsibilities-${experience.id}`}
+                                          >
+                                            {(provided) => (
+                                              <div
+                                                ref={provided.innerRef}
+                                                {...provided.droppableProps}
+                                              >
+                                                {experience.responsibilities
+                                                  .sort(
+                                                    (a, b) =>
+                                                      a.position - b.position
+                                                  )
+                                                  .map(
+                                                    (
+                                                      responsibility: IResponsibility,
+                                                      idx: number
+                                                    ) => {
+                                                      let resIdx: number;
+                                                      for (
+                                                        let i = 0;
+                                                        i <
+                                                        experienceList[expIdx]
+                                                          .responsibilities
+                                                          .length;
+                                                        i++
+                                                      ) {
+                                                        if (
+                                                          experienceList[expIdx]
+                                                            .responsibilities[i]
+                                                            .id ===
+                                                          responsibility.id
+                                                        ) {
+                                                          resIdx = i;
+                                                          break;
+                                                        }
+                                                      }
+                                                      return (isAuthenticated ||
+                                                        isTestAuthenticated) &&
+                                                        edit ? (
+                                                        <Draggable
+                                                          draggableId={
+                                                            responsibility.id
+                                                          }
+                                                          index={
+                                                            responsibility.position
+                                                          }
+                                                          key={
+                                                            responsibility.id
+                                                          }
+                                                          isDragDisabled={
+                                                            (!isAuthenticated &&
+                                                              !isTestAuthenticated) ||
+                                                            !edit
+                                                          }
+                                                        >
+                                                          {(
+                                                            provided,
+                                                            snapshot
+                                                          ) => (
+                                                            <Stack
+                                                              key={
+                                                                responsibility.id
+                                                              }
+                                                              direction="column"
+                                                              sx={{
+                                                                border:
+                                                                  "#c4c4c4 solid 1px",
+                                                                borderRadius:
+                                                                  "5px",
+                                                              }}
+                                                              padding="1rem 1rem 0 1rem"
+                                                              ref={
+                                                                provided.innerRef
+                                                              }
+                                                              {...provided.draggableProps}
+                                                              {...provided.dragHandleProps}
+                                                              className={
+                                                                snapshot.isDragging
+                                                                  ? "draggingListItem"
+                                                                  : ""
+                                                              }
+                                                            >
+                                                              <WysiwygEditor
+                                                                content={
+                                                                  responsibility.details
+                                                                }
+                                                                onChange={(
+                                                                  value
+                                                                ) =>
+                                                                  handleResponsibilityListChange(
+                                                                    value,
+                                                                    responsibility,
+                                                                    expIdx,
+                                                                    resIdx
+                                                                  )
+                                                                }
+                                                                options={[
+                                                                  "inline",
+                                                                ]}
+                                                                expanded
+                                                                error={
+                                                                  responsibility
+                                                                    .details
+                                                                    .length ===
+                                                                    0 ||
+                                                                  responsibility.details.startsWith(
+                                                                    emptyWysiwyg
+                                                                  )
+                                                                }
+                                                              />
+                                                              <IconButton
+                                                                onClick={() =>
+                                                                  handleRemoveResponsibility(
+                                                                    expIdx,
+                                                                    resIdx
+                                                                  )
+                                                                }
+                                                              >
+                                                                <RemoveCircle
+                                                                  sx={{
+                                                                    mr: 1,
+                                                                  }}
+                                                                />
+                                                              </IconButton>
+                                                            </Stack>
+                                                          )}
+                                                        </Draggable>
+                                                      ) : (
+                                                        <Typography
+                                                          key={
+                                                            responsibility.id
+                                                          }
+                                                        >
+                                                          <li
+                                                            className="responsibility-list"
+                                                            key={resIdx}
+                                                            dangerouslySetInnerHTML={{
+                                                              __html:
+                                                                DOMPurify.sanitize(
+                                                                  responsibility.details
+                                                                ),
+                                                            }}
+                                                          />
+                                                        </Typography>
+                                                      );
                                                     }
-                                                    onChange={(value) =>
-                                                      handleResponsibilityListChange(
-                                                        value,
-                                                        responsibility,
-                                                        expIdx,
-                                                        resIdx
-                                                      )
-                                                    }
-                                                    options={["inline"]}
-                                                    expanded
-                                                    error={
-                                                      responsibility.details
-                                                        .length === 0 ||
-                                                      responsibility.details.startsWith(
-                                                        emptyWysiwyg
-                                                      )
-                                                    }
-                                                  />
-                                                  <IconButton
-                                                    onClick={() =>
-                                                      handleRemoveResponsibility(
-                                                        expIdx,
-                                                        resIdx
-                                                      )
-                                                    }
-                                                  >
-                                                    <RemoveCircle
-                                                      sx={{ mr: 1 }}
-                                                    />
-                                                  </IconButton>
-                                                </Stack>
-                                              ) : (
-                                                <Typography
-                                                  key={responsibility.id}
-                                                >
-                                                  <li
-                                                    className="responsibility-list"
-                                                    key={resIdx}
-                                                    dangerouslySetInnerHTML={{
-                                                      __html:
-                                                        DOMPurify.sanitize(
-                                                          responsibility.details
-                                                        ),
-                                                    }}
-                                                  />
-                                                </Typography>
-                                              );
-                                            }
-                                          )}
+                                                  )}
+
+                                                {provided.placeholder}
+                                              </div>
+                                            )}
+                                          </Droppable>
+                                        </DragDropContext>
                                       </Stack>
                                     </AccordionDetails>
                                   </Accordion>
