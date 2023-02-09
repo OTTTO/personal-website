@@ -30,6 +30,7 @@
     "html-to-draftjs": "^1.5.0",
     "lorem-ipsum": "^2.0.8",
     "material-ui-popup-state": "^5.0.4",
+    "random-words": "^1.2.1",
     "react": "^18.2.0",
     "react-beautiful-dnd": "^13.1.1",
     "react-dom": "^18.2.0",

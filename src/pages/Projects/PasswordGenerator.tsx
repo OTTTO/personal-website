@@ -11,9 +11,17 @@ import { Footer } from "components/Footer";
 import { Menu } from "components/Menu";
 import React from "react";
 import mainTheme from "themes/mainTheme";
+import randomWords from "random-words";
+
+type PasswordType = "cryptic" | "human";
 
 export function PasswordGenerator() {
   const [password, setPassword] = React.useState("");
+  const [radio, setRadio] = React.useState<PasswordType>("cryptic");
+
+  const handleRadioChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setRadio((event.target as HTMLInputElement).value as PasswordType);
+  };
 
   let uppers = Array.from(Array(26))
     .map((e, i) => i + 65)
@@ -70,10 +78,29 @@ export function PasswordGenerator() {
     setPassword(genPassword);
   };
 
-  const generateHuman = () => {};
+  const humanSpecials = ["!", "@", "#", "$", "%", "&", "?", "+"];
+
+  const generateHuman = () => {
+    setPassword(
+      randomWords({
+        exactly: 3,
+        join: "",
+        formatter: (word, index) => {
+          return word.slice(0, 1).toUpperCase().concat(word.slice(1));
+        },
+      }) +
+        shuffle(numbers)[0] +
+        shuffle(numbers)[0] +
+        shuffle(humanSpecials)[0]
+    );
+  };
 
   const onGenerate = () => {
-    generateCryptic();
+    if (radio === "cryptic") {
+      generateCryptic();
+    } else {
+      generateHuman();
+    }
   };
 
   return (
@@ -88,17 +115,26 @@ export function PasswordGenerator() {
         bgcolor="black"
         textAlign="center"
       >
-        <Typography color="white" variant="h4">
+        <Typography
+          color="white"
+          variant="h4"
+          sx={{ textDecoration: "underline" }}
+        >
           RANDOM PASSWORD GENERATOR
         </Typography>
-        <Grid container bgcolor="white" width="20rem" margin="0 auto">
+        <Grid
+          container
+          bgcolor="white"
+          width="20rem"
+          margin="1rem auto"
+          sx={{ borderRadius: "3px" }}
+        >
           <RadioGroup
             defaultValue="cryptic"
             sx={{
-              backgroundColor: "white",
               margin: "0 auto",
-              borderRadius: "3px",
             }}
+            onChange={handleRadioChange}
           >
             <FormControlLabel
               value="cryptic"
@@ -109,7 +145,7 @@ export function PasswordGenerator() {
             <FormControlLabel
               value="human"
               control={<Radio />}
-              label="Readable"
+              label="Human"
               sx={{ paddingLeft: "1rem" }}
             />
           </RadioGroup>
@@ -131,7 +167,13 @@ export function PasswordGenerator() {
             GENERATE
           </Button>
         </Grid>
-        <Typography color="white" variant="h6">
+        <Typography
+          color="white"
+          variant="h6"
+          border="white solid"
+          display={password ? "inline" : "none"}
+          padding=".25rem"
+        >
           {password}
         </Typography>
       </Grid>
