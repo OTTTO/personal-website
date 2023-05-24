@@ -902,9 +902,12 @@ export function Trouble() {
                   marginTop: "-1rem",
                 }}
                 onClick={() => {
-                  reset();
-                  changeOutput(introText);
-                  handleOpenSelect();
+                  // eslint-disable-next-line no-restricted-globals
+                  if (confirm("You are about to restart your game")) {
+                    reset();
+                    changeOutput(introText);
+                    handleOpenSelect();
+                  }
                 }}
               >
                 RESTART
@@ -1220,7 +1223,10 @@ export function Trouble() {
       {/* SELECT PLAYERS MODAL */}
       <Modal
         open={openSelect}
-        onClose={handleCloseSelect}
+        onClose={() => {
+          handleCloseSelect();
+          setNumPlayers(0);
+        }}
         sx={{
           display: "flex",
           alignItems: "center",
@@ -1237,7 +1243,13 @@ export function Trouble() {
             opacity: ".9",
           }}
         >
-          <IconButton onClick={handleCloseSelect} sx={{ float: "left" }}>
+          <IconButton
+            onClick={() => {
+              handleCloseSelect();
+              setNumPlayers(0);
+            }}
+            sx={{ float: "left" }}
+          >
             <Close sx={{ color: "red" }}></Close>
           </IconButton>
           <Typography
