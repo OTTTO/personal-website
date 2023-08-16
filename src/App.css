@@ -62,7 +62,7 @@
   width: auto;
   max-width: 80%;
   border: white double thick;
-  padding: .1rem;
+  padding: 0.1rem;
 }
 
 .projectImg {
@@ -310,4 +310,13 @@
   left: 70%;
   top: 60%;
   animation-delay: -0.4s;
+}
+
+.training-email {
+  color: #65ff00;
+  font-size: 2rem;
+}
+
+.training-email:hover {
+  color: #ff3131;
 }

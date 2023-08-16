@@ -4,6 +4,7 @@ import {
   CrisisAlertOutlined,
   HomeOutlined,
   ReceiptOutlined,
+  BeenhereOutlined,
 } from "@mui/icons-material";
 import { Menu as MenuIcon } from "@mui/icons-material";
 import {
@@ -29,7 +30,7 @@ export function Menu({
   bottomBorder = true,
 }) {
   const { width } = useWindowDimensions();
-  const smallerSize = 785;
+  const smallerSize = 1150;
   const isLarger = width > smallerSize;
 
   return (
@@ -131,6 +132,15 @@ export function Menu({
                       >
                         <Typography variant="h6">BLOG</Typography>
                       </MenuItem>
+                      <MenuItem
+                        sx={{ border: "black solid" }}
+                        onClick={() => {
+                          popupState.close();
+                          window.location.href = "/live-training";
+                        }}
+                      >
+                        <Typography variant="h6">TRAINING</Typography>
+                      </MenuItem>
                     </MuiMenu>
                   </ThemeProvider>
                 </>
@@ -193,6 +203,20 @@ export function Menu({
                   />
                 ) : null}
                 <Typography variant="h4">BLOG</Typography>
+              </Fab>
+              <Fab
+                variant="extended"
+                href="/live-training"
+                sx={{ margin: "1rem 0.5rem 0rem 0rem" }}
+                size={isLarger ? "large" : "small"}
+              >
+                {isLarger ? (
+                  <BeenhereOutlined
+                    sx={{ mr: 1 }}
+                    fontSize={isLarger ? "large" : "small"}
+                  />
+                ) : null}
+                <Typography variant="h4">TRAINING</Typography>
               </Fab>
             </>
           )}
