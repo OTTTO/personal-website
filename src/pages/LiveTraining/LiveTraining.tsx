@@ -62,9 +62,8 @@ export function LiveTraining() {
                 <b>
                   <u>basic understanding of programming</u>
                 </b>{" "}
-                knowledge in any language of your choice. We will typically be
-                working in Java, JavaScript, or Python so any of those would be
-                a plus.
+                in any language of your choice. We will typically be working in
+                Java, JavaScript, or Python so any of those would be a plus.
               </p>
               <p>
                 {" "}
