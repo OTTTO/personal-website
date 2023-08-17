@@ -1,24 +1,15 @@
-import { AddCircle, ExpandMore, RemoveCircle } from "@mui/icons-material";
-import {
-  Stack,
-  Typography,
-  IconButton,
-  Accordion,
-  AccordionSummary,
-  TextField,
-  Box,
-  AccordionDetails,
-} from "@mui/material";
-import { WysiwygEditor } from "components/WysiwygEditor";
-import { IExperience, IResponsibility } from "types/resume";
+import { AddCircle } from "@mui/icons-material";
+import { Stack, Typography, IconButton, Accordion } from "@mui/material";
+import { IExperience } from "types/resume";
 import { v4 as uuid } from "uuid";
-import * as DOMPurify from "dompurify";
 import {
   DragDropContext,
   Droppable,
   Draggable,
   DropResult,
 } from "react-beautiful-dnd";
+import { ExperienceSummary } from "./ExperienceSummary";
+import { ExperienceDetails } from "./ExperienceDetails";
 
 export function Experience({
   isAuthenticated,
@@ -113,20 +104,6 @@ export function Experience({
     setExperienceList(newExperienceList);
   };
 
-  const handleResponsibilityListChange = (
-    value: string,
-    responsibility: IResponsibility,
-    expIdx: number,
-    resIdx: number
-  ) => {
-    const newResponsibility: IResponsibility = structuredClone(responsibility);
-    newResponsibility.details = value;
-    updateErrorCountWysiwyg(responsibility.details, newResponsibility.details);
-    const newExperienceList = structuredClone(experienceList);
-    newExperienceList[expIdx].responsibilities[resIdx] = newResponsibility;
-    setExperienceList(newExperienceList);
-  };
-
   const handleRemoveExperience = (idx: number) => {
     const newExperienceList: IExperience[] = structuredClone(experienceList);
 
@@ -160,35 +137,6 @@ export function Experience({
     setExperienceList(sortedNewExperienceList);
   };
 
-  const handleRemoveResponsibility = (expIdx: number, resIdx: number) => {
-    const newExperienceList: IExperience[] = structuredClone(experienceList);
-
-    //Reset Position
-    for (
-      let i = 0;
-      i < newExperienceList[expIdx].responsibilities.length;
-      i++
-    ) {
-      newExperienceList[expIdx].responsibilities[i].position = i;
-    }
-
-    //Splice removed element out of array and remove error count from canSubmitArr
-    const responsbility: IResponsibility = newExperienceList[
-      expIdx
-    ].responsibilities.splice(resIdx, 1)[0];
-    const newCanSubmitArr: boolean[] = structuredClone(canSubmitArr);
-
-    if (
-      responsbility.details.length === 0 ||
-      responsbility.details.startsWith(emptyWysiwyg)
-    ) {
-      newCanSubmitArr.pop();
-    }
-
-    setCanSubmitArr(newCanSubmitArr);
-    setExperienceList(newExperienceList);
-  };
-
   const onDragEndExperiences = ({ destination, source }: DropResult) => {
     if (!destination) return;
 
@@ -204,47 +152,6 @@ export function Experience({
     }
 
     setExperienceList(experiences);
-  };
-
-  const onDragEndResponsibilities = (
-    { destination, source }: DropResult,
-    expIdx: number
-  ) => {
-    if (!destination) return;
-
-    const experiences = structuredClone(resume.experience);
-    const responsibilities = experiences[expIdx].responsibilities.sort(
-      (a, b) => a.position - b.position
-    );
-
-    const [removed] = responsibilities.splice(source.index, 1);
-    responsibilities.splice(destination.index, 0, removed);
-
-    //reset positions
-    for (let i = 0; i < responsibilities.length; i++) {
-      responsibilities[i].position = i;
-    }
-
-    setExperienceList(experiences);
-  };
-
-  const emptyWysiwyg = "<p></p>";
-
-  const updateErrorCountWysiwyg = (oldString: string, newString: string) => {
-    const newCanSubmitArr: boolean[] = structuredClone(canSubmitArr);
-    if (
-      oldString.length !== 0 &&
-      !oldString.startsWith(emptyWysiwyg) &&
-      newString.startsWith(emptyWysiwyg)
-    ) {
-      newCanSubmitArr.push(true);
-    } else if (
-      oldString.startsWith(emptyWysiwyg) &&
-      !newString.startsWith(emptyWysiwyg)
-    ) {
-      newCanSubmitArr.pop();
-    }
-    setCanSubmitArr(newCanSubmitArr);
   };
 
   return (
@@ -299,263 +206,31 @@ export function Experience({
                                 idx !== experienceList.length - 1 ? "1rem" : 0,
                             }}
                           >
-                            <AccordionSummary expandIcon={<ExpandMore />}>
-                              {(isAuthenticated || isTestAuthenticated) &&
-                              edit ? (
-                                <Stack
-                                  direction={isDeviceWidth ? "column" : "row"}
-                                  spacing={isDeviceWidth ? 2 : 1}
-                                >
-                                  <TextField
-                                    id="experienceRole"
-                                    error={experience.role.length === 0}
-                                    defaultValue={experience.role}
-                                    onChange={(e) =>
-                                      handleExperienceListChange(
-                                        e,
-                                        experience,
-                                        expIdx
-                                      )
-                                    }
-                                    label="Role"
-                                  ></TextField>
-                                  <TextField
-                                    id="experienceCompany"
-                                    error={experience.company.length === 0}
-                                    defaultValue={experience.company}
-                                    onChange={(e) =>
-                                      handleExperienceListChange(
-                                        e,
-                                        experience,
-                                        expIdx
-                                      )
-                                    }
-                                    label="Company"
-                                  ></TextField>
-                                  <TextField
-                                    id="experienceLocation"
-                                    error={experience.location.length === 0}
-                                    defaultValue={experience.location}
-                                    onChange={(e) =>
-                                      handleExperienceListChange(
-                                        e,
-                                        experience,
-                                        expIdx
-                                      )
-                                    }
-                                    label="Location"
-                                  ></TextField>
-                                  <TextField
-                                    id="experienceTime"
-                                    error={experience.time.length === 0}
-                                    defaultValue={experience.time}
-                                    onChange={(e) =>
-                                      handleExperienceListChange(
-                                        e,
-                                        experience,
-                                        expIdx
-                                      )
-                                    }
-                                    label="Time"
-                                  ></TextField>
-                                  <Stack direction="row">
-                                    <IconButton
-                                      onClick={(e) => {
-                                        e.stopPropagation();
-                                        handleAddResponsibility(expIdx);
-                                      }}
-                                    >
-                                      <AddCircle sx={{ mr: 1 }} />
-                                    </IconButton>
-                                    <IconButton
-                                      onClick={() =>
-                                        handleRemoveExperience(expIdx)
-                                      }
-                                    >
-                                      <RemoveCircle sx={{ mr: 1 }} />
-                                    </IconButton>
-                                  </Stack>
-                                </Stack>
-                              ) : isDeviceWidth ? (
-                                <Box>
-                                  <Typography variant="subtitle2">
-                                    <b>
-                                      <i>{experience.role}</i>
-                                    </b>
-                                  </Typography>
-                                  <Typography variant="subtitle2">
-                                    {experience.company}
-                                  </Typography>
-                                  <Typography variant="subtitle2">
-                                    {experience.location}
-                                  </Typography>
-                                  <Typography variant="subtitle2">
-                                    {experience.time}
-                                  </Typography>
-                                </Box>
-                              ) : (
-                                <Box>
-                                  <Typography variant="subtitle2">
-                                    <b>
-                                      <i>{experience.role}</i>,{" "}
-                                      {experience.company}
-                                    </b>
-                                  </Typography>
-                                  <Typography variant="subtitle2">
-                                    {experience.location} : {experience.time}
-                                  </Typography>
-                                </Box>
-                              )}
-                            </AccordionSummary>
-                            <div onClick={(e) => e.stopPropagation()}>
-                              <AccordionDetails>
-                                <Stack
-                                  id="dropabble-stack"
-                                  direction="column"
-                                  spacing={2}
-                                >
-                                  <DragDropContext
-                                    onDragEnd={(result) =>
-                                      onDragEndResponsibilities(result, expIdx)
-                                    }
-                                  >
-                                    <Droppable
-                                      droppableId={`droppable-responsibilities-${experience.id}`}
-                                    >
-                                      {(provided) => (
-                                        <div
-                                          ref={provided.innerRef}
-                                          {...provided.droppableProps}
-                                        >
-                                          {experience.responsibilities
-                                            .sort(
-                                              (a, b) => a.position - b.position
-                                            )
-                                            .map(
-                                              (
-                                                responsibility: IResponsibility,
-                                                idx: number
-                                              ) => {
-                                                let resIdx: number;
-                                                for (
-                                                  let i = 0;
-                                                  i <
-                                                  experienceList[expIdx]
-                                                    .responsibilities.length;
-                                                  i++
-                                                ) {
-                                                  if (
-                                                    experienceList[expIdx]
-                                                      .responsibilities[i]
-                                                      .id === responsibility.id
-                                                  ) {
-                                                    resIdx = i;
-                                                    break;
-                                                  }
-                                                }
-                                                return (isAuthenticated ||
-                                                  isTestAuthenticated) &&
-                                                  edit ? (
-                                                  <Draggable
-                                                    draggableId={
-                                                      responsibility.id
-                                                    }
-                                                    index={
-                                                      responsibility.position
-                                                    }
-                                                    key={responsibility.id}
-                                                    isDragDisabled={
-                                                      (!isAuthenticated &&
-                                                        !isTestAuthenticated) ||
-                                                      !edit
-                                                    }
-                                                  >
-                                                    {(provided, snapshot) => (
-                                                      <Stack
-                                                        key={responsibility.id}
-                                                        direction="column"
-                                                        sx={{
-                                                          border:
-                                                            "#c4c4c4 solid 1px",
-                                                          borderRadius: "5px",
-                                                        }}
-                                                        padding="1rem 1rem 0 1rem"
-                                                        ref={provided.innerRef}
-                                                        {...provided.draggableProps}
-                                                        {...provided.dragHandleProps}
-                                                        className={
-                                                          snapshot.isDragging
-                                                            ? "draggingListItem"
-                                                            : ""
-                                                        }
-                                                      >
-                                                        <WysiwygEditor
-                                                          content={
-                                                            responsibility.details
-                                                          }
-                                                          onChange={(value) =>
-                                                            handleResponsibilityListChange(
-                                                              value,
-                                                              responsibility,
-                                                              expIdx,
-                                                              resIdx
-                                                            )
-                                                          }
-                                                          options={["inline"]}
-                                                          expanded
-                                                          error={
-                                                            responsibility
-                                                              .details
-                                                              .length === 0 ||
-                                                            responsibility.details.startsWith(
-                                                              emptyWysiwyg
-                                                            )
-                                                          }
-                                                        />
-                                                        <IconButton
-                                                          onClick={() =>
-                                                            handleRemoveResponsibility(
-                                                              expIdx,
-                                                              resIdx
-                                                            )
-                                                          }
-                                                        >
-                                                          <RemoveCircle
-                                                            sx={{
-                                                              mr: 1,
-                                                            }}
-                                                          />
-                                                        </IconButton>
-                                                      </Stack>
-                                                    )}
-                                                  </Draggable>
-                                                ) : (
-                                                  <Typography
-                                                    key={responsibility.id}
-                                                  >
-                                                    <li
-                                                      className="responsibility-list"
-                                                      key={resIdx}
-                                                      dangerouslySetInnerHTML={{
-                                                        __html:
-                                                          DOMPurify.sanitize(
-                                                            responsibility.details
-                                                          ),
-                                                      }}
-                                                    />
-                                                  </Typography>
-                                                );
-                                              }
-                                            )}
-
-                                          {provided.placeholder}
-                                        </div>
-                                      )}
-                                    </Droppable>
-                                  </DragDropContext>
-                                </Stack>
-                              </AccordionDetails>
-                            </div>
+                            <ExperienceSummary
+                              isAuthenticated={isAuthenticated}
+                              isTestAuthenticated={isTestAuthenticated}
+                              edit={edit}
+                              experience={experience}
+                              expIdx={expIdx}
+                              handleExperienceListChange={
+                                handleExperienceListChange
+                              }
+                              handleAddResponsibility={handleAddResponsibility}
+                              handleRemoveExperience={handleRemoveExperience}
+                              isDeviceWidth={isDeviceWidth}
+                            />
+                            <ExperienceDetails
+                              isAuthenticated={isAuthenticated}
+                              isTestAuthenticated={isTestAuthenticated}
+                              edit={edit}
+                              resume={resume}
+                              experienceList={experienceList}
+                              setExperienceList={setExperienceList}
+                              experience={experience}
+                              expIdx={expIdx}
+                              canSubmitArr={canSubmitArr}
+                              setCanSubmitArr={setCanSubmitArr}
+                            />
                           </Accordion>
                         )}
                       </Draggable>
