@@ -30,6 +30,7 @@ export function Home() {
 
   const [edit, setEdit] = React.useState(true);
   const [home, setHome] = React.useState(new HomeClass());
+  const [imgLoaded, setImgLoaded] = React.useState(false);
 
   const handleContentChange = (content: string, property: string) => {
     updateErrorCount(home[property], content);
@@ -133,7 +134,8 @@ export function Home() {
               <img
                 src={`${process.env.REACT_APP_S3_CLOUDFRONT}/${home.mainImg}`}
                 alt="Angel's Landing"
-                className="angelImg"
+                className={imgLoaded ? "angelImg" : ""}
+                onLoad={() => setImgLoaded(true)}
               ></img>
               {(isAuthenticated || isTestAuthenticated) && edit && (
                 <Grid
