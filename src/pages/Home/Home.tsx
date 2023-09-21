@@ -114,14 +114,29 @@ export function Home() {
             border: "white solid .25rem",
           }}
         >
-          <Menu backgroundColor={backgroundColor}></Menu>
+          <Menu
+            backgroundColor={backgroundColor}
+            background="linear-gradient(90deg, red, black)"
+          ></Menu>
           <Grid
             container
             direction="column"
-            sx={{ paddingTop: "1rem" }}
             alignItems="center"
+            sx={{
+              paddingTop: "1rem",
+              background: "linear-gradient(135deg, black, red)",
+            }}
           >
-            <Typography variant="h1" color="white" key="1">
+            <Typography
+              variant="h1"
+              key="1"
+              color="transparent"
+              sx={{
+                background: "linear-gradient(#C6AB62, white)",
+                "-webkit-background-clip": "text",
+                textDecoration: "underline",
+              }}
+            >
               <u>WELCOME!!</u>
             </Typography>
 
@@ -180,6 +195,7 @@ export function Home() {
                     dangerouslySetInnerHTML={{
                       __html: DOMPurify.sanitize(home.intro),
                     }}
+                    sx={{ textShadow: "3px 3px 2px black" }}
                   ></Typography>
                 )}
 
@@ -216,6 +232,7 @@ export function Home() {
                     dangerouslySetInnerHTML={{
                       __html: DOMPurify.sanitize(home.websiteInfo),
                     }}
+                    sx={{ textShadow: "3px 3px 2px black" }}
                   ></Typography>
                 )}
               </Grid>
@@ -231,7 +248,10 @@ export function Home() {
               disabled={canSubmitArr.length > 0}
             />
           )}
-          <Footer backgroundColor={backgroundColor}></Footer>
+          <Footer
+            backgroundColor={backgroundColor}
+            background="linear-gradient(90deg, red, black)"
+          ></Footer>
         </Grid>
       </ThemeProvider>
     </Grid>

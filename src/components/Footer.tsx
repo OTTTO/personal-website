@@ -8,6 +8,7 @@ export function Footer({ backgroundColor, background = undefined }) {
         background,
         padding: "0rem 0rem 1rem 1rem",
       }}
+      borderTop="3px solid white"
     >
       <Grid item>
         <Typography

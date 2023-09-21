@@ -136,10 +136,16 @@ export function Resume() {
     <Grid border="double thick black">
       <ThemeProvider theme={mainTheme}>
         <Grid border="white solid .25rem">
-          <Menu backgroundColor={backgroundColor} />
+          <Menu
+            backgroundColor={backgroundColor}
+            background="linear-gradient(90deg, red, black)"
+          />
           <Grid
             padding="1rem 0rem 1rem 0rem"
-            sx={{ backgroundColor: "black", position: "relative" }}
+            sx={{
+              position: "relative",
+              background: "linear-gradient(135deg, black, red)",
+            }}
           >
             {!isDeviceWidth && <SideIcons />}
             <Box
@@ -215,7 +221,10 @@ export function Resume() {
             </Box>
           </Grid>
 
-          <Footer backgroundColor={backgroundColor}></Footer>
+          <Footer
+            backgroundColor={backgroundColor}
+            background="linear-gradient(90deg, red, black)"
+          ></Footer>
         </Grid>
       </ThemeProvider>
     </Grid>

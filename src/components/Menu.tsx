@@ -16,6 +16,7 @@ import {
   Grid,
   Button,
   ThemeProvider,
+  createTheme,
 } from "@mui/material";
 import useWindowDimensions from "hooks/useWindowDimensions";
 import PopupState, { bindTrigger, bindMenu } from "material-ui-popup-state";
@@ -24,6 +25,22 @@ import { authenticationCheck, testAuthenticationCheck } from "utils/utils";
 
 const isAuthenticated = authenticationCheck();
 const isTestAuthenticated = testAuthenticationCheck();
+
+const theme = createTheme({
+  palette: {
+    info: {
+      main: "#C6AB62",
+    },
+    error: {
+      main: "#FF0000",
+    },
+  },
+  typography: {
+    h4: {
+      fontSize: "1.5rem",
+    },
+  },
+});
 
 export function Menu({
   backgroundColor,
@@ -130,10 +147,10 @@ export function Menu({
                         sx={{ border: "black solid" }}
                         onClick={() => {
                           popupState.close();
-                          window.location.href = "/referrals";
+                          window.location.href = "/recognition";
                         }}
                       >
-                        <Typography variant="h6">REFERRALS</Typography>
+                        <Typography variant="h6">RECOGNITION</Typography>
                       </MenuItem>
                       <MenuItem
                         sx={{ border: "black solid" }}
@@ -204,7 +221,7 @@ export function Menu({
               </Fab>
               <Fab
                 variant="extended"
-                href="/referrals"
+                href="/recognition"
                 sx={{ margin: "1rem 0.5rem 0rem 0rem" }}
                 size={isLarger ? "large" : "small"}
               >
@@ -214,7 +231,7 @@ export function Menu({
                     fontSize={isLarger ? "large" : "small"}
                   />
                 ) : null}
-                <Typography variant="h4">REFERRALS</Typography>
+                <Typography variant="h4">RECOGNITION</Typography>
               </Fab>
               <Fab
                 variant="extended"
@@ -256,32 +273,34 @@ export function Menu({
           display="inline-block"
           width="auto"
         >
-          <Fab
-            variant="extended"
-            sx={{ margin: "1rem 1rem 0rem 0rem" }}
-            size={isLarger ? "large" : "medium"}
-            color={
-              !isAuthenticated && !isTestAuthenticated ? "info" : "warning"
-            }
-            onClick={() => {
-              if (!isAuthenticated && !isTestAuthenticated) {
-                window.location.href = "/admin";
-              } else {
-                localStorage.removeItem("token");
-                localStorage.removeItem("testToken");
-                localStorage.removeItem("edit");
-                window.location.href = "/";
+          <ThemeProvider theme={theme}>
+            <Fab
+              variant="extended"
+              sx={{ margin: "1rem 1rem 0rem 0rem", border: "solid 1px white" }}
+              size={isLarger ? "large" : "medium"}
+              color={
+                !isAuthenticated && !isTestAuthenticated ? "info" : "warning"
               }
-            }}
-          >
-            <AdminPanelSettingsOutlined
-              sx={{ mr: 1 }}
-              fontSize={isLarger ? "large" : "medium"}
-            />
-            <Typography variant="h4">
-              {!isAuthenticated && !isTestAuthenticated ? "LOGIN" : "LOGOUT"}
-            </Typography>
-          </Fab>
+              onClick={() => {
+                if (!isAuthenticated && !isTestAuthenticated) {
+                  window.location.href = "/admin";
+                } else {
+                  localStorage.removeItem("token");
+                  localStorage.removeItem("testToken");
+                  localStorage.removeItem("edit");
+                  window.location.href = "/";
+                }
+              }}
+            >
+              <AdminPanelSettingsOutlined
+                sx={{ mr: 1 }}
+                fontSize={isLarger ? "large" : "medium"}
+              />
+              <Typography variant="h4">
+                {!isAuthenticated && !isTestAuthenticated ? "LOGIN" : "LOGOUT"}
+              </Typography>
+            </Fab>
+          </ThemeProvider>
         </Grid>
       </Grid>
     </Grid>

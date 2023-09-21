@@ -153,20 +153,28 @@ export function Projects() {
     <Grid border="thick double black">
       <Grid sx={{ height: "vh100" }} border="white solid .25rem">
         <ThemeProvider theme={projectsTheme}>
-          <Menu backgroundColor="black"></Menu>
+          <Menu
+            backgroundColor="black"
+            background="linear-gradient(90deg, red, black)"
+          ></Menu>
           <Grid
             container
             direction="column"
             margin="0 auto"
             paddingBottom="2rem"
-            borderBottom={
-              !isAuthenticated && !isTestAuthenticated
-                ? ".25rem white solid"
-                : null
-            }
-            sx={{ backgroundColor: "black" }}
+            sx={{
+              background: "linear-gradient(135deg, black, red)",
+            }}
           >
-            <Typography variant="h1" textAlign="center" color="white">
+            <Typography
+              variant="h1"
+              textAlign="center"
+              color="transparent"
+              sx={{
+                background: "linear-gradient(#C6AB62, white)",
+                "-webkit-background-clip": "text",
+              }}
+            >
               PERSONAL PROJECTS
             </Typography>
             {(isAuthenticated || isTestAuthenticated) && edit ? (
@@ -414,7 +422,10 @@ export function Projects() {
               setEdit={setEdit}
             />
           )}
-          <Footer backgroundColor="black"></Footer>
+          <Footer
+            backgroundColor="black"
+            background="linear-gradient(90deg, red, black)"
+          ></Footer>
         </ThemeProvider>
       </Grid>
     </Grid>

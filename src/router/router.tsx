@@ -8,7 +8,7 @@ import { PasswordGenerator } from "pages/Projects/PasswordGenerator";
 import { Blog } from "pages/Blog/Blog";
 import { Post } from "pages/Blog/Post";
 import { LiveTraining } from "pages/LiveTraining/LiveTraining";
-import { Referrals } from "pages/Referrals/Referrals";
+import { Recognition } from "pages/Referrals/Recognition";
 
 function AppRoutes() {
   return (
@@ -28,7 +28,7 @@ function AppRoutes() {
         <Route path="/blog/post/:id" element={<Post />} />
         <Route path="/blog/post/edit/:id" element={<Post />} />
         <Route path="/live-training" element={<LiveTraining />} />
-        <Route path="/referrals" element={<Referrals />} />
+        <Route path="/recognition" element={<Recognition />} />
       </Routes>
     </BrowserRouter>
   );

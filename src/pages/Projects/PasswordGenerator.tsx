@@ -106,7 +106,11 @@ export function PasswordGenerator() {
   return (
     <Grid container direction="column" border="double thick black">
       <ThemeProvider theme={mainTheme}>
-        <Menu backgroundColor="black" borderSides></Menu>
+        <Menu
+          backgroundColor="black"
+          borderSides
+          background="linear-gradient(90deg, red, black)"
+        ></Menu>
       </ThemeProvider>
       <Grid
         padding="1rem 0rem"
@@ -114,6 +118,7 @@ export function PasswordGenerator() {
         margin="0 auto .25rem auto"
         bgcolor="black"
         textAlign="center"
+        sx={{ background: "linear-gradient(135deg, black, red)" }}
       >
         <Typography
           color="white"
@@ -177,7 +182,10 @@ export function PasswordGenerator() {
           {password}
         </Typography>
       </Grid>
-      <Footer backgroundColor="black"></Footer>
+      <Footer
+        backgroundColor="black"
+        background="linear-gradient(90deg, red, black)"
+      ></Footer>
     </Grid>
   );
 }

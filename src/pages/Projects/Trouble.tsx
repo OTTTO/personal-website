@@ -868,13 +868,18 @@ export function Trouble() {
       border="double thick black"
     >
       <ThemeProvider theme={mainTheme}>
-        <Menu backgroundColor="black" borderSides></Menu>
+        <Menu
+          backgroundColor="black"
+          borderSides
+          background="linear-gradient(90deg, red, black)"
+        ></Menu>
       </ThemeProvider>
       <Grid
         padding="1rem 0rem"
         border="solid black .1rem"
         width="99%"
         margin="0 auto .25rem auto"
+        sx={{ background: "linear-gradient(45deg, red, white, red)" }}
       >
         {/* BOARD */}
         <Grid
@@ -1218,7 +1223,10 @@ export function Trouble() {
           </Grid>
         )}
       </Grid>
-      <Footer backgroundColor="black"></Footer>
+      <Footer
+        backgroundColor="black"
+        background="linear-gradient(90deg, red, black)"
+      ></Footer>
 
       {/* SELECT PLAYERS MODAL */}
       <Modal

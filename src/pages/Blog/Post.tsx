@@ -109,7 +109,11 @@ export function Post() {
         display={isLoading ? "none" : "visible"}
       >
         <ThemeProvider theme={mainTheme}>
-          <Menu backgroundColor="black" borderSides></Menu>
+          <Menu
+            backgroundColor="black"
+            borderSides
+            background="linear-gradient(90deg, red, black)"
+          ></Menu>
           <Grid
             container
             direction="column"
@@ -279,7 +283,10 @@ export function Post() {
               />
             )}
           </Grid>
-          <Footer backgroundColor="black" />
+          <Footer
+            backgroundColor="black"
+            background="linear-gradient(90deg, red, black)"
+          />
         </ThemeProvider>
       </Grid>
     </>

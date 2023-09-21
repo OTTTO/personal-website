@@ -3,13 +3,9 @@ import { ThemeProvider } from "@emotion/react";
 import projectsTheme from "themes/projectsTheme";
 import { Menu } from "components/Menu";
 import { Footer } from "components/Footer";
-import useWindowDimensions from "hooks/useWindowDimensions";
-import { Referral } from "./Refferal";
+import { RecognitionItem } from "./RecognitionItem";
 
-export function Referrals() {
-  const { width } = useWindowDimensions();
-  const smallerSize = 700;
-  const isMobile = width <= smallerSize;
+export function Recognition() {
   return (
     <Grid border="double thick black">
       <Grid sx={{ height: "vh100" }} border=".25rem white solid">
@@ -23,9 +19,8 @@ export function Referrals() {
             direction="column"
             margin="0 auto"
             paddingBottom="2rem"
-            borderBottom=".25rem white solid"
             sx={{
-              background: "linear-gradient(135deg, black, red) ",
+              background: "linear-gradient(135deg, black, red)",
             }}
           >
             <Typography
@@ -34,13 +29,13 @@ export function Referrals() {
               color="transparent"
               sx={{
                 background: "linear-gradient(#C6AB62, white)",
-                "-webkit-background-clip": "text",
+                WebkitBackgroundClip: "text",
               }}
             >
-              REFERRALS
+              RECOGNITION
             </Typography>
             <Divider sx={{ backgroundColor: "white", borderBottomWidth: 4 }} />
-            <Referral
+            <RecognitionItem
               content="Dylan is a truly exceptional Full Stack developer. He can easily
               switch between two different languages: Java and React+JS, and he
               performs at a very high level of productivity. Dylan can tackle
@@ -48,19 +43,19 @@ export function Referrals() {
               source="Anastassiya Starns (Senior Engineer)"
               linkedin="https://www.linkedin.com/in/anastassiya-mayer/"
               left
-              isMobile={isMobile}
+              up={false}
             />
-            <Referral
+            <RecognitionItem
               content="Dylan gets things done. He is one of the fastest developers on the
               project and doesn't just finish his tasks and call it a day… our
               colleagues at IBM appreciated that a lot."
               source="Moazzam Khan (Project Lead)"
               linkedin="https://www.linkedin.com/in/moazzam-khan-915194b/"
               left={false}
-              isMobile={isMobile}
+              up
             />
-            <Referral
-              content="On what was an only week-long effort, Dylan was able to pickup
+            <RecognitionItem
+              content="On what was only a week-long effort, Dylan was able to pickup
               both a new language and new unit testing framework and start
               contributing immediately. He instantly started writing
               Groovy/Spock like he had been doing it for years, started knocking
@@ -71,9 +66,9 @@ export function Referrals() {
               source="John Valentino (Prinicpal Software Engineer)"
               linkedin="https://www.linkedin.com/in/john-valentino-5554162/"
               left
-              isMobile={isMobile}
+              up
             />
-            <Referral
+            <RecognitionItem
               content="Dylan is someone you can give the summary of what you need done
               and he'll immediately get to working on it raising any concerns
               along the way. I found it to be a refreshing experience pairing up
@@ -84,9 +79,9 @@ export function Referrals() {
               source="Robert Goddard (Senior Engineer)"
               linkedin="https://www.linkedin.com/in/robert-goddard-05257812/"
               left={false}
-              isMobile={isMobile}
+              up
             />
-            <Referral
+            <RecognitionItem
               content="Dylan wasted no time getting up and running on this project.
               Relatively new to Dialexa, but you would have no idea with how
               quickly he fit into the team, adapted to new processes, and picked
@@ -99,7 +94,7 @@ export function Referrals() {
               source="Meghan Miller (Project Manager)"
               linkedin="https://www.linkedin.com/in/miller-meghan/"
               left
-              isMobile={isMobile}
+              up
             />
           </Grid>
           <Footer
