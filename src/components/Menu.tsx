@@ -5,6 +5,7 @@ import {
   HomeOutlined,
   ReceiptOutlined,
   BeenhereOutlined,
+  PeopleOutlined,
 } from "@mui/icons-material";
 import { Menu as MenuIcon } from "@mui/icons-material";
 import {
@@ -26,17 +27,19 @@ const isTestAuthenticated = testAuthenticationCheck();
 
 export function Menu({
   backgroundColor,
+  background = undefined,
   borderSides = false,
   bottomBorder = true,
 }) {
   const { width } = useWindowDimensions();
-  const smallerSize = 1150;
+  const smallerSize = 1350;
   const isLarger = width > smallerSize;
 
   return (
     <Grid
       sx={{
         backgroundColor,
+        background,
         padding: "0rem 0rem 1rem 1rem",
         borderBottom: bottomBorder
           ? backgroundColor === "black"
@@ -127,6 +130,15 @@ export function Menu({
                         sx={{ border: "black solid" }}
                         onClick={() => {
                           popupState.close();
+                          window.location.href = "/referrals";
+                        }}
+                      >
+                        <Typography variant="h6">REFERRALS</Typography>
+                      </MenuItem>
+                      <MenuItem
+                        sx={{ border: "black solid" }}
+                        onClick={() => {
+                          popupState.close();
                           window.location.href = "/blog";
                         }}
                       >
@@ -189,6 +201,20 @@ export function Menu({
                   />
                 ) : null}
                 <Typography variant="h4">PROJECTS</Typography>
+              </Fab>
+              <Fab
+                variant="extended"
+                href="/referrals"
+                sx={{ margin: "1rem 0.5rem 0rem 0rem" }}
+                size={isLarger ? "large" : "small"}
+              >
+                {isLarger ? (
+                  <PeopleOutlined
+                    sx={{ mr: 1 }}
+                    fontSize={isLarger ? "large" : "small"}
+                  />
+                ) : null}
+                <Typography variant="h4">REFERRALS</Typography>
               </Fab>
               <Fab
                 variant="extended"

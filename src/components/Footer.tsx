@@ -1,10 +1,11 @@
 import { Grid, Typography } from "@mui/material";
 
-export function Footer({ backgroundColor }) {
+export function Footer({ backgroundColor, background = undefined }) {
   return (
     <Grid
       sx={{
-        backgroundColor: { backgroundColor },
+        backgroundColor,
+        background,
         padding: "0rem 0rem 1rem 1rem",
       }}
     >
