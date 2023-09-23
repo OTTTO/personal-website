@@ -13,19 +13,20 @@ export default function useWindowDimensions() {
     getWindowDimensions()
   );
 
-  const [initialWidth] = useState(windowDimensions.width);
-
   useEffect(() => {
     function handleResize() {
       const dimensions = getWindowDimensions();
-      if (initialWidth !== dimensions.width) {
-        setWindowDimensions(dimensions);
-      }
+      setWindowDimensions(dimensions);
     }
+    const dimensions = getWindowDimensions();
+    const isMobile = dimensions.width < 700;
 
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, [initialWidth]);
+    if (!isMobile) window.addEventListener("resize", handleResize);
+
+    return !isMobile
+      ? () => window.removeEventListener("resize", handleResize)
+      : () => {};
+  }, []);
 
   return windowDimensions;
 }

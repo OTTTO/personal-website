@@ -7,8 +7,8 @@ import { Themes } from "types/themes";
 export function RecognitionItem({ left, up, content, source, linkedin }) {
   const { theme } = useContext(ThemeContext);
   const { width } = useWindowDimensions();
-  const smallerSize = 700;
-  const isMobile = width <= smallerSize;
+  const mobileSize = 700;
+  const isMobile = width <= mobileSize;
 
   const leftMargin = "2rem 0 2rem 2rem";
   const rightMargin = "2rem 2rem 2rem auto";
