@@ -14,7 +14,7 @@ import {
 } from "@mui/material";
 import { Footer } from "components/Footer";
 import { Menu } from "components/Menu";
-import React, { useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 
 import {
   authenticationCheck,
@@ -25,6 +25,10 @@ import axios from "axios";
 import * as DOMPurify from "dompurify";
 import { Loading } from "components/Loading";
 import projectsTheme from "themes/projectsTheme";
+import { ThemeContext } from "themes/context";
+import { Themes } from "types/themes";
+import { Link } from "react-router-dom";
+import { ErrorPage } from "pages/Error/Error";
 
 const isAuthenticated = authenticationCheck();
 const isTestAuthenticated = testAuthenticationCheck();
@@ -38,6 +42,8 @@ interface IPost {
 }
 
 export function Blog() {
+  const { theme } = useContext(ThemeContext);
+  const [error, setError] = React.useState(false);
   const [loading, setLoading] = React.useState(true);
   const [posts, setPosts] = React.useState([]);
   const [deleteId, setDeleteId] = React.useState({ id: "", idx: -1 });
@@ -62,9 +68,11 @@ export function Blog() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const resp = await axios.get(
-        `${process.env.REACT_APP_API_ENDPOINT}/blog/posts`
-      );
+      const resp = await axios
+        .get(`${process.env.REACT_APP_API_ENDPOINT}/blog/posts`)
+        .catch((err) => {
+          setError(true);
+        });
       if (resp) {
         setPosts(resp.data);
       }
@@ -78,23 +86,24 @@ export function Blog() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  if (error) return <ErrorPage />;
   if (loading) return <Loading />;
 
   return (
     <Grid border="double thick black">
       <Grid sx={{ height: "vh100" }} border=".25rem white solid">
         <ThemeProvider theme={projectsTheme}>
-          <Menu
-            backgroundColor="black"
-            background="linear-gradient(90deg, red, black)"
-          ></Menu>
+          <Menu backgroundColor="black"></Menu>
           <Grid
             container
             direction="column"
             margin="0 auto"
             paddingBottom="2rem"
             sx={{
-              background: "linear-gradient(135deg, black, red)",
+              background:
+                theme === Themes.Fire
+                  ? "linear-gradient(135deg, black, red)"
+                  : "linear-gradient(135deg, black, cyan, black, cyan)",
             }}
           >
             <Typography
@@ -103,7 +112,7 @@ export function Blog() {
               color="transparent"
               sx={{
                 background: "linear-gradient(#C6AB62, white)",
-                "-webkit-background-clip": "text",
+                WebkitBackgroundClip: "text",
               }}
             >
               PERSONAL BLOG
@@ -156,7 +165,9 @@ export function Blog() {
                         ></Typography>
                         {!isAuthenticated && !isTestAuthenticated ? (
                           <Typography>
-                            <a href={`/blog/post/${post.id}`}>- READ MORE -</a>
+                            <Link to={`/blog/post/${post.id}`}>
+                              - READ MORE -
+                            </Link>
                           </Typography>
                         ) : (
                           <Grid>
@@ -186,10 +197,7 @@ export function Blog() {
                   );
                 })}
           </Grid>
-          <Footer
-            backgroundColor="black"
-            background="linear-gradient(90deg, red, black)"
-          />
+          <Footer />
 
           {/* DELETE MODAL */}
           <Modal

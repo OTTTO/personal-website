@@ -182,10 +182,7 @@ export function PasswordGenerator() {
           {password}
         </Typography>
       </Grid>
-      <Footer
-        backgroundColor="black"
-        background="linear-gradient(90deg, red, black)"
-      ></Footer>
+      <Footer />
     </Grid>
   );
 }

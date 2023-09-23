@@ -8,7 +8,7 @@ import {
 } from "@mui/material";
 import { Footer } from "components/Footer";
 import { Menu } from "components/Menu";
-import React, { useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import mainTheme from "themes/mainTheme";
 import {
@@ -22,12 +22,15 @@ import axios from "axios";
 import { Loading } from "components/Loading";
 import { WysiwygEditor } from "components/WysiwygEditor";
 import { AuthButtons } from "components/AuthButtons";
+import { Themes } from "types/themes";
+import { ThemeContext } from "themes/context";
 
 const isAuthenticated = authenticationCheck();
 const isTestAuthenticated = testAuthenticationCheck();
 const now = new Date().getTime();
 
 export function Post() {
+  const { theme } = useContext(ThemeContext);
   const [loading, setLoading] = React.useState(true);
   const [edit, setEdit] = React.useState(true);
   const [post, setPost] = React.useState({
@@ -98,6 +101,9 @@ export function Post() {
   const newPost = window.location.href.includes("new");
   const isLoading = !newPost && loading;
 
+  // theme === Themes.Fire
+  // ? "linear-gradient(135deg, black, red)"
+  // : "linear-gradient(135deg, black, cyan, black, cyan)",
   return (
     <>
       <Grid display={isLoading ? "visible" : "none"}>
@@ -109,11 +115,7 @@ export function Post() {
         display={isLoading ? "none" : "visible"}
       >
         <ThemeProvider theme={mainTheme}>
-          <Menu
-            backgroundColor="black"
-            borderSides
-            background="linear-gradient(90deg, red, black)"
-          ></Menu>
+          <Menu backgroundColor="black" borderSides></Menu>
           <Grid
             container
             direction="column"
@@ -122,10 +124,10 @@ export function Post() {
             margin="0 auto .25rem auto"
             width="99%"
             sx={{
-              backgroundColor:
-                (!isAuthenticated && !isTestAuthenticated) || !edit
-                  ? "black"
-                  : "white",
+              background:
+                theme === Themes.Fire
+                  ? "linear-gradient(135deg, red, black, red, black)"
+                  : "linear-gradient(135deg, cyan, black, cyan, black)",
             }}
           >
             <Grid padding=".5rem 0" width="95%" margin="0 auto">
@@ -275,18 +277,13 @@ export function Post() {
             </Grid>
             {(isAuthenticated || isTestAuthenticated) && (
               <AuthButtons
-                backgroundColor={edit ? "white" : "black"}
-                topPadding={true}
                 handleSaveOnClick={handleSaveOnClick}
                 edit={edit}
                 setEdit={setEdit}
               />
             )}
           </Grid>
-          <Footer
-            backgroundColor="black"
-            background="linear-gradient(90deg, red, black)"
-          />
+          <Footer />
         </ThemeProvider>
       </Grid>
     </>

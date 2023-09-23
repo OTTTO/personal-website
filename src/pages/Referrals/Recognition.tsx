@@ -4,23 +4,27 @@ import projectsTheme from "themes/projectsTheme";
 import { Menu } from "components/Menu";
 import { Footer } from "components/Footer";
 import { RecognitionItem } from "./RecognitionItem";
+import { Themes } from "types/themes";
+import { useContext } from "react";
+import { ThemeContext } from "themes/context";
 
 export function Recognition() {
+  const { theme } = useContext(ThemeContext);
   return (
     <Grid border="double thick black">
       <Grid sx={{ height: "vh100" }} border=".25rem white solid">
         <ThemeProvider theme={projectsTheme}>
-          <Menu
-            backgroundColor="black"
-            background="linear-gradient(90deg, red, black)"
-          ></Menu>
+          <Menu backgroundColor="black"></Menu>
           <Grid
             container
             direction="column"
             margin="0 auto"
             paddingBottom="2rem"
             sx={{
-              background: "linear-gradient(135deg, black, red)",
+              background:
+                theme === Themes.Fire
+                  ? "linear-gradient(135deg, black, red)"
+                  : "linear-gradient(135deg, black, cyan, black, cyan)",
             }}
           >
             <Typography
@@ -97,10 +101,7 @@ export function Recognition() {
               up
             />
           </Grid>
-          <Footer
-            backgroundColor="black"
-            background="linear-gradient(90deg, red, black)"
-          />
+          <Footer />
         </ThemeProvider>
       </Grid>
     </Grid>

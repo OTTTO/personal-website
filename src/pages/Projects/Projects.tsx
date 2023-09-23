@@ -18,7 +18,7 @@ import {
 } from "utils/utils";
 import { WysiwygEditor } from "components/WysiwygEditor";
 import * as DOMPurify from "dompurify";
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
 import React from "react";
 import { Loading } from "components/Loading";
 import { ErrorPage } from "pages/Error/Error";
@@ -33,11 +33,15 @@ import {
   Draggable,
 } from "react-beautiful-dnd";
 import axios from "axios";
+import { ThemeContext } from "themes/context";
+import { Themes } from "types/themes";
+import { Link } from "react-router-dom";
 
 const isAuthenticated = authenticationCheck();
 const isTestAuthenticated = testAuthenticationCheck();
 
 export function Projects() {
+  const { theme } = useContext(ThemeContext);
   const [loading, setLoading] = React.useState(true);
   const [error, setError] = React.useState(false);
 
@@ -153,17 +157,17 @@ export function Projects() {
     <Grid border="thick double black">
       <Grid sx={{ height: "vh100" }} border="white solid .25rem">
         <ThemeProvider theme={projectsTheme}>
-          <Menu
-            backgroundColor="black"
-            background="linear-gradient(90deg, red, black)"
-          ></Menu>
+          <Menu backgroundColor="black"></Menu>
           <Grid
             container
             direction="column"
             margin="0 auto"
             paddingBottom="2rem"
             sx={{
-              background: "linear-gradient(135deg, black, red)",
+              background:
+                theme === Themes.Fire
+                  ? "linear-gradient(135deg, black, red)"
+                  : "linear-gradient(135deg, black, cyan, black, cyan)",
             }}
           >
             <Typography
@@ -172,7 +176,7 @@ export function Projects() {
               color="transparent"
               sx={{
                 background: "linear-gradient(#C6AB62, white)",
-                "-webkit-background-clip": "text",
+                WebkitBackgroundClip: "text",
               }}
             >
               PERSONAL PROJECTS
@@ -263,7 +267,10 @@ export function Projects() {
                                       !isTestAuthenticated &&
                                       project.href ? (
                                         <Button
-                                          href={project.href}
+                                          {...{
+                                            component: Link,
+                                            to: project.href,
+                                          }}
                                           target={
                                             project.openNewTab ? "_blank" : null
                                           }
@@ -411,21 +418,16 @@ export function Projects() {
                 </Droppable>
               </DragDropContext>
             </Grid>
+            {(isAuthenticated || isTestAuthenticated) && (
+              <AuthButtons
+                handleSaveOnClick={handleSaveOnClick}
+                edit={edit}
+                setEdit={setEdit}
+              />
+            )}
           </Grid>
 
-          {(isAuthenticated || isTestAuthenticated) && (
-            <AuthButtons
-              backgroundColor={"black"}
-              topPadding={false}
-              handleSaveOnClick={handleSaveOnClick}
-              edit={edit}
-              setEdit={setEdit}
-            />
-          )}
-          <Footer
-            backgroundColor="black"
-            background="linear-gradient(90deg, red, black)"
-          ></Footer>
+          <Footer />
         </ThemeProvider>
       </Grid>
     </Grid>

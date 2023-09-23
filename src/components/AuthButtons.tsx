@@ -1,11 +1,9 @@
 import { Button, Stack, Typography } from "@mui/material";
 
 export function AuthButtons({
-  backgroundColor,
-  topPadding,
+  bottomPadding = undefined,
   handleSaveOnClick,
   disabled = false,
-  resume = false,
   setEdit,
   edit,
 }) {
@@ -14,10 +12,12 @@ export function AuthButtons({
       direction="row"
       alignItems="center"
       justifyContent="right"
-      padding={topPadding ? "1rem 1rem 0rem 0rem" : "0rem 1rem 0rem 0rem"}
-      margin={resume ? "0rem -2rem" : 0}
+      padding={bottomPadding ? "1rem 1rem 1rem 0rem" : "1rem 1rem 0rem 0rem"}
       spacing={2}
-      sx={{ backgroundColor }}
+      sx={{
+        backgroundColor: "transparent",
+        background: "transparent",
+      }}
     >
       <Button
         variant="contained"

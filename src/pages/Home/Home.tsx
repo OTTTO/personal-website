@@ -1,7 +1,7 @@
 import { Divider, Grid, ThemeProvider, Typography } from "@mui/material";
 import { Menu } from "components/Menu";
 import { Footer } from "components/Footer";
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
 import { ErrorPage } from "pages/Error/Error";
 import { Loading } from "components/Loading";
 import { AuthButtons } from "components/AuthButtons";
@@ -18,11 +18,14 @@ import useWindowDimensions from "hooks/useWindowDimensions";
 import * as DOMPurify from "dompurify";
 import axios from "axios";
 import { HomeClass } from "types/home";
+import { Themes } from "types/themes";
+import { ThemeContext } from "themes/context";
 
 const isAuthenticated = authenticationCheck();
 const isTestAuthenticated = testAuthenticationCheck();
 
 export function Home() {
+  const { theme } = useContext(ThemeContext);
   const [loading, setLoading] = React.useState(true);
   const [error, setError] = React.useState(false);
   const { width } = useWindowDimensions();
@@ -110,21 +113,19 @@ export function Home() {
             height: "100vh",
             overflowY: "auto",
             margin: "0 auto",
-            textAlign: "center",
             border: "white solid .25rem",
           }}
         >
-          <Menu
-            backgroundColor={backgroundColor}
-            background="linear-gradient(90deg, red, black)"
-          ></Menu>
+          <Menu backgroundColor={backgroundColor}></Menu>
           <Grid
             container
             direction="column"
-            alignItems="center"
             sx={{
               paddingTop: "1rem",
-              background: "linear-gradient(135deg, black, red)",
+              background:
+                theme === Themes.Fire
+                  ? "linear-gradient(135deg, black, red)"
+                  : "linear-gradient(135deg, cyan, black)",
             }}
           >
             <Typography
@@ -133,8 +134,9 @@ export function Home() {
               color="transparent"
               sx={{
                 background: "linear-gradient(#C6AB62, white)",
-                "-webkit-background-clip": "text",
+                WebkitBackgroundClip: "text",
                 textDecoration: "underline",
+                margin: "0 auto",
               }}
             >
               <u>WELCOME!!</u>
@@ -237,21 +239,17 @@ export function Home() {
                 )}
               </Grid>
             </Grid>
+            {(isAuthenticated || isTestAuthenticated) && (
+              <AuthButtons
+                bottomPadding
+                handleSaveOnClick={handleSaveOnClick}
+                edit={edit}
+                setEdit={setEdit}
+                disabled={canSubmitArr.length > 0}
+              />
+            )}
           </Grid>
-          {(isAuthenticated || isTestAuthenticated) && (
-            <AuthButtons
-              backgroundColor={"black"}
-              topPadding={true}
-              handleSaveOnClick={handleSaveOnClick}
-              edit={edit}
-              setEdit={setEdit}
-              disabled={canSubmitArr.length > 0}
-            />
-          )}
-          <Footer
-            backgroundColor={backgroundColor}
-            background="linear-gradient(90deg, red, black)"
-          ></Footer>
+          <Footer />
         </Grid>
       </ThemeProvider>
     </Grid>

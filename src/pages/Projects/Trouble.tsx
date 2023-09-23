@@ -24,12 +24,14 @@ import threeDie from "images/dice/dice-three.svg";
 import fourDie from "images/dice/dice-four.svg";
 import fiveDie from "images/dice/dice-five.svg";
 import sixDie from "images/dice/dice-six.svg";
-import React, { useEffect, useRef } from "react";
+import React, { useContext, useEffect, useRef } from "react";
 import { Footer } from "components/Footer";
 import { Menu } from "components/Menu";
 import mainTheme from "themes/mainTheme";
 import useWindowDimensions from "hooks/useWindowDimensions";
 import { Peg, Player } from "types/trouble";
+import { ThemeContext } from "themes/context";
+import { Themes } from "types/themes";
 
 const HOME = -1;
 const startEndSpaces = [1, 8, 15, 22];
@@ -859,6 +861,7 @@ export function Trouble() {
   const { width } = useWindowDimensions();
   const smallerDeviceWidth = 650;
   const isSmall = width > smallerDeviceWidth;
+  const { theme } = useContext(ThemeContext);
 
   return (
     <Grid
@@ -879,7 +882,12 @@ export function Trouble() {
         border="solid black .1rem"
         width="99%"
         margin="0 auto .25rem auto"
-        sx={{ background: "linear-gradient(45deg, red, white, red)" }}
+        sx={{
+          background:
+            theme === Themes.Fire
+              ? "linear-gradient(45deg, red, white, red)"
+              : "linear-gradient(45deg, black, cyan, black)",
+        }}
       >
         {/* BOARD */}
         <Grid
@@ -1223,10 +1231,7 @@ export function Trouble() {
           </Grid>
         )}
       </Grid>
-      <Footer
-        backgroundColor="black"
-        background="linear-gradient(90deg, red, black)"
-      ></Footer>
+      <Footer />
 
       {/* SELECT PLAYERS MODAL */}
       <Modal

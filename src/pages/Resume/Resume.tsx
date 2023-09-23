@@ -1,7 +1,7 @@
 import { Box, Grid, ThemeProvider } from "@mui/material";
 import mainTheme from "themes/mainTheme";
 
-import React, { useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import { Menu } from "components/Menu";
 import { Footer } from "components/Footer";
 import { IEducation, IExperience, IResume, ISkillGroup } from "types/resume";
@@ -20,12 +20,15 @@ import { Education } from "./Education";
 import { Experience } from "./Experience";
 import { SideIcons } from "./SideIcons";
 import { Skills } from "./Skills";
+import { Themes } from "types/themes";
+import { ThemeContext } from "themes/context";
 
 const isAuthenticated = authenticationCheck();
 const isTestAuthenticated = testAuthenticationCheck();
 const header = { name: "", title: "" };
 
 export function Resume() {
+  const { theme } = useContext(ThemeContext);
   const [loading, setLoading] = React.useState(true);
   const [error, setError] = React.useState(false);
 
@@ -136,15 +139,15 @@ export function Resume() {
     <Grid border="double thick black">
       <ThemeProvider theme={mainTheme}>
         <Grid border="white solid .25rem">
-          <Menu
-            backgroundColor={backgroundColor}
-            background="linear-gradient(90deg, red, black)"
-          />
+          <Menu backgroundColor={backgroundColor} />
           <Grid
             padding="1rem 0rem 1rem 0rem"
             sx={{
               position: "relative",
-              background: "linear-gradient(135deg, black, red)",
+              background:
+                theme === Themes.Fire
+                  ? "linear-gradient(135deg, black, red)"
+                  : "linear-gradient(135deg, black, cyan, black, cyan)",
             }}
           >
             {!isDeviceWidth && <SideIcons />}
@@ -200,31 +203,17 @@ export function Resume() {
                 isDeviceWidth={isDeviceWidth}
               />
             </Box>
-            <Box
-              margin="0 auto"
-              sx={{
-                width: isDeviceWidth ? "80%" : "55%",
-                backgroundColor: "black",
-              }}
-            >
-              {(isAuthenticated || isTestAuthenticated) && (
-                <AuthButtons
-                  backgroundColor={backgroundColor}
-                  topPadding={true}
-                  handleSaveOnClick={handleSaveOnClick}
-                  disabled={canSubmitArr.length > 0}
-                  edit={edit}
-                  setEdit={setEdit}
-                  resume={true}
-                />
-              )}
-            </Box>
-          </Grid>
 
-          <Footer
-            backgroundColor={backgroundColor}
-            background="linear-gradient(90deg, red, black)"
-          ></Footer>
+            {(isAuthenticated || isTestAuthenticated) && (
+              <AuthButtons
+                handleSaveOnClick={handleSaveOnClick}
+                disabled={canSubmitArr.length > 0}
+                edit={edit}
+                setEdit={setEdit}
+              />
+            )}
+          </Grid>
+          <Footer />
         </Grid>
       </ThemeProvider>
     </Grid>

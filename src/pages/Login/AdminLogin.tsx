@@ -159,7 +159,7 @@ function AdminLogin() {
             <hr key={idx}></hr>
           ))}
         </Grid>
-        <Footer backgroundColor={backgroundColor}></Footer>
+        <Footer />
       </Grid>
     </ThemeProvider>
   );

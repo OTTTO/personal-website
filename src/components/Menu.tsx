@@ -20,13 +20,17 @@ import {
 } from "@mui/material";
 import useWindowDimensions from "hooks/useWindowDimensions";
 import PopupState, { bindTrigger, bindMenu } from "material-ui-popup-state";
+import { useContext } from "react";
+import { Link } from "react-router-dom";
+import { ThemeContext } from "themes/context";
 import muiMenuTheme from "themes/muiMenuTheme";
+import { Themes } from "types/themes";
 import { authenticationCheck, testAuthenticationCheck } from "utils/utils";
 
 const isAuthenticated = authenticationCheck();
 const isTestAuthenticated = testAuthenticationCheck();
 
-const theme = createTheme({
+const buttonTheme = createTheme({
   palette: {
     info: {
       main: "#C6AB62",
@@ -48,15 +52,19 @@ export function Menu({
   borderSides = false,
   bottomBorder = true,
 }) {
+  const { theme, setTheme } = useContext(ThemeContext);
   const { width } = useWindowDimensions();
-  const smallerSize = 1350;
+  const smallerSize = 1435;
   const isLarger = width > smallerSize;
 
   return (
     <Grid
       sx={{
         backgroundColor,
-        background,
+        background:
+          theme === Themes.Fire
+            ? "linear-gradient(90deg, red, black)"
+            : "linear-gradient(90deg, black, cyan)",
         padding: "0rem 0rem 1rem 1rem",
         borderBottom: bottomBorder
           ? backgroundColor === "black"
@@ -118,54 +126,54 @@ export function Menu({
                     >
                       <MenuItem
                         sx={{ border: "black solid" }}
+                        {...{ component: Link, to: "/" }}
                         onClick={() => {
                           popupState.close();
-                          window.location.href = "/";
                         }}
                       >
                         <Typography variant="h6">HOME</Typography>
                       </MenuItem>
                       <MenuItem
                         sx={{ border: "black solid" }}
+                        {...{ component: Link, to: "/resume" }}
                         onClick={() => {
                           popupState.close();
-                          window.location.href = "/resume";
                         }}
                       >
                         <Typography variant="h6">RESUME</Typography>
                       </MenuItem>
                       <MenuItem
                         sx={{ border: "black solid" }}
+                        {...{ component: Link, to: "/projects" }}
                         onClick={() => {
                           popupState.close();
-                          window.location.href = "/projects";
                         }}
                       >
                         <Typography variant="h6">PROJECTS</Typography>
                       </MenuItem>
                       <MenuItem
                         sx={{ border: "black solid" }}
+                        {...{ component: Link, to: "/recognition" }}
                         onClick={() => {
                           popupState.close();
-                          window.location.href = "/recognition";
                         }}
                       >
                         <Typography variant="h6">RECOGNITION</Typography>
                       </MenuItem>
                       <MenuItem
                         sx={{ border: "black solid" }}
+                        {...{ component: Link, to: "/blog" }}
                         onClick={() => {
                           popupState.close();
-                          window.location.href = "/blog";
                         }}
                       >
                         <Typography variant="h6">BLOG</Typography>
                       </MenuItem>
                       <MenuItem
                         sx={{ border: "black solid" }}
+                        {...{ component: Link, to: "/live-training" }}
                         onClick={() => {
                           popupState.close();
-                          window.location.href = "/live-training";
                         }}
                       >
                         <Typography variant="h6">TRAINING</Typography>
@@ -179,7 +187,7 @@ export function Menu({
             <>
               <Fab
                 variant="extended"
-                href="/"
+                {...{ component: Link, to: "/" }}
                 sx={{ margin: "1rem 0.5rem 0rem 0rem" }}
                 size={isLarger ? "large" : "small"}
               >
@@ -193,7 +201,7 @@ export function Menu({
               </Fab>
               <Fab
                 variant="extended"
-                href="/resume"
+                {...{ component: Link, to: "/resume" }}
                 sx={{ margin: "1rem 0.5rem 0rem 0rem" }}
                 size={isLarger ? "large" : "small"}
               >
@@ -207,7 +215,7 @@ export function Menu({
               </Fab>
               <Fab
                 variant="extended"
-                href="/projects"
+                {...{ component: Link, to: "/projects" }}
                 sx={{ margin: "1rem 0.5rem 0rem 0rem" }}
                 size={isLarger ? "large" : "small"}
               >
@@ -221,7 +229,7 @@ export function Menu({
               </Fab>
               <Fab
                 variant="extended"
-                href="/recognition"
+                {...{ component: Link, to: "/recognition" }}
                 sx={{ margin: "1rem 0.5rem 0rem 0rem" }}
                 size={isLarger ? "large" : "small"}
               >
@@ -235,7 +243,7 @@ export function Menu({
               </Fab>
               <Fab
                 variant="extended"
-                href="/blog"
+                {...{ component: Link, to: "/blog" }}
                 sx={{ margin: "1rem 0.5rem 0rem 0rem" }}
                 size={isLarger ? "large" : "small"}
               >
@@ -249,7 +257,7 @@ export function Menu({
               </Fab>
               <Fab
                 variant="extended"
-                href="/live-training"
+                {...{ component: Link, to: "/live-training" }}
                 sx={{ margin: "1rem 0.5rem 0rem 0rem" }}
                 size={isLarger ? "large" : "small"}
               >
@@ -273,22 +281,42 @@ export function Menu({
           display="inline-block"
           width="auto"
         >
-          <ThemeProvider theme={theme}>
+          <Button
+            size="small"
+            sx={{
+              fontSize: "2rem",
+              padding: 0,
+              height: "2rem",
+              marginTop: "1rem",
+            }}
+            onClick={() => {
+              if (theme === Themes.Fire) {
+                setTheme(Themes.Ice);
+              } else {
+                setTheme(Themes.Fire);
+              }
+            }}
+          >
+            {theme === Themes.Fire ? "❄️" : "🔥"}
+          </Button>
+          <ThemeProvider theme={buttonTheme}>
             <Fab
               variant="extended"
+              {...{
+                component: Link,
+                to: !isAuthenticated && !isTestAuthenticated ? "/admin" : "/",
+              }}
               sx={{ margin: "1rem 1rem 0rem 0rem", border: "solid 1px white" }}
               size={isLarger ? "large" : "medium"}
               color={
                 !isAuthenticated && !isTestAuthenticated ? "info" : "warning"
               }
               onClick={() => {
-                if (!isAuthenticated && !isTestAuthenticated) {
-                  window.location.href = "/admin";
-                } else {
+                if (isAuthenticated || isTestAuthenticated) {
                   localStorage.removeItem("token");
                   localStorage.removeItem("testToken");
                   localStorage.removeItem("edit");
-                  window.location.href = "/";
+                  window.location.reload();
                 }
               }}
             >

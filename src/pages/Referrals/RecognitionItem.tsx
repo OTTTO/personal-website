@@ -1,7 +1,11 @@
 import { Link, Typography, styled } from "@mui/material";
 import useWindowDimensions from "hooks/useWindowDimensions";
+import { useContext } from "react";
+import { ThemeContext } from "themes/context";
+import { Themes } from "types/themes";
 
 export function RecognitionItem({ left, up, content, source, linkedin }) {
+  const { theme } = useContext(ThemeContext);
   const { width } = useWindowDimensions();
   const smallerSize = 700;
   const isMobile = width <= smallerSize;
@@ -10,6 +14,11 @@ export function RecognitionItem({ left, up, content, source, linkedin }) {
   const rightMargin = "2rem 2rem 2rem auto";
   const leftMobileMargin = "2rem 0 0rem 2rem";
   const rightMobileMargin = "2rem 2rem 0rem auto";
+
+  const fireShadow =
+    "8px 5px 5px #C6AB62, 10px 7px 7px #0ff, inset 3px 2px 2px white;";
+  const iceShadow =
+    "8px 5px 5px #C6AB62, 10px 7px 7px #8800C7, inset 3px 2px 2px black;";
 
   const horizTime = isMobile ? "60s" : "90s";
 
@@ -90,8 +99,8 @@ export function RecognitionItem({ left, up, content, source, linkedin }) {
             ? rightMobileMargin
             : rightMargin
         }
-        boxShadow="8px 5px 5px #C6AB62, 10px 7px 7px #0ff, inset 3px 2px 2px white;"
-        sx={{ textShadow: "3px 3px 2px black" }}
+        boxShadow={theme === Themes.Fire ? fireShadow : iceShadow}
+        sx={{ textShadow: "2px 2px 2px black" }}
       >
         {content}
         <p color="white">
