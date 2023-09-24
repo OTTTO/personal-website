@@ -8,7 +8,7 @@ import { PasswordGenerator } from "pages/Projects/PasswordGenerator";
 import { Blog } from "pages/Blog/Blog";
 import { Post } from "pages/Blog/Post";
 import { LiveTraining } from "pages/LiveTraining/LiveTraining";
-import { Recognition } from "pages/Referrals/Recognition";
+import { Recognition } from "pages/Reecognition/Recognition";
 
 function AppRoutes() {
   return (

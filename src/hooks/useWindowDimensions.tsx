@@ -19,7 +19,7 @@ export default function useWindowDimensions() {
       setWindowDimensions(dimensions);
     }
     const dimensions = getWindowDimensions();
-    const isMobile = dimensions.width < 700;
+    const isMobile = dimensions.width < 500;
 
     if (!isMobile) window.addEventListener("resize", handleResize);
 

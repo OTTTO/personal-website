@@ -65,7 +65,7 @@ export function getMainTheme(theme: Themes) {
   } else if (theme === Themes.Ice) {
     return "linear-gradient(135deg, black, cyan, purple, cyan, purple, cyan, black)";
   } else if (theme === Themes.Lightning) {
-    return "linear-gradient(135deg, black, goldenrod, #c0c0c0, goldenrod, #c0c0c0, goldenrod, black)";
+    return "linear-gradient(135deg, goldenrod, #c0c0c0, goldenrod, #c0c0c0, goldenrod)";
   }
 }
 
@@ -75,7 +75,7 @@ export function getTitleTheme(theme: Themes) {
   } else if (theme === Themes.Ice) {
     return "linear-gradient(orange, yellow, red)";
   } else if (theme === Themes.Lightning) {
-    return "linear-gradient(purple, blue)";
+    return "linear-gradient(white, blue, white)";
   }
 }
 
@@ -85,6 +85,16 @@ export function getShadowTheme(theme: Themes) {
   } else if (theme === Themes.Ice) {
     return "8px 5px 5px #C6AB62, 10px 7px 7px #8800C7, inset 3px 2px 2px black;";
   } else if (theme === Themes.Lightning) {
-    return "8px 5px 5px blue, 10px 7px 7px purple, inset 3px 2px 2px grey;";
+    return "8px 5px 5px blue, 10px 7px 7px purple, inset 3px 2px 2px black;";
+  }
+}
+
+export function getEmojiShadowTheme(theme: Themes) {
+  if (theme === Themes.Fire) {
+    return "0 -0.5rem 1.5rem #ADD8E6, 0 0.5rem 1.5rem #ADD8E6;";
+  } else if (theme === Themes.Ice) {
+    return "0 -0.5rem 1.5rem goldenrod, 0 0.5rem 1.5rem goldenrod;";
+  } else if (theme === Themes.Lightning) {
+    return "0 -0.5rem 1.5rem blue, 0 -1rem 1.5rem white, 0 0.5rem 1.5rem blue, 0 1rem 1.5rem white;";
   }
 }

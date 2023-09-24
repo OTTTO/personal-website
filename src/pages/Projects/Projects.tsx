@@ -156,7 +156,7 @@ export function Projects() {
 
   return (
     <Grid border="thick double black">
-      <Grid sx={{ height: "vh100" }} border="white solid .25rem">
+      <Grid border="white solid .25rem">
         <ThemeProvider theme={projectsTheme}>
           <Menu backgroundColor="black"></Menu>
           <Grid

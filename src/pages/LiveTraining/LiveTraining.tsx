@@ -12,7 +12,7 @@ export function LiveTraining() {
   const { theme } = useContext(ThemeContext);
   return (
     <Grid border="double thick black">
-      <Grid sx={{ height: "vh100" }} border=".25rem white solid">
+      <Grid border=".25rem white solid">
         <ThemeProvider theme={projectsTheme}>
           <Menu backgroundColor="black"></Menu>
           <Grid
@@ -24,7 +24,15 @@ export function LiveTraining() {
           >
             <Title title="LIVE TRAINING" />
             <Divider sx={{ backgroundColor: "white", borderBottomWidth: 4 }} />
-            <Typography variant="h5" color="white" width="90%" margin="0 auto">
+            <Typography
+              variant="h5"
+              color="black"
+              width="80%"
+              margin="2rem auto 0 auto"
+              padding="0rem 1rem 0 1rem"
+              borderRadius="10px"
+              sx={{ backgroundColor: "white" }}
+            >
               <p>
                 The purpose of Training with Dylan is to help you become job
                 ready by seeing what it's like to work in a production codebase.

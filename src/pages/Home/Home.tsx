@@ -1,4 +1,4 @@
-import { Divider, Grid, ThemeProvider, Typography } from "@mui/material";
+import { Divider, Grid, ThemeProvider } from "@mui/material";
 import { Menu } from "components/Menu";
 import { Footer } from "components/Footer";
 import { useContext, useEffect } from "react";
@@ -6,7 +6,6 @@ import { ErrorPage } from "pages/Error/Error";
 import { Loading } from "components/Loading";
 import { AuthButtons } from "components/AuthButtons";
 import { CloudImages } from "components/CloudImages";
-import { WysiwygEditor } from "components/WysiwygEditor";
 import {
   authenticationCheck,
   getMainTheme,
@@ -15,12 +14,14 @@ import {
 } from "utils/utils";
 import React from "react";
 import mainTheme from "themes/mainTheme";
-import useWindowDimensions from "hooks/useWindowDimensions";
-import * as DOMPurify from "dompurify";
+
 import axios from "axios";
 import { HomeClass } from "types/home";
 import { ThemeContext } from "themes/context";
 import { Title } from "components/TItle";
+import { HomeWysiwygEditor } from "components/HomeWysiwygEditor";
+import { HomeText } from "components/HomeText";
+import useWindowDimensions from "hooks/useWindowDimensions";
 
 const isAuthenticated = authenticationCheck();
 const isTestAuthenticated = testAuthenticationCheck();
@@ -29,19 +30,10 @@ export function Home() {
   const { theme } = useContext(ThemeContext);
   const [loading, setLoading] = React.useState(true);
   const [error, setError] = React.useState(false);
-  const { width } = useWindowDimensions();
-  const introWidth = 735;
 
   const [edit, setEdit] = React.useState(true);
   const [home, setHome] = React.useState(new HomeClass());
   const [imgLoaded, setImgLoaded] = React.useState(false);
-
-  const handleContentChange = (content: string, property: string) => {
-    updateErrorCount(home[property], content);
-    const newHome = structuredClone(home);
-    newHome[property] = content;
-    setHome(newHome);
-  };
 
   const [canSubmitArr, setCanSubmitArr] = React.useState<boolean[]>([]);
 
@@ -100,38 +92,35 @@ export function Home() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const { width } = useWindowDimensions();
+  const isMobile = width < 500;
+
   if (loading) return <Loading />;
   if (error) return <ErrorPage />;
-
-  const backgroundColor = "black";
 
   return (
     <Grid border="thick double black">
       <ThemeProvider theme={mainTheme}>
-        <Grid
-          sx={{
-            backgroundColor: "black",
-            height: "100vh",
-            overflowY: "auto",
-            margin: "0 auto",
-            border: "white solid .25rem",
-          }}
-        >
-          <Menu backgroundColor={backgroundColor}></Menu>
+        <Grid border=".25rem white solid">
+          <Menu backgroundColor="black"></Menu>
           <Grid
             container
             direction="column"
-            sx={{
-              paddingTop: "1rem",
-              background: getMainTheme(theme),
-            }}
+            margin="0 auto"
+            paddingBottom="2rem"
+            sx={{ background: getMainTheme(theme) }}
           >
             <Title title="WELCOME!!" />
+            <Divider sx={{ backgroundColor: "white", borderBottomWidth: 4 }} />
             <Grid
               container
               direction="column"
               justifyContent="center"
-              sx={{ paddingTop: "2rem" }}
+              sx={{
+                paddingTop: "2rem",
+
+                marginTop: "1rem",
+              }}
             >
               <img
                 src={`${process.env.REACT_APP_S3_CLOUDFRONT}/${home.mainImg}`}
@@ -159,31 +148,24 @@ export function Home() {
               <Grid
                 container
                 direction="column"
-                width={width > introWidth ? "90%" : "95%"}
-                padding="1rem 2rem 0rem 2rem"
-                margin="0 auto"
+                padding="0 1rem 0rem 1rem"
+                margin="2rem auto 0 auto"
+                width={isMobile ? "80%" : "70%"}
+                sx={{
+                  wordWrap: "break-word",
+                  backgroundColor: "white",
+                  borderRadius: "10px",
+                }}
               >
                 {(isAuthenticated || isTestAuthenticated) && edit ? (
-                  <WysiwygEditor
-                    content={home.intro}
-                    onChange={(value) => handleContentChange(value, "intro")}
-                    options={["inline", "link", "textAlign"]}
-                    expanded
-                    first={home.intro.length > 0}
-                    error={
-                      home.intro.length === 0 ||
-                      home.intro.startsWith("<p></p>")
-                    }
+                  <HomeWysiwygEditor
+                    home={home}
+                    setHome={setHome}
+                    property="intro"
+                    updateErrorCount={updateErrorCount}
                   />
                 ) : (
-                  <Typography
-                    color="white"
-                    textAlign="left"
-                    dangerouslySetInnerHTML={{
-                      __html: DOMPurify.sanitize(home.intro),
-                    }}
-                    sx={{ textShadow: "3px 3px 2px black" }}
-                  ></Typography>
+                  <HomeText content={home.intro} />
                 )}
 
                 <Grid margin="1rem 0">
@@ -191,7 +173,7 @@ export function Home() {
                     sx={{ backgroundColor: "white", borderBottomWidth: 1 }}
                   />
                   <Divider
-                    sx={{ backgroundColor: "black", borderBottomWidth: 1 }}
+                    sx={{ backgroundColor: "black", borderBottomWidth: 2 }}
                   />
                   <Divider
                     sx={{ backgroundColor: "white", borderBottomWidth: 1 }}
@@ -199,28 +181,14 @@ export function Home() {
                 </Grid>
 
                 {(isAuthenticated || isTestAuthenticated) && edit ? (
-                  <WysiwygEditor
-                    content={home.websiteInfo}
-                    onChange={(value) =>
-                      handleContentChange(value, "websiteInfo")
-                    }
-                    options={["inline", "link", "textAlign"]}
-                    expanded
-                    first={home.websiteInfo.length > 0}
-                    error={
-                      home.websiteInfo.length === 0 ||
-                      home.websiteInfo.startsWith("<p></p>")
-                    }
+                  <HomeWysiwygEditor
+                    home={home}
+                    setHome={setHome}
+                    property="websiteInfo"
+                    updateErrorCount={updateErrorCount}
                   />
                 ) : (
-                  <Typography
-                    color="white"
-                    textAlign="left"
-                    dangerouslySetInnerHTML={{
-                      __html: DOMPurify.sanitize(home.websiteInfo),
-                    }}
-                    sx={{ textShadow: "3px 3px 2px black" }}
-                  ></Typography>
+                  <HomeText content={home.websiteInfo} />
                 )}
               </Grid>
             </Grid>

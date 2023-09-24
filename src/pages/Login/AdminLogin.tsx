@@ -11,15 +11,18 @@ import {
 import axios from "axios";
 import { Footer } from "components/Footer";
 import { Menu } from "components/Menu";
-import React from "react";
+import React, { useContext } from "react";
+import { ThemeContext } from "themes/context";
 import mainTheme from "themes/mainTheme";
 import { State } from "types/adminLogin";
 import { testPosts } from "types/blog";
 import { testHome } from "types/home";
 import { testProjects } from "types/project";
 import { testResume } from "types/resume";
+import { getMainTheme } from "utils/utils";
 
 function AdminLogin() {
+  const { theme } = useContext(ThemeContext);
   const [values, setValues] = React.useState<State>({
     email: "",
     password: "",
@@ -87,7 +90,10 @@ function AdminLogin() {
     <ThemeProvider theme={mainTheme}>
       <Grid border="white solid .25rem">
         <Menu backgroundColor={backgroundColor}></Menu>
-        <Grid border="black solid .25rem">
+        <Grid
+          border="black solid .25rem"
+          sx={{ background: getMainTheme(theme) }}
+        >
           {new Array(9).fill(true).map((el, idx) => (
             <hr key={idx}></hr>
           ))}
@@ -102,6 +108,7 @@ function AdminLogin() {
                   placeholder="Email"
                   onKeyDown={handleKeyDown}
                   autoFocus
+                  sx={{ backgroundColor: "white" }}
                 ></OutlinedInput>
               </FormControl>
               <FormControl sx={{ m: 1 }} variant="outlined">
@@ -129,6 +136,7 @@ function AdminLogin() {
                     </InputAdornment>
                   }
                   label="Password"
+                  sx={{ backgroundColor: "white" }}
                 />
               </FormControl>
               <Button

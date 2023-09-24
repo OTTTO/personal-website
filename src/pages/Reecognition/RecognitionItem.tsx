@@ -7,7 +7,7 @@ import { getShadowTheme } from "utils/utils";
 export function RecognitionItem({ left, up, content, source, linkedin }) {
   const { theme } = useContext(ThemeContext);
   const { width } = useWindowDimensions();
-  const mobileSize = 700;
+  const mobileSize = 500;
   const isMobile = width <= mobileSize;
 
   const leftMargin = "2rem 0 2rem 2rem";
@@ -78,9 +78,9 @@ export function RecognitionItem({ left, up, content, source, linkedin }) {
   return (
     <Keyframes>
       <Typography
-        variant="h4"
+        fontSize={isMobile ? "1rem" : "1.7rem"}
         textAlign="left"
-        color="#C6AB62"
+        color="black"
         border="white 1px solid"
         borderRadius="10px"
         padding="1rem 1rem 0rem 1rem"
@@ -95,12 +95,21 @@ export function RecognitionItem({ left, up, content, source, linkedin }) {
             : rightMargin
         }
         boxShadow={getShadowTheme(theme)}
-        sx={{ textShadow: "2px 2px 2px black" }}
+        sx={{
+          backgroundColor: "white",
+        }}
       >
         {content}
-        <p color="white">
+        <p color="black">
           -{" "}
-          <Link href={linkedin} color="#fff">
+          <Link
+            href={linkedin}
+            color="#000"
+            sx={{
+              textDecorationColor: "black",
+              textDecorationThickness: "3px",
+            }}
+          >
             {source}
           </Link>
         </p>

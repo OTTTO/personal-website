@@ -30,6 +30,7 @@ import {
   getHeaderTheme,
   getThemeEmoji,
   setThemeEmoji,
+  getEmojiShadowTheme,
 } from "utils/utils";
 
 const isAuthenticated = authenticationCheck();
@@ -58,6 +59,8 @@ export function Menu({
 }) {
   const { theme, setTheme } = useContext(ThemeContext);
   const { width } = useWindowDimensions();
+  const mobileSize = 400;
+  const isMobile = width < mobileSize;
   const smallerSize = 1435;
   const isLarger = width > smallerSize;
 
@@ -105,6 +108,9 @@ export function Menu({
                     sx={{
                       margin: "1.2rem 1rem 0rem 0rem",
                       border: "white solid ",
+                      "&:hover": {
+                        boxShadow: "0 0 5px white, inset 0 0 5px white;",
+                      },
                     }}
                     size="medium"
                     {...bindTrigger(popupState)}
@@ -285,7 +291,6 @@ export function Menu({
           <Button
             size="small"
             sx={{
-              fontSize: "2rem",
               padding: 0,
               height: "2rem",
               marginTop: "1rem",
@@ -294,7 +299,18 @@ export function Menu({
               setThemeEmoji(theme, setTheme);
             }}
           >
-            {getThemeEmoji(theme)}
+            <Typography
+              fontSize="2rem"
+              sx={{
+                "&:hover": {
+                  fontSize: !isMobile ? "2.5rem" : "2rem",
+                  textShadow: getEmojiShadowTheme(theme),
+                },
+                textShadow: isMobile ? getEmojiShadowTheme(theme) : undefined,
+              }}
+            >
+              {getThemeEmoji(theme)}
+            </Typography>
           </Button>
           <ThemeProvider theme={buttonTheme}>
             <Fab
