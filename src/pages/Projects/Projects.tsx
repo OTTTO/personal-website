@@ -34,8 +34,9 @@ import {
 } from "react-beautiful-dnd";
 import axios from "axios";
 import { ThemeContext } from "themes/context";
-import { Themes } from "types/themes";
+import { getMainTheme } from "utils/utils";
 import { Link } from "react-router-dom";
+import { Title } from "components/TItle";
 
 const isAuthenticated = authenticationCheck();
 const isTestAuthenticated = testAuthenticationCheck();
@@ -163,24 +164,9 @@ export function Projects() {
             direction="column"
             margin="0 auto"
             paddingBottom="2rem"
-            sx={{
-              background:
-                theme === Themes.Fire
-                  ? "linear-gradient(135deg, black, red)"
-                  : "linear-gradient(135deg, black, cyan, black, cyan)",
-            }}
+            sx={{ background: getMainTheme(theme) }}
           >
-            <Typography
-              variant="h1"
-              textAlign="center"
-              color="transparent"
-              sx={{
-                background: "linear-gradient(#C6AB62, white)",
-                WebkitBackgroundClip: "text",
-              }}
-            >
-              PERSONAL PROJECTS
-            </Typography>
+            <Title title="PERSONAL PROJECTS" />
             {(isAuthenticated || isTestAuthenticated) && edit ? (
               <IconButton onClick={addProject}>
                 <AddCircle sx={{ mr: 1 }} style={{ color: "white" }} />

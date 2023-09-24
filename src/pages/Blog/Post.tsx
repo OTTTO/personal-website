@@ -13,6 +13,7 @@ import { useParams } from "react-router-dom";
 import mainTheme from "themes/mainTheme";
 import {
   authenticationCheck,
+  getMainTheme,
   getStorage,
   testAuthenticationCheck,
 } from "utils/utils";
@@ -22,8 +23,8 @@ import axios from "axios";
 import { Loading } from "components/Loading";
 import { WysiwygEditor } from "components/WysiwygEditor";
 import { AuthButtons } from "components/AuthButtons";
-import { Themes } from "types/themes";
 import { ThemeContext } from "themes/context";
+import { Title } from "components/TItle";
 
 const isAuthenticated = authenticationCheck();
 const isTestAuthenticated = testAuthenticationCheck();
@@ -123,18 +124,11 @@ export function Post() {
             border="double thick black"
             margin="0 auto .25rem auto"
             width="99%"
-            sx={{
-              background:
-                theme === Themes.Fire
-                  ? "linear-gradient(135deg, red, black, red, black)"
-                  : "linear-gradient(135deg, cyan, black, cyan, black)",
-            }}
+            sx={{ background: getMainTheme(theme) }}
           >
             <Grid padding=".5rem 0" width="95%" margin="0 auto">
               {(!isAuthenticated && !isTestAuthenticated) || !edit ? (
-                <Typography variant="h1" textAlign="center" color="white">
-                  {post.title}
-                </Typography>
+                <Title title={post.title} />
               ) : (
                 <TextField
                   fullWidth={true}

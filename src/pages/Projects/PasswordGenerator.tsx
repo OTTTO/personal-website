@@ -9,13 +9,16 @@ import {
 } from "@mui/material";
 import { Footer } from "components/Footer";
 import { Menu } from "components/Menu";
-import React from "react";
+import React, { useContext } from "react";
 import mainTheme from "themes/mainTheme";
 import randomWords from "random-words";
+import { getMainTheme } from "utils/utils";
+import { ThemeContext } from "themes/context";
 
 type PasswordType = "cryptic" | "human";
 
 export function PasswordGenerator() {
+  const { theme } = useContext(ThemeContext);
   const [password, setPassword] = React.useState("");
   const [radio, setRadio] = React.useState<PasswordType>("cryptic");
 
@@ -106,11 +109,7 @@ export function PasswordGenerator() {
   return (
     <Grid container direction="column" border="double thick black">
       <ThemeProvider theme={mainTheme}>
-        <Menu
-          backgroundColor="black"
-          borderSides
-          background="linear-gradient(90deg, red, black)"
-        ></Menu>
+        <Menu backgroundColor="black" borderSides></Menu>
       </ThemeProvider>
       <Grid
         padding="1rem 0rem"
@@ -118,7 +117,7 @@ export function PasswordGenerator() {
         margin="0 auto .25rem auto"
         bgcolor="black"
         textAlign="center"
-        sx={{ background: "linear-gradient(135deg, black, red)" }}
+        sx={{ background: getMainTheme(theme) }}
       >
         <Typography
           color="white"

@@ -9,6 +9,7 @@ import { CloudImages } from "components/CloudImages";
 import { WysiwygEditor } from "components/WysiwygEditor";
 import {
   authenticationCheck,
+  getMainTheme,
   getStorage,
   testAuthenticationCheck,
 } from "utils/utils";
@@ -18,8 +19,8 @@ import useWindowDimensions from "hooks/useWindowDimensions";
 import * as DOMPurify from "dompurify";
 import axios from "axios";
 import { HomeClass } from "types/home";
-import { Themes } from "types/themes";
 import { ThemeContext } from "themes/context";
+import { Title } from "components/TItle";
 
 const isAuthenticated = authenticationCheck();
 const isTestAuthenticated = testAuthenticationCheck();
@@ -122,26 +123,10 @@ export function Home() {
             direction="column"
             sx={{
               paddingTop: "1rem",
-              background:
-                theme === Themes.Fire
-                  ? "linear-gradient(135deg, black, red)"
-                  : "linear-gradient(135deg, cyan, black)",
+              background: getMainTheme(theme),
             }}
           >
-            <Typography
-              variant="h1"
-              key="1"
-              color="transparent"
-              sx={{
-                background: "linear-gradient(#C6AB62, white)",
-                WebkitBackgroundClip: "text",
-                textDecoration: "underline",
-                margin: "0 auto",
-              }}
-            >
-              <u>WELCOME!!</u>
-            </Typography>
-
+            <Title title="WELCOME!!" />
             <Grid
               container
               direction="column"

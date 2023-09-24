@@ -24,8 +24,13 @@ import { useContext } from "react";
 import { Link } from "react-router-dom";
 import { ThemeContext } from "themes/context";
 import muiMenuTheme from "themes/muiMenuTheme";
-import { Themes } from "types/themes";
-import { authenticationCheck, testAuthenticationCheck } from "utils/utils";
+import {
+  authenticationCheck,
+  testAuthenticationCheck,
+  getHeaderTheme,
+  getThemeEmoji,
+  setThemeEmoji,
+} from "utils/utils";
 
 const isAuthenticated = authenticationCheck();
 const isTestAuthenticated = testAuthenticationCheck();
@@ -48,7 +53,6 @@ const buttonTheme = createTheme({
 
 export function Menu({
   backgroundColor,
-  background = undefined,
   borderSides = false,
   bottomBorder = true,
 }) {
@@ -61,10 +65,7 @@ export function Menu({
     <Grid
       sx={{
         backgroundColor,
-        background:
-          theme === Themes.Fire
-            ? "linear-gradient(90deg, red, black)"
-            : "linear-gradient(90deg, black, cyan)",
+        background: getHeaderTheme(theme),
         padding: "0rem 0rem 1rem 1rem",
         borderBottom: bottomBorder
           ? backgroundColor === "black"
@@ -290,14 +291,10 @@ export function Menu({
               marginTop: "1rem",
             }}
             onClick={() => {
-              if (theme === Themes.Fire) {
-                setTheme(Themes.Ice);
-              } else {
-                setTheme(Themes.Fire);
-              }
+              setThemeEmoji(theme, setTheme);
             }}
           >
-            {theme === Themes.Fire ? "❄️" : "🔥"}
+            {getThemeEmoji(theme)}
           </Button>
           <ThemeProvider theme={buttonTheme}>
             <Fab

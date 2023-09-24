@@ -31,7 +31,7 @@ import mainTheme from "themes/mainTheme";
 import useWindowDimensions from "hooks/useWindowDimensions";
 import { Peg, Player } from "types/trouble";
 import { ThemeContext } from "themes/context";
-import { Themes } from "types/themes";
+import { getMainTheme } from "utils/utils";
 
 const HOME = -1;
 const startEndSpaces = [1, 8, 15, 22];
@@ -871,23 +871,14 @@ export function Trouble() {
       border="double thick black"
     >
       <ThemeProvider theme={mainTheme}>
-        <Menu
-          backgroundColor="black"
-          borderSides
-          background="linear-gradient(90deg, red, black)"
-        ></Menu>
+        <Menu backgroundColor="black" borderSides></Menu>
       </ThemeProvider>
       <Grid
         padding="1rem 0rem"
         border="solid black .1rem"
         width="99%"
         margin="0 auto .25rem auto"
-        sx={{
-          background:
-            theme === Themes.Fire
-              ? "linear-gradient(45deg, red, white, red)"
-              : "linear-gradient(45deg, black, cyan, black)",
-        }}
+        sx={{ background: getMainTheme(theme) }}
       >
         {/* BOARD */}
         <Grid

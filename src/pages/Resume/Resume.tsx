@@ -7,6 +7,7 @@ import { Footer } from "components/Footer";
 import { IEducation, IExperience, IResume, ISkillGroup } from "types/resume";
 import {
   authenticationCheck,
+  getMainTheme,
   getStorage,
   testAuthenticationCheck,
 } from "utils/utils";
@@ -20,7 +21,6 @@ import { Education } from "./Education";
 import { Experience } from "./Experience";
 import { SideIcons } from "./SideIcons";
 import { Skills } from "./Skills";
-import { Themes } from "types/themes";
 import { ThemeContext } from "themes/context";
 
 const isAuthenticated = authenticationCheck();
@@ -144,10 +144,7 @@ export function Resume() {
             padding="1rem 0rem 1rem 0rem"
             sx={{
               position: "relative",
-              background:
-                theme === Themes.Fire
-                  ? "linear-gradient(135deg, black, red)"
-                  : "linear-gradient(135deg, black, cyan, black, cyan)",
+              background: getMainTheme(theme),
             }}
           >
             {!isDeviceWidth && <SideIcons />}

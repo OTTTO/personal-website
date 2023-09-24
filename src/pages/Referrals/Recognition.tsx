@@ -1,12 +1,13 @@
-import { Grid, Typography, Divider } from "@mui/material";
+import { Grid, Divider } from "@mui/material";
 import { ThemeProvider } from "@emotion/react";
 import projectsTheme from "themes/projectsTheme";
 import { Menu } from "components/Menu";
 import { Footer } from "components/Footer";
 import { RecognitionItem } from "./RecognitionItem";
-import { Themes } from "types/themes";
 import { useContext } from "react";
 import { ThemeContext } from "themes/context";
+import { getMainTheme } from "utils/utils";
+import { Title } from "components/TItle";
 
 export function Recognition() {
   const { theme } = useContext(ThemeContext);
@@ -20,24 +21,9 @@ export function Recognition() {
             direction="column"
             margin="0 auto"
             paddingBottom="2rem"
-            sx={{
-              background:
-                theme === Themes.Fire
-                  ? "linear-gradient(135deg, black, red)"
-                  : "linear-gradient(135deg, black, cyan, black, cyan)",
-            }}
+            sx={{ background: getMainTheme(theme) }}
           >
-            <Typography
-              variant="h1"
-              textAlign="center"
-              color="transparent"
-              sx={{
-                background: "linear-gradient(#C6AB62, white)",
-                WebkitBackgroundClip: "text",
-              }}
-            >
-              RECOGNITION
-            </Typography>
+            <Title title="RECOGNITION" />
             <Divider sx={{ backgroundColor: "white", borderBottomWidth: 4 }} />
             <RecognitionItem
               content="Dylan is a truly exceptional Full Stack developer. He can easily

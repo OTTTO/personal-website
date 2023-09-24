@@ -1,11 +1,12 @@
 import { Divider, Grid, ThemeProvider, Typography } from "@mui/material";
 import { Footer } from "components/Footer";
 import { Menu } from "components/Menu";
+import { Title } from "components/TItle";
 import React, { useContext } from "react";
 import { ThemeContext } from "themes/context";
 
 import projectsTheme from "themes/projectsTheme";
-import { Themes } from "types/themes";
+import { getMainTheme } from "utils/utils";
 
 export function LiveTraining() {
   const { theme } = useContext(ThemeContext);
@@ -19,27 +20,10 @@ export function LiveTraining() {
             direction="column"
             margin="0 auto"
             paddingBottom="2rem"
-            sx={{
-              background:
-                theme === Themes.Fire
-                  ? "linear-gradient(135deg, black, red)"
-                  : "linear-gradient(135deg, cyan, black)",
-            }}
+            sx={{ background: getMainTheme(theme) }}
           >
-            <Typography
-              variant="h1"
-              textAlign="center"
-              color="transparent"
-              sx={{
-                background: "linear-gradient(#C6AB62, white)",
-                "-webkit-background-clip": "text",
-              }}
-            >
-              LIVE TRAINING
-            </Typography>
-
+            <Title title="LIVE TRAINING" />
             <Divider sx={{ backgroundColor: "white", borderBottomWidth: 4 }} />
-
             <Typography variant="h5" color="white" width="90%" margin="0 auto">
               <p>
                 The purpose of Training with Dylan is to help you become job

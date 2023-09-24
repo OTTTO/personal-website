@@ -26,9 +26,10 @@ import * as DOMPurify from "dompurify";
 import { Loading } from "components/Loading";
 import projectsTheme from "themes/projectsTheme";
 import { ThemeContext } from "themes/context";
-import { Themes } from "types/themes";
 import { Link } from "react-router-dom";
 import { ErrorPage } from "pages/Error/Error";
+import { getMainTheme } from "utils/utils";
+import { Title } from "components/TItle";
 
 const isAuthenticated = authenticationCheck();
 const isTestAuthenticated = testAuthenticationCheck();
@@ -99,24 +100,9 @@ export function Blog() {
             direction="column"
             margin="0 auto"
             paddingBottom="2rem"
-            sx={{
-              background:
-                theme === Themes.Fire
-                  ? "linear-gradient(135deg, black, red)"
-                  : "linear-gradient(135deg, black, cyan, black, cyan)",
-            }}
+            sx={{ background: getMainTheme(theme) }}
           >
-            <Typography
-              variant="h1"
-              textAlign="center"
-              color="transparent"
-              sx={{
-                background: "linear-gradient(#C6AB62, white)",
-                WebkitBackgroundClip: "text",
-              }}
-            >
-              PERSONAL BLOG
-            </Typography>
+            <Title title="PERSONAL BLOG" />
             {isAuthenticated || isTestAuthenticated ? (
               <IconButton href="/blog/post/new">
                 <AddCircle sx={{ mr: 1 }} style={{ color: "white" }} />
