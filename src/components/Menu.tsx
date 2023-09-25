@@ -178,7 +178,7 @@ export function Menu({
                       </MenuItem>
                       <MenuItem
                         sx={{ border: "black solid" }}
-                        {...{ component: Link, to: "/live-training" }}
+                        {...{ component: Link, to: "/training" }}
                         onClick={() => {
                           popupState.close();
                         }}
@@ -264,7 +264,7 @@ export function Menu({
               </Fab>
               <Fab
                 variant="extended"
-                {...{ component: Link, to: "/live-training" }}
+                {...{ component: Link, to: "/training" }}
                 sx={{ margin: "1rem 0.5rem 0rem 0rem" }}
                 size={isLarger ? "large" : "small"}
               >

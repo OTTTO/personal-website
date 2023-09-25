@@ -50,7 +50,9 @@ export function WysiwygEditor({
       editorClassName={!error ? "rdw-editor-main" : "rdw-editor-error"}
       toolbar={{
         options,
-        fontSize: { options: [8, 12, 16, 24, 36, 48, 72, 128] },
+        fontSize: {
+          options: [8, 10, 12, 14, 16, 18, 19, 20, 24, 30, 36, 48, 72, 128],
+        },
         inline: { inDropdown: !expanded && isSmaller },
         list: { inDropdown: !expanded && isSmaller },
         link: { inDropdown: !expanded && isSmaller },

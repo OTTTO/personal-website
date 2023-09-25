@@ -32,7 +32,7 @@ export function ErrorPage() {
             Something went terribly wrong
           </Typography>
         </Grid>
-        <Footer error></Footer>
+        <Footer />
       </Grid>
     </ThemeProvider>
   );

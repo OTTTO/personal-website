@@ -27,7 +27,7 @@ function AppRoutes() {
         <Route path="/blog/post/new" element={<Post />} />
         <Route path="/blog/post/:id" element={<Post />} />
         <Route path="/blog/post/edit/:id" element={<Post />} />
-        <Route path="/live-training" element={<LiveTraining />} />
+        <Route path="/training" element={<LiveTraining />} />
         <Route path="/recognition" element={<Recognition />} />
       </Routes>
     </BrowserRouter>

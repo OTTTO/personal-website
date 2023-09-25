@@ -20,6 +20,7 @@ import { testHome } from "types/home";
 import { testProjects } from "types/project";
 import { testRecognition } from "types/recognition";
 import { testResume } from "types/resume";
+import { testTraining } from "types/training";
 import { getMainTheme } from "utils/utils";
 
 function AdminLogin() {
@@ -81,6 +82,7 @@ function AdminLogin() {
     localStorage.setItem("projects", JSON.stringify(testProjects));
     localStorage.setItem("posts", JSON.stringify(testPosts));
     localStorage.setItem("recognition", JSON.stringify(testRecognition));
+    localStorage.setItem("training", JSON.stringify(testTraining));
 
     localStorage.setItem("edit", "true");
     window.location.replace("/");

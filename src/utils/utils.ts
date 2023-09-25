@@ -65,7 +65,7 @@ export function getMainTheme(theme: Themes) {
   } else if (theme === Themes.Ice) {
     return "linear-gradient(135deg, black, cyan, purple, cyan, purple, cyan, black)";
   } else if (theme === Themes.Lightning) {
-    return "linear-gradient(135deg, goldenrod, silver, goldenrod, silver, goldenrod)";
+    return "linear-gradient(135deg, goldenrod, silver,  goldenrod, white, goldenrod, silver, goldenrod)";
   }
 }
 

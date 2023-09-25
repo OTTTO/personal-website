@@ -1,15 +1,87 @@
-import { Divider, Grid, ThemeProvider, Typography } from "@mui/material";
+import {
+  Container,
+  Divider,
+  Grid,
+  ThemeProvider,
+  Typography,
+} from "@mui/material";
 import { Footer } from "components/Footer";
 import { Menu } from "components/Menu";
 import { Title } from "components/TItle";
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { ThemeContext } from "themes/context";
-
+import * as DOMPurify from "dompurify";
 import projectsTheme from "themes/projectsTheme";
-import { getMainTheme } from "utils/utils";
+import {
+  authenticationCheck,
+  getMainTheme,
+  getStorage,
+  testAuthenticationCheck,
+} from "utils/utils";
+import { Training } from "types/training";
+import axios from "axios";
+import { AuthButtons } from "components/AuthButtons";
+import { WysiwygEditor } from "components/WysiwygEditor";
+import { ErrorPage } from "pages/Error/Error";
+import { Loading } from "components/Loading";
 
 export function LiveTraining() {
   const { theme } = useContext(ThemeContext);
+  const isAuthenticated = authenticationCheck();
+  const isTestAuthenticated = testAuthenticationCheck();
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
+  const [edit, setEdit] = useState(true);
+  const [training, setTraining] = useState(new Training());
+
+  const handleContentChange = (content: string) => {
+    const newTraining = { ...training, content };
+    setTraining(newTraining);
+  };
+
+  const handleSaveOnClick = async () => {
+    if (isTestAuthenticated) {
+      localStorage.setItem("home", JSON.stringify(training));
+    } else {
+      await axios.put(
+        `${process.env.REACT_APP_API_ENDPOINT}/training/save`,
+        training,
+        {
+          headers: {
+            Authorization: localStorage.getItem("token"),
+          },
+        }
+      );
+    }
+    window.location.replace("/training");
+  };
+
+  const testTraining = getStorage("training");
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const resp = await axios
+        .get(`${process.env.REACT_APP_API_ENDPOINT}/training`)
+        .catch((err) => {
+          setError(true);
+        });
+      if (resp) {
+        setTraining(resp.data || training);
+      }
+      setLoading(false);
+    };
+    if (!isTestAuthenticated) fetchData();
+    else {
+      setTraining(testTraining);
+      setLoading(false);
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  if (loading) return <Loading />;
+  if (error) return <ErrorPage />;
+
   return (
     <Grid border="double thick black">
       <Grid border=".25rem white solid">
@@ -24,65 +96,45 @@ export function LiveTraining() {
           >
             <Title title="LIVE TRAINING" />
             <Divider sx={{ backgroundColor: "white", borderBottomWidth: 4 }} />
-            <Typography
-              variant="h5"
-              color="black"
-              width="80%"
-              margin="2rem auto 0 auto"
-              padding="0rem 1rem 0 1rem"
-              borderRadius="10px"
-              sx={{ backgroundColor: "white" }}
+
+            <Grid>
+              {((!isAuthenticated && !isTestAuthenticated) || !edit) && (
+                <Typography
+                  margin="2rem 10%"
+                  padding=".5rem 1rem"
+                  fontSize="1rem"
+                  sx={{ backgroundColor: "white", borderRadius: "10px" }}
+                  dangerouslySetInnerHTML={{
+                    __html: DOMPurify.sanitize(training.content),
+                  }}
+                ></Typography>
+              )}
+            </Grid>
+            <Grid
+              sx={{
+                paddingTop: "3rem",
+                display:
+                  (!isAuthenticated && !isTestAuthenticated) || !edit
+                    ? "none"
+                    : "visible",
+              }}
             >
-              <p>
-                The purpose of Training with Dylan is to help you become job
-                ready by seeing what it's like to work in a production codebase.
-                During these training sessions, we will be covering a wide
-                breadth of topics that are necessary to become a successful{" "}
-                <b>
-                  <u>full stack developer</u>
-                </b>{" "}
-                . You will join me on the job where I will show you how to
-                become an effective developer in the real world.{" "}
-              </p>
-              <p>
-                We will{" "}
-                <b>
-                  <u>work on the backend</u>
-                </b>{" "}
-                learning how to leverage an MVC framework where we will be
-                extending APIs and writing out business logic,
-                navigating/interacting with a database, as well as interfacing
-                with AWS and other third party applications and libraries.{" "}
-              </p>
-              <p>
-                We will also{" "}
-                <b>
-                  <u>work on the frontend</u>
-                </b>{" "}
-                making network calls to those backend apis and operating on the
-                responses dynamically displaying information/document
-                structure/styling.
-              </p>
-              <p>
-                {" "}
-                A necessary prerequisite to joining the live sessions is a{" "}
-                <b>
-                  <u>basic understanding of programming</u>
-                </b>{" "}
-                in any language of your choice. We will typically be working in
-                Java, JavaScript, or Python so any of those would be a plus.
-              </p>
-              <p>
-                {" "}
-                If you are ready to learn..{" "}
-                <a
-                  className="training-email"
-                  href="mailto:contact.dylanbeckwith@gamil.com"
-                >
-                  REACH OUT TODAY!
-                </a>
-              </p>
-            </Typography>
+              <Container>
+                <WysiwygEditor
+                  content={training.content}
+                  onChange={(content: string) => handleContentChange(content)}
+                  options={["inline", "textAlign", "list", "link", "fontSize"]}
+                />
+              </Container>
+            </Grid>
+            {(isAuthenticated || isTestAuthenticated) && (
+              <AuthButtons
+                bottomPadding
+                handleSaveOnClick={handleSaveOnClick}
+                edit={edit}
+                setEdit={setEdit}
+              />
+            )}
           </Grid>
           <Footer />
         </ThemeProvider>
