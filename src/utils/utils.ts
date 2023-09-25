@@ -61,21 +61,21 @@ export function getFooterTheme(theme: Themes) {
 
 export function getMainTheme(theme: Themes) {
   if (theme === Themes.Fire) {
-    return "linear-gradient(135deg, black, red, #ff4d00, red, #ff4d00, red, black)";
+    return "linear-gradient(135deg, black, red, grey, #ff4d00, red, #ff4d00, silver, red, black)";
   } else if (theme === Themes.Ice) {
     return "linear-gradient(135deg, black, cyan, purple, cyan, purple, cyan, black)";
   } else if (theme === Themes.Lightning) {
-    return "linear-gradient(135deg, goldenrod, #c0c0c0, goldenrod, #c0c0c0, goldenrod)";
+    return "linear-gradient(135deg, goldenrod, silver, goldenrod, silver, goldenrod)";
   }
 }
 
 export function getTitleTheme(theme: Themes) {
   if (theme === Themes.Fire) {
-    return "linear-gradient(#C6AB62, #C6AB62, white)";
+    return "linear-gradient(black,#C6AB62, #C6AB62, black)";
   } else if (theme === Themes.Ice) {
     return "linear-gradient(orange, yellow, red)";
   } else if (theme === Themes.Lightning) {
-    return "linear-gradient(white, blue, white)";
+    return "linear-gradient(black, blue, black)";
   }
 }
 

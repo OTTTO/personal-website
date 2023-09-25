@@ -18,6 +18,7 @@ import { State } from "types/adminLogin";
 import { testPosts } from "types/blog";
 import { testHome } from "types/home";
 import { testProjects } from "types/project";
+import { testRecognition } from "types/recognition";
 import { testResume } from "types/resume";
 import { getMainTheme } from "utils/utils";
 
@@ -79,6 +80,7 @@ function AdminLogin() {
     localStorage.setItem("resume", JSON.stringify(testResume));
     localStorage.setItem("projects", JSON.stringify(testProjects));
     localStorage.setItem("posts", JSON.stringify(testPosts));
+    localStorage.setItem("recognition", JSON.stringify(testRecognition));
 
     localStorage.setItem("edit", "true");
     window.location.replace("/");

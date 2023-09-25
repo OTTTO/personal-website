@@ -4,7 +4,7 @@ import { useContext } from "react";
 import { ThemeContext } from "themes/context";
 import { getShadowTheme } from "utils/utils";
 
-export function RecognitionItem({ left, up, content, source, linkedin }) {
+export function RecognitionItem({ left, up, content, source, href }) {
   const { theme } = useContext(ThemeContext);
   const { width } = useWindowDimensions();
   const mobileSize = 500;
@@ -103,11 +103,12 @@ export function RecognitionItem({ left, up, content, source, linkedin }) {
         <p color="black">
           -{" "}
           <Link
-            href={linkedin}
+            href={href}
             color="#000"
             sx={{
               textDecorationColor: "black",
               textDecorationThickness: "3px",
+              target: "_blank",
             }}
           >
             {source}

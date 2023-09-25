@@ -1,18 +1,152 @@
-import { Grid, Divider } from "@mui/material";
+import { Grid, Divider, IconButton } from "@mui/material";
 import { ThemeProvider } from "@emotion/react";
 import projectsTheme from "themes/projectsTheme";
 import { Menu } from "components/Menu";
 import { Footer } from "components/Footer";
 import { RecognitionItem } from "./RecognitionItem";
-import { ReferralTab } from "./ReferralTab";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import {
+  DropResult,
+  DragDropContext,
+  Droppable,
+  Draggable,
+} from "react-beautiful-dnd";
 import { ThemeContext } from "themes/context";
-import { getMainTheme } from "utils/utils";
+import {
+  authenticationCheck,
+  getMainTheme,
+  getStorage,
+  testAuthenticationCheck,
+} from "utils/utils";
 import { Title } from "components/TItle";
+import axios from "axios";
+import { RecognitionItemClass } from "types/recognition";
+import { Loading } from "components/Loading";
+import { ErrorPage } from "pages/Error/Error";
+import { RecognitionType } from "types/recognitionType";
+import { AddCircle } from "@mui/icons-material";
+import { AuthButtons } from "components/AuthButtons";
+import { RecognitionEdit } from "./RecognitionEdit";
+import { ReferralTabs } from "./ReferralTabs";
 
 export function Recognition() {
   const { theme } = useContext(ThemeContext);
-  const [activeTab, setActiveTab] = useState(0);
+  const isAuthenticated = authenticationCheck();
+  const isTestAuthenticated = testAuthenticationCheck();
+
+  const [activeTab, setActiveTab] = useState(RecognitionType.Development);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
+  const [edit, setEdit] = useState(true);
+  const [recognition, setRecognition] = useState([]);
+
+  const addRecognitionItem = () => {
+    const newRecognition = structuredClone(recognition);
+    const thisRecognition = newRecognition.filter((x) => x.type === activeTab);
+    const otherRecognition = newRecognition.filter((x) => x.type !== activeTab);
+    const newRecognitionItem = new RecognitionItemClass();
+    newRecognitionItem.type = activeTab;
+
+    newRecognitionItem.position = thisRecognition.length;
+    thisRecognition.push(newRecognitionItem);
+
+    const completeRecognition = thisRecognition.concat(otherRecognition);
+    setRecognition(completeRecognition);
+  };
+
+  const removeRecognitionItem = (idx: number) => {
+    let newRecognition = structuredClone(recognition);
+    const thisRecognition = newRecognition.filter((x) => x.type === activeTab);
+    const otherRecognition = newRecognition.filter((x) => x.type !== activeTab);
+    thisRecognition.splice(idx, 1);
+
+    const sortedNewRecognition = thisRecognition.sort(
+      (a, b) => a.position - b.position
+    );
+
+    for (let i = 0; i < sortedNewRecognition.length; i++) {
+      sortedNewRecognition[i].position = i;
+    }
+
+    const completeRecognition = sortedNewRecognition.concat(otherRecognition);
+    setRecognition(completeRecognition);
+  };
+
+  const onDragEnd = ({ destination, source }: DropResult) => {
+    if (!destination) return;
+
+    const newRecognition = structuredClone(recognition);
+    console.log(newRecognition);
+    const thisRecognition = newRecognition.filter((x) => x.type === activeTab);
+    const otherRecognition = newRecognition.filter((x) => x.type !== activeTab);
+    thisRecognition.sort((a, b) => a.position - b.position);
+    const [removed] = thisRecognition.splice(source.index, 1);
+    thisRecognition.splice(destination.index, 0, removed);
+
+    //reset positions
+    for (let i = 0; i < thisRecognition.length; i++) {
+      thisRecognition[i].position = i;
+    }
+
+    const completeRecognition = thisRecognition.concat(otherRecognition);
+    setRecognition(completeRecognition);
+  };
+
+  const handleSaveOnClick = async () => {
+    if (isTestAuthenticated) {
+      localStorage.setItem("recognition", JSON.stringify(recognition));
+    } else {
+      console.log(recognition);
+      await axios.put(
+        `${process.env.REACT_APP_API_ENDPOINT}/portfolio/recognition/save`,
+        { items: recognition },
+        {
+          headers: {
+            Authorization: localStorage.getItem("token"),
+          },
+        }
+      );
+    }
+    window.location.replace("/recognition");
+  };
+
+  const handleTextChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    key: string,
+    idx: number
+  ) => {
+    const newRecognition = structuredClone(recognition);
+    const newRecognitionItem = structuredClone(newRecognition[idx]);
+    newRecognitionItem[key] = e.target.value;
+    newRecognition[idx] = newRecognitionItem;
+    setRecognition(newRecognition);
+  };
+
+  const testRecognition = getStorage("recognition");
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const resp = await axios
+        .get(`${process.env.REACT_APP_API_ENDPOINT}/portfolio/recognition`)
+        .catch((err) => {
+          setError(true);
+        });
+      if (resp && resp.data) {
+        setRecognition(resp.data.items);
+      }
+      setLoading(false);
+    };
+    if (!isTestAuthenticated) fetchData();
+    else {
+      setRecognition(testRecognition);
+      setLoading(false);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  if (loading) return <Loading />;
+  if (error) return <ErrorPage />;
+
   return (
     <Grid border="double thick black">
       <Grid sx={{ height: "vh100" }} border=".25rem white solid">
@@ -21,102 +155,90 @@ export function Recognition() {
           <Grid
             container
             direction="column"
-            margin="0 auto"
             paddingBottom="2rem"
             sx={{ background: getMainTheme(theme) }}
           >
             <Title title="RECOGNITION" />
+            {(isAuthenticated || isTestAuthenticated) && edit ? (
+              <IconButton onClick={addRecognitionItem}>
+                <AddCircle sx={{ mr: 1 }} style={{ color: "white" }} />
+              </IconButton>
+            ) : null}
             <Divider sx={{ backgroundColor: "white", borderBottomWidth: 4 }} />
-            <Grid direction="row">
-              <ReferralTab
-                label="Development"
-                tab={0}
-                activeTab={activeTab}
-                setActiveTab={setActiveTab}
-              />
-              <ReferralTab
-                label="Mentorship"
-                tab={1}
-                activeTab={activeTab}
-                setActiveTab={setActiveTab}
-              />
+            <ReferralTabs activeTab={activeTab} setActiveTab={setActiveTab} />
+            <Grid>
+              <DragDropContext onDragEnd={onDragEnd}>
+                <Droppable droppableId="droppable-list">
+                  {(provided) => (
+                    <div ref={provided.innerRef} {...provided.droppableProps}>
+                      {[...recognition]
+                        .filter((x) => x.type === activeTab)
+                        .sort((a, b) => a.position - b.position)
+                        .map((item, idx) => (
+                          <Draggable
+                            draggableId={item.id}
+                            index={idx}
+                            key={item.id}
+                            isDragDisabled={
+                              (!isAuthenticated && !isTestAuthenticated) ||
+                              !edit
+                            }
+                          >
+                            {(provided, snapshot) => (
+                              <Grid
+                                container
+                                key={idx}
+                                ref={provided.innerRef}
+                                {...provided.draggableProps}
+                                {...provided.dragHandleProps}
+                                className={
+                                  snapshot.isDragging ? "draggingListItem" : ""
+                                }
+                              >
+                                {/* <Grid width="5%"></Grid> */}
+
+                                {(!isAuthenticated && !isTestAuthenticated) ||
+                                !edit ? (
+                                  <RecognitionItem
+                                    content={item.content}
+                                    source={item.source}
+                                    href={item.href}
+                                    left={idx % 2 === 0}
+                                    up={
+                                      (idx % 3) - 1 === 0 || (idx % 3) - 2 === 0
+                                    }
+                                  />
+                                ) : (
+                                  <RecognitionEdit
+                                    recognition={recognition}
+                                    item={item}
+                                    idx={idx}
+                                    handleTextChange={handleTextChange}
+                                    isAuthenticated={isAuthenticated}
+                                    isTestAuthenticated={isTestAuthenticated}
+                                    edit={edit}
+                                    removeRecognitionItem={
+                                      removeRecognitionItem
+                                    }
+                                  />
+                                )}
+                                <Grid width="5%"></Grid>
+                              </Grid>
+                            )}
+                          </Draggable>
+                        ))}
+                    </div>
+                  )}
+                </Droppable>
+              </DragDropContext>
+              {(isAuthenticated || isTestAuthenticated) && (
+                <AuthButtons
+                  handleSaveOnClick={handleSaveOnClick}
+                  edit={edit}
+                  setEdit={setEdit}
+                />
+              )}
             </Grid>
-            {activeTab === 0 ? (
-              <>
-                <RecognitionItem
-                  content="Dylan is a truly exceptional Full Stack developer. He can easily
-              switch between two different languages: Java and React+JS, and he
-              performs at a very high level of productivity. Dylan can tackle
-              complex issues with ease and is highly responsible when it comes to meeting delivery deadlines."
-                  source="Anastassiya Starns (Senior Engineer)"
-                  linkedin="https://www.linkedin.com/in/anastassiya-mayer/"
-                  left
-                  up={false}
-                />
-                <RecognitionItem
-                  content="Dylan gets things done. He is one of the fastest developers on the
-              project and doesn't just finish his tasks and call it a day… our
-              colleagues at IBM appreciated that a lot."
-                  source="Moazzam Khan (Project Lead)"
-                  linkedin="https://www.linkedin.com/in/moazzam-khan-915194b/"
-                  left={false}
-                  up
-                />
-                <RecognitionItem
-                  content="On what was only a week-long effort, Dylan was able to pickup
-              both a new language and new unit testing framework and start
-              contributing immediately. He instantly started writing
-              Groovy/Spock like he had been doing it for years, started knocking
-              out stories almost as fast as I could write them, and provided
-              good feedback on the design, architecture, and implementation.
-              With only two of us and a very short deadline, I could not have
-              done this without him."
-                  source="John Valentino (Prinicpal Software Engineer)"
-                  linkedin="https://www.linkedin.com/in/john-valentino-5554162/"
-                  left
-                  up
-                />
-                <RecognitionItem
-                  content="Dylan is someone you can give the summary of what you need done
-              and he'll immediately get to working on it raising any concerns
-              along the way. I found it to be a refreshing experience pairing up
-              with Dylan when particularly difficult or complicated issues would
-              arise. There was a feeling of 'getting it figured out together'
-              which I've rarely had the chance to experience throughout my
-              career."
-                  source="Robert Goddard (Senior Engineer)"
-                  linkedin="https://www.linkedin.com/in/robert-goddard-05257812/"
-                  left={false}
-                  up
-                />
-                <RecognitionItem
-                  content="Dylan wasted no time getting up and running on this project.
-              Relatively new to Dialexa, but you would have no idea with how
-              quickly he fit into the team, adapted to new processes, and picked
-              up new technologies. He exemplifies all of Dialexa's best traits
-              and has become a fundamental member of the team. He has eased some
-              of my anxieties on this project with his knowledge on [certain
-              difficult technologies] and I appreciate his willingness to
-              research options and his patience in sharing some of the knowledge
-              with me. We're lucky to have Dylan on this team!"
-                  source="Meghan Miller (Project Manager)"
-                  linkedin="https://www.linkedin.com/in/miller-meghan/"
-                  left
-                  up
-                />{" "}
-              </>
-            ) : (
-              <RecognitionItem
-                content="I had an incredible experience with Dylan as my coding mentor. 
-                His expertise, personalized guidance, and friendly approach made all the 
-                difference in my learning journey. 
-                Dylan is a coding mentor you can trust for excellent results."
-                source="Daniel Cardin (Business Analyst)"
-                linkedin="https://www.linkedin.com/in/daniel-cardin-5777b3212/"
-                left
-                up={false}
-              />
-            )}
           </Grid>
           <Footer />
         </ThemeProvider>
