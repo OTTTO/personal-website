@@ -19,7 +19,7 @@ export function Footer({ error = undefined }) {
           padding="1rem 1rem 0rem 0rem"
           textAlign="right"
         >
-          © Dylan Beckwith 2022
+          © Dylan Beckwith {new Date().getFullYear()}
         </Typography>
       </Grid>
     </Grid>

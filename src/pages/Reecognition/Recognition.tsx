@@ -28,11 +28,14 @@ import { AddCircle } from "@mui/icons-material";
 import { AuthButtons } from "components/AuthButtons";
 import { RecognitionEdit } from "./RecognitionEdit";
 import { ReferralTabs } from "./ReferralTabs";
+import useWindowDimensions from "hooks/useWindowDimensions";
 
 export function Recognition() {
   const { theme } = useContext(ThemeContext);
   const isAuthenticated = authenticationCheck();
   const isTestAuthenticated = testAuthenticationCheck();
+  const { width } = useWindowDimensions();
+  const isMobile = width <= 500;
 
   const [activeTab, setActiveTab] = useState(RecognitionType.Development);
   const [loading, setLoading] = useState(true);
@@ -195,7 +198,7 @@ export function Recognition() {
                                   snapshot.isDragging ? "draggingListItem" : ""
                                 }
                               >
-                                {/* <Grid width="5%"></Grid> */}
+                                <Grid width={isMobile ? "5%" : "10%"}></Grid>
 
                                 {(!isAuthenticated && !isTestAuthenticated) ||
                                 !edit ? (
@@ -222,7 +225,7 @@ export function Recognition() {
                                     }
                                   />
                                 )}
-                                <Grid width="5%"></Grid>
+                                <Grid width={isMobile ? "5%" : "10%"}></Grid>
                               </Grid>
                             )}
                           </Draggable>

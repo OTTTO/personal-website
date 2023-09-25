@@ -1,12 +1,4 @@
-import {
-  Button,
-  Divider,
-  Grid,
-  IconButton,
-  TextField,
-  ThemeProvider,
-  Typography,
-} from "@mui/material";
+import { Divider, Grid, IconButton, ThemeProvider } from "@mui/material";
 import { Footer } from "components/Footer";
 import { Menu } from "components/Menu";
 import useWindowDimensions from "hooks/useWindowDimensions";
@@ -16,14 +8,11 @@ import {
   getStorage,
   testAuthenticationCheck,
 } from "utils/utils";
-import { WysiwygEditor } from "components/WysiwygEditor";
-import * as DOMPurify from "dompurify";
 import { useContext, useEffect } from "react";
 import React from "react";
 import { Loading } from "components/Loading";
 import { ErrorPage } from "pages/Error/Error";
-import { AddCircle, RemoveCircle } from "@mui/icons-material";
-import { ProjectImage } from "./ProjectImage";
+import { AddCircle } from "@mui/icons-material";
 import { Project } from "types/project";
 import { AuthButtons } from "components/AuthButtons";
 import {
@@ -35,8 +24,8 @@ import {
 import axios from "axios";
 import { ThemeContext } from "themes/context";
 import { getMainTheme } from "utils/utils";
-import { Link } from "react-router-dom";
 import { Title } from "components/TItle";
+import { ProjectItem } from "./ProjectItem";
 
 const isAuthenticated = authenticationCheck();
 const isTestAuthenticated = testAuthenticationCheck();
@@ -203,175 +192,19 @@ export function Projects() {
                               >
                                 <Grid width="5%"></Grid>
 
-                                <Grid
-                                  container
-                                  sx={{
-                                    backgroundColor: "white",
-                                    padding: "1rem",
-                                    margin:
-                                      idx !== projects.length - 1
-                                        ? "1rem 0"
-                                        : "1rem 0rem 0rem 0rem",
-                                    border: "thick double black",
-                                  }}
-                                  width="90%"
-                                  alignItems="center"
-                                  justifyContent="center"
-                                >
-                                  <Grid width={isSmaller ? "80%" : "15%"}>
-                                    <Grid
-                                      padding={
-                                        isSmaller ? "0rem 0rem" : ".5rem 0rem"
-                                      }
-                                      margin="0 auto"
-                                      width="auto"
-                                    >
-                                      {(!isAuthenticated &&
-                                        !isTestAuthenticated) ||
-                                      !edit ? (
-                                        <Typography
-                                          variant={isSmaller ? "h3" : "h4"}
-                                          textAlign="center"
-                                        >
-                                          <b>
-                                            {project.title &&
-                                              project.title.toUpperCase()}
-                                          </b>
-                                        </Typography>
-                                      ) : (
-                                        <TextField
-                                          fullWidth={true}
-                                          value={project.title || ""}
-                                          onChange={(e) =>
-                                            handleTextChange(e, "title", idx)
-                                          }
-                                          label="Title"
-                                          sx={{ margin: "1rem 0rem" }}
-                                        ></TextField>
-                                      )}
-                                      {!isAuthenticated &&
-                                      !isTestAuthenticated &&
-                                      project.href ? (
-                                        <Button
-                                          {...{
-                                            component: Link,
-                                            to: project.href,
-                                          }}
-                                          target={
-                                            project.openNewTab ? "_blank" : null
-                                          }
-                                          rel={
-                                            project.openNewTab
-                                              ? "noreffer"
-                                              : null
-                                          }
-                                          sx={{
-                                            padding: isSmaller
-                                              ? "1rem 0rem"
-                                              : ".5rem 0rem",
-                                            display: "block",
-                                          }}
-                                        >
-                                          <ProjectImage
-                                            projects={projects}
-                                            isSmaller={isSmaller}
-                                            edit={edit}
-                                            idx={idx}
-                                            handleTextChange={handleTextChange}
-                                            isAuthenticated={isAuthenticated}
-                                            isTestAuthenticated={
-                                              isTestAuthenticated
-                                            }
-                                            setProjects={setProjects}
-                                          ></ProjectImage>
-                                        </Button>
-                                      ) : (
-                                        <ProjectImage
-                                          projects={projects}
-                                          isSmaller={isSmaller}
-                                          edit={edit}
-                                          idx={idx}
-                                          handleTextChange={handleTextChange}
-                                          isAuthenticated={isAuthenticated}
-                                          isTestAuthenticated={
-                                            isTestAuthenticated
-                                          }
-                                          setProjects={setProjects}
-                                        ></ProjectImage>
-                                      )}
-                                      {(!isAuthenticated &&
-                                        !isTestAuthenticated) ||
-                                      !edit ? (
-                                        <Typography
-                                          variant={isSmaller ? "h3" : "h6"}
-                                          textAlign="center"
-                                        >
-                                          <b>{project.subtitle}</b>
-                                        </Typography>
-                                      ) : (
-                                        <TextField
-                                          fullWidth={true}
-                                          value={project.subtitle || ""}
-                                          onChange={(e) =>
-                                            handleTextChange(e, "subtitle", idx)
-                                          }
-                                          label="Subtitle"
-                                          sx={{ margin: "1rem 0rem" }}
-                                        ></TextField>
-                                      )}
-                                    </Grid>
-                                    <Typography
-                                      variant={isSmaller ? "h3" : "h6"}
-                                      textAlign="center"
-                                    ></Typography>
-                                  </Grid>
-                                  {(!isAuthenticated && !isTestAuthenticated) ||
-                                  !edit ? (
-                                    <Typography
-                                      variant={isSmaller ? null : "h5"}
-                                      width={isSmaller ? "100%" : "75%"}
-                                      paddingLeft={isSmaller ? "0rem" : "2rem"}
-                                      textAlign={isSmaller ? "center" : "left"}
-                                      dangerouslySetInnerHTML={{
-                                        __html: DOMPurify.sanitize(
-                                          project.content
-                                        ),
-                                      }}
-                                    ></Typography>
-                                  ) : (
-                                    <Grid
-                                      width={isSmaller ? "100%" : "75%"}
-                                      paddingLeft={isSmaller ? null : "1rem"}
-                                      marginLeft={isSmaller ? null : "1rem"}
-                                    >
-                                      <WysiwygEditor
-                                        content={project.content}
-                                        onChange={(value) =>
-                                          handleContentChange(value, idx)
-                                        }
-                                        options={["inline", "link"]}
-                                        expanded
-                                      />
-                                    </Grid>
-                                  )}
-
-                                  <Grid
-                                    width="5%"
-                                    marginLeft={isSmaller ? null : "1rem"}
-                                  >
-                                    {(isAuthenticated || isTestAuthenticated) &&
-                                      edit && (
-                                        <IconButton
-                                          onClick={() => removeProject(idx)}
-                                        >
-                                          <RemoveCircle
-                                            sx={{ mr: 1 }}
-                                            style={{ color: "black" }}
-                                          />
-                                        </IconButton>
-                                      )}
-                                  </Grid>
-                                </Grid>
+                                <ProjectItem
+                                  projects={projects}
+                                  setProjects={setProjects}
+                                  project={project}
+                                  idx={idx}
+                                  isSmaller={isSmaller}
+                                  isAuthenticated={isAuthenticated}
+                                  isTestAuthenticated={isTestAuthenticated}
+                                  edit={edit}
+                                  handleTextChange={handleTextChange}
+                                  handleContentChange={handleContentChange}
+                                  removeProject={removeProject}
+                                />
                                 {idx !== projects.length - 1 && (
                                   <Grid width="95%" margin="0 auto">
                                     <Divider

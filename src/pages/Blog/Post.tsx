@@ -2,7 +2,7 @@ import {
   Container,
   Divider,
   Grid,
-  TextField,
+  OutlinedInput,
   ThemeProvider,
   Typography,
 } from "@mui/material";
@@ -25,6 +25,7 @@ import { WysiwygEditor } from "components/WysiwygEditor";
 import { AuthButtons } from "components/AuthButtons";
 import { ThemeContext } from "themes/context";
 import { Title } from "components/TItle";
+import { Themes } from "types/themes";
 
 const isAuthenticated = authenticationCheck();
 const isTestAuthenticated = testAuthenticationCheck();
@@ -130,13 +131,13 @@ export function Post() {
               {(!isAuthenticated && !isTestAuthenticated) || !edit ? (
                 <Title title={post.title} />
               ) : (
-                <TextField
+                <OutlinedInput
                   fullWidth={true}
                   value={post.title}
                   onChange={(e) => handleTextChange(e, "title")}
                   label="Title"
-                  sx={{ margin: "1rem 0rem" }}
-                ></TextField>
+                  sx={{ margin: "1rem 0rem", backgroundColor: "white" }}
+                ></OutlinedInput>
               )}
             </Grid>
             <Divider
@@ -172,21 +173,25 @@ export function Post() {
                   variant="h3"
                   textAlign="center"
                   fontWeight="light"
-                  color="white"
+                  color={theme !== Themes.Lightning ? "white" : "black"}
                 >
                   {post.author}
                 </Typography>
               ) : (
-                <TextField
+                <OutlinedInput
                   fullWidth={true}
                   value={post.author}
                   onChange={(e) => handleTextChange(e, "author")}
                   label="Author"
-                  sx={{ margin: "1rem 0rem" }}
-                ></TextField>
+                  sx={{ margin: "1rem 0rem", backgroundColor: "white" }}
+                ></OutlinedInput>
               )}
               {((!isAuthenticated && !isTestAuthenticated) || !edit) && (
-                <Typography variant="h4" textAlign="center" color="white">
+                <Typography
+                  variant="h4"
+                  textAlign="center"
+                  color={theme !== Themes.Lightning ? "white" : "black"}
+                >
                   {new Date(post.createdAt).toLocaleDateString()}
                 </Typography>
               )}
@@ -226,6 +231,7 @@ export function Post() {
                   padding: "1rem",
                   marginTop: "1rem",
                   backgroundColor: "white",
+                  borderRadius: "10px",
                 }}
                 width="90%"
                 alignItems="center"

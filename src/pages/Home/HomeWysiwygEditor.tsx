@@ -1,4 +1,4 @@
-import { WysiwygEditor } from "./WysiwygEditor";
+import { WysiwygEditor } from "../../components/WysiwygEditor";
 
 export function HomeWysiwygEditor({
   home,

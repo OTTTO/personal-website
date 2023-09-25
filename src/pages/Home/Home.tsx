@@ -19,8 +19,8 @@ import axios from "axios";
 import { HomeClass } from "types/home";
 import { ThemeContext } from "themes/context";
 import { Title } from "components/TItle";
-import { HomeWysiwygEditor } from "components/HomeWysiwygEditor";
-import { HomeText } from "components/HomeText";
+import { HomeWysiwygEditor } from "pages/Home/HomeWysiwygEditor";
+import { HomeText } from "pages/Home/HomeText";
 import useWindowDimensions from "hooks/useWindowDimensions";
 
 const isAuthenticated = authenticationCheck();
@@ -150,7 +150,7 @@ export function Home() {
                 direction="column"
                 padding="0 1rem 0rem 1rem"
                 margin="2rem auto 0 auto"
-                width={isMobile ? "80%" : "70%"}
+                width={isMobile ? "90%" : "70%"}
                 sx={{
                   wordWrap: "break-word",
                   backgroundColor: "white",

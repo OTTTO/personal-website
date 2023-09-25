@@ -25,6 +25,7 @@ export function RecognitionEdit({
         margin:
           idx !== recognition.length - 1 ? "1rem 0" : "1rem 0rem 0rem 0rem",
         border: "thick double black",
+        borderRadius: "10px",
       }}
       width={isMobile ? "90%" : "80%"}
       alignItems="center"

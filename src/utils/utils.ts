@@ -61,7 +61,7 @@ export function getFooterTheme(theme: Themes) {
 
 export function getMainTheme(theme: Themes) {
   if (theme === Themes.Fire) {
-    return "linear-gradient(135deg, black, red, grey, #ff4d00, red, #ff4d00, silver, red, black)";
+    return "linear-gradient(135deg, black, red, grey, #ff4d00, red, #ff4d00, grey, red, black)";
   } else if (theme === Themes.Ice) {
     return "linear-gradient(135deg, black, cyan, purple, cyan, purple, cyan, black)";
   } else if (theme === Themes.Lightning) {
@@ -71,7 +71,7 @@ export function getMainTheme(theme: Themes) {
 
 export function getTitleTheme(theme: Themes) {
   if (theme === Themes.Fire) {
-    return "linear-gradient(black,#C6AB62, #C6AB62, black)";
+    return "#C6AB62";
   } else if (theme === Themes.Ice) {
     return "linear-gradient(orange, yellow, red)";
   } else if (theme === Themes.Lightning) {
@@ -81,7 +81,7 @@ export function getTitleTheme(theme: Themes) {
 
 export function getShadowTheme(theme: Themes) {
   if (theme === Themes.Fire) {
-    return "8px 5px 5px #C6AB62, 10px 7px 7px #0ff, inset 3px 2px 2px white;";
+    return "8px 5px 5px #C6AB62, 10px 7px 7px #0ff, inset 3px 2px 2px black;";
   } else if (theme === Themes.Ice) {
     return "8px 5px 5px #C6AB62, 10px 7px 7px #8800C7, inset 3px 2px 2px black;";
   } else if (theme === Themes.Lightning) {

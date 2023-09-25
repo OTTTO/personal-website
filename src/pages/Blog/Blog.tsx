@@ -127,6 +127,7 @@ export function Blog() {
                           marginTop: "2rem",
                           border: "thick black double",
                           backgroundColor: "white",
+                          borderRadius: "10px",
                         }}
                         width="90%"
                         alignItems="center"
