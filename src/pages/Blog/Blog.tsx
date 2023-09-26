@@ -30,6 +30,7 @@ import { Link } from "react-router-dom";
 import { ErrorPage } from "pages/Error/Error";
 import { getMainTheme } from "utils/utils";
 import { Title } from "components/TItle";
+import { Pagination } from "components/Pagination";
 
 const isAuthenticated = authenticationCheck();
 const isTestAuthenticated = testAuthenticationCheck();
@@ -49,6 +50,7 @@ export function Blog() {
   const [posts, setPosts] = React.useState([]);
   const [deleteId, setDeleteId] = React.useState({ id: "", idx: -1 });
   const [openDelete, setOpenDelete] = React.useState(false);
+  const [paginatedPosts, setPaginatedPosts] = React.useState([]);
   const handleOpenDelete = () => setOpenDelete(true);
   const handleCloseDelete = () => setOpenDelete(false);
 
@@ -109,8 +111,8 @@ export function Blog() {
               </IconButton>
             ) : null}
             <Divider sx={{ backgroundColor: "white", borderBottomWidth: 4 }} />
-            {posts &&
-              posts
+            {paginatedPosts &&
+              paginatedPosts
                 .sort((a, b) => b.createdAt - a.createdAt)
                 .map((post, idx) => {
                   return (
@@ -177,11 +179,15 @@ export function Blog() {
                           </Grid>
                         )}
                       </Grid>
-
                       <Grid width="5%"></Grid>
                     </Grid>
                   );
                 })}
+            <Pagination
+              items={posts}
+              setPaginatedItems={setPaginatedPosts}
+              pageLength="3"
+            />
           </Grid>
           <Footer />
 
