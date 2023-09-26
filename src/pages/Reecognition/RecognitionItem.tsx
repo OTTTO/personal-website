@@ -82,7 +82,7 @@ export function RecognitionItem({ left, up, content, source, href }) {
         textAlign="left"
         color="black"
         border="white 1px solid"
-        borderRadius="10px"
+        borderRadius="7px"
         padding="1rem 1rem 0rem 1rem"
         width="60%"
         margin={

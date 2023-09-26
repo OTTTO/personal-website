@@ -154,7 +154,7 @@ export function Home() {
                 sx={{
                   wordWrap: "break-word",
                   backgroundColor: "white",
-                  borderRadius: "10px",
+                  border: "double thick black",
                 }}
               >
                 {(isAuthenticated || isTestAuthenticated) && edit ? (

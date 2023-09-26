@@ -1,4 +1,4 @@
-import { Box, Grid, ThemeProvider } from "@mui/material";
+import { Box, Divider, Grid, ThemeProvider } from "@mui/material";
 import mainTheme from "themes/mainTheme";
 
 import React, { useContext, useEffect } from "react";
@@ -22,6 +22,7 @@ import { Experience } from "./Experience";
 import { SideIcons } from "./SideIcons";
 import { Skills } from "./Skills";
 import { ThemeContext } from "themes/context";
+import { Title } from "components/TItle";
 
 const isAuthenticated = authenticationCheck();
 const isTestAuthenticated = testAuthenticationCheck();
@@ -141,18 +142,25 @@ export function Resume() {
         <Grid border="white solid .25rem">
           <Menu backgroundColor={backgroundColor} />
           <Grid
-            padding="1rem 0rem 1rem 0rem"
+            padding="0rem 0rem 1rem 0rem"
             sx={{
               position: "relative",
               background: getMainTheme(theme),
             }}
           >
+            <Title title="RESUME" />
+            <Divider
+              sx={{
+                backgroundColor: "white",
+                borderBottomWidth: 4,
+              }}
+            />
             {!isDeviceWidth && <SideIcons />}
             <Box
               padding="1rem"
               border="black thick double"
               sx={{
-                margin: "auto",
+                margin: "1rem auto 0",
                 width: isDeviceWidth ? "80%" : "55%",
                 backgroundColor: "white",
               }}

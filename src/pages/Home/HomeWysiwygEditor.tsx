@@ -17,7 +17,7 @@ export function HomeWysiwygEditor({
     <WysiwygEditor
       content={home[property]}
       onChange={(value) => handleContentChange(value, property)}
-      options={["inline", "link", "textAlign"]}
+      options={["inline", "link", "textAlign", "fontSize"]}
       expanded
       first={home[property].length > 0}
       error={

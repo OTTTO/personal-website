@@ -26,7 +26,6 @@ export function ProjectItem({
         padding: "1rem",
         margin: idx !== projects.length - 1 ? "1rem 0" : "1rem 0rem 0rem 0rem",
         border: "thick double black",
-        borderRadius: "10px",
       }}
       width="90%"
       alignItems="center"

@@ -7,7 +7,7 @@ import { Projects } from "pages/Projects/Projects";
 import { PasswordGenerator } from "pages/Projects/PasswordGenerator";
 import { Blog } from "pages/Blog/Blog";
 import { Post } from "pages/Blog/Post";
-import { LiveTraining } from "pages/LiveTraining/LiveTraining";
+import { Mentorship } from "pages/Mentorship/Mentorship";
 import { Recognition } from "pages/Reecognition/Recognition";
 
 function AppRoutes() {
@@ -27,7 +27,7 @@ function AppRoutes() {
         <Route path="/blog/post/new" element={<Post />} />
         <Route path="/blog/post/:id" element={<Post />} />
         <Route path="/blog/post/edit/:id" element={<Post />} />
-        <Route path="/training" element={<LiveTraining />} />
+        <Route path="/mentorship" element={<Mentorship />} />
         <Route path="/recognition" element={<Recognition />} />
       </Routes>
     </BrowserRouter>

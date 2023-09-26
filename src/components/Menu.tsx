@@ -108,6 +108,7 @@ export function Menu({
                     sx={{
                       margin: "1.2rem 1rem 0rem 0rem",
                       border: "white solid ",
+                      // borderRadius: "0",
                       "&:hover": {
                         boxShadow: "0 0 5px white, inset 0 0 5px white;",
                       },
@@ -178,12 +179,12 @@ export function Menu({
                       </MenuItem>
                       <MenuItem
                         sx={{ border: "black solid" }}
-                        {...{ component: Link, to: "/training" }}
+                        {...{ component: Link, to: "/mentorship" }}
                         onClick={() => {
                           popupState.close();
                         }}
                       >
-                        <Typography variant="h6">TRAINING</Typography>
+                        <Typography variant="h6">MENTORSHIP</Typography>
                       </MenuItem>
                     </MuiMenu>
                   </ThemeProvider>
@@ -264,7 +265,7 @@ export function Menu({
               </Fab>
               <Fab
                 variant="extended"
-                {...{ component: Link, to: "/training" }}
+                {...{ component: Link, to: "/mentorship" }}
                 sx={{ margin: "1rem 0.5rem 0rem 0rem" }}
                 size={isLarger ? "large" : "small"}
               >
@@ -274,7 +275,7 @@ export function Menu({
                     fontSize={isLarger ? "large" : "small"}
                   />
                 ) : null}
-                <Typography variant="h4">TRAINING</Typography>
+                <Typography variant="h4">MENTORSHIP</Typography>
               </Fab>
             </>
           )}

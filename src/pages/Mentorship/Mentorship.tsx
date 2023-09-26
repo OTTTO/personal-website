@@ -24,9 +24,12 @@ import { AuthButtons } from "components/AuthButtons";
 import { WysiwygEditor } from "components/WysiwygEditor";
 import { ErrorPage } from "pages/Error/Error";
 import { Loading } from "components/Loading";
+import useWindowDimensions from "hooks/useWindowDimensions";
 
-export function LiveTraining() {
+export function Mentorship() {
   const { theme } = useContext(ThemeContext);
+  const { width } = useWindowDimensions();
+  const isMobile = width <= 500;
   const isAuthenticated = authenticationCheck();
   const isTestAuthenticated = testAuthenticationCheck();
   const [loading, setLoading] = useState(true);
@@ -53,7 +56,7 @@ export function LiveTraining() {
         }
       );
     }
-    window.location.replace("/training");
+    window.location.replace("/mentorship");
   };
 
   const testTraining = getStorage("training");
@@ -91,19 +94,31 @@ export function LiveTraining() {
             container
             direction="column"
             margin="0 auto"
-            paddingBottom="2rem"
-            sx={{ background: getMainTheme(theme) }}
+            paddingBottom={
+              isAuthenticated || isTestAuthenticated ? "0" : "2rem"
+            }
+            sx={{
+              background: getMainTheme(theme),
+            }}
           >
-            <Title title="LIVE TRAINING" />
-            <Divider sx={{ backgroundColor: "white", borderBottomWidth: 4 }} />
+            <Title title="MENTORSHIP" />
+            <Divider
+              sx={{
+                backgroundColor: "white",
+                borderBottomWidth: 4,
+              }}
+            />
 
             <Grid>
               {((!isAuthenticated && !isTestAuthenticated) || !edit) && (
                 <Typography
-                  margin="2rem 10%"
-                  padding=".5rem 1rem"
+                  margin={isMobile ? "1rem 5% 0" : "2rem 10% 1rem"}
+                  padding="0rem .5rem"
                   fontSize="1rem"
-                  sx={{ backgroundColor: "white", borderRadius: "10px" }}
+                  sx={{
+                    backgroundColor: "white",
+                    border: "double thick black",
+                  }}
                   dangerouslySetInnerHTML={{
                     __html: DOMPurify.sanitize(training.content),
                   }}
@@ -112,7 +127,7 @@ export function LiveTraining() {
             </Grid>
             <Grid
               sx={{
-                paddingTop: "3rem",
+                paddingTop: "1rem",
                 display:
                   (!isAuthenticated && !isTestAuthenticated) || !edit
                     ? "none"

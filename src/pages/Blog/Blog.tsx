@@ -124,10 +124,9 @@ export function Blog() {
                             !isAuthenticated && !isTestAuthenticated
                               ? "1rem"
                               : "1rem 1rem 0rem 1rem",
-                          marginTop: "2rem",
+                          marginTop: "1rem",
                           border: "thick black double",
                           backgroundColor: "white",
-                          borderRadius: "10px",
                         }}
                         width="90%"
                         alignItems="center"

@@ -12,7 +12,7 @@ export function SideIcons() {
         container={true}
         justifyContent="space-between"
         direction="column"
-        height="100%"
+        height="92%"
         sx={{ position: "absolute", left: "0rem", marginLeft: "2%" }}
       >
         <Grid item>
@@ -46,7 +46,7 @@ export function SideIcons() {
         container={true}
         justifyContent="space-between"
         direction="column"
-        height="100%"
+        height="92%"
         sx={{
           position: "absolute",
           right: "0rem",
