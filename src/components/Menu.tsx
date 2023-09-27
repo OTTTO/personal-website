@@ -61,7 +61,7 @@ export function Menu({
   const { width } = useWindowDimensions();
   const mobileSize = 400;
   const isMobile = width < mobileSize;
-  const smallerSize = 1435;
+  const smallerSize = 1500;
   const isLarger = width > smallerSize;
 
   return (

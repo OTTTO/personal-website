@@ -4,6 +4,7 @@ import { WysiwygEditor } from "components/WysiwygEditor";
 import { RemoveCircle } from "@mui/icons-material";
 import * as DOMPurify from "dompurify";
 import { Link } from "react-router-dom";
+import useWindowDimensions from "hooks/useWindowDimensions";
 
 export function ProjectItem({
   projects,
@@ -18,8 +19,27 @@ export function ProjectItem({
   handleContentChange,
   removeProject,
 }) {
+  const { width } = useWindowDimensions();
+  const isMobile = width <= 500;
+
+  let className;
+  if (isMobile) className = "";
+  else if (idx % 2 === 0) className = "projectAnimationEven";
+  else className = "projectAnimationOdd";
+
   return (
+    // TODO: fix mobile waypoint animation
+    // <Waypoint
+    //   onEnter={() => {
+    //     document
+    //       .getElementById(`project_${idx}`)
+    //       .classList.add(
+    //         idx % 2 === 0 ? "projectAnimationOdd" : "projectAnimationEven"
+    //       );
+    //   }}
+    // >
     <Grid
+      id={`project_${idx}`}
       container
       sx={{
         backgroundColor: "white",
@@ -30,6 +50,7 @@ export function ProjectItem({
       width="90%"
       alignItems="center"
       justifyContent="center"
+      className={className}
     >
       <Grid width={isSmaller ? "80%" : "15%"}>
         <Grid
@@ -139,5 +160,6 @@ export function ProjectItem({
         )}
       </Grid>
     </Grid>
+    // </Waypoint>
   );
 }

@@ -81,6 +81,36 @@
   border: double thick black;
 }
 
+@keyframes moveRightLeft {
+  0% {
+    transform: translate(-95%);
+    opacity: 0;
+  }
+  100% {
+    transform: translate(0%);
+    opacity: 1;
+  }
+}
+
+@keyframes moveLeftRight {
+  0% {
+    transform: translate(95%);
+    opacity: 0;
+  }
+  100% {
+    transform: translate(0%);
+    opacity: 1;
+  }
+}
+
+.projectAnimationEven {
+  animation: moveRightLeft 1s;
+}
+
+.projectAnimationOdd {
+  animation: moveLeftRight 1s;
+}
+
 .brokenRobot {
   display: block;
   margin: auto;

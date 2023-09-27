@@ -14,7 +14,6 @@ export function ProjectImage({
 }) {
   const project = projects[idx];
   const [isChecked, setIsChecked] = React.useState(project.openNewTab);
-  const [imgLoaded, setImgLoaded] = React.useState(false);
 
   const checkboxOnChange = (idx: number) => {
     setIsChecked(!isChecked);
@@ -47,8 +46,7 @@ export function ProjectImage({
               ? project.title
               : ""
           }
-          className={imgLoaded ? "projectImg" : ""}
-          onLoad={() => setImgLoaded(true)}
+          className={"projectImg"}
         ></img>
       )}
       {(isAuthenticated || isTestAuthenticated) && edit && (

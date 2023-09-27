@@ -98,3 +98,78 @@ export function getEmojiShadowTheme(theme: Themes) {
     return "0 -0.5rem 1.5rem blue, 0 -1rem 1.5rem white, 0 0.5rem 1.5rem blue, 0 1rem 1.5rem white;";
   }
 }
+
+export function getRecognitionAnimationStyle(animation, isMobile, width) {
+  return {
+    "@keyframes moveLeftRight": {
+      "0%": {
+        left: 0,
+      },
+      "50%": {
+        left: !isMobile ? width - width * 0.7 : width - width * 0.85,
+      },
+      "100%": {
+        left: 0,
+      },
+    },
+    "@keyframes moveRightLeft": {
+      "0%": {
+        right: 0,
+      },
+      "50%": {
+        right: !isMobile ? width - width * 0.7 : width - width * 0.85,
+      },
+      "100%": {
+        right: 0,
+      },
+    },
+    "@keyframes moveDownUp": {
+      "0%": {
+        top: "-1rem",
+      },
+      "50%": {
+        top: 0,
+      },
+      "100%": {
+        top: "-1rem",
+      },
+    },
+    "@keyframes moveUpDown": {
+      "0%": {
+        top: 0,
+      },
+      "50%": {
+        top: "-1rem",
+      },
+      "100%": {
+        top: 0,
+      },
+    },
+    animation,
+    position: "relative",
+  };
+}
+
+export function getRecognitionAnimation(left, up, horizTime) {
+  if (left && up)
+    return `moveLeftRight ${horizTime} infinite, moveUpDown 15s infinite`;
+  else if (left)
+    return `moveLeftRight ${horizTime} infinite, moveDownUp 15s infinite`;
+  else if (!left && up)
+    return `moveRightLeft ${horizTime} infinite, moveUpDown 15s infinite`;
+  else return `moveRightLeft ${horizTime} infinite, moveDownUp 15s infinite`;
+}
+
+export function getRecognitionMargin(left, isMobile) {
+  const leftMargin = "2rem 0 2rem 2rem";
+  const rightMargin = "2rem 2rem 2rem auto";
+  const leftMobileMargin = "2rem 0 0rem 2rem";
+  const rightMobileMargin = "2rem 2rem 0rem auto";
+  return left
+    ? isMobile
+      ? leftMobileMargin
+      : leftMargin
+    : isMobile
+    ? rightMobileMargin
+    : rightMargin;
+}
