@@ -27,6 +27,10 @@ const isAuthenticated = authenticationCheck();
 const isTestAuthenticated = testAuthenticationCheck();
 
 export function Home() {
+  if (window.location.href.split("/")[3] !== "") {
+    window.location.href = "/";
+  }
+
   const { theme } = useContext(ThemeContext);
   const [loading, setLoading] = React.useState(true);
   const [error, setError] = React.useState(false);
