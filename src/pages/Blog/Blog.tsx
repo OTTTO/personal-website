@@ -77,7 +77,7 @@ export function Blog() {
           setError(true);
         });
       if (resp) {
-        setPosts(resp.data);
+        setPosts(resp.data.sort((a, b) => b.createdAt - a.createdAt));
       }
       setLoading(false);
     };
@@ -112,77 +112,75 @@ export function Blog() {
             ) : null}
             <Divider sx={{ backgroundColor: "white", borderBottomWidth: 4 }} />
             {paginatedPosts &&
-              paginatedPosts
-                .sort((a, b) => b.createdAt - a.createdAt)
-                .map((post, idx) => {
-                  return (
-                    <Grid container key={idx}>
-                      <Grid width="5%"></Grid>
-                      <Grid
-                        container
-                        direction="column"
-                        sx={{
-                          padding:
-                            !isAuthenticated && !isTestAuthenticated
-                              ? "1rem"
-                              : "1rem 1rem 0rem 1rem",
-                          marginTop: "1rem",
-                          border: "thick black double",
-                          backgroundColor: "white",
-                        }}
-                        width="90%"
-                        alignItems="center"
-                        justifyContent="center"
+              paginatedPosts.map((post, idx) => {
+                return (
+                  <Grid container key={idx}>
+                    <Grid width="5%"></Grid>
+                    <Grid
+                      container
+                      direction="column"
+                      sx={{
+                        padding:
+                          !isAuthenticated && !isTestAuthenticated
+                            ? "1rem"
+                            : "1rem 1rem 0rem 1rem",
+                        marginTop: "1rem",
+                        border: "thick black double",
+                        backgroundColor: "white",
+                      }}
+                      width="90%"
+                      alignItems="center"
+                      justifyContent="center"
+                    >
+                      <Typography
+                        variant="h5"
+                        sx={{ textDecoration: "underline", display: "block" }}
                       >
-                        <Typography
-                          variant="h5"
-                          sx={{ textDecoration: "underline", display: "block" }}
-                        >
-                          <b>{post.title}</b>
-                        </Typography>
-                        <Typography variant="h5">{post.author}</Typography>
+                        <b>{post.title}</b>
+                      </Typography>
+                      <Typography variant="h5">{post.author}</Typography>
+                      <Typography>
+                        {new Date(post.createdAt).toLocaleDateString()}
+                      </Typography>
+                      <Typography
+                        dangerouslySetInnerHTML={{
+                          __html: DOMPurify.sanitize(
+                            `${post.content.slice(0, 500)}...`
+                          ),
+                        }}
+                      ></Typography>
+                      {!isAuthenticated && !isTestAuthenticated ? (
                         <Typography>
-                          {new Date(post.createdAt).toLocaleDateString()}
+                          <Link to={`/blog/post/${post.id}`}>
+                            - READ MORE -
+                          </Link>
                         </Typography>
-                        <Typography
-                          dangerouslySetInnerHTML={{
-                            __html: DOMPurify.sanitize(
-                              `${post.content.slice(0, 500)}...`
-                            ),
-                          }}
-                        ></Typography>
-                        {!isAuthenticated && !isTestAuthenticated ? (
-                          <Typography>
-                            <Link to={`/blog/post/${post.id}`}>
-                              - READ MORE -
-                            </Link>
-                          </Typography>
-                        ) : (
-                          <Grid>
-                            <IconButton
-                              onClick={async () => {
-                                setDeleteId({ id: post.id, idx });
-                                handleOpenDelete();
-                              }}
-                            >
-                              <RemoveCircle
-                                sx={{ mr: 1 }}
-                                style={{ color: "black" }}
-                              />
-                            </IconButton>
-                            <IconButton href={`/blog/post/edit/${post.id}`}>
-                              <EditOutlined
-                                sx={{ mr: 1 }}
-                                style={{ color: "black" }}
-                              />
-                            </IconButton>
-                          </Grid>
-                        )}
-                      </Grid>
-                      <Grid width="5%"></Grid>
+                      ) : (
+                        <Grid>
+                          <IconButton
+                            onClick={async () => {
+                              setDeleteId({ id: post.id, idx });
+                              handleOpenDelete();
+                            }}
+                          >
+                            <RemoveCircle
+                              sx={{ mr: 1 }}
+                              style={{ color: "black" }}
+                            />
+                          </IconButton>
+                          <IconButton href={`/blog/post/edit/${post.id}`}>
+                            <EditOutlined
+                              sx={{ mr: 1 }}
+                              style={{ color: "black" }}
+                            />
+                          </IconButton>
+                        </Grid>
+                      )}
                     </Grid>
-                  );
-                })}
+                    <Grid width="5%"></Grid>
+                  </Grid>
+                );
+              })}
             <Pagination
               items={posts}
               setPaginatedItems={setPaginatedPosts}
