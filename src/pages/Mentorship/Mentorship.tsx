@@ -89,7 +89,7 @@ export function Mentorship() {
     <Grid border="double thick black">
       <Grid border=".25rem white solid">
         <ThemeProvider theme={projectsTheme}>
-          <Menu backgroundColor="black"></Menu>
+          <Menu backgroundColor="black" />
           <Grid
             container
             direction="column"

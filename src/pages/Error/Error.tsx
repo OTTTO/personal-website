@@ -8,7 +8,7 @@ export function ErrorPage() {
   return (
     <ThemeProvider theme={mainTheme}>
       <Grid border="double thick black">
-        <Menu backgroundColor="white"></Menu>
+        <Menu backgroundColor="white" />
         <Grid
           container
           direction="column"

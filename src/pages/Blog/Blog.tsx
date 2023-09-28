@@ -96,7 +96,7 @@ export function Blog() {
     <Grid border="double thick black">
       <Grid sx={{ height: "vh100" }} border=".25rem white solid">
         <ThemeProvider theme={projectsTheme}>
-          <Menu backgroundColor="black"></Menu>
+          <Menu backgroundColor="black" />
           <Grid
             container
             direction="column"

@@ -117,7 +117,7 @@ export function Post() {
         display={isLoading ? "none" : "visible"}
       >
         <ThemeProvider theme={mainTheme}>
-          <Menu backgroundColor="black" borderSides></Menu>
+          <Menu backgroundColor="black" borderSides />
           <Grid
             container
             direction="column"

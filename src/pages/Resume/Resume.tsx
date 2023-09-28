@@ -134,13 +134,11 @@ export function Resume() {
   if (loading) return <Loading />;
   if (error) return <ErrorPage />;
 
-  const backgroundColor = "black";
-
   return (
     <Grid border="double thick black">
       <ThemeProvider theme={mainTheme}>
         <Grid border="white solid .25rem">
-          <Menu backgroundColor={backgroundColor} />
+          <Menu backgroundColor="black" />
           <Grid
             padding="0rem 0rem 1rem 0rem"
             sx={{

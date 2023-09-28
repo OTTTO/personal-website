@@ -88,12 +88,10 @@ function AdminLogin() {
     window.location.replace("/");
   };
 
-  const backgroundColor = "black";
-
   return (
     <ThemeProvider theme={mainTheme}>
       <Grid border="white solid .25rem">
-        <Menu backgroundColor={backgroundColor}></Menu>
+        <Menu backgroundColor="black" />
         <Grid
           border="black solid .25rem"
           sx={{ background: getMainTheme(theme) }}

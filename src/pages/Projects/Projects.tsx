@@ -147,7 +147,7 @@ export function Projects() {
     <Grid border="thick double black">
       <Grid border="white solid .25rem">
         <ThemeProvider theme={projectsTheme}>
-          <Menu backgroundColor="black"></Menu>
+          <Menu backgroundColor="black" />
           <Grid
             container
             direction="column"

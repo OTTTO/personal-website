@@ -109,7 +109,7 @@ export function PasswordGenerator() {
   return (
     <Grid container direction="column" border="double thick black">
       <ThemeProvider theme={mainTheme}>
-        <Menu backgroundColor="black" borderSides></Menu>
+        <Menu backgroundColor="black" borderSides />
       </ThemeProvider>
       <Grid
         padding="1rem 0rem"
