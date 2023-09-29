@@ -23,7 +23,7 @@ export function ProjectItem({
   const isMobile = width <= 500;
 
   let className;
-  if (isMobile) className = "";
+  if (isMobile || isAuthenticated || isTestAuthenticated) className = "";
   else if (idx % 2 === 0) className = "projectAnimationEven";
   else className = "projectAnimationOdd";
 

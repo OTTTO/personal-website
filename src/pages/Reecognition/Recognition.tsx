@@ -1,4 +1,4 @@
-import { Grid, Divider, IconButton } from "@mui/material";
+import { Grid, IconButton } from "@mui/material";
 import { ThemeProvider } from "@emotion/react";
 import projectsTheme from "themes/projectsTheme";
 import { Menu } from "components/Menu";
@@ -29,6 +29,7 @@ import { AuthButtons } from "components/AuthButtons";
 import { RecognitionEdit } from "./RecognitionEdit";
 import { ReferralTabs } from "./ReferralTabs";
 import useWindowDimensions from "hooks/useWindowDimensions";
+import { TitleDivider } from "components/TitleDivider";
 
 export function Recognition() {
   const { theme } = useContext(ThemeContext);
@@ -167,7 +168,7 @@ export function Recognition() {
                 <AddCircle sx={{ mr: 1 }} style={{ color: "white" }} />
               </IconButton>
             ) : null}
-            <Divider sx={{ backgroundColor: "white", borderBottomWidth: 4 }} />
+            <TitleDivider />
             <ReferralTabs activeTab={activeTab} setActiveTab={setActiveTab} />
             <Grid>
               <DragDropContext onDragEnd={onDragEnd}>
@@ -203,6 +204,7 @@ export function Recognition() {
                                 {(!isAuthenticated && !isTestAuthenticated) ||
                                 !edit ? (
                                   <RecognitionItem
+                                    idx={idx}
                                     content={item.content}
                                     source={item.source}
                                     href={item.href}

@@ -22,6 +22,7 @@ import { Title } from "components/TItle";
 import { HomeWysiwygEditor } from "pages/Home/HomeWysiwygEditor";
 import { HomeText } from "pages/Home/HomeText";
 import useWindowDimensions from "hooks/useWindowDimensions";
+import { TitleDivider } from "components/TitleDivider";
 
 const isAuthenticated = authenticationCheck();
 const isTestAuthenticated = testAuthenticationCheck();
@@ -115,16 +116,12 @@ export function Home() {
             sx={{ background: getMainTheme(theme) }}
           >
             <Title title="WELCOME!!" />
-            <Divider sx={{ backgroundColor: "white", borderBottomWidth: 4 }} />
+            <TitleDivider />
             <Grid
               container
               direction="column"
               justifyContent="center"
-              sx={{
-                paddingTop: "2rem",
-
-                marginTop: "1rem",
-              }}
+              marginTop="1rem"
             >
               <img
                 src={`${process.env.REACT_APP_S3_CLOUDFRONT}/${home.mainImg}`}
@@ -153,7 +150,7 @@ export function Home() {
                 container
                 direction="column"
                 padding="0 1rem 0rem 1rem"
-                margin="2rem auto 0 auto"
+                margin="1rem auto 0 auto"
                 width={isMobile ? "90%" : "70%"}
                 sx={{
                   wordWrap: "break-word",
@@ -174,13 +171,13 @@ export function Home() {
 
                 <Grid margin="1rem 0">
                   <Divider
-                    sx={{ backgroundColor: "white", borderBottomWidth: 1 }}
+                    sx={{ backgroundColor: "black", borderBottomWidth: 1 }}
                   />
                   <Divider
-                    sx={{ backgroundColor: "black", borderBottomWidth: 2 }}
+                    sx={{ backgroundColor: "white", borderBottomWidth: 2 }}
                   />
                   <Divider
-                    sx={{ backgroundColor: "white", borderBottomWidth: 1 }}
+                    sx={{ backgroundColor: "black", borderBottomWidth: 1 }}
                   />
                 </Grid>
 

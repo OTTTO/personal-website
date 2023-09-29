@@ -11,6 +11,7 @@ import {
 import axios from "axios";
 import { Footer } from "components/Footer";
 import { Menu } from "components/Menu";
+import { Title } from "components/TItle";
 import React, { useContext } from "react";
 import { ThemeContext } from "themes/context";
 import mainTheme from "themes/mainTheme";
@@ -23,7 +24,7 @@ import { testResume } from "types/resume";
 import { testTraining } from "types/training";
 import { getMainTheme } from "utils/utils";
 
-function AdminLogin() {
+export function AdminLogin() {
   const { theme } = useContext(ThemeContext);
   const [values, setValues] = React.useState<State>({
     email: "",
@@ -88,91 +89,95 @@ function AdminLogin() {
     window.location.replace("/");
   };
 
+  function AdminLoginLines() {
+    return (
+      <>
+        {new Array(9).fill(true).map((_, idx) => (
+          <hr key={idx}></hr>
+        ))}
+      </>
+    );
+  }
+
   return (
-    <ThemeProvider theme={mainTheme}>
-      <Grid border="white solid .25rem">
-        <Menu backgroundColor="black" />
-        <Grid
-          border="black solid .25rem"
-          sx={{ background: getMainTheme(theme) }}
-        >
-          {new Array(9).fill(true).map((el, idx) => (
-            <hr key={idx}></hr>
-          ))}
-          <Grid sx={{ margin: "0 auto", width: "80%" }}>
-            <Grid container direction="column">
-              <FormControl sx={{ m: 1 }} variant="outlined">
-                <OutlinedInput
-                  id="outlined-email"
-                  type="text"
-                  value={values.email}
-                  onChange={handleChange("email")}
-                  placeholder="Email"
+    <Grid border="double thick black">
+      <ThemeProvider theme={mainTheme}>
+        <Grid border="white solid .25rem">
+          <Menu backgroundColor="black" />
+          <Grid sx={{ background: getMainTheme(theme), margin: "0 0 -2rem" }}>
+            <Title title="ADMIN LOGIN" />
+            <AdminLoginLines />
+            <Grid sx={{ margin: "0 auto", width: "80%" }}>
+              <Grid container direction="column">
+                <FormControl sx={{ m: 1 }} variant="outlined">
+                  <OutlinedInput
+                    id="outlined-email"
+                    type="text"
+                    value={values.email}
+                    onChange={handleChange("email")}
+                    placeholder="Email"
+                    onKeyDown={handleKeyDown}
+                    autoFocus
+                    sx={{ backgroundColor: "white" }}
+                  ></OutlinedInput>
+                </FormControl>
+                <FormControl sx={{ m: 1 }} variant="outlined">
+                  <OutlinedInput
+                    id="outlined-adornment-password"
+                    type={values.showPassword ? "text" : "password"}
+                    value={values.password}
+                    onChange={handleChange("password")}
+                    placeholder="Password"
+                    onKeyDown={handleKeyDown}
+                    endAdornment={
+                      <InputAdornment position="end">
+                        <IconButton
+                          aria-label="toggle password visibility"
+                          onClick={handleClickShowPassword}
+                          onMouseDown={handleMouseDownPassword}
+                          edge="end"
+                        >
+                          {values.showPassword ? (
+                            <VisibilityOff />
+                          ) : (
+                            <Visibility />
+                          )}
+                        </IconButton>
+                      </InputAdornment>
+                    }
+                    label="Password"
+                    sx={{ backgroundColor: "white" }}
+                  />
+                </FormControl>
+                <Button
+                  sx={{ m: 1 }}
+                  variant="contained"
                   onKeyDown={handleKeyDown}
-                  autoFocus
-                  sx={{ backgroundColor: "white" }}
-                ></OutlinedInput>
-              </FormControl>
-              <FormControl sx={{ m: 1 }} variant="outlined">
-                <OutlinedInput
-                  id="outlined-adornment-password"
-                  type={values.showPassword ? "text" : "password"}
-                  value={values.password}
-                  onChange={handleChange("password")}
-                  placeholder="Password"
-                  onKeyDown={handleKeyDown}
-                  endAdornment={
-                    <InputAdornment position="end">
-                      <IconButton
-                        aria-label="toggle password visibility"
-                        onClick={handleClickShowPassword}
-                        onMouseDown={handleMouseDownPassword}
-                        edge="end"
-                      >
-                        {values.showPassword ? (
-                          <VisibilityOff />
-                        ) : (
-                          <Visibility />
-                        )}
-                      </IconButton>
-                    </InputAdornment>
-                  }
-                  label="Password"
-                  sx={{ backgroundColor: "white" }}
-                />
-              </FormControl>
-              <Button
-                sx={{ m: 1 }}
-                variant="contained"
-                onKeyDown={handleKeyDown}
-                onClick={handleSubmit}
-              >
-                LOG IN
-              </Button>
-              <Button
-                sx={{
-                  m: 1,
-                  backgroundColor: "green",
-                  "&:hover": {
-                    color: "white",
-                    backgroundColor: "red",
-                  },
-                }}
-                variant="contained"
-                onClick={handleTestAdminClick}
-              >
-                TEST ADMIN FUNCTIONALITY
-              </Button>
+                  onClick={handleSubmit}
+                >
+                  LOG IN
+                </Button>
+                <Button
+                  sx={{
+                    m: 1,
+                    backgroundColor: "green",
+                    "&:hover": {
+                      color: "white",
+                      backgroundColor: "red",
+                    },
+                  }}
+                  variant="contained"
+                  onClick={handleTestAdminClick}
+                >
+                  TEST ADMIN FUNCTIONALITY
+                </Button>
+              </Grid>
             </Grid>
+            <AdminLoginLines />
           </Grid>
-          {new Array(9).fill(true).map((el, idx) => (
-            <hr key={idx}></hr>
-          ))}
+          <Footer />
         </Grid>
-        <Footer />
-      </Grid>
-    </ThemeProvider>
+      </ThemeProvider>
+    </Grid>
   );
 }
-
-export default AdminLogin;

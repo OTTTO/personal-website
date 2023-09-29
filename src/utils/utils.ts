@@ -99,14 +99,19 @@ export function getEmojiShadowTheme(theme: Themes) {
   }
 }
 
-export function getRecognitionAnimationStyle(animation, isMobile, width) {
+export function getRecognitionAnimationStyle(
+  animation,
+  isMobile,
+  width,
+  itemWidth
+) {
   return {
     "@keyframes moveLeftRight": {
       "0%": {
         left: 0,
       },
       "50%": {
-        left: !isMobile ? width - width * 0.7 : width - width * 0.85,
+        left: width - itemWidth - 60,
       },
       "100%": {
         left: 0,
@@ -117,7 +122,7 @@ export function getRecognitionAnimationStyle(animation, isMobile, width) {
         right: 0,
       },
       "50%": {
-        right: !isMobile ? width - width * 0.7 : width - width * 0.85,
+        right: width - itemWidth - 60,
       },
       "100%": {
         right: 0,
@@ -161,9 +166,9 @@ export function getRecognitionAnimation(left, up, horizTime) {
 }
 
 export function getRecognitionMargin(left, isMobile) {
-  const leftMargin = "2rem 0 2rem 2rem";
+  const leftMargin = "2rem 0 2rem 1rem";
   const rightMargin = "2rem 2rem 2rem auto";
-  const leftMobileMargin = "2rem 0 0rem 2rem";
+  const leftMobileMargin = "2rem 0 0rem 1rem";
   const rightMobileMargin = "2rem 2rem 0rem auto";
   return left
     ? isMobile

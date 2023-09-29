@@ -4,7 +4,6 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
-  Divider,
   Grid,
   IconButton,
   Modal,
@@ -34,6 +33,7 @@ import { Peg, Player } from "types/trouble";
 import { ThemeContext } from "themes/context";
 import { getMainTheme } from "utils/utils";
 import { Title } from "components/TItle";
+import { TitleDivider } from "components/TitleDivider";
 
 const HOME = -1;
 const startEndSpaces = [1, 8, 15, 22];
@@ -886,17 +886,8 @@ export function Trouble() {
         margin="0 auto .25rem auto"
         sx={{ background: getMainTheme(theme) }}
       >
-        <ThemeProvider theme={mainTheme}>
-          <Title title="TROUBLE" />
-        </ThemeProvider>
-        <Divider
-          sx={{
-            backgroundColor: "#white",
-            borderColor: "white",
-            borderBottomWidth: 3,
-            opacity: 1,
-          }}
-        />
+        <Title title="TROUBLE" />
+        <TitleDivider />
         <Grid
           container
           justifyContent="center"

@@ -1,6 +1,5 @@
-import { Box, Divider, Grid, ThemeProvider } from "@mui/material";
+import { Box, Grid, ThemeProvider } from "@mui/material";
 import mainTheme from "themes/mainTheme";
-
 import React, { useContext, useEffect } from "react";
 import { Menu } from "components/Menu";
 import { Footer } from "components/Footer";
@@ -23,6 +22,7 @@ import { SideIcons } from "./SideIcons";
 import { Skills } from "./Skills";
 import { ThemeContext } from "themes/context";
 import { Title } from "components/TItle";
+import { TitleDivider } from "components/TitleDivider";
 
 const isAuthenticated = authenticationCheck();
 const isTestAuthenticated = testAuthenticationCheck();
@@ -147,12 +147,7 @@ export function Resume() {
             }}
           >
             <Title title="RESUME" />
-            <Divider
-              sx={{
-                backgroundColor: "white",
-                borderBottomWidth: 4,
-              }}
-            />
+            <TitleDivider />
             {!isDeviceWidth && <SideIcons />}
             <Box
               padding="1rem"
@@ -222,5 +217,3 @@ export function Resume() {
     </Grid>
   );
 }
-
-export default Resume;

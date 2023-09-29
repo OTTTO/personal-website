@@ -26,6 +26,7 @@ import { ThemeContext } from "themes/context";
 import { getMainTheme } from "utils/utils";
 import { Title } from "components/TItle";
 import { ProjectItem } from "./ProjectItem";
+import { TitleDivider } from "components/TitleDivider";
 
 const isAuthenticated = authenticationCheck();
 const isTestAuthenticated = testAuthenticationCheck();
@@ -161,7 +162,7 @@ export function Projects() {
                 <AddCircle sx={{ mr: 1 }} style={{ color: "white" }} />
               </IconButton>
             ) : null}
-            <Divider sx={{ backgroundColor: "white", borderBottomWidth: 4 }} />
+            <TitleDivider />
             <Grid>
               <DragDropContext onDragEnd={onDragEnd}>
                 <Droppable droppableId="droppable-list">

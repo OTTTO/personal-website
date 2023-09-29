@@ -1,6 +1,5 @@
 import {
   Container,
-  Divider,
   Grid,
   OutlinedInput,
   ThemeProvider,
@@ -26,6 +25,7 @@ import { AuthButtons } from "components/AuthButtons";
 import { ThemeContext } from "themes/context";
 import { Title } from "components/TItle";
 import { Themes } from "types/themes";
+import { PostHeaderDivider } from "./PostHeaderDivider";
 
 const isAuthenticated = authenticationCheck();
 const isTestAuthenticated = testAuthenticationCheck();
@@ -103,9 +103,6 @@ export function Post() {
   const newPost = window.location.href.includes("new");
   const isLoading = !newPost && loading;
 
-  // theme === Themes.Fire
-  // ? "linear-gradient(135deg, black, red)"
-  // : "linear-gradient(135deg, black, cyan, black, cyan)",
   return (
     <>
       <Grid display={isLoading ? "visible" : "none"}>
@@ -122,8 +119,7 @@ export function Post() {
             container
             direction="column"
             paddingBottom="2rem"
-            border="double thick black"
-            margin="0 auto .25rem auto"
+            margin="0 auto"
             width="99%"
             sx={{ background: getMainTheme(theme) }}
           >
@@ -140,33 +136,7 @@ export function Post() {
                 ></OutlinedInput>
               )}
             </Grid>
-            <Divider
-              sx={{
-                backgroundColor:
-                  (!isAuthenticated && !isTestAuthenticated) || !edit
-                    ? "white"
-                    : "black",
-                borderBottomWidth: 1,
-              }}
-            />
-            <Divider
-              sx={{
-                backgroundColor:
-                  (!isAuthenticated && !isTestAuthenticated) || !edit
-                    ? "black"
-                    : "white",
-                borderBottomWidth: 1,
-              }}
-            />
-            <Divider
-              sx={{
-                backgroundColor:
-                  (!isAuthenticated && !isTestAuthenticated) || !edit
-                    ? "white"
-                    : "black",
-                borderBottomWidth: 1,
-              }}
-            />
+            <PostHeaderDivider />
             <Grid padding=".5rem 0" width="95%" margin="0 auto">
               {(!isAuthenticated && !isTestAuthenticated) || !edit ? (
                 <Typography
@@ -196,33 +166,7 @@ export function Post() {
                 </Typography>
               )}
             </Grid>
-            <Divider
-              sx={{
-                backgroundColor:
-                  (!isAuthenticated && !isTestAuthenticated) || !edit
-                    ? "white"
-                    : "black",
-                borderBottomWidth: 1,
-              }}
-            />
-            <Divider
-              sx={{
-                backgroundColor:
-                  (!isAuthenticated && !isTestAuthenticated) || !edit
-                    ? "black"
-                    : "white",
-                borderBottomWidth: 1,
-              }}
-            />
-            <Divider
-              sx={{
-                backgroundColor:
-                  (!isAuthenticated && !isTestAuthenticated) || !edit
-                    ? "white"
-                    : "black",
-                borderBottomWidth: 1,
-              }}
-            />
+            <PostHeaderDivider />
             <Grid container>
               <Grid width="5%"></Grid>
               <Grid

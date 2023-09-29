@@ -13,7 +13,7 @@ export function MenuThemeButton({ isMobile, theme, setTheme, isHome }) {
       onClick={() => {
         setThemeEmoji(theme, setTheme);
       }}
-      className={isHome ? "themeButtonAnimation" : ""}
+      className="themeButtonAnimation"
     >
       <Typography
         fontSize="2rem"

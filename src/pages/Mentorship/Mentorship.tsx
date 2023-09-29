@@ -1,10 +1,4 @@
-import {
-  Container,
-  Divider,
-  Grid,
-  ThemeProvider,
-  Typography,
-} from "@mui/material";
+import { Container, Grid, ThemeProvider, Typography } from "@mui/material";
 import { Footer } from "components/Footer";
 import { Menu } from "components/Menu";
 import { Title } from "components/TItle";
@@ -25,6 +19,7 @@ import { WysiwygEditor } from "components/WysiwygEditor";
 import { ErrorPage } from "pages/Error/Error";
 import { Loading } from "components/Loading";
 import useWindowDimensions from "hooks/useWindowDimensions";
+import { TitleDivider } from "components/TitleDivider";
 
 export function Mentorship() {
   const { theme } = useContext(ThemeContext);
@@ -102,13 +97,7 @@ export function Mentorship() {
             }}
           >
             <Title title="MENTORSHIP" />
-            <Divider
-              sx={{
-                backgroundColor: "white",
-                borderBottomWidth: 4,
-              }}
-            />
-
+            <TitleDivider />
             <Grid>
               {((!isAuthenticated && !isTestAuthenticated) || !edit) && (
                 <Typography

@@ -5,7 +5,6 @@ import {
   RemoveCircle,
 } from "@mui/icons-material";
 import {
-  Divider,
   Grid,
   IconButton,
   Modal,
@@ -31,6 +30,7 @@ import { ErrorPage } from "pages/Error/Error";
 import { getMainTheme } from "utils/utils";
 import { Title } from "components/TItle";
 import { Pagination } from "components/Pagination";
+import { TitleDivider } from "components/TitleDivider";
 
 const isAuthenticated = authenticationCheck();
 const isTestAuthenticated = testAuthenticationCheck();
@@ -110,7 +110,7 @@ export function Blog() {
                 <AddCircle sx={{ mr: 1 }} style={{ color: "white" }} />
               </IconButton>
             ) : null}
-            <Divider sx={{ backgroundColor: "white", borderBottomWidth: 4 }} />
+            <TitleDivider />
             {paginatedPosts &&
               paginatedPosts.map((post, idx) => {
                 return (
