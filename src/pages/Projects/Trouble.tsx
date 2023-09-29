@@ -4,6 +4,7 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
+  Divider,
   Grid,
   IconButton,
   Modal,
@@ -32,6 +33,7 @@ import useWindowDimensions from "hooks/useWindowDimensions";
 import { Peg, Player } from "types/trouble";
 import { ThemeContext } from "themes/context";
 import { getMainTheme } from "utils/utils";
+import { Title } from "components/TItle";
 
 const HOME = -1;
 const startEndSpaces = [1, 8, 15, 22];
@@ -124,7 +126,7 @@ function Console({ text, update, finished, playerTurn }) {
     <Grid
       sx={{
         backgroundColor: "black",
-        margin: "2rem auto",
+        margin: "1rem auto",
         padding: "2rem 0rem",
         borderRadius: "1rem",
         maxWidth: "37rem",
@@ -863,6 +865,10 @@ export function Trouble() {
   const isSmall = width > smallerDeviceWidth;
   const { theme } = useContext(ThemeContext);
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   return (
     <Grid
       container
@@ -874,13 +880,23 @@ export function Trouble() {
         <Menu backgroundColor="black" borderSides />
       </ThemeProvider>
       <Grid
-        padding="1rem 0rem"
+        // padding="1rem 0rem"
         border="solid black .1rem"
         width="99%"
         margin="0 auto .25rem auto"
         sx={{ background: getMainTheme(theme) }}
       >
-        {/* BOARD */}
+        <ThemeProvider theme={mainTheme}>
+          <Title title="TROUBLE" />
+        </ThemeProvider>
+        <Divider
+          sx={{
+            backgroundColor: "#white",
+            borderColor: "white",
+            borderBottomWidth: 3,
+            opacity: 1,
+          }}
+        />
         <Grid
           container
           justifyContent="center"
@@ -891,7 +907,7 @@ export function Trouble() {
             padding: "2rem 0rem",
             borderRadius: "1rem",
           }}
-          margin="auto"
+          margin="1rem auto 0"
         >
           <Grid container justifyContent="space-between" padding="0rem 1rem">
             {/* START BUTTON */}

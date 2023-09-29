@@ -106,7 +106,7 @@ export function Home() {
     <Grid border="thick double black">
       <ThemeProvider theme={mainTheme}>
         <Grid border=".25rem white solid">
-          <Menu backgroundColor="black"></Menu>
+          <Menu backgroundColor="black" isHome></Menu>
           <Grid
             container
             direction="column"

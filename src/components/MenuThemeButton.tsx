@@ -1,7 +1,7 @@
 import { Button, Typography } from "@mui/material";
 import { getEmojiShadowTheme, getThemeEmoji, setThemeEmoji } from "utils/utils";
 
-export function MenuThemeButton({ isMobile, theme, setTheme }) {
+export function MenuThemeButton({ isMobile, theme, setTheme, isHome }) {
   return (
     <Button
       size="small"
@@ -13,6 +13,7 @@ export function MenuThemeButton({ isMobile, theme, setTheme }) {
       onClick={() => {
         setThemeEmoji(theme, setTheme);
       }}
+      className={isHome ? "themeButtonAnimation" : ""}
     >
       <Typography
         fontSize="2rem"

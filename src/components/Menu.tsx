@@ -13,6 +13,7 @@ export function Menu({
   backgroundColor,
   borderSides = false,
   bottomBorder = true,
+  isHome = false,
 }) {
   const { theme, setTheme } = useContext(ThemeContext);
   const { width } = useWindowDimensions();
@@ -63,6 +64,7 @@ export function Menu({
             isMobile={isMobile}
             theme={theme}
             setTheme={setTheme}
+            isHome={isHome}
           />
           <MenuLoginButton isLarger={isLarger} />
         </Grid>

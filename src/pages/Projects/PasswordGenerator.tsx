@@ -1,5 +1,6 @@
 import {
   Button,
+  Divider,
   FormControlLabel,
   Grid,
   Radio,
@@ -14,6 +15,7 @@ import mainTheme from "themes/mainTheme";
 import randomWords from "random-words";
 import { getMainTheme } from "utils/utils";
 import { ThemeContext } from "themes/context";
+import { Title } from "components/TItle";
 
 type PasswordType = "cryptic" | "human";
 
@@ -119,16 +121,22 @@ export function PasswordGenerator() {
         textAlign="center"
         sx={{ background: getMainTheme(theme) }}
       >
-        <Typography
-          color="white"
-          variant="h4"
-          sx={{ textDecoration: "underline" }}
-        >
-          RANDOM PASSWORD GENERATOR
-        </Typography>
+        <ThemeProvider theme={mainTheme}>
+          <Title title="PASSWORD GENERATOR" />
+        </ThemeProvider>
+        <Divider
+          sx={{
+            backgroundColor: "#white",
+            borderColor: "white",
+            borderBottomWidth: 3,
+            opacity: 1,
+            margin: "1rem 0 2rem",
+          }}
+        />
         <Grid
           container
           bgcolor="white"
+          border="2px solid black"
           width="20rem"
           margin="1rem auto"
           sx={{ borderRadius: "3px" }}
@@ -172,11 +180,12 @@ export function PasswordGenerator() {
           </Button>
         </Grid>
         <Typography
-          color="white"
+          color="black"
           variant="h6"
-          border="white solid"
+          border="2px solid black"
           display={password ? "inline" : "none"}
           padding=".25rem"
+          sx={{ backgroundColor: "white", borderRadius: "3px" }}
         >
           {password}
         </Typography>
