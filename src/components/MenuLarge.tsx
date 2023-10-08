@@ -70,7 +70,7 @@ export function MenuLarge({ isLarger }) {
       </Fab>
       <Fab
         variant="extended"
-        {...{ component: Link, to: "/blog" }}
+        {...{ component: Link, to: "/blog?page=1" }}
         sx={{ margin: "1rem 0.5rem 0rem 0rem" }}
         size={isLarger ? "large" : "small"}
       >

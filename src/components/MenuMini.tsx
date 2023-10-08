@@ -81,7 +81,7 @@ export function MenuMini({ isLarger }) {
               </MenuItem>
               <MenuItem
                 sx={{ border: "black solid" }}
-                {...{ component: Link, to: "/blog" }}
+                {...{ component: Link, to: "/blog?page=1" }}
                 onClick={() => {
                   popupState.close();
                 }}
