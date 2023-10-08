@@ -9,6 +9,7 @@ import { Blog } from "pages/Blog/Blog";
 import { Post } from "pages/Blog/Post";
 import { Mentorship } from "pages/Mentorship/Mentorship";
 import { Recognition } from "pages/Reecognition/Recognition";
+import { Index } from "pages/Projects/DataStructures/Index";
 
 function AppRoutes() {
   return (
@@ -20,6 +21,7 @@ function AppRoutes() {
         <Route path="/resume" element={<Resume />} />
         <Route path="/projects" element={<Projects />} />
         <Route path="/projects/trouble" element={<Trouble />} />
+        <Route path="/projects/data-structures" element={<Index />} />
         <Route
           path="/projects/password-generator"
           element={<PasswordGenerator />}
