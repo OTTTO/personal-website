@@ -10,6 +10,7 @@ import { Post } from "pages/Blog/Post";
 import { Mentorship } from "pages/Mentorship/Mentorship";
 import { Recognition } from "pages/Reecognition/Recognition";
 import { Index } from "pages/Projects/DataStructures/Index";
+import { StackPage } from "pages/Projects/DataStructures/StackPage";
 
 function AppRoutes() {
   return (
@@ -22,6 +23,7 @@ function AppRoutes() {
         <Route path="/projects" element={<Projects />} />
         <Route path="/projects/trouble" element={<Trouble />} />
         <Route path="/projects/data-structures" element={<Index />} />
+        <Route path="/projects/data-structures/stack" element={<StackPage />} />
         <Route
           path="/projects/password-generator"
           element={<PasswordGenerator />}

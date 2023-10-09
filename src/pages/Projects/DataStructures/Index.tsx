@@ -5,6 +5,7 @@ import { Menu } from "components/Menu";
 import { Title } from "components/TItle";
 import { TitleDivider } from "components/TitleDivider";
 import { useContext } from "react";
+import { Link } from "react-router-dom";
 import { ThemeContext } from "themes/context";
 import projectsTheme from "themes/projectsTheme";
 import { getMainTheme } from "utils/utils";
@@ -64,7 +65,9 @@ export function Index() {
                 </p>
                 <h2 style={{ marginBottom: 0 }}>SEQUENTIAL</h2>
                 <ul style={{ marginTop: 0 }}>
-                  <li>Stack</li>
+                  <li>
+                    <Link to="/projects/data-structures/stack">Stack</Link>
+                  </li>
                   <li>Queue</li>
                   <li>Linked List</li>
                 </ul>
