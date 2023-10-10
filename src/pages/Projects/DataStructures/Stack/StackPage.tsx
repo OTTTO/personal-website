@@ -1,10 +1,4 @@
-import {
-  Grid,
-  MenuItem,
-  Select,
-  ThemeProvider,
-  Typography,
-} from "@mui/material";
+import { Grid, ThemeProvider, Typography } from "@mui/material";
 import { Menu } from "components/Menu";
 import { Title } from "components/TItle";
 import { TitleDivider } from "components/TitleDivider";
@@ -12,9 +6,9 @@ import { useContext, useState } from "react";
 import { ThemeContext } from "themes/context";
 import projectsTheme from "themes/projectsTheme";
 import { getMainTheme } from "utils/utils";
-import { CopyBlock, monokaiSublime } from "react-code-blocks";
-import { stack } from "./codeSnippets";
-import { CodeBlock } from "./CodeBlock";
+import { codeSnippets } from "../codeSnippets";
+import { CodeBlock } from "../CodeBlock";
+import { ReverseString } from "./ReverseString/ReverseString";
 
 export function StackPage() {
   const { theme } = useContext(ThemeContext);
@@ -34,13 +28,12 @@ export function StackPage() {
           >
             <Title title="STACK" />
             <TitleDivider />
-            <Grid>
+            <Grid width="90%" margin="0 auto">
               <Typography
                 sx={{
                   backgroundColor: "white",
                   margin: "2rem auto 0",
                   padding: ".5rem 1rem",
-                  width: "80%",
                   border: "3px solid black",
                 }}
               >
@@ -70,7 +63,7 @@ export function StackPage() {
                 <CodeBlock
                   language={language}
                   setLanguage={setLanguage}
-                  text={stack.node[language]}
+                  text={codeSnippets.stack.node[language]}
                   title="stack node"
                   width="20rem"
                 />
@@ -82,7 +75,7 @@ export function StackPage() {
                 <CodeBlock
                   language={language}
                   setLanguage={setLanguage}
-                  text={stack.stack[language]}
+                  text={codeSnippets.stack.stack[language]}
                   title="stack class"
                   width="20rem"
                 />
@@ -93,21 +86,21 @@ export function StackPage() {
                 <CodeBlock
                   language={language}
                   setLanguage={setLanguage}
-                  text={stack.push[language]}
+                  text={codeSnippets.stack.push[language]}
                   title="push"
                   width="25rem"
                 />
                 <CodeBlock
                   language={language}
                   setLanguage={setLanguage}
-                  text={stack.pop[language]}
+                  text={codeSnippets.stack.pop[language]}
                   title="pop"
                   width="25rem"
                 />
                 <CodeBlock
                   language={language}
                   setLanguage={setLanguage}
-                  text={stack.peek[language]}
+                  text={codeSnippets.stack.peek[language]}
                   title="peek"
                   width="25rem"
                 />
@@ -119,10 +112,11 @@ export function StackPage() {
                 <CodeBlock
                   language={language}
                   setLanguage={setLanguage}
-                  text={stack.builtIn[language]}
+                  text={codeSnippets.stack.builtIn[language]}
                   title="built in stack"
                   width="20rem"
                 />
+                <ReverseString language={language} setLanguage={setLanguage} />
               </Typography>
             </Grid>
           </Grid>

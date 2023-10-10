@@ -10,7 +10,7 @@ import { Post } from "pages/Blog/Post";
 import { Mentorship } from "pages/Mentorship/Mentorship";
 import { Recognition } from "pages/Reecognition/Recognition";
 import { Index } from "pages/Projects/DataStructures/Index";
-import { StackPage } from "pages/Projects/DataStructures/StackPage";
+import { StackPage } from "pages/Projects/DataStructures/Stack/StackPage";
 
 function AppRoutes() {
   return (
