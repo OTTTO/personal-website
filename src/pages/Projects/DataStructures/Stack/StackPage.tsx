@@ -75,7 +75,7 @@ export function StackPage() {
                 <CodeBlock
                   language={language}
                   setLanguage={setLanguage}
-                  text={codeSnippets.stack.stack[language]}
+                  text={codeSnippets.stack.class[language]}
                   title="stack class"
                   width="20rem"
                 />

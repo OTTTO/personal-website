@@ -68,7 +68,9 @@ export function Index() {
                   <li>
                     <Link to="/projects/data-structures/stack">Stack</Link>
                   </li>
-                  <li>Queue</li>
+                  <li>
+                    <Link to="/projects/data-structures/queue">Queue</Link>
+                  </li>
                   <li>Linked List</li>
                 </ul>
                 <h2 style={{ marginBottom: 0 }}>ASSOCIATIVE</h2>

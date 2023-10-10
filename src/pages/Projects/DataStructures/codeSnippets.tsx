@@ -12,7 +12,7 @@ export const codeSnippets = {
     self.data = data
     self.next = next`,
     },
-    stack: {
+    class: {
       javascript: `class Stack {
   constructor() {
     this.top = null;
@@ -125,6 +125,129 @@ reverseString = (string) => {
 
 //ippississiM
 console.log(reverseString('Mississippi'));`,
+    },
+  },
+  queue: {
+    node: {
+      python: `class Node:
+  def __init__(self, data, next, prev):
+    self.data = data
+    self.next = next
+    self.prev = prev`,
+      javascript: `class Node { 
+  constructor(data, next, prev) {
+    this.data = data;
+    this.next = next;
+    this.prev = prev;
+  }
+}`,
+    },
+    class: {
+      python: `class Queue:
+  constructor(self):
+    self.tail = None
+    self.head = None`,
+      javascript: `class Queue {
+  constructor() {
+    this.tail = null;
+    this.head = null;
+  }
+}`,
+    },
+    enqueue: {
+      python: `# add a node to the tail
+def enqueue(self, data):
+  node = new Node(data)
+  # if queue is empty
+  if (self.head is None):
+    # point both head and tail to the new node
+    self.head = node
+    self.tail = self.head
+  else:
+    # point the new node to the tail
+    node.next = self.tail
+    # point the tail back to the new node
+    # this completes the linkage
+    self.tail.prev = node
+    # set the node to be the new tail
+    self.tail = node`,
+      javascript: `// add a node to the tail
+enqueue(data) {
+  const node = new Node(data);
+  // if queue is empty
+  if (!this.head) {
+    // point both head and tail to the new node
+    this.head = node;
+    this.tail = this.head;
+  } else {
+    // point the new node to the tail
+    node.next = this.tail;
+    // point the tail back to the new node
+    // this completes the linkage
+    this.tail.prev = node;
+    // set the node to be the new tail
+    this.tail = node;
+  }
+}`,
+    },
+    deque: {
+      python: `# remove a node from the head
+def deque(self):
+  # if queue is empty
+  if (!self.head):
+    return None
+  # save data on head node
+  # since we will be changing the reference to head
+  data = self.head.data
+  # if there is more than one node in the queue
+  if (self.head.prev):
+    # reference to head moves back one node
+    self.head = self.head.prev
+  # if we are dequing the last node
+  else:
+    # reset the queue
+    self.head = null;
+    self.tail = self.head;
+  return data;`,
+      javascript: `// remove a node from the head
+deque() {
+  // if queue is empty
+  if (!this.head)
+    return null;
+  // save data on head node
+  // since we will be changing the reference to head
+  const data = this.head.data;
+  // if there is more than one node in the queue  
+  if (this.head.prev)
+    // reference to head moves back one node
+    this.head = this.head.prev;
+  // if we are dequing the last node
+  else { 
+    // reset the queue
+    this.head = null;
+    this.tail = this.head;
+  }
+  return data;
+}`,
+    },
+    builtIn: {
+      python: `queue = []
+# insert value at the 0th index (the rear)
+queue.insert(0, 1)
+queue.insert(0, 2)
+queue.insert(0, 3)
+print(queue) # [3, 2, 1]
+front = queue.pop()
+print(front) # 1
+print(queue) # [3, 2]`,
+      javascript: `const queue = []
+queue.unshift(1)
+queue.unshift(2)
+queue.unshift(3)
+console.log(queue) // [3, 2, 1]
+const front = queue.pop()
+console.log(front) // 1
+console.log(queue) // [3, 2]`,
     },
   },
 };
