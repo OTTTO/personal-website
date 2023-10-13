@@ -1,20 +1,33 @@
 import { ChevronLeft, ChevronRight } from "@material-ui/icons";
 import { Grid } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { PaginationButton } from "./PaginationButton";
 import { PaginationChevron } from "./PaginationChevron";
 
-export function Pagination({ items, setPaginatedItems, pageLength }) {
+export function Pagination({
+  items,
+  setPaginatedItems,
+  pageLength,
+  currentPage,
+  root,
+}) {
   const totalPages = Math.ceil(items.length / pageLength);
   const pagesToDisplay = totalPages >= 4 ? 4 : totalPages - 1;
 
-  const [currentPage, setCurrentPage] = useState(0);
-  const [pageStart, setPageStart] = useState(0);
-  const [pageEnd, setPageEnd] = useState(pagesToDisplay);
+  if (currentPage === null || currentPage < 0 || currentPage > totalPages) {
+    window.location.href = `${root}/?page=1`;
+  }
+
+  let internalPage = currentPage / pagesToDisplay;
+  // last page will be the next whole number, so we need to account for that
+  if (internalPage !== 0 && internalPage % 1 === 0) internalPage -= 1;
+  internalPage = Math.floor(internalPage);
+
+  const pageStart = internalPage * pagesToDisplay;
+  const pageEnd = pageStart + pagesToDisplay;
 
   const hasMorePagesDown = pageStart > 0;
   const hasMorePagesUp = totalPages - 1 > pagesToDisplay + pageStart;
-
   const disabledPrev = currentPage <= 0;
   const disabledNext = currentPage === totalPages - 1;
 
@@ -30,64 +43,34 @@ export function Pagination({ items, setPaginatedItems, pageLength }) {
   };
 
   const findArraySize = () => {
-    const hasFullPages = (pageEnd - pageStart) % pagesToDisplay === 0;
-    if (hasFullPages) return pagesToDisplay;
-    else return pageEnd - pageStart;
+    if (pageEnd > totalPages) return totalPages - pageStart - 1;
+    else return pagesToDisplay;
   };
 
   const handlePrev = () => {
     if (currentPage > 0) {
-      const newCurrentPage = currentPage - 1;
-      setCurrentPage(newCurrentPage);
-
-      const onFirstPage = pageStart === 0;
-      const isGoingBackPage = newCurrentPage < pageStart + 1;
-      if (!onFirstPage && isGoingBackPage) {
-        setPageEnd(newCurrentPage);
-        setPageStart(newCurrentPage - pagesToDisplay);
-      }
+      // currentPage is one less than page that appears to user due to offset
+      window.location.href = `${root}/?page=${currentPage}`;
     }
   };
 
   const handleNext = () => {
     if (currentPage < totalPages - 1) {
-      const newCurrentPage = currentPage + 1;
-      setCurrentPage(newCurrentPage);
-      if (newCurrentPage > pagesToDisplay + pageStart) {
-        setPageStart(currentPage);
-
-        const newPageEnd =
-          currentPage + pagesToDisplay >= totalPages
-            ? totalPages - 1
-            : currentPage + pagesToDisplay;
-        setPageEnd(newPageEnd);
-      }
+      // add one additional page to handle offset
+      window.location.href = `${root}/?page=${currentPage + 2}`;
     }
   };
 
   const handleNumber = (pageNumber) => {
-    const newPageNumber = pageNumber + pageStart;
-    setCurrentPage(newPageNumber);
-    if (pageNumber === 0) {
-      setPageStart(0);
-      setPageEnd(pagesToDisplay);
-    }
+    if (pageNumber === 0) window.location.href = `${root}/?page=1`;
+    else window.location.href = `${root}/?page=${pageNumber + pageStart + 1}`;
   };
 
   const handleEllipse = (up) => {
     if (up) {
-      setCurrentPage(pageEnd + 1);
-      setPageStart(pageEnd);
-
-      const newPageEnd =
-        pageEnd + pagesToDisplay >= totalPages
-          ? totalPages - 1
-          : pageEnd + pagesToDisplay;
-      setPageEnd(newPageEnd);
+      window.location.href = `${root}/?page=${pageEnd + 2}`;
     } else {
-      setCurrentPage(pageStart);
-      setPageEnd(pageStart);
-      setPageStart(pageStart - pagesToDisplay);
+      window.location.href = `${root}/?page=${pageStart + 1}`;
     }
   };
 

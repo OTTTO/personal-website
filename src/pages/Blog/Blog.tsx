@@ -25,7 +25,7 @@ import * as DOMPurify from "dompurify";
 import { Loading } from "components/Loading";
 import projectsTheme from "themes/projectsTheme";
 import { ThemeContext } from "themes/context";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { ErrorPage } from "pages/Error/Error";
 import { getMainTheme } from "utils/utils";
 import { Title } from "components/TItle";
@@ -51,6 +51,9 @@ export function Blog() {
   const [deleteId, setDeleteId] = React.useState({ id: "", idx: -1 });
   const [openDelete, setOpenDelete] = React.useState(false);
   const [paginatedPosts, setPaginatedPosts] = React.useState([]);
+  const queryPage = new URLSearchParams(useLocation().search).get("page");
+  const paginationPage = parseInt(queryPage) - 1 || 0;
+
   const handleOpenDelete = () => setOpenDelete(true);
   const handleCloseDelete = () => setOpenDelete(false);
 
@@ -185,6 +188,8 @@ export function Blog() {
               items={posts}
               setPaginatedItems={setPaginatedPosts}
               pageLength="3"
+              currentPage={paginationPage}
+              root={"/blog"}
             />
           </Grid>
           <Footer />
