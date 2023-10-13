@@ -12,6 +12,7 @@ import { Recognition } from "pages/Reecognition/Recognition";
 import { Index } from "pages/Projects/DataStructures/Index";
 import { StackPage } from "pages/Projects/DataStructures/Stack/StackPage";
 import { QueuePage } from "pages/Projects/DataStructures/Queue/QueuePage";
+import { LinkedListPage } from "pages/Projects/DataStructures/LinkedList/LinkedListPage";
 
 function AppRoutes() {
   return (
@@ -26,6 +27,10 @@ function AppRoutes() {
         <Route path="/projects/data-structures" element={<Index />} />
         <Route path="/projects/data-structures/stack" element={<StackPage />} />
         <Route path="/projects/data-structures/queue" element={<QueuePage />} />
+        <Route
+          path="/projects/data-structures/linked-list"
+          element={<LinkedListPage />}
+        />
         <Route
           path="/projects/password-generator"
           element={<PasswordGenerator />}

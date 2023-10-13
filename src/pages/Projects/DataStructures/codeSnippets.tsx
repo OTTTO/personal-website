@@ -144,7 +144,7 @@ console.log(reverseString('Mississippi'));`,
     },
     class: {
       python: `class Queue:
-  constructor(self):
+  def __init_(self):
     self.tail = None
     self.head = None`,
       javascript: `class Queue {
@@ -248,6 +248,171 @@ console.log(queue) // [3, 2, 1]
 const front = queue.pop()
 console.log(front) // 1
 console.log(queue) // [3, 2]`,
+    },
+  },
+  sll: {
+    node: {
+      python: `class Node:
+  def __init__ (self, data, next = None):
+    self.data = data
+    self.next = next`,
+      javascript: `class Node {
+  constructor(data, next) {
+    this.data = data;
+    this.next = next;
+  }
+}`,
+    },
+    class: {
+      python: `class SinglyLinkedList:
+  def __init__(self):
+    self.tail = None
+    self.head = None
+    self.size = 0`,
+      javascript: `class SinglyLinkedList {
+  constructor() {
+    this.tail = null;
+    this.head = null;
+    this.size = 0;
+  }
+}`,
+    },
+    append: {
+      python: `# add node to end of list 
+def append(self, data):
+  node = Node(data);
+  # add node to empty list
+  if (self.tail is None):
+    self.tail = node
+  else:
+    # start at tail of list
+    curr = self.tail
+    # iterate until end of list
+    while (curr.next):
+      curr = curr.next
+    # add node to end of list
+    curr.next = node
+  # increase size of list
+  self.size = self.size + 1`,
+      javascript: `// add node to end of list 
+append(data) {
+  const node = new Node(data);
+  // add node to empty list
+  if (!this.tail)
+    this.tail = node;
+  else {
+    // start at tail of list
+    let curr = this.tail;
+    // iterate until end of list
+    while (curr.next) 
+      curr = curr.next;
+    // add node to end of list
+    curr.next = node;
+  }
+  // increase size of list
+  this.size += 1
+}`,
+    },
+    remove: {
+      python: ` # remove a node by index
+def remove(self, idx):
+  # empty list, nothing to remove
+  if (self.tail is None):
+    return False
+  # if tail is to be removed
+  if (idx == 0):
+    # set next after tail to be the new tail
+    self.tail = self.tail.next
+    # decrease size of list
+    self.size -= 1
+    return True
+  # if index out of bounds
+  # size starts with 1, idx starts with 0
+  # so increase idx by 1 to rectify
+  if (idx + 1 > self.size):
+    return False
+  
+  # start at tail of list
+  curr = self.tail
+  # iterate list
+  # curr needs to be the node before the deletion (idx - 1)
+  for _ in range(idx - 1):
+    curr = curr.next
+  
+  # set next reference to be the following node
+  curr.next = curr.next.next
+  # decrease size of list
+  self.size -= 1
+  return True`,
+      javascript: `// remove a node by index
+remove(idx) {
+  // empty list, nothing to remove
+  if (!this.tail)
+    return false;
+  // if tail is to be removed
+  if (idx === 0) {
+    // set next after tail to be the new tail
+    this.tail = this.tail.next;
+    // decrease size of list
+    this.size -= 1;
+    return true;
+  }
+  // if index out of bounds
+  // size starts with 1, idx starts with 0
+  // so increase idx by 1 to rectify
+  if (idx + 1 > this.size) {
+    return false
+  }
+  // start at tail of list
+  let curr = this.tail;
+  // iterate list
+  // curr needs to be the node before the deletion (idx - 1)
+  for (let i = 0; i < idx - 1; i++) {
+    curr = curr.next;
+  }
+  // set next reference to be the following node
+  curr.next = curr.next.next;
+  // decrease size of list
+  this.size -= 1;
+  return true;
+} `,
+    },
+    get: {
+      python: `# get the data of a node by index
+def get(self, idx):
+  if (self.size == 0):
+    raise Exception('Empty List')
+  if (self.size < idx + 1):
+    raise Exception('Index out of bounds')
+  curr = self.tail
+  # iterate over the list until index is reached
+  # we have found the node
+  for _ in range(idx):
+    curr = curr.next
+  return curr.data`,
+      javascript: `// get the data of a node by index
+get(idx) {
+  if (this.size === 0)
+    throw new Error('Empty List')
+  if (this.size < idx + 1)
+    throw new Error('Index out of bounds')
+  let curr = this.tail
+  // iterate over the list until index is reached
+  // we have found the node
+  for (let i = 0; i < idx; i++) {
+    curr = curr.next;
+  }
+  return curr.data;
+}`,
+    },
+    length: {
+      python: `#get the size of the list
+def length(self):
+  return self.size;`,
+      javascript: `// get the size of the list
+length() {
+    return this.size;
+}`,
     },
   },
 };

@@ -46,7 +46,7 @@ export function StackPage() {
                 </p>{" "}
                 <p> Stacks can be used for a number of problems.</p>
                 <ul>
-                  <li> Undo/redo feature on many text editing applications </li>
+                  <li>Undo/redo feature on many text editing applications </li>
                   <li>Reversing a string or array </li>
                   <li>Parenthesis matching</li>{" "}
                 </ul>

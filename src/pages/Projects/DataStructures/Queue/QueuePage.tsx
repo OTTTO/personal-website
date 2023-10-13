@@ -60,8 +60,8 @@ export function QueuePage() {
                 <p>
                   Just like the Stack class, the Queue operates on Nodes. The
                   first two properties are the same - <b>data</b> and{" "}
-                  <b>next</b>. But for Queue implementation of a Node, we have
-                  one additional property. We include <b>prev</b> to have a
+                  <b>next</b>. But for the Queue implementation of a Node, we
+                  have one additional property. We include <b>prev</b> to have a
                   reference to the previous node in the list. We will see that
                   we need this when dequing in order to set the new head.{" "}
                 </p>
