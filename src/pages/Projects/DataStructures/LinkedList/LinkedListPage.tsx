@@ -8,6 +8,7 @@ import projectsTheme from "themes/projectsTheme";
 import { getMainTheme } from "utils/utils";
 import { codeSnippets } from "../codeSnippets";
 import { CodeBlock } from "../CodeBlock";
+import { PageButtons } from "components/PageButtons";
 
 export function LinkedListPage() {
   const { theme } = useContext(ThemeContext);
@@ -128,6 +129,10 @@ export function LinkedListPage() {
                   arrays that automatically resize behind the scenes - for most
                   cases this defeats the purpose of Linked List.
                 </p>
+                <PageButtons
+                  backTitle="QUEUE"
+                  backTo="/projects/xplained/ds/queue"
+                />
               </Typography>
             </Grid>
           </Grid>

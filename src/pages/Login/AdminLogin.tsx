@@ -104,7 +104,9 @@ export function AdminLogin() {
       <ThemeProvider theme={mainTheme}>
         <Grid border="white solid .25rem">
           <Menu backgroundColor="black" />
-          <Grid sx={{ background: getMainTheme(theme), margin: "0 0 -2rem" }}>
+          <Grid
+            sx={{ background: getMainTheme(theme), marginBottom: "-.5rem" }}
+          >
             <Title title="ADMIN LOGIN" />
             <AdminLoginLines />
             <Grid sx={{ margin: "0 auto", width: "80%" }}>

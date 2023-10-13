@@ -8,6 +8,7 @@ import projectsTheme from "themes/projectsTheme";
 import { getMainTheme } from "utils/utils";
 import { codeSnippets } from "../codeSnippets";
 import { CodeBlock } from "../CodeBlock";
+import { PageButtons } from "components/PageButtons";
 
 export function QueuePage() {
   const { theme } = useContext(ThemeContext);
@@ -109,6 +110,12 @@ export function QueuePage() {
                   text={codeSnippets.queue.builtIn[language]}
                   title="built in queue"
                   width="20rem"
+                />
+                <PageButtons
+                  backTitle="STACK"
+                  backTo="/projects/xplained/ds/stack"
+                  forwardTitle="LINKED LIST"
+                  forwardTo="/projects/xplained/ds/linked-list"
                 />
               </Typography>
             </Grid>

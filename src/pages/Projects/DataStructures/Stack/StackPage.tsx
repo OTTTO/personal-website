@@ -9,6 +9,8 @@ import { getMainTheme } from "utils/utils";
 import { codeSnippets } from "../codeSnippets";
 import { CodeBlock } from "../CodeBlock";
 import { ReverseString } from "./ReverseString/ReverseString";
+import { StackDemo } from "./StackDemo";
+import { PageButtons } from "components/PageButtons";
 
 export function StackPage() {
   const { theme } = useContext(ThemeContext);
@@ -116,7 +118,11 @@ export function StackPage() {
                   title="built in stack"
                   width="20rem"
                 />
-                <ReverseString language={language} setLanguage={setLanguage} />
+                {/* <StackDemo /> */}
+                <PageButtons
+                  forwardTitle="QUEUE"
+                  forwardTo="/projects/xplained/ds/queue"
+                />
               </Typography>
             </Grid>
           </Grid>

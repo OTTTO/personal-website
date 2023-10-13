@@ -2,6 +2,7 @@ import { ThemeProvider } from "@emotion/react";
 import { Grid, Typography } from "@mui/material";
 import { Footer } from "components/Footer";
 import { Menu } from "components/Menu";
+import { PageButtons } from "components/PageButtons";
 import { Title } from "components/TItle";
 import { TitleDivider } from "components/TitleDivider";
 import { useContext } from "react";
@@ -92,6 +93,11 @@ export function Index() {
                   <li>Breadth First Search</li>
                   <li>Depth First Search</li>
                 </ul>
+                <PageButtons
+                  forwardTitle="STACK"
+                  forwardTo="/projects/xplained/ds/stack"
+                  hasHome={false}
+                />
               </Typography>
             </Grid>
           </Grid>

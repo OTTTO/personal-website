@@ -24,11 +24,11 @@ function AppRoutes() {
         <Route path="/resume" element={<Resume />} />
         <Route path="/projects" element={<Projects />} />
         <Route path="/projects/trouble" element={<Trouble />} />
-        <Route path="/projects/data-structures" element={<Index />} />
-        <Route path="/projects/data-structures/stack" element={<StackPage />} />
-        <Route path="/projects/data-structures/queue" element={<QueuePage />} />
+        <Route path="/projects/xplained/ds" element={<Index />} />
+        <Route path="/projects/xplained/ds/stack" element={<StackPage />} />
+        <Route path="/projects/xplained/ds/queue" element={<QueuePage />} />
         <Route
-          path="/projects/data-structures/linked-list"
+          path="/projects/xplained/ds/linked-list"
           element={<LinkedListPage />}
         />
         <Route
