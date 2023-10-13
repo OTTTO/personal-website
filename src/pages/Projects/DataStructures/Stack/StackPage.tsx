@@ -1,4 +1,4 @@
-import { Grid, ThemeProvider, Typography } from "@mui/material";
+import { Divider, Grid, ThemeProvider, Typography } from "@mui/material";
 import { Menu } from "components/Menu";
 import { Title } from "components/TItle";
 import { TitleDivider } from "components/TitleDivider";
@@ -118,7 +118,10 @@ export function StackPage() {
                   title="built in stack"
                   width="20rem"
                 />
-                {/* <StackDemo /> */}
+                <Divider
+                  sx={{ backgroundColor: "black", borderBottomWidth: 4 }}
+                />
+                <StackDemo />
                 <PageButtons
                   forwardTitle="QUEUE"
                   forwardTo="/projects/xplained/ds/queue"
