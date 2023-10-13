@@ -1,4 +1,4 @@
-import { Grid, ThemeProvider, Typography } from "@mui/material";
+import { Divider, Grid, ThemeProvider, Typography } from "@mui/material";
 import { Menu } from "components/Menu";
 import { Title } from "components/TItle";
 import { TitleDivider } from "components/TitleDivider";
@@ -9,6 +9,7 @@ import { getMainTheme } from "utils/utils";
 import { codeSnippets } from "../codeSnippets";
 import { CodeBlock } from "../CodeBlock";
 import { PageButtons } from "components/PageButtons";
+import { QueueDemo } from "./QueueDemo";
 
 export function QueuePage() {
   const { theme } = useContext(ThemeContext);
@@ -111,6 +112,10 @@ export function QueuePage() {
                   title="built in queue"
                   width="20rem"
                 />
+                <Divider
+                  sx={{ backgroundColor: "black", borderBottomWidth: 4 }}
+                />
+                <QueueDemo />
                 <PageButtons
                   backTitle="STACK"
                   backTo="/projects/xplained/ds/stack"

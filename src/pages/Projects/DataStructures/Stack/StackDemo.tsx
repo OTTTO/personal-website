@@ -43,7 +43,6 @@ export function StackDemo({}) {
         direction="column"
         justifyContent="flex-end"
         borderRadius="5px"
-        overflow="scroll"
         sx={{ backgroundColor: "black", opacity: 0.9 }}
       >
         {[]
