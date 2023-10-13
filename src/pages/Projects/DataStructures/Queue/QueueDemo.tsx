@@ -1,18 +1,18 @@
 import { Button, Grid, Typography } from "@mui/material";
 import { useState } from "react";
+import { getRandomInt } from "utils/utils";
 
-export function QueueDemo({}) {
+export function QueueDemo() {
   const [queue, setQueue] = useState([]);
-  const getRandomInt = () => Math.floor(Math.random() * 100);
-  const [nextData, setNextData] = useState(getRandomInt());
+  const [nextData, setNextData] = useState(getRandomInt(100));
   const maxQueueLength = 11;
 
   const enqueue = () => {
     if (queue.length < maxQueueLength) {
-      const queueCopy = queue;
+      const queueCopy = [...queue];
       queueCopy.unshift(nextData);
       setQueue(queueCopy);
-      setNextData(getRandomInt());
+      setNextData(getRandomInt(100));
     }
   };
 
@@ -37,7 +37,7 @@ export function QueueDemo({}) {
       </Button>
       <Grid
         height="3rem"
-        width="18rem"
+        width="16rem"
         margin="0 auto"
         display="flex"
         justifyContent="flex-start"
@@ -45,11 +45,12 @@ export function QueueDemo({}) {
         borderRadius="5px"
         sx={{ backgroundColor: "black", opacity: 0.9 }}
       >
-        {[].concat(queue).map((el) => {
+        {[].concat(queue).map((el, idx) => {
           return (
             <Grid
               width="1.5rem"
               marginLeft=".1rem"
+              marginRight={idx === queue.length - 1 ? ".1rem" : "0"}
               textAlign="center"
               border="1px solid red"
               borderRadius="3px"

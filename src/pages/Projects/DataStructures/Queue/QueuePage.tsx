@@ -2,7 +2,7 @@ import { Divider, Grid, ThemeProvider, Typography } from "@mui/material";
 import { Menu } from "components/Menu";
 import { Title } from "components/TItle";
 import { TitleDivider } from "components/TitleDivider";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { ThemeContext } from "themes/context";
 import projectsTheme from "themes/projectsTheme";
 import { getMainTheme } from "utils/utils";
@@ -14,6 +14,10 @@ import { QueueDemo } from "./QueueDemo";
 export function QueuePage() {
   const { theme } = useContext(ThemeContext);
   const [language, setLanguage] = useState("python");
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   return (
     <Grid border="double thick black">

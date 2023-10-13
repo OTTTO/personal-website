@@ -178,3 +178,7 @@ export function getRecognitionMargin(left, isMobile) {
     ? rightMobileMargin
     : rightMargin;
 }
+
+export function getRandomInt(max) {
+  return Math.floor(Math.random() * max);
+}

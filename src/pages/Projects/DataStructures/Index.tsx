@@ -5,7 +5,7 @@ import { Menu } from "components/Menu";
 import { PageButtons } from "components/PageButtons";
 import { Title } from "components/TItle";
 import { TitleDivider } from "components/TitleDivider";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { ThemeContext } from "themes/context";
 import projectsTheme from "themes/projectsTheme";
@@ -13,6 +13,9 @@ import { getMainTheme } from "utils/utils";
 
 export function Index() {
   const { theme } = useContext(ThemeContext);
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   return (
     <Grid border="double thick black">
       <Grid border=".25rem white solid">
@@ -67,13 +70,13 @@ export function Index() {
                 <h2 style={{ marginBottom: 0 }}>SEQUENTIAL</h2>
                 <ul style={{ marginTop: 0 }}>
                   <li>
-                    <Link to="/projects/data-structures/stack">Stack</Link>
+                    <Link to="/projects/xplained/ds/stack">Stack</Link>
                   </li>
                   <li>
-                    <Link to="/projects/data-structures/queue">Queue</Link>
+                    <Link to="/projects/xplained/ds/queue">Queue</Link>
                   </li>
                   <li>
-                    <Link to="/projects/data-structures/linked-list">
+                    <Link to="/projects/xplained/ds/linked-list">
                       Linked List
                     </Link>
                   </li>

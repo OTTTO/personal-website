@@ -1,18 +1,18 @@
 import { Button, Grid, Typography } from "@mui/material";
 import { useState } from "react";
+import { getRandomInt } from "utils/utils";
 
 export function StackDemo({}) {
   const [stack, setStack] = useState([]);
-  const getRandomInt = () => Math.floor(Math.random() * 100);
-  const [nextData, setNextData] = useState(getRandomInt());
+  const [nextData, setNextData] = useState(getRandomInt(100));
   const maxStackHeight = 10;
 
   const push = () => {
     if (stack.length < maxStackHeight) {
-      const stackCopy = stack;
+      const stackCopy = [...stack];
       stackCopy.push(nextData);
       setStack(stackCopy);
-      setNextData(getRandomInt());
+      setNextData(getRandomInt(100));
     }
   };
 
@@ -43,6 +43,7 @@ export function StackDemo({}) {
         direction="column"
         justifyContent="flex-end"
         borderRadius="5px"
+        overflow="scroll"
         sx={{ backgroundColor: "black", opacity: 0.9 }}
       >
         {[]

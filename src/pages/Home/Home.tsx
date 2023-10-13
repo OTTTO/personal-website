@@ -23,7 +23,6 @@ import { HomeWysiwygEditor } from "pages/Home/HomeWysiwygEditor";
 import { HomeText } from "pages/Home/HomeText";
 import useWindowDimensions from "hooks/useWindowDimensions";
 import { TitleDivider } from "components/TitleDivider";
-import { Link } from "react-router-dom";
 
 const isAuthenticated = authenticationCheck();
 const isTestAuthenticated = testAuthenticationCheck();
@@ -118,7 +117,6 @@ export function Home() {
           >
             <Title title="WELCOME!!" />
             <TitleDivider />
-            <Link to="/projects/data-structures">DATA STRUCTURES</Link>
             <Grid
               container
               direction="column"

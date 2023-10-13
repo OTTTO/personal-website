@@ -1,18 +1,23 @@
-import { Grid, ThemeProvider, Typography } from "@mui/material";
+import { Divider, Grid, ThemeProvider, Typography } from "@mui/material";
 import { Menu } from "components/Menu";
 import { Title } from "components/TItle";
 import { TitleDivider } from "components/TitleDivider";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { ThemeContext } from "themes/context";
 import projectsTheme from "themes/projectsTheme";
 import { getMainTheme } from "utils/utils";
 import { codeSnippets } from "../codeSnippets";
 import { CodeBlock } from "../CodeBlock";
 import { PageButtons } from "components/PageButtons";
+import { LinkedListDemo } from "./LinkedListDemo";
 
 export function LinkedListPage() {
   const { theme } = useContext(ThemeContext);
   const [language, setLanguage] = useState("python");
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   return (
     <Grid border="double thick black">
@@ -86,7 +91,7 @@ export function LinkedListPage() {
                 <p>
                   The minimum implementation of a singly linked list only
                   consists of 2 properties - <b>tail</b> and <b>head</b>.{" "}
-                  {"[tail]->[node]-{>}[head]"}
+                  {"[tail]->[node]->[head]"}
                 </p>
                 <CodeBlock
                   language={language}
@@ -106,7 +111,7 @@ export function LinkedListPage() {
                   language={language}
                   setLanguage={setLanguage}
                   text={codeSnippets.sll.remove[language]}
-                  title="remove (by data)"
+                  title="remove (by index)"
                   width="25rem"
                 />
                 <CodeBlock
@@ -129,6 +134,10 @@ export function LinkedListPage() {
                   arrays that automatically resize behind the scenes - for most
                   cases this defeats the purpose of Linked List.
                 </p>
+                <Divider
+                  sx={{ backgroundColor: "black", borderBottomWidth: 4 }}
+                />
+                <LinkedListDemo />
                 <PageButtons
                   backTitle="QUEUE"
                   backTo="/projects/xplained/ds/queue"
