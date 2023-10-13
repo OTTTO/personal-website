@@ -1,71 +1,93 @@
 export const codeSnippets = {
   stack: {
     node: {
+      python: `class Node:
+  def __init__(self, data, next = None):
+    self.data = data
+    self.next = next`,
       javascript: `class Node {
   constructor(data, next) {
     this.data = data;
     this.next = next;
   }
 }`,
-      python: `class Node:
-  def __init__(self, data, next):
-    self.data = data
-    self.next = next`,
     },
     class: {
+      python: `class Stack:
+  def __init__(self):
+    self.top = None`,
       javascript: `class Stack {
   constructor() {
     this.top = null;
   }
 }`,
-      python: `class Stack:
-  def __init__(self):
-    self.top = None`,
     },
     push: {
+      python: `#push an element on the top of the stack
+def push(self, data):
+  node = Node(data)
+  # if the stack is not empty
+  if (self.top):
+    # point the new node to the top of the stack
+    node.next = self.top
+  # set the top of the stack to be the new node
+  self.top = node`,
       javascript: `// push an element on the top of the stack
 push(data) {
   const node = new Node(data);
-  if (this.top) node.next = this.top;
-  this.top = node.next;
-}`,
-      python: `#push an element on the top of the stack
-def push(self, data):
-  node = new Node(data);
-  if (self.top):
-    node.next = self.top;
-    self.top = node.next;
+  // if the stack is not empty
+  if (this.top)
+    // point the new node to the top of the stack
+    node.next = this.top;
+  // set the top of the stack to be the new node
+  this.top = node;
 }`,
     },
     pop: {
+      python: `#remove and return the top element
+def pop(self):
+  # if the stack is not empty
+  if (self.top):
+    # store the top's data
+    # since we will be changing the reference to top 
+    data = self.top.data
+    # set top to be next node down the stack
+    self.top = self.top.next
+    return data
+  # if stack is empty return None
+  else:
+          return None`,
       javascript: `// remove and return the top element
 pop() {
+  // if the stack is not empty
   if (this.top) {
+    // store the top's data
+    // since we will be changing the reference to top 
     const data = this.top.data;
+    // set top to be next node down the stack
     this.top = this.top.next;
     return data;
+  // if stack is empty return null
   } else {
     return null;
   }
 }`,
-      python: `#remove and return the top element
-def pop(self):
-  if (self.top):
-    data = self.top.data;
-    self.top = self.top.next;
-    return data;
-  else:
-    return None;
-`,
     },
     peek: {
+      python: `#read the top element
+def peek(self):
+  # if stack is not empty, return top data
+  if (self.top):
+    return self.top.data
+  # if stack is empty return None
+  else:
+    return None`,
       javascript: `// read the top element
 peek() {
-  this.top.data
-}`,
-      python: `#read the top element
-def peek(self) {
-  self.top.data
+  // if stack is not empty, return top data
+  if (this.top) return this.top.data;
+  // if stack is empty, return null
+  else return null;
 }`,
     },
     builtIn: {
@@ -130,7 +152,7 @@ console.log(reverseString('Mississippi'));`,
   queue: {
     node: {
       python: `class Node:
-  def __init__(self, data, next, prev):
+  def __init__(self, data, next = None, prev = None):
     self.data = data
     self.next = next
     self.prev = prev`,
@@ -157,7 +179,7 @@ console.log(reverseString('Mississippi'));`,
     enqueue: {
       python: `# add a node to the tail
 def enqueue(self, data):
-  node = new Node(data)
+  node = Node(data)
   # if queue is empty
   if (self.head is None):
     # point both head and tail to the new node
@@ -194,7 +216,7 @@ enqueue(data) {
       python: `# remove a node from the head
 def deque(self):
   # if queue is empty
-  if (!self.head):
+  if (self.head is None):
     return None
   # save data on head node
   # since we will be changing the reference to head
@@ -206,9 +228,9 @@ def deque(self):
   # if we are dequing the last node
   else:
     # reset the queue
-    self.head = null;
-    self.tail = self.head;
-  return data;`,
+    self.head = None
+    self.tail = self.head
+  return data`,
       javascript: `// remove a node from the head
 deque() {
   // if queue is empty
