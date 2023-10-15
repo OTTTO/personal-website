@@ -1,8 +1,15 @@
-import { Button, Grid, Typography } from "@mui/material";
+import { Grid, Typography } from "@mui/material";
+import { OperationButton } from "components/OperationButton";
 import { useState } from "react";
-import { getRandomInt } from "utils/utils";
+import {
+  getRandomInt,
+  isListEmpty,
+  isListMaxLength,
+  textDecorationEmpty,
+  textDecorationMaxLength,
+} from "utils/utils";
 
-export function StackDemo({}) {
+export function StackDemo() {
   const [stack, setStack] = useState([]);
   const [nextData, setNextData] = useState(getRandomInt(100));
   const maxStackHeight = 10;
@@ -22,19 +29,9 @@ export function StackDemo({}) {
 
   return (
     <Grid margin="1rem auto 1rem" textAlign="center">
-      <Typography fontWeight="bold"> STACK DEMO</Typography>
-
-      <Button onClick={push}>
-        <Typography
-          fontWeight="bold"
-          sx={{
-            textDecoration:
-              stack.length >= maxStackHeight ? "line-through" : "",
-          }}
-        >
-          push({nextData})
-        </Typography>
-      </Button>
+      <Typography fontWeight="bold" sx={{ textDecoration: "underline" }}>
+        STACK DEMO
+      </Typography>
       <Grid
         height="18rem"
         width="3rem"
@@ -49,7 +46,7 @@ export function StackDemo({}) {
         {[]
           .concat(stack)
           .reverse()
-          .map((el) => {
+          .map((el, idx) => {
             return (
               <Grid
                 width="2rem"
@@ -57,16 +54,27 @@ export function StackDemo({}) {
                 textAlign="center"
                 border="1px solid red"
                 borderRadius="3px"
-                sx={{ backgroundColor: "white" }}
+                sx={{
+                  backgroundColor: idx === 0 ? "yellowgreen" : "white",
+                }}
               >
                 {el}
               </Grid>
             );
           })}
       </Grid>
-      <Button onClick={pop}>
-        <Typography fontWeight="bold">pop()</Typography>
-      </Button>
+      <OperationButton
+        onClick={push}
+        disabled={isListMaxLength(stack, maxStackHeight)}
+        textDecoration={textDecorationMaxLength(stack, maxStackHeight)}
+        text={`push(${nextData})`}
+      />
+      <OperationButton
+        disabled={isListEmpty(stack)}
+        onClick={pop}
+        textDecoration={textDecorationEmpty(stack)}
+        text="pop()"
+      />
     </Grid>
   );
 }

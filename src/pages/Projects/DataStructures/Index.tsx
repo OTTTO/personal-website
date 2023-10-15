@@ -92,9 +92,10 @@ export function Index() {
                 </ul>
                 <h2 style={{ marginBottom: 0 }}>TREES</h2>
                 <ul style={{ marginTop: 0 }}>
+                  <li>Tree Primer</li>
                   <li>Binary Search Tree (BST)</li>
-                  <li>AVL (Self Balancing BST)</li>
                   <li>Heap</li>
+                  <li>AVL Tree (Self Balancing BST)</li>
                 </ul>
                 <h2 style={{ marginBottom: 0 }}>GRAPHS</h2>
                 <ul style={{ marginTop: 0 }}>

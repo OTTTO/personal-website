@@ -1,37 +1,14 @@
-import { Button, Grid, Typography } from "@mui/material";
+import { Grid, Typography } from "@mui/material";
+import { LinkedListDescription } from "components/LinkedListDescription";
+import { OperationButton } from "components/OperationButton";
 import { useState } from "react";
-import { getRandomInt } from "utils/utils";
-
-function DLLOperation({ onClick, textDecoration, text }) {
-  return (
-    <Button onClick={onClick}>
-      <Typography fontWeight="bold" sx={{ textDecoration }}>
-        {text}
-      </Typography>
-    </Button>
-  );
-}
-
-function DLLDescription({ backgroundColor, text }) {
-  return (
-    <>
-      <Grid
-        width="1.5rem"
-        border="1px solid black"
-        borderRadius="3px"
-        sx={{ backgroundColor }}
-      ></Grid>
-      <Typography
-        fontWeight="bold"
-        // sx={{ textDecoration: "underline" }}
-        marginLeft=".5rem"
-        marginRight=".5rem"
-      >
-        {text}
-      </Typography>
-    </>
-  );
-}
+import {
+  getRandomInt,
+  isListEmpty,
+  isListMaxLength,
+  textDecorationEmpty,
+  textDecorationMaxLength,
+} from "utils/utils";
 
 export function DLLDemo() {
   const [linkedList, setLinkedList] = useState([]);
@@ -55,12 +32,13 @@ export function DLLDemo() {
     if (linkedList.length < maxListLength) {
       const llCopy = [...linkedList];
       llCopy.unshift(nextData);
+      console.log("pre", llCopy);
       setData(llCopy, 0);
     }
   };
 
   const insertBefore = () => {
-    if (linkedList.length < maxListLength) {
+    if (linkedList.length > 0 && linkedList.length < maxListLength) {
       const llCopy = [...linkedList];
       llCopy.splice(nextBefore, 0, nextData);
       setData(llCopy, nextBefore);
@@ -68,7 +46,7 @@ export function DLLDemo() {
   };
 
   const insertAfter = () => {
-    if (linkedList.length < maxListLength) {
+    if (linkedList.length > 0 && linkedList.length < maxListLength) {
       const llCopy = [...linkedList];
       llCopy.splice(nextAfter + 1, 0, nextData);
       setData(llCopy, nextAfter + 1);
@@ -79,6 +57,7 @@ export function DLLDemo() {
     if (linkedList.length < maxListLength) {
       const llCopy = [...linkedList];
       llCopy.push(nextData);
+      console.log("app", llCopy);
       setData(llCopy, llCopy.length - 1);
     }
   };
@@ -86,15 +65,11 @@ export function DLLDemo() {
   const remove = (idx) => {
     if (linkedList.length > 0) {
       const llCopy = [...linkedList];
-      console.log("rem idx", idx);
       llCopy.splice(idx, 1);
       setData(llCopy, undefined);
     }
   };
 
-  const textDecorationMaxLength =
-    linkedList.length >= maxListLength ? "line-through" : "";
-  const textDecorationEmpty = linkedList.length <= 0 ? "line-through" : "";
   const background = (idx) =>
     idx === highlightIdx && idx === nextRemove
       ? "linear-gradient(90deg, greenyellow, #ff4d00)"
@@ -111,12 +86,11 @@ export function DLLDemo() {
       alignItems="center"
     >
       <Typography fontWeight="bold" sx={{ textDecoration: "underline" }}>
-        {" "}
         DOUBLY LINKED LIST DEMO
       </Typography>
       <Grid display="flex" flexDirection="row" margin=".2rem 0 .5rem">
-        <DLLDescription backgroundColor="greenyellow" text="ADDED" />
-        <DLLDescription backgroundColor="#ff4d00" text="TO REMOVE" />
+        <LinkedListDescription backgroundColor="greenyellow" text="ADDED" />
+        <LinkedListDescription backgroundColor="#ff4d00" text="TO REMOVE" />
       </Grid>
       <Grid
         height="3rem"
@@ -157,29 +131,46 @@ export function DLLDemo() {
         alignItems="center"
         marginTop=".5rem"
       >
-        <DLLOperation
+        <OperationButton
           onClick={prepend}
-          textDecoration={textDecorationMaxLength}
+          disabled={isListMaxLength(linkedList, maxListLength)}
+          textDecoration={textDecorationMaxLength(linkedList, maxListLength)}
           text={`prepend(${nextData})`}
         />
-        <DLLOperation
-          onClick={insertBefore}
-          textDecoration={textDecorationMaxLength}
-          text={`insertBefore(${nextBefore},${nextData})`}
-        />
-        <DLLOperation
+        <OperationButton
           onClick={append}
-          textDecoration={textDecorationMaxLength}
+          disabled={isListMaxLength(linkedList, maxListLength)}
+          textDecoration={textDecorationMaxLength(linkedList, maxListLength)}
           text={`append(${nextData})`}
         />
-        <DLLOperation
+        <OperationButton
+          onClick={insertBefore}
+          disabled={
+            isListMaxLength(linkedList, maxListLength) ||
+            isListEmpty(linkedList)
+          }
+          textDecoration={
+            textDecorationMaxLength(linkedList, maxListLength) ||
+            textDecorationEmpty(linkedList)
+          }
+          text={`insertBefore(${nextBefore},${nextData})`}
+        />
+        <OperationButton
           onClick={insertAfter}
-          textDecoration={textDecorationMaxLength}
+          disabled={
+            isListMaxLength(linkedList, maxListLength) ||
+            isListEmpty(linkedList)
+          }
+          textDecoration={
+            textDecorationMaxLength(linkedList, maxListLength) ||
+            textDecorationEmpty(linkedList)
+          }
           text={`insertAfter(${nextAfter},${nextData})`}
         />
-        <DLLOperation
+        <OperationButton
           onClick={() => remove(nextRemove)}
-          textDecoration={textDecorationEmpty}
+          disabled={isListEmpty(linkedList)}
+          textDecoration={textDecorationEmpty(linkedList)}
           text={`remove(${nextRemove})`}
         />
       </Grid>

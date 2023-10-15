@@ -1,6 +1,13 @@
-import { Button, Grid, Typography } from "@mui/material";
+import { Grid, Typography } from "@mui/material";
+import { OperationButton } from "components/OperationButton";
 import { useState } from "react";
-import { getRandomInt } from "utils/utils";
+import {
+  getRandomInt,
+  isListEmpty,
+  isListMaxLength,
+  textDecorationEmpty,
+  textDecorationMaxLength,
+} from "utils/utils";
 
 export function QueueDemo() {
   const [queue, setQueue] = useState([]);
@@ -22,19 +29,9 @@ export function QueueDemo() {
 
   return (
     <Grid margin="1rem auto 1rem" textAlign="center">
-      <Typography fontWeight="bold"> QUEUE DEMO</Typography>
-
-      <Button onClick={enqueue}>
-        <Typography
-          fontWeight="bold"
-          sx={{
-            textDecoration:
-              queue.length >= maxQueueLength ? "line-through" : "",
-          }}
-        >
-          enqueue({nextData})
-        </Typography>
-      </Button>
+      <Typography fontWeight="bold" sx={{ textDecoration: "underline" }}>
+        QUEUE DEMO
+      </Typography>
       <Grid
         height="3rem"
         width="16rem"
@@ -54,16 +51,25 @@ export function QueueDemo() {
               textAlign="center"
               border="1px solid red"
               borderRadius="3px"
-              sx={{ backgroundColor: "white" }}
+              sx={{ backgroundColor: idx === 0 ? "yellowgreen" : "white" }}
             >
               {el}
             </Grid>
           );
         })}
       </Grid>
-      <Button onClick={deque}>
-        <Typography fontWeight="bold">deque()</Typography>
-      </Button>
+      <OperationButton
+        onClick={enqueue}
+        disabled={isListMaxLength(queue, maxQueueLength)}
+        textDecoration={textDecorationMaxLength(queue, maxQueueLength)}
+        text={`append(${nextData})`}
+      />
+      <OperationButton
+        disabled={isListEmpty(queue)}
+        onClick={deque}
+        textDecoration={textDecorationEmpty(queue)}
+        text="deque()"
+      />
     </Grid>
   );
 }
