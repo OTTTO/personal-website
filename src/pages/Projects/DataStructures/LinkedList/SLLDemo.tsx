@@ -2,7 +2,7 @@ import { Button, Grid, Typography } from "@mui/material";
 import { useState } from "react";
 import { getRandomInt } from "utils/utils";
 
-export function LinkedListDemo() {
+export function SLLDemo() {
   const [linkedList, setLinkedList] = useState([]);
   const [nextData, setNextData] = useState(getRandomInt(100));
   const [nextRemove, setNextRemove] = useState(getRandomInt(linkedList.length));
@@ -22,13 +22,11 @@ export function LinkedListDemo() {
     if (linkedList.length > 0) {
       const llCopy = [...linkedList];
       llCopy.splice(idx, 1);
-      console.log("llcopy", llCopy);
       setLinkedList(llCopy);
       setNextRemove(getRandomInt(llCopy.length));
     }
   };
 
-  console.log("linkedList", linkedList);
   return (
     <Grid margin="1rem auto 1rem" textAlign="center">
       <Typography fontWeight="bold"> LINKED LIST DEMO</Typography>

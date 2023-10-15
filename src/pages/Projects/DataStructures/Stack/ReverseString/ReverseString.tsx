@@ -5,7 +5,7 @@ import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import PlayCircleOutlineIcon from "@mui/icons-material/PlayCircleOutline";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
 import { DemoString } from "./DemoString";
-import { CodeBlock } from "../../CodeBlock";
+import { CodeBlock } from "../../../../../components/CodeBlock";
 import { codeSnippets } from "../../codeSnippets";
 
 export function ReverseString({ language, setLanguage }) {

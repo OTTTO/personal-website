@@ -10,7 +10,7 @@ export function CodeBlock({
 }) {
   return (
     <Grid width={width} margin="0 auto 1rem" maxWidth="80%">
-      <Grid>
+      <Grid width="25rem">
         <Select
           value={language}
           label="Language"

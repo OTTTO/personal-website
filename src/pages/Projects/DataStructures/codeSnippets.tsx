@@ -437,4 +437,240 @@ length() {
 }`,
     },
   },
+  dll: {
+    node: {
+      python: `class Node:
+  def __init__ (self, data, next = None, prev = None):
+    self.data = data
+    self.next = next
+    self.prev = prev `,
+      javascript: `class Node {
+  constructor(data, next, prev) {
+    this.data = data
+    this.next = next
+    this.prev = prev 
+  }
+}`,
+    },
+    class: {
+      python: `class DoublyLinkedList:
+  def __init__(self):
+    self.tail = None
+    self.head = None
+    self.size = 0`,
+      javascript: `class DoublyLinkedList {
+  constructor() {
+    this.tail = null
+    this.head = null
+    this.size = 0
+  }
+}`,
+    },
+    getNode: {
+      python: `# PRIVATE HELPER METHOD
+# get a node by index
+def __getNode(self, idx):
+  if (self.size == 0):
+    raise Exception('Empty List')
+  if (self.size < idx + 1):
+    raise Exception('Index out of bounds')
+  curr = self.tail
+  for _ in range(idx):
+    curr = curr.next
+  return curr`,
+      javascript: `// PRIVATE HELPER METHOD
+// get a node by index
+#getNode(idx) {
+  if (this.size == 0)
+    throw new Error('Empty List')
+  if (this.size < idx + 1)
+    throw new Error('Index out of bounds')
+  let curr = this.tail
+  for (let i = 0; i < idx; i++)
+    curr = curr.next
+  return curr
+}`,
+    },
+
+    insertBefore: {
+      python: `# insert Node before Node at index
+def insertBefore(self, idx, data):
+  # get node to insert before
+  node = self.__getNode(idx)
+  # new node pointing forward to that node
+  newNode = Node(data, node)
+  # if we are inserting at the beginning 
+  if (node.prev is None):
+    self.tail = newNode
+  else:
+    #connect the nodes
+    newNode.prev = node.prev
+    node.prev.next = newNode
+    node.prev = newNode
+  self.size = self.size + 1`,
+      javascript: `// insert Node before Node at index
+insertBefore(idx, data) {
+  // get node to insert before
+  const node = this.#getNode(idx)
+  // new node pointing forward to that node
+  const newNode = new Node(data, node)
+  // if we are inserting at the beginning 
+  if (!node.prev) {
+    this.tail = newNode
+  } else {
+    // connect the nodes
+    newNode.prev = node.prev
+    node.prev.next = newNode
+    node.prev = newNode
+  }
+  this.size += 1
+}`,
+    },
+    prepend: {
+      python: `# insert Node at beginning of list
+def prepend(self, data):
+# if list is empty
+if (self.tail is None):
+  self.tail = self.head = Node(data)
+  size.size = self.size + 1
+else:
+  self.insertBefore(0, data)`,
+      javascript: `// insert Node at beginning of list
+prepend(data) {
+  // if list is empty
+  if (!this.tail) {
+    this.tail = this.head = new Node(data)
+    this.size += 1
+  } else {
+    this.insertBefore(0, data)
+  }
+}`,
+    },
+    insertAfter: {
+      python: `# insert Node after Node at index
+def insertAfter(self, idx, data):
+  # get node to insert after
+  node = self.__getNode(idx)
+  # new node pointing back to that node
+  newNode = Node(data, None, node)
+  # if we are inserting at the end
+  if (node.next is None):
+    self.head = newNode
+  else:
+    # connect the nodes
+    newNode.next = node.next
+    node.next.prev = newNode
+    node.next = newNode
+  self.size = self.size + 1`,
+      javascript: `// insert Node after Node at index
+insertAfter(idx, data) {
+  // get node to insert after
+  const node = this.#getNode(idx)
+  // new node pointing back to that node
+  const newNode = new Node(data, null, node)
+  // if we are inserting at the end
+  if (!node.next){
+    this.head = newNode
+  } else {
+    // connect the nodes
+    newNode.next = node.next
+    node.next.prev = newNode
+    node.next = newNode
+  }
+  this.size += 1
+}`,
+    },
+    append: {
+      python: `# insert Node at end of list
+def append(self, data):
+  # if list is empty
+  if (self.tail is None):
+    self.tail = self.head = Node(data)
+    self.size = self.size + 1
+  else:
+    endIndex = self.size - 1
+    self.insertAfter(endIndex, data)`,
+      javascript: `// insert Node at end of list
+append(data) {
+  // if list is empty
+  if (!this.tail) {
+    this.tail = this.head = new Node(data)
+    this.size += 1
+  } else {
+    const endIndex = this.size - 1
+    this.insertAfter(endIndex, data)
+  }
+}`,
+    },
+    get: {
+      python: `# get by index
+def get(self, idx):
+  node = self.__getNode(idx)
+  return node.data`,
+      javascript: `// get by index
+get(idx) {
+  const node = this.#getNode(idx)
+  return node.data
+}`,
+    },
+    remove: {
+      python: `# remove by index
+def remove(self, idx):
+  # get node at this index
+  node = self.__getNode(idx)
+  # if node is at the beginning
+  if (node.prev is None):
+    # adjust tail to be the next node
+    self.tail = node.next
+  else:
+    curr = self.tail
+    # find the node before the node we want to remove
+    for _ in range(idx -1):
+      curr = curr.next
+    # if we are not removing the last node
+    if (curr.next.next):
+      # point that node to the node after
+      # the one we want to remove
+      # our node is now skipped over and dropped
+      curr.next = curr.next.next
+    else:
+      # adjust head to be previous node
+      self.head = self.head.prev
+  self.size = self.size - 1`,
+      javascript: `// remove by index
+remove(idx) {
+  // get node at this index
+  const node = this.#getNode(idx)
+  // if node is at the beginning
+  if (!node.prev) {
+    // adjust tail to be the next node
+    this.tail = node.next
+  } else {
+    let curr = this.tail
+    // find the node before the node we want to remove
+    for (let i = 0; i < idx - 1; i++)
+      curr = curr.next
+    // if we are not removing the last node
+    if (curr.next.next)
+      // point that node to the node after
+      // the one we want to remove
+      // our node is now skipped over and dropped
+      curr.next = curr.next.next
+    else
+      // adjust head to be previous node
+      this.head = this.head.prev
+  }
+  this.size -= 1
+}`,
+    },
+    length: {
+      python: `# get length of list
+def length(self):
+  return self.size`,
+      javascript: `// get length of list
+length() {
+  return this.size
+}`,
+    },
+  },
 };

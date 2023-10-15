@@ -1,8 +1,9 @@
-import { Button, Grid, IconButton, Typography } from "@mui/material";
+import { Button, Grid, IconButton } from "@mui/material";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import OtherHousesIcon from "@mui/icons-material/OtherHouses";
 import { Link } from "react-router-dom";
+import { PageButtonText } from "./PageButtonText";
 
 export function PageButtons({
   backTitle = undefined,
@@ -13,13 +14,13 @@ export function PageButtons({
 }) {
   const homeLink = "/projects/xplained/ds";
   return (
-    <Grid display="flex" justifyContent="space-between">
+    <Grid display="flex" justifyContent="space-between" alignItems="center">
       <Grid>
         {backTitle && backTo && (
           <Link to={backTo}>
             <Button>
               <ArrowBackIosIcon />
-              <Typography>{backTitle}</Typography>
+              <PageButtonText text={backTitle} />
             </Button>
           </Link>
         )}
@@ -39,7 +40,7 @@ export function PageButtons({
       {forwardTitle && forwardTo && (
         <Link to={forwardTo}>
           <Button>
-            <Typography>{forwardTitle}</Typography>
+            <PageButtonText text={forwardTitle} />
             <ArrowForwardIosIcon />
           </Button>
         </Link>

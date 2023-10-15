@@ -7,11 +7,11 @@ import { ThemeContext } from "themes/context";
 import projectsTheme from "themes/projectsTheme";
 import { getMainTheme } from "utils/utils";
 import { codeSnippets } from "../codeSnippets";
-import { CodeBlock } from "../CodeBlock";
+import { CodeBlock } from "../../../../components/CodeBlock";
 import { PageButtons } from "components/PageButtons";
-import { LinkedListDemo } from "./LinkedListDemo";
+import { SLLDemo } from "./SLLDemo";
 
-export function LinkedListPage() {
+export function SLLPage() {
   const { theme } = useContext(ThemeContext);
   const [language, setLanguage] = useState("python");
 
@@ -31,7 +31,7 @@ export function LinkedListPage() {
             paddingBottom="2rem"
             sx={{ background: getMainTheme(theme) }}
           >
-            <Title title="LINKED LIST" />
+            <Title title="SINGLY LINKED LIST" />
             <TitleDivider />
             <Grid width="90%" margin="0 auto">
               <Typography
@@ -64,17 +64,18 @@ export function LinkedListPage() {
                   will actually see one leveraged in our implementation of
                   HashMap later on.
                 </p>
-                Linked Lists can be used to solve certain problems
+                Singly Linked Lists can be used to solve certain problems
                 <ul>
-                  <li>Building a HashMap implementation</li>
+                  <li>Building a HashMap Implementation</li>
+                  <li>Navigation in Web Browers</li>
                   <li>
                     As an alternative to arrays in order to preserve memory
                   </li>
-                  <li>Use of back and forward button in a browser</li>
                 </ul>
                 <p>
                   Below is a JS implementation of a singly linked list with some
-                  explanation.
+                  explanation. You will see the doubly linked list
+                  implementation on the next page.
                 </p>
                 <p>
                   A singly linked list is composed of a sequence of Nodes which
@@ -85,19 +86,21 @@ export function LinkedListPage() {
                   language={language}
                   setLanguage={setLanguage}
                   text={codeSnippets.sll.node[language]}
-                  title="linked list node"
+                  title="node"
                   width="20rem"
                 />
                 <p>
-                  The minimum implementation of a singly linked list only
-                  consists of 2 properties - <b>tail</b> and <b>head</b>.{" "}
-                  {"[tail]->[node]->[head]"}
+                  The minimum implementation of a singly linked list consists of
+                  3 properties. <b>size</b> which tracks the length of the list.
+                  The other two necessary properties are <b>tail</b>
+                  <b>head</b>, which are the two ends of the linked list{" "}
+                  <b>{"[tail]->[node]->[head]"}</b>
                 </p>
                 <CodeBlock
                   language={language}
                   setLanguage={setLanguage}
                   text={codeSnippets.sll.class[language]}
-                  title="linked list class"
+                  title="linked list"
                   width="20rem"
                 />
                 <CodeBlock
@@ -137,10 +140,12 @@ export function LinkedListPage() {
                 <Divider
                   sx={{ backgroundColor: "black", borderBottomWidth: 4 }}
                 />
-                <LinkedListDemo />
+                <SLLDemo />
                 <PageButtons
                   backTitle="QUEUE"
                   backTo="/projects/xplained/ds/queue"
+                  forwardTitle="DOUBLY LINKED LIST"
+                  forwardTo="/projects/xplained/ds/dll"
                 />
               </Typography>
             </Grid>

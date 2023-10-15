@@ -12,7 +12,8 @@ import { Recognition } from "pages/Reecognition/Recognition";
 import { Index } from "pages/Projects/DataStructures/Index";
 import { StackPage } from "pages/Projects/DataStructures/Stack/StackPage";
 import { QueuePage } from "pages/Projects/DataStructures/Queue/QueuePage";
-import { LinkedListPage } from "pages/Projects/DataStructures/LinkedList/LinkedListPage";
+import { SLLPage } from "pages/Projects/DataStructures/LinkedList/SLLPage";
+import { DLLPage } from "pages/Projects/DataStructures/LinkedList/DLLPage";
 
 function AppRoutes() {
   return (
@@ -27,10 +28,8 @@ function AppRoutes() {
         <Route path="/projects/xplained/ds" element={<Index />} />
         <Route path="/projects/xplained/ds/stack" element={<StackPage />} />
         <Route path="/projects/xplained/ds/queue" element={<QueuePage />} />
-        <Route
-          path="/projects/xplained/ds/linked-list"
-          element={<LinkedListPage />}
-        />
+        <Route path="/projects/xplained/ds/sll" element={<SLLPage />} />
+        <Route path="/projects/xplained/ds/dll" element={<DLLPage />} />
         <Route
           path="/projects/password-generator"
           element={<PasswordGenerator />}

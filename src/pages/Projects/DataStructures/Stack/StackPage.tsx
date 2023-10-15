@@ -7,7 +7,7 @@ import { ThemeContext } from "themes/context";
 import projectsTheme from "themes/projectsTheme";
 import { getMainTheme } from "utils/utils";
 import { codeSnippets } from "../codeSnippets";
-import { CodeBlock } from "../CodeBlock";
+import { CodeBlock } from "../../../../components/CodeBlock";
 import { StackDemo } from "./StackDemo";
 import { PageButtons } from "components/PageButtons";
 
@@ -51,7 +51,7 @@ export function StackPage() {
                 </p>{" "}
                 <p> Stacks can be used for a number of problems.</p>
                 <ul>
-                  <li>Undo/redo feature on many text editing applications </li>
+                  <li>Depth First Search </li>
                   <li>Reversing a string or array </li>
                   <li>Parenthesis matching</li>{" "}
                 </ul>
@@ -69,7 +69,7 @@ export function StackPage() {
                   language={language}
                   setLanguage={setLanguage}
                   text={codeSnippets.stack.node[language]}
-                  title="stack node"
+                  title="node"
                   width="20rem"
                 />
                 <p>
@@ -81,7 +81,7 @@ export function StackPage() {
                   language={language}
                   setLanguage={setLanguage}
                   text={codeSnippets.stack.class[language]}
-                  title="stack class"
+                  title="stack"
                   width="20rem"
                 />
                 <p>

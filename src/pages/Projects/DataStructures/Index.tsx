@@ -76,8 +76,13 @@ export function Index() {
                     <Link to="/projects/xplained/ds/queue">Queue</Link>
                   </li>
                   <li>
-                    <Link to="/projects/xplained/ds/linked-list">
-                      Linked List
+                    <Link to="/projects/xplained/ds/sll">
+                      Singly Linked List
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/projects/xplained/ds/dll">
+                      Doubly Linked List
                     </Link>
                   </li>
                 </ul>

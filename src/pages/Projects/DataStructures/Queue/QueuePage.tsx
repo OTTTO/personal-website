@@ -7,7 +7,7 @@ import { ThemeContext } from "themes/context";
 import projectsTheme from "themes/projectsTheme";
 import { getMainTheme } from "utils/utils";
 import { codeSnippets } from "../codeSnippets";
-import { CodeBlock } from "../CodeBlock";
+import { CodeBlock } from "../../../../components/CodeBlock";
 import { PageButtons } from "components/PageButtons";
 import { QueueDemo } from "./QueueDemo";
 
@@ -56,8 +56,8 @@ export function QueuePage() {
                 </p>
                 Queues can be used to solve certain problems
                 <ul>
-                  <li>Job processing</li>
                   <li>Breadth First Search</li>
+                  <li>Job processing</li>
                   <li>Iteratively invert a binary tree</li>
                 </ul>
                 <p>
@@ -75,7 +75,7 @@ export function QueuePage() {
                   language={language}
                   setLanguage={setLanguage}
                   text={codeSnippets.queue.node[language]}
-                  title="queue node"
+                  title="node"
                   width="20rem"
                 />
                 <p>
@@ -87,7 +87,7 @@ export function QueuePage() {
                   language={language}
                   setLanguage={setLanguage}
                   text={codeSnippets.queue.class[language]}
-                  title="queue class"
+                  title="queue"
                   width="20rem"
                 />
                 <CodeBlock
@@ -123,8 +123,8 @@ export function QueuePage() {
                 <PageButtons
                   backTitle="STACK"
                   backTo="/projects/xplained/ds/stack"
-                  forwardTitle="LINKED LIST"
-                  forwardTo="/projects/xplained/ds/linked-list"
+                  forwardTitle="SINGLY LINKED LIST"
+                  forwardTo="/projects/xplained/ds/sll"
                 />
               </Typography>
             </Grid>
