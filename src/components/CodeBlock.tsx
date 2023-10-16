@@ -1,5 +1,6 @@
-import { Grid, Select, MenuItem } from "@mui/material";
+import { Grid, Typography } from "@mui/material";
 import { CopyBlock, monokaiSublime } from "react-code-blocks";
+import { LanguageSelect } from "./LanguageSelect";
 
 export function CodeBlock({
   language,
@@ -10,20 +11,18 @@ export function CodeBlock({
 }) {
   return (
     <Grid width={width} margin="0 auto 1rem" maxWidth="80%">
-      <Grid width="25rem">
-        <Select
-          value={language}
-          label="Language"
-          onChange={(e) => setLanguage(e.target.value)}
-          variant="standard"
-        >
-          <MenuItem value="python">Python</MenuItem>
-          <MenuItem value="javascript">JS</MenuItem>
-        </Select>
-        <span>
+      <Grid
+        width="100%"
+        display="flex"
+        flexDirection="column"
+        alignItems="center"
+      >
+        <LanguageSelect language={language} setLanguage={setLanguage} />
+        <Typography>
           <b>{title?.toUpperCase()}</b>
-        </span>
+        </Typography>
       </Grid>
+
       <CopyBlock
         language={language}
         text={text}
