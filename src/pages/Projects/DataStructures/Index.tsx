@@ -14,10 +14,10 @@ import { getMainTheme } from "utils/utils";
 export function Index() {
   const { theme } = useContext(ThemeContext);
   useEffect(() => {
-    window.scrollTo(0, 0);
+    document.getElementById("outerGrid").scrollIntoView();
   }, []);
   return (
-    <Grid border="double thick black">
+    <Grid border="double thick black" id="outerGrid">
       <Grid border=".25rem white solid">
         <ThemeProvider theme={projectsTheme}>
           <Menu backgroundColor="black" />
