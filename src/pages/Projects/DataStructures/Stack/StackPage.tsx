@@ -43,7 +43,7 @@ export function StackPage() {
                 }}
               >
                 <p>
-                  A stack is a First In Last Out or FILO data structure. That
+                  A stack is a Last In First Out or LIFO data structure. That
                   means that the first data to come in is the last data to come
                   out. You can imagine this as a stack of plates where one is
                   placed on top of another and you can only remove the one at
@@ -85,8 +85,9 @@ export function StackPage() {
                   width="20rem"
                 />
                 <p>
-                  A stack is one of the simpler data structures with typically
-                  only 3 methods on it.{" "}
+                  We add nodes to the stack by "pushing" them on the top. This
+                  sets the newly added node to be the top and points it to the
+                  old top in order to extend the stack.
                 </p>
                 <CodeBlock
                   language={language}
@@ -95,6 +96,11 @@ export function StackPage() {
                   title="push"
                   width="25rem"
                 />
+                <p>
+                  We remove nodes in a LIFO fashion by popping the top of the
+                  stack, which returns the top data and resets the top to be the
+                  next node down (even if that node is null or None).
+                </p>
                 <CodeBlock
                   language={language}
                   setLanguage={setLanguage}
@@ -102,6 +108,10 @@ export function StackPage() {
                   title="pop"
                   width="25rem"
                 />
+                <p>
+                  If we just want to see what the top of the stack is or get the
+                  top data, we use peek instead of pop.
+                </p>
                 <CodeBlock
                   language={language}
                   setLanguage={setLanguage}
@@ -112,7 +122,7 @@ export function StackPage() {
                 <p>
                   In many languages you don't need to implement a stack yourself
                   or even import it. For example, in both JavaScript and Python,
-                  a list can serve as a queue{" "}
+                  a list can serve as a queue.
                 </p>
                 <CodeBlock
                   language={language}

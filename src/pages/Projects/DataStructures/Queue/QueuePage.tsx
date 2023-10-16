@@ -90,6 +90,13 @@ export function QueuePage() {
                   title="queue"
                   width="20rem"
                 />
+                <p>
+                  To add a node to the back of the queue, we enqueue it by
+                  pointing the new node to the current tail, pointing the
+                  current tail back to the new node, and resetting the tail to
+                  be the new node. Logic is a bit simpler if we have an empty
+                  queue - we just set both the tail and head as the new node.
+                </p>
                 <CodeBlock
                   language={language}
                   setLanguage={setLanguage}
@@ -97,6 +104,12 @@ export function QueuePage() {
                   title="enqueue"
                   width="25rem"
                 />
+                <p>
+                  When we return and remove, or deque, a node from the queue we
+                  simply reset the head to point to the previous node in the
+                  queue. Logic differs if we are removing the last node in the
+                  queue, in which case we essentially reset the queue.
+                </p>
                 <CodeBlock
                   language={language}
                   setLanguage={setLanguage}

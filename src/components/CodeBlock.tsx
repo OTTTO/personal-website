@@ -10,15 +10,16 @@ export function CodeBlock({
   width,
 }) {
   return (
-    <Grid width={width} margin="0 auto 1rem" maxWidth="80%">
+    <Grid width={width} margin="0 auto 1rem" maxWidth="100%">
       <Grid
         width="100%"
         display="flex"
-        flexDirection="column"
+        flexDirection="row"
         alignItems="center"
+        marginBottom=".3rem"
       >
         <LanguageSelect language={language} setLanguage={setLanguage} />
-        <Typography>
+        <Typography marginLeft=".5rem">
           <b>{title?.toUpperCase()}</b>
         </Typography>
       </Grid>

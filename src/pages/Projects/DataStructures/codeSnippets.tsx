@@ -183,8 +183,7 @@ def enqueue(self, data):
   # if queue is empty
   if (self.head is None):
     # point both head and tail to the new node
-    self.head = node
-    self.tail = self.head
+    self.head = self.tail = node
   else:
     # point the new node to the tail
     node.next = self.tail
@@ -199,8 +198,7 @@ enqueue(data) {
   // if queue is empty
   if (!this.head) {
     // point both head and tail to the new node
-    this.head = node;
-    this.tail = this.head;
+    this.head = this.tail = node;
   } else {
     // point the new node to the tail
     node.next = this.tail;
@@ -341,6 +339,11 @@ def remove(self, idx):
   # empty list, nothing to remove
   if (self.tail is None):
     return False
+  # if index out of bounds
+  # size starts with 1, idx starts with 0
+  # so increase idx by 1 to rectify
+  if (idx + 1 > self.size):
+    return False
   # if tail is to be removed
   if (idx == 0):
     # set next after tail to be the new tail
@@ -348,11 +351,7 @@ def remove(self, idx):
     # decrease size of list
     self.size -= 1
     return True
-  # if index out of bounds
-  # size starts with 1, idx starts with 0
-  # so increase idx by 1 to rectify
-  if (idx + 1 > self.size):
-    return False
+  
   
   # start at tail of list
   curr = self.tail
@@ -371,6 +370,12 @@ remove(idx) {
   // empty list, nothing to remove
   if (!this.tail)
     return false;
+  // if index out of bounds
+  // size starts with 1, idx starts with 0
+  // so increase idx by 1 to rectify
+  if (idx + 1 > this.size) {
+    return false
+  }
   // if tail is to be removed
   if (idx === 0) {
     // set next after tail to be the new tail
@@ -378,12 +383,6 @@ remove(idx) {
     // decrease size of list
     this.size -= 1;
     return true;
-  }
-  // if index out of bounds
-  // size starts with 1, idx starts with 0
-  // so increase idx by 1 to rectify
-  if (idx + 1 > this.size) {
-    return false
   }
   // start at tail of list
   let curr = this.tail;

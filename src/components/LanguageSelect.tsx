@@ -9,7 +9,7 @@ export function LanguageSelect({ language, setLanguage }) {
   const styles = {
     container: (base) => ({
       ...base,
-      width: "7rem",
+      minWidth: "7rem",
       marginTop: ".2rem",
       border: "1px solid black",
       borderRadius: "3px",

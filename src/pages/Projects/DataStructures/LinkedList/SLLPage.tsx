@@ -103,6 +103,12 @@ export function SLLPage() {
                   title="linked list"
                   width="20rem"
                 />
+                <p>
+                  For a singly linked list, when we add a new node we append it
+                  to the front of the list. If the list is empty we simply set
+                  the tail to be the new node. Otherwise, we step all the way
+                  through the List and tack the node on to the end.
+                </p>
                 <CodeBlock
                   language={language}
                   setLanguage={setLanguage}
@@ -110,13 +116,29 @@ export function SLLPage() {
                   title="append"
                   width="25rem"
                 />
+                <p>
+                  When we want to remove a node from the linked list, firt we
+                  make sure that the list is not empty and that the index is in
+                  bounds. We then iterate the list up until the index we want to
+                  remove - 1. Then we take that node and point it to the node
+                  after the node we want to remove, effectively dropping it from
+                  the linked list.
+                </p>
                 <CodeBlock
                   language={language}
                   setLanguage={setLanguage}
                   text={codeSnippets.sll.remove[language]}
-                  title="remove (by index)"
+                  title="remove"
                   width="25rem"
                 />
+                <p>
+                  Getting a node from a linked list is simple, we do the same
+                  checks that were on the remove method - make sure the list is
+                  not empty and that the index is not out of bounds. If we
+                  cannot remove a node because it violates one of these
+                  conditions, we simply return false. Otherwise we just iterate
+                  up until the given index and return the node's data.
+                </p>
                 <CodeBlock
                   language={language}
                   setLanguage={setLanguage}
@@ -124,6 +146,12 @@ export function SLLPage() {
                   title="get"
                   width="25rem"
                 />
+                <p>
+                  Here we are simply returning the size of the list. This length
+                  method is useful to help us iterate the list with a for loop,
+                  a more advanced linked list would have an iterator on it that
+                  we can just call next on until it is exhausted.
+                </p>
                 <CodeBlock
                   language={language}
                   setLanguage={setLanguage}

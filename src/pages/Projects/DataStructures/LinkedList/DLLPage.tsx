@@ -84,6 +84,12 @@ export function DLLPage() {
                   title="doubly linked list"
                   width="20rem"
                 />
+                <p>
+                  This getNode method is a helper method as it grabs the actual
+                  node, our user should only be concerned about the data and not
+                  node ojects. You will see that it is utilized by many of the
+                  exposed methods of this data structure.
+                </p>
                 <CodeBlock
                   language={language}
                   setLanguage={setLanguage}
@@ -91,6 +97,14 @@ export function DLLPage() {
                   title="get node"
                   width="25rem"
                 />
+                <p>
+                  The ability to insert a node before another in the list makes
+                  this data structure comparable to an array in terms of
+                  functionality. The difficult part of this method is making
+                  sure to wire up all of the nodes appropriately. We need to be
+                  concerned about 3 nodes - the new node that we are inserting
+                  and the nodes before/after that node.
+                </p>
                 <CodeBlock
                   language={language}
                   setLanguage={setLanguage}
@@ -98,6 +112,12 @@ export function DLLPage() {
                   title="insert before"
                   width="25rem"
                 />
+                <p>
+                  Prepending a node to the doubly linked list is insertion at
+                  the tail. If the list is empty we just set the tail and head
+                  to be that node. Otherwise, we can simply call our
+                  insertBefore method and insert before the 0th index.
+                </p>
                 <CodeBlock
                   language={language}
                   setLanguage={setLanguage}
@@ -105,6 +125,11 @@ export function DLLPage() {
                   title="prepend"
                   width="25rem"
                 />
+                <p>
+                  Inserting after is just as useful as insertBefore and the
+                  logic is almost entirely the same except we must wire up our
+                  nodes in the reverse order.
+                </p>
                 <CodeBlock
                   language={language}
                   setLanguage={setLanguage}
@@ -112,6 +137,12 @@ export function DLLPage() {
                   title="insert after"
                   width="25rem"
                 />
+                <p>
+                  Appending a node is the opposite of prepending, we are
+                  inserting at the head of the list. The logic here is the same
+                  except we call insertAfter with the last index instead of
+                  insertBefore with the 0th.
+                </p>
                 <CodeBlock
                   language={language}
                   setLanguage={setLanguage}
@@ -119,6 +150,11 @@ export function DLLPage() {
                   title="append"
                   width="25rem"
                 />
+                <p>
+                  Getting the data from a node is very simple when leveraging
+                  the helper method of the same name. We get the node and then
+                  return the data.
+                </p>
                 <CodeBlock
                   language={language}
                   setLanguage={setLanguage}
@@ -126,6 +162,12 @@ export function DLLPage() {
                   title="get"
                   width="25rem"
                 />
+                <p>
+                  Removing a node from a doubly linked list is almost exactly
+                  the same as removing form a singly linked list. Except in the
+                  case of removing the head, we must also reset the head to be
+                  the previous node.
+                </p>
                 <CodeBlock
                   language={language}
                   setLanguage={setLanguage}
@@ -133,6 +175,10 @@ export function DLLPage() {
                   title="remove"
                   width="25rem"
                 />
+                <p>
+                  Once again, we have the length method here as an easy wasy for
+                  the user to iterate over the list.
+                </p>
                 <CodeBlock
                   language={language}
                   setLanguage={setLanguage}
