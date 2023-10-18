@@ -9,6 +9,7 @@ import { getMainTheme } from "utils/utils";
 import { codeSnippets } from "../codeSnippets";
 import { CodeBlock } from "../../../../components/CodeBlock";
 import { PageButtons } from "components/PageButtons";
+import { BSTDemo } from "./BSTDemo";
 
 export function BSTPage() {
   const { theme } = useContext(ThemeContext);
@@ -159,7 +160,7 @@ export function BSTPage() {
                 <Divider
                   sx={{ backgroundColor: "black", borderBottomWidth: 4 }}
                 />
-                {/* <DLLDemo /> */}
+                <BSTDemo />
                 <PageButtons
                   backTitle="DOUBLY LINKED LIST"
                   backTo="/projects/xplained/ds/dll"
