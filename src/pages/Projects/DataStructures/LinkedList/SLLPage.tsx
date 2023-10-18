@@ -73,7 +73,7 @@ export function SLLPage() {
                   </li>
                 </ul>
                 <p>
-                  Below is a JS implementation of a singly linked list with some
+                  Below is an implementation of a singly linked list with some
                   explanation. You will see the doubly linked list
                   implementation on the next page.
                 </p>

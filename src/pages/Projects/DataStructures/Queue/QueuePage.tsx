@@ -61,7 +61,7 @@ export function QueuePage() {
                   <li>Iteratively invert a binary tree</li>
                 </ul>
                 <p>
-                  Below is a JS implementation of a queue with some explanation.
+                  Below is an implementation of a queue with some explanation.
                 </p>
                 <p>
                   Just like the Stack class, the Queue operates on Nodes. The

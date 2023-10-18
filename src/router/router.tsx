@@ -14,6 +14,7 @@ import { StackPage } from "pages/Projects/DataStructures/Stack/StackPage";
 import { QueuePage } from "pages/Projects/DataStructures/Queue/QueuePage";
 import { SLLPage } from "pages/Projects/DataStructures/LinkedList/SLLPage";
 import { DLLPage } from "pages/Projects/DataStructures/LinkedList/DLLPage";
+import { BSTPage } from "pages/Projects/DataStructures/BinarySearchTree/BSTPage";
 
 function AppRoutes() {
   return (
@@ -30,6 +31,7 @@ function AppRoutes() {
         <Route path="/projects/xplained/ds/queue" element={<QueuePage />} />
         <Route path="/projects/xplained/ds/sll" element={<SLLPage />} />
         <Route path="/projects/xplained/ds/dll" element={<DLLPage />} />
+        <Route path="/projects/xplained/ds/bst" element={<BSTPage />} />
         <Route
           path="/projects/password-generator"
           element={<PasswordGenerator />}

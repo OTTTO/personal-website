@@ -56,7 +56,7 @@ export function StackPage() {
                   <li>Parenthesis matching</li>{" "}
                 </ul>
                 <p>
-                  Below is a JS implementation of a stack with some explanation.
+                  Below is an implementation of a stack with some explanation.
                 </p>
                 <p>
                   First we need a way to represent the elements that are going

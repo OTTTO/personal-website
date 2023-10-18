@@ -92,8 +92,11 @@ export function Index() {
                 </ul>
                 <h2 style={{ marginBottom: 0 }}>TREES</h2>
                 <ul style={{ marginTop: 0 }}>
-                  <li>Tree Primer</li>
-                  <li>Binary Search Tree (BST)</li>
+                  <li>
+                    <Link to="/projects/xplained/ds/bst">
+                      Binary Search Tree (BST)
+                    </Link>
+                  </li>
                   <li>Heap</li>
                   <li>AVL Tree (Self Balancing BST)</li>
                 </ul>

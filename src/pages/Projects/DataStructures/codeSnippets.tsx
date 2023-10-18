@@ -672,4 +672,204 @@ length() {
 }`,
     },
   },
+  bst: {
+    node: {
+      python: `class BSTNode:
+  def __init__(self, data = None):
+    self.data = data
+    self.left = None
+    self.right = None`,
+      javascript: `class BSTNode {
+  constructor(data) {
+    this.data = data
+    this.left = null
+    this.right = null
+  }`,
+    },
+    insert: {
+      python: `# insert a node into the bst
+def insert(self, data):
+  node = BSTNode(data)
+  # tree is empty
+  if (self.data is None):
+    self.data = data
+    return 
+  # data already exists in tree
+  if (self.data == data):
+    return
+  # data is less than this node
+  if (data < self.data):
+    # node doesn't have a left child
+    if (self.left is None):
+      self.left = node
+    # else recurse left
+    else:
+      self.left.insert(data)
+  # data is greater than this node
+  elif (data > self.data):
+    # node doesn't have a right child
+    if (self.right is None):
+      self.right = node
+    # else recurse right
+    else:
+      self.right.insert(data)`,
+      javascript: `// insert a node into the bst
+insert(data) {  
+  const node = new BSTNode(data)
+  // tree is empty
+  if (!this.data) {
+    this.data = data
+    return 
+  }
+  // data already exists in tree
+  if (this.data === data) return
+  // data is less than this node
+  if (data < this.data) {
+    // node doesn't have a left child
+    if (!this.left)
+      this.left = node
+    // else recurse left
+    else
+      this.left.insert(data)
+  }
+  // data is greater than this node
+  else if (data > this.data) {
+    // node doesn't have a right child
+    if (!this.right)
+      this.right = node
+    // else recurse right
+    else
+      this.right.insert(data)
+  }
+}`,
+    },
+    exists: {
+      python: `# check if an element exists
+def exists(self, data):
+  if (self.data == data):
+    return True
+  elif (self.data > data and self.left):
+    self.left.exists(data)
+  elif (self.data < data and self.right):
+    self.right.exists(data)
+  else:
+    return False`,
+      javascript: `// check if an element exists
+exists(data) {
+  if (this.data == data)
+    return true
+  else if (this.data > data && this.left)
+    this.left.exists(data)
+  else if (this.data < data && this.right)
+    this.right.exists(data)
+  else
+    return false
+}`,
+    },
+    min: {
+      python: `# get the smallest node from the current node
+# used as a helper method
+# to get the succesor when deleting a node
+def __min__(self):
+  node = self
+  while (node.left):
+    node = node.left
+  return node`,
+      javascript: `// get the smallest node from the current node
+// used as a helper method
+// to get the succesor when deleting a node
+#min() {
+  let node = this
+  while (node.left)
+    node = node.left
+  return node
+}`,
+    },
+    replaceRoot: {
+      python: `# helper method to replace root
+def __replaceRoot__(self, replace):
+    self.data = replace.data
+    self.left = replace.left
+    self.right = replace.right`,
+      javascript: `// helper method to replace root
+#replaceRoot(replace) {
+    this.data = replace.data
+    this.left = replace.left
+    this.right = replace.right
+}`,
+    },
+    delete: {
+      python: `# to delete a node in the bst
+def delete(self, data, isRoot = True):
+  if (self is None):
+    return null
+  if (data < self.data):
+    # recurse left, set returned subtree equal to left child
+    self.left = self.left.delete(data, False)
+    return self
+  if (data > self.data):
+    # recurse right, set returned subtree equal to right child
+    self.right = self.right.delete(data, False)      
+    return self
+  # logic to replace the root node
+  if (isRoot):
+    if (self.left is None and self.right is None) :
+      self.data = None
+    elif (self.left is None):
+      self.__replaceRoot__(self.right)
+    elif (self.right is None):
+      self.__replaceRoot__(self.left)  
+  elif (self.left is None):
+    return self.right
+  elif (self.right is None):
+    return self.left
+  # if node has both children
+  # select successor as 
+  # smallest node of right child
+  successor = self.right.__min__()
+  # replace node with successor
+  self.data = successor.data
+  # delete successor
+  self.right = self.right.delete(successor.data, False)
+  return self`,
+      javascript: `// to delete a node in the bst
+delete(data, isRoot = true) {
+  if (!this) {
+    return null
+  }
+  if (data < this.data) {
+    // recurse left, set returned subtree equal to left child
+    this.left = this.left.delete(data, false)
+    return this
+  }
+  if (data > this.data) {
+    // recurse right, set returned subtree equal to right child
+    this.right = this.right.delete(data, false)      
+    return this
+  }
+  // logic to replace the root node
+  if (isRoot) {
+    if (!this.left && !this.right) 
+      this.data = null
+    else if (!this.left)
+      this.#replaceRoot(this.right)
+    else if (!this.right)
+      this.#replaceRoot(this.left)
+  }  
+  else if (!this.left)
+    return this.right
+  else if (!this.right)
+    return this.left
+  // if node has both children
+  // select successor as 
+  // smallest node of right child
+  const successor = this.right.#min()
+  // replace node with successor
+  this.data = successor.data
+  // delete successor
+  this.right = this.right.delete(successor.data, false)
+  return this
+}`,
+    },
+  },
 };

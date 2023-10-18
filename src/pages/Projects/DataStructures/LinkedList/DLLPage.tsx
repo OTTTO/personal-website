@@ -54,7 +54,7 @@ export function DLLPage() {
                   <li>Use of back and forward button in a browser</li>
                 </ul>
                 <p>
-                  Below is a JS implementation of a doubly linked list with some
+                  Below is an implementation of a doubly linked list with some
                   explanation.
                 </p>
                 <p>
@@ -201,6 +201,8 @@ export function DLLPage() {
                 <PageButtons
                   backTitle="SINGLY LINKED LIST"
                   backTo="/projects/xplained/ds/sll"
+                  forwardTitle="BINARY SEARCH TREE"
+                  forwardTo="/projects/xplained/ds/bst"
                 />
               </Typography>
             </Grid>
