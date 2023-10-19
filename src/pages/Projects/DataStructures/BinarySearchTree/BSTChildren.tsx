@@ -1,7 +1,12 @@
 import { Grid } from "@mui/material";
 import { BSTNode } from "./BSTNode";
 
-export function BSTChildren({ left = undefined, right = undefined, height }) {
+export function BSTChildren({
+  left = undefined,
+  right = undefined,
+  height,
+  removeData,
+}) {
   const justify = (left, right) => {
     if (left && right) return "center";
     else if (left) return "flex-start";
@@ -19,8 +24,8 @@ export function BSTChildren({ left = undefined, right = undefined, height }) {
       flexDirection="row"
       justifyContent={justify(left, right)}
     >
-      <BSTNode data={left} />
-      <BSTNode data={right} />
+      <BSTNode data={left} removeData={removeData} />
+      <BSTNode data={right} removeData={removeData} />
     </Grid>
   );
 }

@@ -10,6 +10,7 @@ import { BSTRow } from "./BSTRow";
 
 export function BSTDemo() {
   const [bst, setBst] = useState([50]);
+
   const [nextData, setNextData] = useState(getRandomInt(100));
   const [nextRemove, setNextRemove] = useState(0);
   const [isFull, setFull] = useState(false);
@@ -26,6 +27,20 @@ export function BSTDemo() {
 
   const isEmpty = (bst) => {
     return !bst || bst.every((el) => !el);
+  };
+
+  const getRandomData = (tree) => {
+    let randomInt = getRandomInt(100);
+    let iter = 0;
+    while (!isValidInsert(tree, randomInt)) {
+      if (iter === 1000) {
+        setFull(true);
+        break;
+      }
+      randomInt = getRandomInt(100);
+      iter += 1;
+    }
+    return randomInt;
   };
 
   const insert = () => {
@@ -52,19 +67,8 @@ export function BSTDemo() {
         }
       }
     }
-
-    let randomInt = getRandomInt(100);
-    let iter = 0;
-    while (!isValidInsert(tree, randomInt)) {
-      if (iter === 1000) {
-        setFull(true);
-        break;
-      }
-      randomInt = getRandomInt(100);
-      iter += 1;
-    }
     setBst(tree);
-    setNextData(randomInt);
+    setNextData(getRandomData(tree));
   };
 
   // check to see if we will overflow our visualization
@@ -124,15 +128,18 @@ export function BSTDemo() {
   const deleteNode = () => {
     console.log("in delete node");
     const tree = [...bst];
+    console.log(tree);
 
-    const data = nextRemove;
-    if (!exists(tree, tree[data])) return false;
-    console.log("remove", data);
+    const rmIdx = nextRemove;
+    if (!exists(tree, tree[rmIdx])) return false;
+    console.log("remove", rmIdx);
     for (let i = 0; i <= tree.length; ) {
       console.log("i", i);
       let leftChild = 2 * i + 1;
       let rightChild = 2 * i + 2;
-      if (tree[i] === tree[data]) {
+      console.log("LEFT CHILD", tree[leftChild]);
+      console.log("CHECK", isNode(tree[leftChild]));
+      if (tree[i] === tree[rmIdx]) {
         console.log("EQUAL");
         if (!isNode(tree[leftChild]) && !isNode(tree[rightChild])) {
           console.log("LEAF");
@@ -161,8 +168,8 @@ export function BSTDemo() {
         }
       }
 
-      if (tree[data] < tree[i]) {
-        console.log("IN OTHER, tree[data], tree[i]", tree[data], tree[i]);
+      if (tree[rmIdx] < tree[i]) {
+        console.log("IN OTHER, tree[rmIdx], tree[i]", tree[rmIdx], tree[i]);
         console.log("GOING LEFT");
         if (!isNode(tree[leftChild])) {
           console.log("BREAKING LEFT");
@@ -171,7 +178,14 @@ export function BSTDemo() {
           console.log("ITER LEFT");
           i = leftChild;
         }
-      } else if (tree[data] > tree[i]) {
+      } else if (tree[rmIdx] > tree[i]) {
+        console.log(
+          "tree[rmIdx], tree[i], rmIdx, i",
+          tree[rmIdx],
+          tree[i],
+          rmIdx,
+          i
+        );
         console.log("GOING RIGHT");
         if (!isNode(tree[rightChild])) {
           console.log("BREAKING RIGHT");
@@ -184,24 +198,26 @@ export function BSTDemo() {
     }
     setFull(false);
     setBst(tree);
+    setNextData(getRandomData(tree));
   };
 
   const moveUp = (tree, idx) => {
-    console.log("move up");
-    const pathIndices = [idx];
-    while (pathIndices.every((path) => path > tree.length)) {
-      for (let path = 0; path < pathIndices.length; path++) {
-        let i = pathIndices[path];
-        let leftChild = 2 * i + 1;
-        let rightChild = 2 * i + 2;
-        let leftParent = Math.floor(i / 2);
-        let rightParent = i / 2;
-        if (tree[leftChild]) tree[leftParent] = leftChild;
-        if (tree[rightChild]) tree[rightParent] = rightChild;
-        pathIndices.push(leftChild);
-        pathIndices.push(rightChild);
-      }
+    if (idx > 14) return;
+
+    let leftChild = 2 * idx + 1;
+    let rightChild = 2 * idx + 2;
+
+    if (isNode(tree[leftChild])) {
+      tree[idx] = tree[leftChild];
+      tree[leftChild] = null;
     }
+    if (isNode(tree[rightChild])) {
+      tree[idx] = tree[rightChild];
+      tree[rightChild] = null;
+    }
+
+    moveUp(tree, leftChild);
+    moveUp(tree, rightChild);
   };
 
   return (
@@ -227,7 +243,7 @@ export function BSTDemo() {
           sx={{ backgroundColor: "black", opacity: 0.85 }}
         >
           {new Array(4).fill(true).map((_, height) => (
-            <BSTRow nodes={bst} height={height} />
+            <BSTRow nodes={bst} height={height} removeData={bst[nextRemove]} />
           ))}
         </Grid>
         <Button onClick={insert} disabled={isFull}>

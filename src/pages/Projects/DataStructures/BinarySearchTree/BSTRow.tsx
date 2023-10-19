@@ -2,7 +2,7 @@ import { Grid } from "@mui/material";
 import { BSTChildren } from "./BSTChildren";
 import { BSTNode } from "./BSTNode";
 
-export function BSTRow({ nodes, height }) {
+export function BSTRow({ nodes, height, removeData }) {
   const getRow = () => {
     let start = 0;
     for (let i = 0; i < height; i++) {
@@ -33,10 +33,15 @@ export function BSTRow({ nodes, height }) {
     >
       <>
         {height === 0 ? (
-          <BSTNode data={nodes[0]} />
+          <BSTNode data={nodes[0]} removeData={removeData} />
         ) : (
           getRow().map((el) => (
-            <BSTChildren left={el.left} right={el.right} height={height} />
+            <BSTChildren
+              left={el.left}
+              right={el.right}
+              height={height}
+              removeData={removeData}
+            />
           ))
         )}
       </>
