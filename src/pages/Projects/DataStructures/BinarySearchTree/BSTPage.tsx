@@ -100,24 +100,34 @@ export function BSTPage() {
                   trees that balance themselves and are guaranteed to maintain
                   O(log(n)) insertion and search.
                 </p>
-                <ul>
-                  <li>Serving as a double ended queue (deque)</li>
-                  <li>Undo/Redo feature in editing applications</li>
-                  <li>Use of back and forward button in a browser</li>
-                </ul>
                 <p>
                   Below is an implementation of a binary search tree with some
                   explanation.
                 </p>
-                <p></p>
+                <p>
+                  Unlike the sequential data structures, BSTs only require a
+                  single class for their operations. This class contains 4
+                  properties - <b>key</b>: the identifier of our nodes,
+                  <b>data</b>: the actual data which is stored at the node, and
+                  then <b>left</b>/<b>right</b>: references to the left and
+                  right children. We don't need to store the root of the BST
+                  because we know that the first node will always be the root
+                  and then we climb down from there.
+                </p>
                 <CodeBlock
                   language={language}
                   setLanguage={setLanguage}
-                  text={codeSnippets.bst.node[language]}
+                  text={codeSnippets.bst.class[language]}
                   title="binary search tree"
                   width="20rem"
                 />
-                <p></p>
+                <p>
+                  Insertion into a BST is simple. If there is no root we simply
+                  set the node with the key and the data, otherwise we recurse
+                  to the left or the right depending on if the key is less than
+                  or greater than the current node. Once we hit the bottom of
+                  the tree that is when we do the actual insertion.
+                </p>
                 <CodeBlock
                   language={language}
                   setLanguage={setLanguage}
@@ -125,7 +135,13 @@ export function BSTPage() {
                   title="insert"
                   width="25rem"
                 />
-                <p></p>
+                <p>
+                  Checking if an element exists is how we search for elements in
+                  a BST. It is done by recursively climbing down the children
+                  looking for the key, if we eventually find it we return true
+                  otherwise if we hit the bottom of the tree we return false
+                  knowing that the key is not present.
+                </p>
                 <CodeBlock
                   language={language}
                   setLanguage={setLanguage}
@@ -133,7 +149,24 @@ export function BSTPage() {
                   title="exists"
                   width="25rem"
                 />
-                <p></p>
+                <p>
+                  Getting an element is done exactly the same as checking if it
+                  exists but instead of returning a boolean we return the data
+                  that node or a null value if we don't find it.
+                </p>
+                <CodeBlock
+                  language={language}
+                  setLanguage={setLanguage}
+                  text={codeSnippets.bst.get[language]}
+                  title="get"
+                  width="25rem"
+                />
+                <p>
+                  Find the minimum child of any given node. This is used to find
+                  the successor when we delete a node that has both a left and
+                  right child. The successor is always the min of the right
+                  child and it will take the place of the deleted node.
+                </p>
                 <CodeBlock
                   language={language}
                   setLanguage={setLanguage}
@@ -141,7 +174,11 @@ export function BSTPage() {
                   title="min"
                   width="25rem"
                 />
-                <p></p>
+                <p>
+                  Some simple logic is needed to replace the root node when it
+                  only has one child. We have extracted this as a helper method
+                  because to clean up the delete method.
+                </p>
                 <CodeBlock
                   language={language}
                   setLanguage={setLanguage}
@@ -149,7 +186,13 @@ export function BSTPage() {
                   title="replace root"
                   width="25rem"
                 />
-                <p></p>
+                <p>
+                  Deleting a node also involves recursing the tree until the key
+                  is found. Once the key is found, we follow various means to
+                  delete it. There is certain logic if we are deleting the root,
+                  deleting a node with only one child, or deleting a node with
+                  both a left and right child.
+                </p>
                 <CodeBlock
                   language={language}
                   setLanguage={setLanguage}

@@ -3,7 +3,7 @@ import { Themes } from "types/themes";
 
 export const ThemeContext = createContext(undefined);
 export const ThemeContextProvider = ({ children }) => {
-  const [theme, setTheme] = useState(Themes.Ice);
+  const [theme, setTheme] = useState(Themes.Fire);
   return (
     <ThemeContext.Provider value={{ theme, setTheme }}>
       {children}
