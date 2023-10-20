@@ -1,10 +1,10 @@
 import { Grid, Typography } from "@mui/material";
 
-export function BSTNode({ data, removeData, getData }) {
+export function BSTNode({ data, justAdded, removeData }) {
   const background = () =>
-    data === getData && data === removeData
+    data === justAdded && data === removeData
       ? "linear-gradient(90deg, greenyellow, #ff4d00)"
-      : data === getData
+      : data === justAdded
       ? "greenyellow"
       : data === removeData
       ? "#ff4d00"

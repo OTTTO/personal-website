@@ -1,4 +1,4 @@
-import { Divider, Grid, ThemeProvider, Typography } from "@mui/material";
+import { Grid, ThemeProvider, Typography } from "@mui/material";
 import { Menu } from "components/Menu";
 import { Title } from "components/TItle";
 import { TitleDivider } from "components/TitleDivider";
@@ -10,6 +10,7 @@ import { codeSnippets } from "../codeSnippets";
 import { CodeBlock } from "../../../../components/CodeBlock";
 import { PageButtons } from "components/PageButtons";
 import { QueueDemo } from "./QueueDemo";
+import { DSDivider } from "components/DSDivider";
 
 export function QueuePage() {
   const { theme } = useContext(ThemeContext);
@@ -63,6 +64,7 @@ export function QueuePage() {
                 <p>
                   Below is an implementation of a queue with some explanation.
                 </p>
+                <DSDivider />
                 <p>
                   Just like the Stack class, the Queue operates on Nodes. The
                   first two properties are the same - <b>data</b> and{" "}
@@ -78,6 +80,7 @@ export function QueuePage() {
                   title="node"
                   width="20rem"
                 />
+                <DSDivider />
                 <p>
                   The minimum Queue class contains just 2 properties -{" "}
                   <b>tail</b> which is a reference to the rear of the queue and{" "}
@@ -90,6 +93,7 @@ export function QueuePage() {
                   title="queue"
                   width="20rem"
                 />
+                <DSDivider />
                 <p>
                   To add a node to the back of the queue, we enqueue it by
                   pointing the new node to the current tail, pointing the
@@ -104,6 +108,7 @@ export function QueuePage() {
                   title="enqueue"
                   width="25rem"
                 />
+                <DSDivider />
                 <p>
                   When we return and remove, or deque, a node from the queue we
                   simply reset the head to point to the previous node in the
@@ -117,6 +122,7 @@ export function QueuePage() {
                   title="deque"
                   width="25rem"
                 />
+                <DSDivider />
                 <p>
                   Just like stacks, in both JavaScript and Python, a list can
                   serve as a queue. Although as we will see, the way by which
@@ -129,13 +135,9 @@ export function QueuePage() {
                   title="built in queue"
                   width="20rem"
                 />
-                <Divider
-                  sx={{ backgroundColor: "black", borderBottomWidth: 4 }}
-                />
+                <DSDivider />
                 <QueueDemo />
-                <Divider
-                  sx={{ backgroundColor: "black", borderBottomWidth: 4 }}
-                />
+                <DSDivider />
                 <PageButtons
                   backTitle="STACK"
                   backTo="/projects/xplained/ds/stack"

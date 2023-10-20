@@ -1,4 +1,4 @@
-import { Divider, Grid, ThemeProvider, Typography } from "@mui/material";
+import { Grid, ThemeProvider, Typography } from "@mui/material";
 import { Menu } from "components/Menu";
 import { Title } from "components/TItle";
 import { TitleDivider } from "components/TitleDivider";
@@ -10,6 +10,7 @@ import { codeSnippets } from "../codeSnippets";
 import { CodeBlock } from "../../../../components/CodeBlock";
 import { PageButtons } from "components/PageButtons";
 import { SLLDemo } from "./SLLDemo";
+import { DSDivider } from "components/DSDivider";
 
 export function SLLPage() {
   const { theme } = useContext(ThemeContext);
@@ -77,6 +78,7 @@ export function SLLPage() {
                   explanation. You will see the doubly linked list
                   implementation on the next page.
                 </p>
+                <DSDivider />
                 <p>
                   A singly linked list is composed of a sequence of Nodes which
                   each contain <b>data</b> and a reference to the <b>next</b>{" "}
@@ -89,6 +91,7 @@ export function SLLPage() {
                   title="node"
                   width="20rem"
                 />
+                <DSDivider />
                 <p>
                   The minimum implementation of a singly linked list consists of
                   3 properties. <b>size</b> which tracks the length of the list.
@@ -103,6 +106,7 @@ export function SLLPage() {
                   title="linked list"
                   width="20rem"
                 />
+                <DSDivider />
                 <p>
                   For a singly linked list, when we add a new node we append it
                   to the front of the list. If the list is empty we simply set
@@ -116,6 +120,7 @@ export function SLLPage() {
                   title="append"
                   width="25rem"
                 />
+                <DSDivider />
                 <p>
                   When we want to remove a node from the linked list, firt we
                   make sure that the list is not empty and that the index is in
@@ -131,6 +136,7 @@ export function SLLPage() {
                   title="remove"
                   width="25rem"
                 />
+                <DSDivider />
                 <p>
                   Getting a node from a linked list is simple, we do the same
                   checks that were on the remove method - make sure the list is
@@ -146,6 +152,7 @@ export function SLLPage() {
                   title="get"
                   width="25rem"
                 />
+                <DSDivider />
                 <p>
                   Here we are simply returning the size of the list. This length
                   method is useful to help us iterate the list with a for loop,
@@ -159,19 +166,16 @@ export function SLLPage() {
                   title="length"
                   width="25rem"
                 />
+                <DSDivider />
                 <p>
                   Unlike stacks and queues, we cannot use JS and Python Lists to
                   mock Linked Lists as these lists are built as Array Lists with
                   arrays that automatically resize behind the scenes - for most
                   cases this defeats the purpose of Linked List.
                 </p>
-                <Divider
-                  sx={{ backgroundColor: "black", borderBottomWidth: 4 }}
-                />
+                <DSDivider />
                 <SLLDemo />
-                <Divider
-                  sx={{ backgroundColor: "black", borderBottomWidth: 4 }}
-                />
+                <DSDivider />
                 <PageButtons
                   backTitle="QUEUE"
                   backTo="/projects/xplained/ds/queue"

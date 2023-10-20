@@ -1,4 +1,4 @@
-import { Divider, Grid, ThemeProvider, Typography } from "@mui/material";
+import { Grid, ThemeProvider, Typography } from "@mui/material";
 import { Menu } from "components/Menu";
 import { Title } from "components/TItle";
 import { TitleDivider } from "components/TitleDivider";
@@ -10,6 +10,7 @@ import { codeSnippets } from "../codeSnippets";
 import { CodeBlock } from "../../../../components/CodeBlock";
 import { PageButtons } from "components/PageButtons";
 import { DLLDemo } from "./DLLDemo";
+import { DSDivider } from "components/DSDivider";
 
 export function DLLPage() {
   const { theme } = useContext(ThemeContext);
@@ -57,6 +58,7 @@ export function DLLPage() {
                   Below is an implementation of a doubly linked list with some
                   explanation.
                 </p>
+                <DSDivider />
                 <p>
                   The Nodes it uses are the same except they also include a
                   reference to the previous node, <b>prev</b>.
@@ -68,6 +70,7 @@ export function DLLPage() {
                   title="node"
                   width="20rem"
                 />
+                <DSDivider />
                 <p>
                   The doubly linked list contains the same properties as its
                   counterpart - <b>size</b>, <b>tail</b>, and <b>head</b>. The
@@ -84,6 +87,7 @@ export function DLLPage() {
                   title="doubly linked list"
                   width="20rem"
                 />
+                <DSDivider />
                 <p>
                   This getNode method is a helper method as it grabs the actual
                   node, our user should only be concerned about the data and not
@@ -97,6 +101,7 @@ export function DLLPage() {
                   title="get node"
                   width="25rem"
                 />
+                <DSDivider />
                 <p>
                   The ability to insert a node before another in the list makes
                   this data structure comparable to an array in terms of
@@ -112,6 +117,7 @@ export function DLLPage() {
                   title="insert before"
                   width="25rem"
                 />
+                <DSDivider />
                 <p>
                   Prepending a node to the doubly linked list is insertion at
                   the tail. If the list is empty we just set the tail and head
@@ -125,6 +131,7 @@ export function DLLPage() {
                   title="prepend"
                   width="25rem"
                 />
+                <DSDivider />
                 <p>
                   Inserting after is just as useful as insertBefore and the
                   logic is almost entirely the same except we must wire up our
@@ -137,6 +144,7 @@ export function DLLPage() {
                   title="insert after"
                   width="25rem"
                 />
+                <DSDivider />
                 <p>
                   Appending a node is the opposite of prepending, we are
                   inserting at the head of the list. The logic here is the same
@@ -150,6 +158,7 @@ export function DLLPage() {
                   title="append"
                   width="25rem"
                 />
+                <DSDivider />
                 <p>
                   Getting the data from a node is very simple when leveraging
                   the helper method of the same name. We get the node and then
@@ -162,6 +171,7 @@ export function DLLPage() {
                   title="get"
                   width="25rem"
                 />
+                <DSDivider />
                 <p>
                   Removing a node from a doubly linked list is almost exactly
                   the same as removing form a singly linked list. Except in the
@@ -175,6 +185,7 @@ export function DLLPage() {
                   title="remove"
                   width="25rem"
                 />
+                <DSDivider />
                 <p>
                   Once again, we have the length method here as an easy wasy for
                   the user to iterate over the list.
@@ -186,6 +197,7 @@ export function DLLPage() {
                   title="length"
                   width="20rem"
                 />
+                <DSDivider />
                 <p>
                   We can easily mock a doubly linked list with a list in JS or
                   Python but in praticality this would not make sense since the
@@ -194,13 +206,9 @@ export function DLLPage() {
                   defeating the purpose of using this data structure in the
                   first place.
                 </p>
-                <Divider
-                  sx={{ backgroundColor: "black", borderBottomWidth: 4 }}
-                />
+                <DSDivider />
                 <DLLDemo />
-                <Divider
-                  sx={{ backgroundColor: "black", borderBottomWidth: 4 }}
-                />
+                <DSDivider />
                 <PageButtons
                   backTitle="SINGLY LINKED LIST"
                   backTo="/projects/xplained/ds/sll"

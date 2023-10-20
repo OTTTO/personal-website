@@ -1,6 +1,6 @@
 import { Grid, Typography } from "@mui/material";
-import { LinkedListDescription } from "components/LinkedListDescription";
 import { OperationButton } from "components/OperationButton";
+import { OperationDescription } from "components/OperationDescription";
 import { useState } from "react";
 import {
   getRandomInt,
@@ -89,8 +89,8 @@ export function DLLDemo() {
         DOUBLY LINKED LIST DEMO
       </Typography>
       <Grid display="flex" flexDirection="row" margin=".2rem 0 .5rem">
-        <LinkedListDescription backgroundColor="greenyellow" text="ADDED" />
-        <LinkedListDescription backgroundColor="#ff4d00" text="TO REMOVE" />
+        <OperationDescription backgroundColor="greenyellow" text="ADDED" />
+        <OperationDescription backgroundColor="#ff4d00" text="TO REMOVE" />
       </Grid>
       <Grid
         height="3rem"

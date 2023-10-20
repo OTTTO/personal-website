@@ -1,4 +1,4 @@
-import { Divider, Grid, ThemeProvider, Typography } from "@mui/material";
+import { Grid, ThemeProvider, Typography } from "@mui/material";
 import { Menu } from "components/Menu";
 import { Title } from "components/TItle";
 import { TitleDivider } from "components/TitleDivider";
@@ -10,6 +10,7 @@ import { codeSnippets } from "../codeSnippets";
 import { CodeBlock } from "../../../../components/CodeBlock";
 import { PageButtons } from "components/PageButtons";
 import { BSTDemo } from "./BSTDemo";
+import { DSDivider } from "components/DSDivider";
 
 export function BSTPage() {
   const { theme } = useContext(ThemeContext);
@@ -70,9 +71,7 @@ export function BSTPage() {
                   The height of a tree is the number of steps between the root
                   node and the lowest leaf.
                 </p>
-                <Divider
-                  sx={{ backgroundColor: "black", borderBottomWidth: 4 }}
-                />
+                <DSDivider />
                 <p>
                   A binary tree is a tree where each node has at most two
                   children. Each node can have a left and/or right child. In a
@@ -104,6 +103,7 @@ export function BSTPage() {
                   Below is an implementation of a binary search tree with some
                   explanation.
                 </p>
+                <DSDivider />
                 <p>
                   Unlike the sequential data structures, BSTs only require a
                   single class for their operations. This class contains 4
@@ -121,6 +121,7 @@ export function BSTPage() {
                   title="binary search tree"
                   width="20rem"
                 />
+                <DSDivider />
                 <p>
                   Insertion into a BST is simple. If there is no root we simply
                   set the node with the key and the data, otherwise we recurse
@@ -135,6 +136,7 @@ export function BSTPage() {
                   title="insert"
                   width="25rem"
                 />
+                <DSDivider />
                 <p>
                   Checking if an element exists is how we search for elements in
                   a BST. It is done by recursively climbing down the children
@@ -149,10 +151,11 @@ export function BSTPage() {
                   title="exists"
                   width="25rem"
                 />
+                <DSDivider />
                 <p>
                   Getting an element is done exactly the same as checking if it
                   exists but instead of returning a boolean we return the data
-                  that node or a null value if we don't find it.
+                  of that node or a null value if we don't find it.
                 </p>
                 <CodeBlock
                   language={language}
@@ -161,6 +164,7 @@ export function BSTPage() {
                   title="get"
                   width="25rem"
                 />
+                <DSDivider />
                 <p>
                   Find the minimum child of any given node. This is used to find
                   the successor when we delete a node that has both a left and
@@ -174,6 +178,7 @@ export function BSTPage() {
                   title="min"
                   width="25rem"
                 />
+                <DSDivider />
                 <p>
                   Some simple logic is needed to replace the root node when it
                   only has one child. We have extracted this as a helper method
@@ -186,6 +191,7 @@ export function BSTPage() {
                   title="replace root"
                   width="25rem"
                 />
+                <DSDivider />
                 <p>
                   Deleting a node also involves recursing the tree until the key
                   is found. Once the key is found, we follow various means to
@@ -200,13 +206,9 @@ export function BSTPage() {
                   title="delete"
                   width="25rem"
                 />
-                <Divider
-                  sx={{ backgroundColor: "black", borderBottomWidth: 4 }}
-                />
+                <DSDivider />
                 <BSTDemo />
-                <Divider
-                  sx={{ backgroundColor: "black", borderBottomWidth: 4 }}
-                />
+                <DSDivider />
                 <PageButtons
                   backTitle="DOUBLY LINKED LIST"
                   backTo="/projects/xplained/ds/dll"

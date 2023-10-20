@@ -1,8 +1,10 @@
-import { Button, Grid, Typography } from "@mui/material";
+import { Grid, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { getRandomInt } from "utils/utils";
 import { BSTRow } from "./BSTRow";
 import numToWords from "num-to-words";
+import { OperationDescription } from "components/OperationDescription";
+import { OperationButton } from "components/OperationButton";
 
 // height: 0
 // nodes per row: 2^h
@@ -21,7 +23,9 @@ export function BSTDemo() {
   const [nextNode, setNextNode] = useState(getRandomNode());
   const [nextRemove, setNextRemove] = useState(0);
   const [nextGet, setNextGet] = useState(0);
+  const [nodeReturned, setNodeReturned] = useState(bst[0]);
   const [viewGet, setViewGet] = useState(false);
+  const [justAdded, setJustAdded] = useState(0);
   const [isFull, setFull] = useState(false);
 
   const isNode = (node) => node?.key || node?.key === 0;
@@ -108,6 +112,7 @@ export function BSTDemo() {
         if (nextNode.key < tree[i].key) {
           if (!isNode(tree[leftChild])) {
             tree[leftChild] = nextNode;
+            setJustAdded(nextNode.key);
             break;
           } else {
             i = leftChild;
@@ -115,6 +120,7 @@ export function BSTDemo() {
         } else if (nextNode.key > tree[i].key) {
           if (!isNode(tree[rightChild])) {
             tree[rightChild] = nextNode;
+            setJustAdded(nextNode.key);
             break;
           } else {
             i = rightChild;
@@ -137,8 +143,6 @@ export function BSTDemo() {
 
   const deleteNode = () => {
     const tree = [...bst];
-    console.log(tree);
-
     const rmKey = nextRemove;
     if (!exists(tree, tree[rmKey].key)) return false;
     for (let i = 0; i <= tree.length; ) {
@@ -207,6 +211,15 @@ export function BSTDemo() {
   };
 
   const getNode = () => {
+    const tree = [...bst];
+    for (let i = 0; i <= tree.length; ) {
+      let leftChild = 2 * i + 1;
+      let rightChild = 2 * i + 2;
+      if (tree[i]?.key === tree[nextGet]?.key) setNodeReturned(tree[i]);
+      if (tree[nextGet]?.key < tree[i]?.key) i = leftChild;
+      else i = rightChild;
+    }
+
     setViewGet(true);
     setNexts();
   };
@@ -223,6 +236,10 @@ export function BSTDemo() {
         <Typography fontWeight="bold" sx={{ textDecoration: "underline" }}>
           Binary Search Tree Demo
         </Typography>
+        <Grid display="flex" flexDirection="row" margin=".2rem 0 .5rem">
+          <OperationDescription backgroundColor="greenyellow" text="ADDED" />
+          <OperationDescription backgroundColor="#ff4d00" text="TO REMOVE" />
+        </Grid>
         <Grid
           display="flex"
           flexDirection="column"
@@ -238,19 +255,28 @@ export function BSTDemo() {
               nodes={keys}
               height={height}
               removeData={bst[nextRemove]?.key}
-              getData={bst[nextGet]?.key}
+              justAdded={justAdded}
             />
           ))}
         </Grid>
-        <Button onClick={insert} disabled={isFull}>
-          INSERT({nextNode.key})
-        </Button>
-        <Button onClick={deleteNode} disabled={bst.length === 0}>
-          DELETE({nextRemove})
-        </Button>
-        <Button onClick={getNode} disabled={bst.length === 0}>
-          GET({nextGet})
-        </Button>
+        <OperationButton
+          onClick={insert}
+          disabled={isFull}
+          text={`INSERT(${nextNode?.key})`}
+          textDecoration={isFull ? "line-through" : ""}
+        />
+        <OperationButton
+          onClick={deleteNode}
+          disabled={isEmpty(bst)}
+          text={`DELETE(${bst[nextRemove]?.key || ""})`}
+          textDecoration={isEmpty(bst) ? "line-through" : ""}
+        />
+        <OperationButton
+          onClick={getNode}
+          disabled={isEmpty(bst)}
+          text={`GET(${bst[nextGet]?.key || ""})`}
+          textDecoration={isEmpty(bst) ? "line-through" : ""}
+        />
         {viewGet && (
           <Typography
             border="1px solid black"
@@ -259,7 +285,7 @@ export function BSTDemo() {
             margin=".4rem 0"
             sx={{ backgroundColor: "yellowgreen" }}
           >
-            {bst[nextGet]?.data}
+            {nodeReturned?.data}
           </Typography>
         )}
       </Grid>

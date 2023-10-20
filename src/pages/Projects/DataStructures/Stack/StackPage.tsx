@@ -1,4 +1,4 @@
-import { Divider, Grid, ThemeProvider, Typography } from "@mui/material";
+import { Grid, ThemeProvider, Typography } from "@mui/material";
 import { Menu } from "components/Menu";
 import { Title } from "components/TItle";
 import { TitleDivider } from "components/TitleDivider";
@@ -10,6 +10,7 @@ import { codeSnippets } from "../codeSnippets";
 import { CodeBlock } from "../../../../components/CodeBlock";
 import { StackDemo } from "./StackDemo";
 import { PageButtons } from "components/PageButtons";
+import { DSDivider } from "components/DSDivider";
 
 export function StackPage() {
   const { theme } = useContext(ThemeContext);
@@ -58,6 +59,7 @@ export function StackPage() {
                 <p>
                   Below is an implementation of a stack with some explanation.
                 </p>
+                <DSDivider />
                 <p>
                   First we need a way to represent the elements that are going
                   to be added to the stack. We do this with a Node class which
@@ -72,6 +74,7 @@ export function StackPage() {
                   title="node"
                   width="20rem"
                 />
+                <DSDivider />
                 <p>
                   The minimum implementation of Stack class itself contains only
                   1 property, <b>top</b>, which as the name implies, always
@@ -84,6 +87,7 @@ export function StackPage() {
                   title="stack"
                   width="20rem"
                 />
+                <DSDivider />
                 <p>
                   We add nodes to the stack by "pushing" them on the top. This
                   sets the newly added node to be the top and points it to the
@@ -96,6 +100,7 @@ export function StackPage() {
                   title="push"
                   width="25rem"
                 />
+                <DSDivider />
                 <p>
                   We remove nodes in a LIFO fashion by popping the top of the
                   stack, which returns the top data and resets the top to be the
@@ -108,6 +113,7 @@ export function StackPage() {
                   title="pop"
                   width="25rem"
                 />
+                <DSDivider />
                 <p>
                   If we just want to see what the top of the stack is or get the
                   top data, we use peek instead of pop.
@@ -119,6 +125,7 @@ export function StackPage() {
                   title="peek"
                   width="25rem"
                 />
+                <DSDivider />
                 <p>
                   In many languages you don't need to implement a stack yourself
                   or even import it. For example, in both JavaScript and Python,
@@ -131,13 +138,9 @@ export function StackPage() {
                   title="built in stack"
                   width="20rem"
                 />
-                <Divider
-                  sx={{ backgroundColor: "black", borderBottomWidth: 4 }}
-                />
+                <DSDivider />
                 <StackDemo />
-                <Divider
-                  sx={{ backgroundColor: "black", borderBottomWidth: 4 }}
-                />
+                <DSDivider />
                 <PageButtons
                   forwardTitle="QUEUE"
                   forwardTo="/projects/xplained/ds/queue"

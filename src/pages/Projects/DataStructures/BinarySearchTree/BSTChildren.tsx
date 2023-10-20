@@ -6,7 +6,7 @@ export function BSTChildren({
   right = undefined,
   height,
   removeData,
-  getData,
+  justAdded,
 }) {
   const justify = (left, right) => {
     if (left && right) return "center";
@@ -25,8 +25,8 @@ export function BSTChildren({
       flexDirection="row"
       justifyContent={justify(left, right)}
     >
-      <BSTNode data={left} removeData={removeData} getData={getData} />
-      <BSTNode data={right} removeData={removeData} getData={getData} />
+      <BSTNode data={left} removeData={removeData} justAdded={justAdded} />
+      <BSTNode data={right} removeData={removeData} justAdded={justAdded} />
     </Grid>
   );
 }
