@@ -198,6 +198,9 @@ export function DLLPage() {
                   sx={{ backgroundColor: "black", borderBottomWidth: 4 }}
                 />
                 <DLLDemo />
+                <Divider
+                  sx={{ backgroundColor: "black", borderBottomWidth: 4 }}
+                />
                 <PageButtons
                   backTitle="SINGLY LINKED LIST"
                   backTo="/projects/xplained/ds/sll"

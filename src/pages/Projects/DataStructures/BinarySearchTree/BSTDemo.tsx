@@ -2,6 +2,7 @@ import { Button, Grid, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { getRandomInt } from "utils/utils";
 import { BSTRow } from "./BSTRow";
+import numToWords from "num-to-words";
 
 // height: 0
 // nodes per row: 2^h
@@ -9,87 +10,69 @@ import { BSTRow } from "./BSTRow";
 // right child: 2n + 2
 
 export function BSTDemo() {
-  const [bst, setBst] = useState([50]);
+  const [bst, setBst] = useState([{ key: 50, data: "FIFTY" }]);
+  const [keys, setKeys] = useState([50]);
 
-  const [nextData, setNextData] = useState(getRandomInt(100));
+  const getRandomNode = () => {
+    const key = getRandomInt(100);
+    const data = numToWords(key).toUpperCase();
+    return { key, data };
+  };
+  const [nextNode, setNextNode] = useState(getRandomNode());
   const [nextRemove, setNextRemove] = useState(0);
+  const [nextGet, setNextGet] = useState(0);
+  const [viewGet, setViewGet] = useState(false);
   const [isFull, setFull] = useState(false);
 
-  const isNode = (node) => node || node === 0;
+  const isNode = (node) => node?.key || node?.key === 0;
 
-  useEffect(() => {
+  const setNexts = () => {
     const filled = bst
       .map((el, idx) => (isNode(el) ? idx : null))
-      .filter((el) => isNode(el));
-    const random = Math.floor(Math.random() * filled.length);
-    setNextRemove(filled[random]);
+      .filter((idx) => !!idx || idx === 0);
+    const removeRandom = Math.floor(Math.random() * filled.length);
+    const getRandom = Math.floor(Math.random() * filled.length);
+    setNextRemove(filled[removeRandom]);
+    setNextGet(filled[getRandom]);
+  };
+
+  useEffect(() => {
+    setNexts();
+    setKeys(bst.map((node) => node?.key));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [bst]);
 
   const isEmpty = (bst) => {
     return !bst || bst.every((el) => !el);
   };
 
-  const getRandomData = (tree) => {
-    let randomInt = getRandomInt(100);
-    let iter = 0;
-    while (!isValidInsert(tree, randomInt)) {
-      if (iter === 1000) {
-        setFull(true);
-        break;
-      }
-      randomInt = getRandomInt(100);
-      iter += 1;
+  const exists = (tree, key) => {
+    if (isEmpty(tree)) return false;
+    for (let node of tree) {
+      if (node?.key === key) return true;
     }
-    return randomInt;
-  };
-
-  const insert = () => {
-    const tree = [...bst];
-    if (isEmpty(tree)) tree[0] = nextData;
-    else {
-      for (let i = 0; i <= tree.length; ) {
-        let leftChild = 2 * i + 1;
-        let rightChild = 2 * i + 2;
-        if (nextData < tree[i]) {
-          if (!isNode(tree[leftChild])) {
-            tree[leftChild] = nextData;
-            break;
-          } else {
-            i = leftChild;
-          }
-        } else if (nextData > tree[i]) {
-          if (!isNode(tree[rightChild])) {
-            tree[rightChild] = nextData;
-            break;
-          } else {
-            i = rightChild;
-          }
-        }
-      }
-    }
-    setBst(tree);
-    setNextData(getRandomData(tree));
+    return false;
   };
 
   // check to see if we will overflow our visualization
   // we currently support 4 rows
-  const isValidInsert = (tree, data) => {
+  const isValidInsert = (tree, key) => {
     if (isEmpty(tree)) return true;
-    if (exists(tree, data)) return false;
+    if (exists(tree, key)) return false;
     let isValid = false;
 
     let i = 0;
     for (let j = 0; j < 3; j++) {
       let leftChild = 2 * i + 1;
       let rightChild = 2 * i + 2;
-      if (data < tree[i]) {
+      if (key < tree[i].key) {
         if (!isNode(tree[leftChild])) {
           isValid = true;
           break;
         } else {
           i = leftChild;
         }
-      } else if (data > tree[i]) {
+      } else if (key > tree[i].key) {
         if (!isNode(tree[rightChild])) {
           isValid = true;
           break;
@@ -101,66 +84,82 @@ export function BSTDemo() {
     return isValid;
   };
 
-  const exists = (tree, data) => {
-    if (isEmpty(tree)) return false;
-    for (let node of tree) {
-      if (node === data) {
-        return true;
+  const getNextNode = (tree) => {
+    let node = getRandomNode();
+    let iter = 0;
+    while (!isValidInsert(tree, node.key)) {
+      if (iter === 1000) {
+        setFull(true);
+        break;
+      }
+      node = getRandomNode();
+      iter += 1;
+    }
+    return node;
+  };
+
+  const insert = () => {
+    const tree = [...bst];
+    if (isEmpty(tree)) tree[0] = nextNode;
+    else {
+      for (let i = 0; i <= tree.length; ) {
+        let leftChild = 2 * i + 1;
+        let rightChild = 2 * i + 2;
+        if (nextNode.key < tree[i].key) {
+          if (!isNode(tree[leftChild])) {
+            tree[leftChild] = nextNode;
+            break;
+          } else {
+            i = leftChild;
+          }
+        } else if (nextNode.key > tree[i].key) {
+          if (!isNode(tree[rightChild])) {
+            tree[rightChild] = nextNode;
+            break;
+          } else {
+            i = rightChild;
+          }
+        }
       }
     }
-    return false;
+    setBst(tree);
+    setNextNode(getNextNode(tree));
+    setViewGet(false);
   };
 
   const minIdx = (tree, idx) => {
     for (let i = idx; i <= tree.length; ) {
-      console.log("minidx", i);
       let leftChild = 2 * i + 1;
-      if (!isNode(tree[leftChild])) {
-        console.log("MIN RETURN");
-        return i;
-      } else {
-        console.log("MIN ITER");
-        i = leftChild;
-      }
+      if (!isNode(tree[leftChild])) return i;
+      else i = leftChild;
     }
   };
 
   const deleteNode = () => {
-    console.log("in delete node");
     const tree = [...bst];
     console.log(tree);
 
-    const rmIdx = nextRemove;
-    if (!exists(tree, tree[rmIdx])) return false;
-    console.log("remove", rmIdx);
+    const rmKey = nextRemove;
+    if (!exists(tree, tree[rmKey].key)) return false;
     for (let i = 0; i <= tree.length; ) {
-      console.log("i", i);
       let leftChild = 2 * i + 1;
       let rightChild = 2 * i + 2;
-      console.log("LEFT CHILD", tree[leftChild]);
-      console.log("CHECK", isNode(tree[leftChild]));
-      if (tree[i] === tree[rmIdx]) {
-        console.log("EQUAL");
+      if (tree[i].key === tree[rmKey].key) {
         if (!isNode(tree[leftChild]) && !isNode(tree[rightChild])) {
-          console.log("LEAF");
           delete tree[i];
           break;
         } else if (!isNode(tree[leftChild])) {
-          console.log("RIGHT");
           tree[i] = tree[rightChild];
           tree[rightChild] = null;
           moveUp(tree, rightChild);
           break;
         } else if (!isNode(tree[rightChild])) {
-          console.log("LEFT");
           tree[i] = tree[leftChild];
           tree[leftChild] = null;
           moveUp(tree, leftChild);
           break;
         } else {
-          console.log("BOTH");
           const succesor = minIdx(tree, rightChild);
-          console.log("succ", succesor);
           tree[i] = tree[succesor];
           tree[succesor] = null;
           moveUp(tree, succesor);
@@ -168,37 +167,24 @@ export function BSTDemo() {
         }
       }
 
-      if (tree[rmIdx] < tree[i]) {
-        console.log("IN OTHER, tree[rmIdx], tree[i]", tree[rmIdx], tree[i]);
-        console.log("GOING LEFT");
+      if (tree[rmKey].key < tree[i].key) {
         if (!isNode(tree[leftChild])) {
-          console.log("BREAKING LEFT");
           break;
         } else {
-          console.log("ITER LEFT");
           i = leftChild;
         }
-      } else if (tree[rmIdx] > tree[i]) {
-        console.log(
-          "tree[rmIdx], tree[i], rmIdx, i",
-          tree[rmIdx],
-          tree[i],
-          rmIdx,
-          i
-        );
-        console.log("GOING RIGHT");
+      } else if (tree[rmKey].key > tree[i].key) {
         if (!isNode(tree[rightChild])) {
-          console.log("BREAKING RIGHT");
           break;
         } else {
-          console.log("ITER RIGHT");
           i = rightChild;
         }
       }
     }
     setFull(false);
     setBst(tree);
-    setNextData(getRandomData(tree));
+    setNextNode(getNextNode(tree));
+    setViewGet(false);
   };
 
   const moveUp = (tree, idx) => {
@@ -218,6 +204,11 @@ export function BSTDemo() {
 
     moveUp(tree, leftChild);
     moveUp(tree, rightChild);
+  };
+
+  const getNode = () => {
+    setViewGet(true);
+    setNexts();
   };
 
   return (
@@ -243,15 +234,34 @@ export function BSTDemo() {
           sx={{ backgroundColor: "black", opacity: 0.85 }}
         >
           {new Array(4).fill(true).map((_, height) => (
-            <BSTRow nodes={bst} height={height} removeData={bst[nextRemove]} />
+            <BSTRow
+              nodes={keys}
+              height={height}
+              removeData={bst[nextRemove]?.key}
+              getData={bst[nextGet]?.key}
+            />
           ))}
         </Grid>
         <Button onClick={insert} disabled={isFull}>
-          INSERT({nextData})
+          INSERT({nextNode.key})
         </Button>
         <Button onClick={deleteNode} disabled={bst.length === 0}>
           DELETE({nextRemove})
         </Button>
+        <Button onClick={getNode} disabled={bst.length === 0}>
+          GET({nextGet})
+        </Button>
+        {viewGet && (
+          <Typography
+            border="1px solid black"
+            borderRadius="3px"
+            padding="0 .3rem"
+            margin=".4rem 0"
+            sx={{ backgroundColor: "yellowgreen" }}
+          >
+            {bst[nextGet]?.data}
+          </Typography>
+        )}
       </Grid>
     </>
   );

@@ -169,6 +169,9 @@ export function SLLPage() {
                   sx={{ backgroundColor: "black", borderBottomWidth: 4 }}
                 />
                 <SLLDemo />
+                <Divider
+                  sx={{ backgroundColor: "black", borderBottomWidth: 4 }}
+                />
                 <PageButtons
                   backTitle="QUEUE"
                   backTo="/projects/xplained/ds/queue"

@@ -204,6 +204,9 @@ export function BSTPage() {
                   sx={{ backgroundColor: "black", borderBottomWidth: 4 }}
                 />
                 <BSTDemo />
+                <Divider
+                  sx={{ backgroundColor: "black", borderBottomWidth: 4 }}
+                />
                 <PageButtons
                   backTitle="DOUBLY LINKED LIST"
                   backTo="/projects/xplained/ds/dll"

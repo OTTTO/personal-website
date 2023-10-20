@@ -133,6 +133,9 @@ export function QueuePage() {
                   sx={{ backgroundColor: "black", borderBottomWidth: 4 }}
                 />
                 <QueueDemo />
+                <Divider
+                  sx={{ backgroundColor: "black", borderBottomWidth: 4 }}
+                />
                 <PageButtons
                   backTitle="STACK"
                   backTo="/projects/xplained/ds/stack"

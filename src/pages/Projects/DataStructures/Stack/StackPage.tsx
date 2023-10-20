@@ -135,6 +135,9 @@ export function StackPage() {
                   sx={{ backgroundColor: "black", borderBottomWidth: 4 }}
                 />
                 <StackDemo />
+                <Divider
+                  sx={{ backgroundColor: "black", borderBottomWidth: 4 }}
+                />
                 <PageButtons
                   forwardTitle="QUEUE"
                   forwardTo="/projects/xplained/ds/queue"
