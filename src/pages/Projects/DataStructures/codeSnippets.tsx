@@ -351,15 +351,12 @@ def remove(self, idx):
     # decrease size of list
     self.size -= 1
     return True
-  
-  
   # start at tail of list
   curr = self.tail
   # iterate list
   # curr needs to be the node before the deletion (idx - 1)
   for _ in range(idx - 1):
     curr = curr.next
-  
   # set next reference to be the following node
   curr.next = curr.next.next
   # decrease size of list
@@ -621,44 +618,27 @@ def remove(self, idx):
   if (node.prev is None):
     # adjust tail to be the next node
     self.tail = node.next
-  else:
-    curr = self.tail
-    # find the node before the node we want to remove
-    for _ in range(idx -1):
-      curr = curr.next
-    # if we are not removing the last node
-    if (curr.next.next):
-      # point that node to the node after
-      # the one we want to remove
-      # our node is now skipped over and dropped
-      curr.next = curr.next.next
-    else:
-      # adjust head to be previous node
-      self.head = self.head.prev
+  # if node is somewhere in the middle
+  elif (node.next):
+    node.prev.next = node.next
+  # if node is at the end
+  else: 
+    self.head = self.head.prev
   self.size = self.size - 1`,
       javascript: `// remove by index
 remove(idx) {
   // get node at this index
   const node = this.#getNode(idx)
   // if node is at the beginning
-  if (!node.prev) {
+  if (!node.prev)
     // adjust tail to be the next node
     this.tail = node.next
-  } else {
-    let curr = this.tail
-    // find the node before the node we want to remove
-    for (let i = 0; i < idx - 1; i++)
-      curr = curr.next
-    // if we are not removing the last node
-    if (curr.next.next)
-      // point that node to the node after
-      // the one we want to remove
-      // our node is now skipped over and dropped
-      curr.next = curr.next.next
-    else
-      // adjust head to be previous node
-      this.head = this.head.prev
-  }
+  // if node is somewhere in the middle
+  else if (node.next)
+    node.prev.next = node.next
+  // if node is at the end
+  else
+    this.head = this.head.prev
   this.size -= 1
 }`,
     },
