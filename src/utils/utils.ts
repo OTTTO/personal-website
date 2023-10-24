@@ -197,3 +197,7 @@ export function textDecorationMaxLength(list, maxLength) {
 export function textDecorationEmpty(list) {
   return isListEmpty(list) ? "line-through" : "";
 }
+
+export function sleep(time) {
+  return new Promise((resolve) => setTimeout(resolve, time));
+}

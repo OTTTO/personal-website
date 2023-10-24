@@ -27,8 +27,19 @@ export function BSTDemo() {
   const [viewGet, setViewGet] = useState(false);
   const [justAdded, setJustAdded] = useState(0);
   const [isFull, setFull] = useState(false);
+  const [phaseNode, setPhaseNode] = useState(undefined);
+  const [buttonsDisabled, setButtonsDisabled] = useState(false);
+  const timeout = 400;
 
   const isNode = (node) => node?.key || node?.key === 0;
+
+  const setPhaseNodes = (nodeSteps) => {
+    for (let i = 0; i < nodeSteps.length - 1; i++) {
+      setTimeout(() => {
+        setPhaseNode(nodeSteps[i]);
+      }, timeout * i);
+    }
+  };
 
   const setNexts = () => {
     const filled = bst
@@ -59,13 +70,13 @@ export function BSTDemo() {
   };
 
   // check to see if we will overflow our visualization
-  // we currently support 4 rows
   const isValidInsert = (tree, key) => {
     if (isEmpty(tree)) return true;
     if (exists(tree, key)) return false;
     let isValid = false;
 
     let i = 0;
+    // we currently support 4 rows
     for (let j = 0; j < 3; j++) {
       let leftChild = 2 * i + 1;
       let rightChild = 2 * i + 2;
@@ -103,16 +114,20 @@ export function BSTDemo() {
   };
 
   const insert = () => {
+    setButtonsDisabled(true);
     const tree = [...bst];
+    const nodeSteps = [];
     if (isEmpty(tree)) tree[0] = nextNode;
     else {
       for (let i = 0; i <= tree.length; ) {
+        nodeSteps.push(i);
         let leftChild = 2 * i + 1;
         let rightChild = 2 * i + 2;
         if (nextNode.key < tree[i].key) {
           if (!isNode(tree[leftChild])) {
             tree[leftChild] = nextNode;
             setJustAdded(nextNode.key);
+            nodeSteps.push(leftChild);
             break;
           } else {
             i = leftChild;
@@ -121,6 +136,7 @@ export function BSTDemo() {
           if (!isNode(tree[rightChild])) {
             tree[rightChild] = nextNode;
             setJustAdded(nextNode.key);
+            nodeSteps.push(rightChild);
             break;
           } else {
             i = rightChild;
@@ -128,9 +144,23 @@ export function BSTDemo() {
         }
       }
     }
-    setBst(tree);
-    setNextNode(getNextNode(tree));
-    setViewGet(false);
+
+    const lastNode = nodeSteps.length - 1;
+    const timeoutMul = lastNode;
+
+    setPhaseNodes(nodeSteps);
+
+    setTimeout(() => {
+      setBst(tree);
+      setPhaseNode(nodeSteps[lastNode]);
+      setNextNode(getNextNode(tree));
+      setViewGet(false);
+    }, timeout * timeoutMul);
+
+    setTimeout(() => {
+      setPhaseNode(undefined);
+      setButtonsDisabled(false);
+    }, timeout * (timeoutMul + 1));
   };
 
   const minIdx = (tree, idx) => {
@@ -142,13 +172,16 @@ export function BSTDemo() {
   };
 
   const deleteNode = () => {
+    setButtonsDisabled(true);
     const tree = [...bst];
     const rmKey = nextRemove;
+    const nodeSteps = [0];
     if (!exists(tree, tree[rmKey].key)) return false;
     for (let i = 0; i <= tree.length; ) {
       let leftChild = 2 * i + 1;
       let rightChild = 2 * i + 2;
       if (tree[i].key === tree[rmKey].key) {
+        nodeSteps.push(i);
         if (!isNode(tree[leftChild]) && !isNode(tree[rightChild])) {
           delete tree[i];
           break;
@@ -175,20 +208,36 @@ export function BSTDemo() {
         if (!isNode(tree[leftChild])) {
           break;
         } else {
+          nodeSteps.push(leftChild);
           i = leftChild;
         }
       } else if (tree[rmKey].key > tree[i].key) {
         if (!isNode(tree[rightChild])) {
           break;
         } else {
+          nodeSteps.push(rightChild);
           i = rightChild;
         }
       }
     }
-    setFull(false);
-    setBst(tree);
-    setNextNode(getNextNode(tree));
-    setViewGet(false);
+
+    const lastNode = nodeSteps.length - 1;
+    const timeoutMul = lastNode;
+
+    setPhaseNodes(nodeSteps);
+
+    setTimeout(() => {
+      setPhaseNode(nodeSteps[lastNode]);
+      setFull(false);
+      setBst(tree);
+      setNextNode(getNextNode(tree));
+      setViewGet(false);
+    }, timeout * timeoutMul);
+
+    setTimeout(() => {
+      setPhaseNode(undefined);
+      setButtonsDisabled(false);
+    }, timeout * (timeoutMul + 1));
   };
 
   const moveUp = (tree, idx) => {
@@ -254,6 +303,7 @@ export function BSTDemo() {
             <BSTRow
               nodes={keys}
               height={height}
+              phaseNode={phaseNode}
               removeData={bst[nextRemove]?.key}
               justAdded={justAdded}
             />
@@ -261,19 +311,19 @@ export function BSTDemo() {
         </Grid>
         <OperationButton
           onClick={insert}
-          disabled={isFull}
+          disabled={isFull || buttonsDisabled}
           text={`INSERT(${nextNode?.key})`}
           textDecoration={isFull ? "line-through" : ""}
         />
         <OperationButton
           onClick={deleteNode}
-          disabled={isEmpty(bst)}
+          disabled={isEmpty(bst) || buttonsDisabled}
           text={`DELETE(${bst[nextRemove]?.key || ""})`}
           textDecoration={isEmpty(bst) ? "line-through" : ""}
         />
         <OperationButton
           onClick={getNode}
-          disabled={isEmpty(bst)}
+          disabled={isEmpty(bst) || buttonsDisabled}
           text={`GET(${bst[nextGet]?.key || ""})`}
           textDecoration={isEmpty(bst) ? "line-through" : ""}
         />

@@ -5,8 +5,10 @@ export function BSTChildren({
   left = undefined,
   right = undefined,
   height,
+  group,
   removeData,
   justAdded,
+  phaseNode,
 }) {
   const justify = (left, right) => {
     if (left && right) return "center";
@@ -17,6 +19,10 @@ export function BSTChildren({
   let gap = ".5rem";
   if (height === 1) gap = "6.5rem";
   if (height === 2) gap = "2.5rem";
+
+  const leftNode = Math.pow(2, height) + 2 * group - 1;
+  const rightNode = leftNode + 1;
+
   return (
     <Grid
       display="flex"
@@ -25,8 +31,20 @@ export function BSTChildren({
       flexDirection="row"
       justifyContent={justify(left, right)}
     >
-      <BSTNode data={left} removeData={removeData} justAdded={justAdded} />
-      <BSTNode data={right} removeData={removeData} justAdded={justAdded} />
+      <BSTNode
+        data={left}
+        node={leftNode}
+        removeData={removeData}
+        justAdded={justAdded}
+        phaseNode={phaseNode}
+      />
+      <BSTNode
+        data={right}
+        node={rightNode}
+        removeData={removeData}
+        justAdded={justAdded}
+        phaseNode={phaseNode}
+      />
     </Grid>
   );
 }
