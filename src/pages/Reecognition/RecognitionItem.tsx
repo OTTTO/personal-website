@@ -1,7 +1,7 @@
 import { Link, Typography, styled } from "@mui/material";
 import useWindowDimensions from "hooks/useWindowDimensions";
 import { useContext, useEffect, useState } from "react";
-import { ThemeContext } from "themes/context";
+import { ThemeContext } from "context/theme";
 import {
   getRecognitionAnimation,
   getRecognitionAnimationStyle,

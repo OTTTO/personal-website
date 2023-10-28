@@ -2,8 +2,8 @@ import { Grid, ThemeProvider, Typography } from "@mui/material";
 import { Menu } from "components/Menu";
 import { Title } from "components/TItle";
 import { TitleDivider } from "components/TitleDivider";
-import { useContext, useEffect, useState } from "react";
-import { ThemeContext } from "themes/context";
+import { useContext, useEffect } from "react";
+import { ThemeContext } from "context/theme";
 import projectsTheme from "themes/projectsTheme";
 import { getMainTheme } from "utils/utils";
 import { codeSnippets } from "../codeSnippets";
@@ -14,8 +14,6 @@ import { DSDivider } from "components/DSDivider";
 
 export function StackPage() {
   const { theme } = useContext(ThemeContext);
-  const [language, setLanguage] = useState("python");
-
   useEffect(() => {
     document.getElementById("outerGrid").scrollIntoView();
   }, []);
@@ -68,9 +66,7 @@ export function StackPage() {
                   words the element beneath it.
                 </p>
                 <CodeBlock
-                  language={language}
-                  setLanguage={setLanguage}
-                  text={codeSnippets.stack.node[language]}
+                  text={codeSnippets.stack.node}
                   title="node"
                   width="20rem"
                 />
@@ -81,9 +77,7 @@ export function StackPage() {
                   points to the top of the stack which is our access point.
                 </p>
                 <CodeBlock
-                  language={language}
-                  setLanguage={setLanguage}
-                  text={codeSnippets.stack.class[language]}
+                  text={codeSnippets.stack.class}
                   title="stack"
                   width="20rem"
                 />
@@ -94,9 +88,7 @@ export function StackPage() {
                   old top in order to extend the stack.
                 </p>
                 <CodeBlock
-                  language={language}
-                  setLanguage={setLanguage}
-                  text={codeSnippets.stack.push[language]}
+                  text={codeSnippets.stack.push}
                   title="push"
                   width="25rem"
                 />
@@ -107,9 +99,7 @@ export function StackPage() {
                   next node down (even if that node is null or None).
                 </p>
                 <CodeBlock
-                  language={language}
-                  setLanguage={setLanguage}
-                  text={codeSnippets.stack.pop[language]}
+                  text={codeSnippets.stack.pop}
                   title="pop"
                   width="25rem"
                 />
@@ -119,9 +109,7 @@ export function StackPage() {
                   top data, we use peek instead of pop.
                 </p>
                 <CodeBlock
-                  language={language}
-                  setLanguage={setLanguage}
-                  text={codeSnippets.stack.peek[language]}
+                  text={codeSnippets.stack.peek}
                   title="peek"
                   width="25rem"
                 />
@@ -132,9 +120,7 @@ export function StackPage() {
                   a list can serve as a queue.
                 </p>
                 <CodeBlock
-                  language={language}
-                  setLanguage={setLanguage}
-                  text={codeSnippets.stack.builtIn[language]}
+                  text={codeSnippets.stack.builtIn}
                   title="built in stack"
                   width="20rem"
                 />

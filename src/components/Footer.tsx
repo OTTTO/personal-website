@@ -1,6 +1,6 @@
 import { Grid, Typography } from "@mui/material";
 import { useContext } from "react";
-import { ThemeContext } from "themes/context";
+import { ThemeContext } from "context/theme";
 import { getFooterTheme } from "utils/utils";
 
 export function Footer() {

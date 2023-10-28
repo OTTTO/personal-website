@@ -2,8 +2,8 @@ import { Grid, ThemeProvider, Typography } from "@mui/material";
 import { Menu } from "components/Menu";
 import { Title } from "components/TItle";
 import { TitleDivider } from "components/TitleDivider";
-import { useContext, useEffect, useState } from "react";
-import { ThemeContext } from "themes/context";
+import { useContext, useEffect } from "react";
+import { ThemeContext } from "context/theme";
 import projectsTheme from "themes/projectsTheme";
 import { getMainTheme } from "utils/utils";
 import { codeSnippets } from "../codeSnippets";
@@ -14,7 +14,6 @@ import { DSDivider } from "components/DSDivider";
 
 export function SLLPage() {
   const { theme } = useContext(ThemeContext);
-  const [language, setLanguage] = useState("python");
 
   useEffect(() => {
     document.getElementById("outerGrid").scrollIntoView();
@@ -85,9 +84,7 @@ export function SLLPage() {
                   Node in the list.
                 </p>
                 <CodeBlock
-                  language={language}
-                  setLanguage={setLanguage}
-                  text={codeSnippets.sll.node[language]}
+                  text={codeSnippets.sll.node}
                   title="node"
                   width="20rem"
                 />
@@ -100,9 +97,7 @@ export function SLLPage() {
                   <b>{"[tail]->[node]->[head]"}</b>
                 </p>
                 <CodeBlock
-                  language={language}
-                  setLanguage={setLanguage}
-                  text={codeSnippets.sll.class[language]}
+                  text={codeSnippets.sll.class}
                   title="linked list"
                   width="20rem"
                 />
@@ -114,9 +109,7 @@ export function SLLPage() {
                   through the List and tack the node on to the end.
                 </p>
                 <CodeBlock
-                  language={language}
-                  setLanguage={setLanguage}
-                  text={codeSnippets.sll.append[language]}
+                  text={codeSnippets.sll.append}
                   title="append"
                   width="25rem"
                 />
@@ -130,9 +123,7 @@ export function SLLPage() {
                   the linked list.
                 </p>
                 <CodeBlock
-                  language={language}
-                  setLanguage={setLanguage}
-                  text={codeSnippets.sll.remove[language]}
+                  text={codeSnippets.sll.remove}
                   title="remove"
                   width="25rem"
                 />
@@ -146,9 +137,7 @@ export function SLLPage() {
                   up until the given index and return the node's data.
                 </p>
                 <CodeBlock
-                  language={language}
-                  setLanguage={setLanguage}
-                  text={codeSnippets.sll.get[language]}
+                  text={codeSnippets.sll.get}
                   title="get"
                   width="25rem"
                 />
@@ -160,9 +149,7 @@ export function SLLPage() {
                   we can just call next on until it is exhausted.
                 </p>
                 <CodeBlock
-                  language={language}
-                  setLanguage={setLanguage}
-                  text={codeSnippets.sll.length[language]}
+                  text={codeSnippets.sll.length}
                   title="length"
                   width="25rem"
                 />

@@ -22,7 +22,7 @@ import axios from "axios";
 import { Loading } from "components/Loading";
 import { WysiwygEditor } from "components/WysiwygEditor";
 import { AuthButtons } from "components/AuthButtons";
-import { ThemeContext } from "themes/context";
+import { ThemeContext } from "context/theme";
 import { Title } from "components/TItle";
 import { Themes } from "types/themes";
 import { PostHeaderDivider } from "./PostHeaderDivider";

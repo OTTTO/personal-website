@@ -20,7 +20,7 @@ import { Education } from "./Education";
 import { Experience } from "./Experience";
 import { SideIcons } from "./SideIcons";
 import { Skills } from "./Skills";
-import { ThemeContext } from "themes/context";
+import { ThemeContext } from "context/theme";
 import { Title } from "components/TItle";
 import { TitleDivider } from "components/TitleDivider";
 

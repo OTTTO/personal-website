@@ -30,7 +30,7 @@ import { Menu } from "components/Menu";
 import mainTheme from "themes/mainTheme";
 import useWindowDimensions from "hooks/useWindowDimensions";
 import { Peg, Player } from "types/trouble";
-import { ThemeContext } from "themes/context";
+import { ThemeContext } from "context/theme";
 import { getMainTheme } from "utils/utils";
 import { Title } from "components/TItle";
 import { TitleDivider } from "components/TitleDivider";

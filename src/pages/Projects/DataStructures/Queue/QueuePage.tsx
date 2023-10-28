@@ -2,8 +2,8 @@ import { Grid, ThemeProvider, Typography } from "@mui/material";
 import { Menu } from "components/Menu";
 import { Title } from "components/TItle";
 import { TitleDivider } from "components/TitleDivider";
-import { useContext, useEffect, useState } from "react";
-import { ThemeContext } from "themes/context";
+import { useContext, useEffect } from "react";
+import { ThemeContext } from "context/theme";
 import projectsTheme from "themes/projectsTheme";
 import { getMainTheme } from "utils/utils";
 import { codeSnippets } from "../codeSnippets";
@@ -14,7 +14,6 @@ import { DSDivider } from "components/DSDivider";
 
 export function QueuePage() {
   const { theme } = useContext(ThemeContext);
-  const [language, setLanguage] = useState("python");
 
   useEffect(() => {
     document.getElementById("outerGrid").scrollIntoView();
@@ -74,9 +73,7 @@ export function QueuePage() {
                   we need this when dequing in order to set the new head.{" "}
                 </p>
                 <CodeBlock
-                  language={language}
-                  setLanguage={setLanguage}
-                  text={codeSnippets.queue.node[language]}
+                  text={codeSnippets.queue.node}
                   title="node"
                   width="20rem"
                 />
@@ -87,9 +84,7 @@ export function QueuePage() {
                   <b>head</b> which is a reference to the front.
                 </p>
                 <CodeBlock
-                  language={language}
-                  setLanguage={setLanguage}
-                  text={codeSnippets.queue.class[language]}
+                  text={codeSnippets.queue.class}
                   title="queue"
                   width="20rem"
                 />
@@ -102,9 +97,7 @@ export function QueuePage() {
                   queue - we just set both the tail and head as the new node.
                 </p>
                 <CodeBlock
-                  language={language}
-                  setLanguage={setLanguage}
-                  text={codeSnippets.queue.enqueue[language]}
+                  text={codeSnippets.queue.enqueue}
                   title="enqueue"
                   width="25rem"
                 />
@@ -116,9 +109,7 @@ export function QueuePage() {
                   queue, in which case we essentially reset the queue.
                 </p>
                 <CodeBlock
-                  language={language}
-                  setLanguage={setLanguage}
-                  text={codeSnippets.queue.deque[language]}
+                  text={codeSnippets.queue.deque}
                   title="deque"
                   width="25rem"
                 />
@@ -129,9 +120,7 @@ export function QueuePage() {
                   this is done is not as clear as using a Stack interface.
                 </p>
                 <CodeBlock
-                  language={language}
-                  setLanguage={setLanguage}
-                  text={codeSnippets.queue.builtIn[language]}
+                  text={codeSnippets.queue.builtIn}
                   title="built in queue"
                   width="20rem"
                 />

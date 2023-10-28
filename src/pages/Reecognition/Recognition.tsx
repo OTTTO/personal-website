@@ -11,7 +11,7 @@ import {
   Droppable,
   Draggable,
 } from "react-beautiful-dnd";
-import { ThemeContext } from "themes/context";
+import { ThemeContext } from "context/theme";
 import {
   authenticationCheck,
   getMainTheme,

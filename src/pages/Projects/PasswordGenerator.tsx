@@ -13,7 +13,7 @@ import React, { useContext } from "react";
 import mainTheme from "themes/mainTheme";
 import randomWords from "random-words";
 import { getMainTheme } from "utils/utils";
-import { ThemeContext } from "themes/context";
+import { ThemeContext } from "context/theme";
 import { Title } from "components/TItle";
 import { TitleDivider } from "components/TitleDivider";
 

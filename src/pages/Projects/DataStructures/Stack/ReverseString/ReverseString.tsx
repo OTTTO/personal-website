@@ -1,23 +1,18 @@
 import { useEffect, useState } from "react";
 import { Grid, IconButton, Typography } from "@mui/material";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import PlayCircleOutlineIcon from "@mui/icons-material/PlayCircleOutline";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
 import { DemoString } from "./DemoString";
 import { CodeBlock } from "../../../../../components/CodeBlock";
 import { codeSnippets } from "../../codeSnippets";
+import { sleep } from "utils/utils";
 
-export function ReverseString({ language, setLanguage }) {
+export function ReverseString() {
   const string = "Mississippi";
   const [stack, setStack] = useState([]);
   const [resultArr, setResultArr] = useState([]);
   const [index, setIndex] = useState(0);
   const [run, setRun] = useState(false);
-
-  function sleep(time) {
-    return new Promise((resolve) => setTimeout(resolve, time));
-  }
 
   const push = () => {
     const thisStack = stack.slice();
@@ -106,9 +101,7 @@ export function ReverseString({ language, setLanguage }) {
       </Grid>
       <Grid textAlign="left">
         <CodeBlock
-          language={language}
-          setLanguage={setLanguage}
-          text={codeSnippets.stack.reverseString[language]}
+          text={codeSnippets.stack.reverseString}
           title="reverse string"
           width="20rem"
         />

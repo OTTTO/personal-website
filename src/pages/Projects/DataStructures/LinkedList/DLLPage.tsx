@@ -2,8 +2,8 @@ import { Grid, ThemeProvider, Typography } from "@mui/material";
 import { Menu } from "components/Menu";
 import { Title } from "components/TItle";
 import { TitleDivider } from "components/TitleDivider";
-import { useContext, useEffect, useState } from "react";
-import { ThemeContext } from "themes/context";
+import { useContext, useEffect } from "react";
+import { ThemeContext } from "context/theme";
 import projectsTheme from "themes/projectsTheme";
 import { getMainTheme } from "utils/utils";
 import { codeSnippets } from "../codeSnippets";
@@ -14,7 +14,6 @@ import { DSDivider } from "components/DSDivider";
 
 export function DLLPage() {
   const { theme } = useContext(ThemeContext);
-  const [language, setLanguage] = useState("python");
 
   useEffect(() => {
     document.getElementById("outerGrid").scrollIntoView();
@@ -64,9 +63,7 @@ export function DLLPage() {
                   reference to the previous node, <b>prev</b>.
                 </p>
                 <CodeBlock
-                  language={language}
-                  setLanguage={setLanguage}
-                  text={codeSnippets.dll.node[language]}
+                  text={codeSnippets.dll.node}
                   title="node"
                   width="20rem"
                 />
@@ -81,9 +78,7 @@ export function DLLPage() {
                   <b>{" [tail]<->[node]<->[head]"}</b>
                 </p>
                 <CodeBlock
-                  language={language}
-                  setLanguage={setLanguage}
-                  text={codeSnippets.dll.class[language]}
+                  text={codeSnippets.dll.class}
                   title="doubly linked list"
                   width="20rem"
                 />
@@ -95,9 +90,7 @@ export function DLLPage() {
                   exposed methods of this data structure.
                 </p>
                 <CodeBlock
-                  language={language}
-                  setLanguage={setLanguage}
-                  text={codeSnippets.dll.getNode[language]}
+                  text={codeSnippets.dll.getNode}
                   title="get node"
                   width="25rem"
                 />
@@ -111,9 +104,7 @@ export function DLLPage() {
                   and the nodes before/after that node.
                 </p>
                 <CodeBlock
-                  language={language}
-                  setLanguage={setLanguage}
-                  text={codeSnippets.dll.insertBefore[language]}
+                  text={codeSnippets.dll.insertBefore}
                   title="insert before"
                   width="25rem"
                 />
@@ -125,9 +116,7 @@ export function DLLPage() {
                   insertBefore method and insert before the 0th index.
                 </p>
                 <CodeBlock
-                  language={language}
-                  setLanguage={setLanguage}
-                  text={codeSnippets.dll.prepend[language]}
+                  text={codeSnippets.dll.prepend}
                   title="prepend"
                   width="25rem"
                 />
@@ -138,9 +127,7 @@ export function DLLPage() {
                   nodes in the reverse order.
                 </p>
                 <CodeBlock
-                  language={language}
-                  setLanguage={setLanguage}
-                  text={codeSnippets.dll.insertAfter[language]}
+                  text={codeSnippets.dll.insertAfter}
                   title="insert after"
                   width="25rem"
                 />
@@ -152,9 +139,7 @@ export function DLLPage() {
                   insertBefore with the 0th.
                 </p>
                 <CodeBlock
-                  language={language}
-                  setLanguage={setLanguage}
-                  text={codeSnippets.dll.append[language]}
+                  text={codeSnippets.dll.append}
                   title="append"
                   width="25rem"
                 />
@@ -165,9 +150,7 @@ export function DLLPage() {
                   return the data.
                 </p>
                 <CodeBlock
-                  language={language}
-                  setLanguage={setLanguage}
-                  text={codeSnippets.dll.get[language]}
+                  text={codeSnippets.dll.get}
                   title="get"
                   width="25rem"
                 />
@@ -179,9 +162,7 @@ export function DLLPage() {
                   the previous node.
                 </p>
                 <CodeBlock
-                  language={language}
-                  setLanguage={setLanguage}
-                  text={codeSnippets.dll.remove[language]}
+                  text={codeSnippets.dll.remove}
                   title="remove"
                   width="25rem"
                 />
@@ -191,9 +172,7 @@ export function DLLPage() {
                   the user to iterate over the list.
                 </p>
                 <CodeBlock
-                  language={language}
-                  setLanguage={setLanguage}
-                  text={codeSnippets.dll.length[language]}
+                  text={codeSnippets.dll.length}
                   title="length"
                   width="20rem"
                 />

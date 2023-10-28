@@ -1,6 +1,6 @@
 import { ThemeProvider, Typography } from "@mui/material";
 import { useContext } from "react";
-import { ThemeContext } from "themes/context";
+import { ThemeContext } from "context/theme";
 import projectsTheme from "themes/projectsTheme";
 import { getTitleTheme } from "utils/utils";
 

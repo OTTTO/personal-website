@@ -2,8 +2,8 @@ import { Grid, ThemeProvider, Typography } from "@mui/material";
 import { Menu } from "components/Menu";
 import { Title } from "components/TItle";
 import { TitleDivider } from "components/TitleDivider";
-import { useContext, useEffect, useState } from "react";
-import { ThemeContext } from "themes/context";
+import { useContext, useEffect } from "react";
+import { ThemeContext } from "context/theme";
 import projectsTheme from "themes/projectsTheme";
 import { getMainTheme } from "utils/utils";
 import { codeSnippets } from "../codeSnippets";
@@ -14,7 +14,7 @@ import { DSDivider } from "components/DSDivider";
 
 export function BSTPage() {
   const { theme } = useContext(ThemeContext);
-  const [language, setLanguage] = useState("python");
+  // const [language, setLanguage] = useState("python");
 
   useEffect(() => {
     document.getElementById("outerGrid").scrollIntoView();
@@ -115,9 +115,7 @@ export function BSTPage() {
                   and then we climb down from there.
                 </p>
                 <CodeBlock
-                  language={language}
-                  setLanguage={setLanguage}
-                  text={codeSnippets.bst.class[language]}
+                  text={codeSnippets.bst.class}
                   title="binary search tree"
                   width="20rem"
                 />
@@ -130,9 +128,7 @@ export function BSTPage() {
                   the tree that is when we do the actual insertion.
                 </p>
                 <CodeBlock
-                  language={language}
-                  setLanguage={setLanguage}
-                  text={codeSnippets.bst.insert[language]}
+                  text={codeSnippets.bst.insert}
                   title="insert"
                   width="25rem"
                 />
@@ -145,9 +141,7 @@ export function BSTPage() {
                   knowing that the key is not present.
                 </p>
                 <CodeBlock
-                  language={language}
-                  setLanguage={setLanguage}
-                  text={codeSnippets.bst.exists[language]}
+                  text={codeSnippets.bst.exists}
                   title="exists"
                   width="25rem"
                 />
@@ -158,9 +152,7 @@ export function BSTPage() {
                   of that node or a null value if we don't find it.
                 </p>
                 <CodeBlock
-                  language={language}
-                  setLanguage={setLanguage}
-                  text={codeSnippets.bst.get[language]}
+                  text={codeSnippets.bst.get}
                   title="get"
                   width="25rem"
                 />
@@ -172,9 +164,7 @@ export function BSTPage() {
                   child and it will take the place of the deleted node.
                 </p>
                 <CodeBlock
-                  language={language}
-                  setLanguage={setLanguage}
-                  text={codeSnippets.bst.min[language]}
+                  text={codeSnippets.bst.min}
                   title="min"
                   width="25rem"
                 />
@@ -185,9 +175,7 @@ export function BSTPage() {
                   because to clean up the delete method.
                 </p>
                 <CodeBlock
-                  language={language}
-                  setLanguage={setLanguage}
-                  text={codeSnippets.bst.replaceRoot[language]}
+                  text={codeSnippets.bst.replaceRoot}
                   title="replace root"
                   width="25rem"
                 />
@@ -200,9 +188,7 @@ export function BSTPage() {
                   both a left and right child.
                 </p>
                 <CodeBlock
-                  language={language}
-                  setLanguage={setLanguage}
-                  text={codeSnippets.bst.delete[language]}
+                  text={codeSnippets.bst.delete}
                   title="delete"
                   width="25rem"
                 />

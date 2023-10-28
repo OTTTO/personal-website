@@ -1,7 +1,7 @@
 import { Grid } from "@mui/material";
 import useWindowDimensions from "hooks/useWindowDimensions";
 import { useContext } from "react";
-import { ThemeContext } from "themes/context";
+import { ThemeContext } from "context/theme";
 
 import { getHeaderTheme } from "utils/utils";
 import { MenuMini } from "./MenuMini";

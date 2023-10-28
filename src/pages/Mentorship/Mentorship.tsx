@@ -3,7 +3,7 @@ import { Footer } from "components/Footer";
 import { Menu } from "components/Menu";
 import { Title } from "components/TItle";
 import React, { useContext, useEffect, useState } from "react";
-import { ThemeContext } from "themes/context";
+import { ThemeContext } from "context/theme";
 import * as DOMPurify from "dompurify";
 import projectsTheme from "themes/projectsTheme";
 import {

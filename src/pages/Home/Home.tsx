@@ -17,7 +17,7 @@ import mainTheme from "themes/mainTheme";
 
 import axios from "axios";
 import { HomeClass } from "types/home";
-import { ThemeContext } from "themes/context";
+import { ThemeContext } from "context/theme";
 import { Title } from "components/TItle";
 import { HomeWysiwygEditor } from "pages/Home/HomeWysiwygEditor";
 import { HomeText } from "pages/Home/HomeText";

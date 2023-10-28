@@ -24,7 +24,7 @@ import axios from "axios";
 import * as DOMPurify from "dompurify";
 import { Loading } from "components/Loading";
 import projectsTheme from "themes/projectsTheme";
-import { ThemeContext } from "themes/context";
+import { ThemeContext } from "context/theme";
 import { Link, useLocation } from "react-router-dom";
 import { ErrorPage } from "pages/Error/Error";
 import { getMainTheme } from "utils/utils";

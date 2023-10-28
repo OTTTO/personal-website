@@ -22,7 +22,7 @@ import {
   Draggable,
 } from "react-beautiful-dnd";
 import axios from "axios";
-import { ThemeContext } from "themes/context";
+import { ThemeContext } from "context/theme";
 import { getMainTheme } from "utils/utils";
 import { Title } from "components/TItle";
 import { ProjectItem } from "./ProjectItem";

@@ -7,7 +7,7 @@ import { Title } from "components/TItle";
 import { TitleDivider } from "components/TitleDivider";
 import { useContext, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { ThemeContext } from "themes/context";
+import { ThemeContext } from "context/theme";
 import projectsTheme from "themes/projectsTheme";
 import { getMainTheme } from "utils/utils";
 
