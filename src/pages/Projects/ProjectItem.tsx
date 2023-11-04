@@ -73,10 +73,7 @@ export function ProjectItem({
           )}
           {!isAuthenticated && !isTestAuthenticated && project.href ? (
             <Button
-              {...{
-                component: Link,
-                to: project.href,
-              }}
+              href={project.href}
               target={project.openNewTab ? "_blank" : null}
               rel={project.openNewTab ? "noreffer" : null}
               sx={{
