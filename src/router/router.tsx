@@ -40,7 +40,7 @@ function AppRoutes() {
         <Route path="/blog/post/new" element={<Post />} />
         <Route path="/blog/post/:id" element={<Post />} />
         <Route path="/blog/post/edit/:id" element={<Post />} />
-        <Route path="/training" element={<Mentorship />} />
+        <Route path="/mentorship" element={<Mentorship />} />
         <Route path="/recognition" element={<Recognition />} />
       </Routes>
     </BrowserRouter>

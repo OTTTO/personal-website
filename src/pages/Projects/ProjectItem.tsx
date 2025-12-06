@@ -3,7 +3,6 @@ import { ProjectImage } from "./ProjectImage";
 import { WysiwygEditor } from "components/WysiwygEditor";
 import { RemoveCircle } from "@mui/icons-material";
 import * as DOMPurify from "dompurify";
-import { Link } from "react-router-dom";
 import useWindowDimensions from "hooks/useWindowDimensions";
 
 export function ProjectItem({
